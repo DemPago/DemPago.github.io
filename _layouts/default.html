@@ -157,6 +157,62 @@
       border-radius: 8px;
       margin: 1rem 0;
       border: 1px solid var(--border);
+      transition: transform 0.3s ease;
+    }
+
+    .post-content img:hover {
+      transform: scale(1.02);
+    }
+
+    .reading-time {
+      color: #8b949e;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--accent);
+      z-index: 1000;
+      transition: width 0.1s;
+    }
+
+    .share-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .share-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: opacity 0.2s;
+    }
+
+    .share-btn:hover { opacity: 0.8; }
+
+    .share-linkedin { background: #0077b5; color: white; }
+    .share-twitter { background: #1da1f2; color: white; }
+    .share-copy { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+
+    .social-links {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    .social-links a {
+      color: #8b949e;
+      font-size: 1.2rem;
+      transition: color 0.2s;
+    }
+
+    .social-links a:hover { color: var(--accent); }
     }
 
     .post-content a {
@@ -249,6 +305,11 @@
       <a href="https://ko-fi.com/dem420156" target="_blank" class="kofi-button">
         ☕ Offrimi un caffè
       </a>
+      <div class="social-links">
+        <a href="https://github.com/DemPago" target="_blank" title="GitHub">🐙</a>
+        <a href="https://linkedin.com/in/demetrio-ferraro" target="_blank" title="LinkedIn">💼</a>
+        <a href="https://twitter.com" target="_blank" title="Twitter/X">🐦</a>
+      </div>
     </aside>
     <main class="main-content">
       <header>
