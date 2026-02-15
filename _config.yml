@@ -1,0 +1,14 @@
+title: Il mio Blog
+description: Un blog fatto con Jekyll
+baseurl: ""
+url: "https://DemPago.github.io"
+
+markdown: kramdown
+theme: minima
+
+collections:
+  posts:
+    title: Posts
+    output: true
+
+permalink: /:title/
