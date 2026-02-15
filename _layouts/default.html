@@ -132,8 +132,14 @@ b22;
     {{ content }}
 
     <footer>
-      © {{ site.time | date: "%Y" }} · Blog tecnologico
+      <p>👀 Visitatori: <span id="counter">-</span></p>
+      <p style="margin-top: 0.5rem">© {{ site.time | date: "%Y" }} · Blog tecnologico</p>
     </footer>
   </div>
+  <script>
+    fetch('https://api.countapi.xyz/hit/DemPago/github.io')
+      .then(r => r.json())
+      .then(data => document.getElementById('counter').innerText = data.value);
+  </script>
 </body>
 </html>
