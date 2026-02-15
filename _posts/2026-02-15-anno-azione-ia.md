@@ -60,10 +60,16 @@ Con l'esplosione dei consumi energetici dovuti ai data center, la sostenibilità
 <strong>🚀 Come provarlo (in 2 minuti):</strong>
 
 1. Scarica Ollama dal sito ufficiale (Mac, Linux o Windows)
-2. Apri il terminale e scrivi: <code>ollama run llama3</code>
+
+2. Apri il terminale e scrivi:
+
+```bash
+ollama run llama3
+```
+
 3. Inizia a chattare!
 
-Puoi anche provare altri modelli come <code>mistral</code> o <code>codellama</code> per programmare.</div>
+<em>Puoi anche provare altri modelli come <code>mistral</code> o <code>codellama</code> per programmare.</em></div>
 
 💡 *Te lo spiega Dem*: "La Green AI non è solo una scelta etica, è una necessità. E penso che nel 2026 vedremo sempre più aziende che adotteranno Small Language Models per ridurre i costi e l'impatto ambientale.
 Potrebbe essere una vera svolta, come anche l'AI in locale è qualcosa che potrebbe andar bene per molti compiti!"
