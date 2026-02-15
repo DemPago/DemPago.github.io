@@ -3,10 +3,11 @@ layout: default
 title: Home
 ---
 
-# Benvenuto nel mio blog!
-
-Questo blog è fatto con Jekyll e GitHub Pages.
-
+<ul class="post-list">
 {% for post in site.posts %}
-- [{{ post.title }}]({{ post.url }})
+  <li>
+    <a href="{{ post.url }}">{{ post.title }}</a>
+    <p class="date">{{ post.date | date: "%d %B %Y" }}</p>
+  </li>
 {% endfor %}
+</ul>

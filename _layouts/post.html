@@ -1,7 +1,9 @@
 ---
 layout: default
 ---
-<h1>{{ page.title }}</h1>
-<p>{{ page.date | date: "%d-%m-%Y" }}</p>
-{{ content }}
-<p><a href="/">← Torna alla home</a></p>
+<article class="post-content">
+  <h1>{{ page.title }}</h1>
+  <p class="post-date">{{ page.date | date: "%d %B %Y" }}</p>
+  {{ content }}
+</article>
+<a href="/" class="back-link">← Torna alla home</a>

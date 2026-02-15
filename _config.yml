@@ -1,10 +1,9 @@
-title: Il mio Blog
-description: Un blog fatto con Jekyll
+title: Tech Blog
+description: Un blog sulla tecnologia
 baseurl: ""
 url: "https://DemPago.github.io"
 
 markdown: kramdown
-theme: minima
 
 collections:
   posts:
