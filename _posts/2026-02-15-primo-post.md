@@ -9,7 +9,7 @@ Ciao! Bentornati su **Tech Illuminato**.
 
 Siamo arrivati al 2026 e la domanda non è più *"cosa può scrivere l'IA?"*, ma *"cosa può fare per noi nel mondo reale?"*. In questo primo post voglio portarvi nel cuore della rivoluzione che stiamo vivendo.
 
-I primi 3 temi dell'anno? Li riassumerei in tre parole: **Azione, Presenza e Sostenibilità**.
+I primi 3 temi dell'anno sono **AI, AI e un altro tipo di AI**.
 
 ---
 
