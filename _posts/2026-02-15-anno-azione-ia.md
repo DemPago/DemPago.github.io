@@ -45,6 +45,8 @@ L'intelligenza artificiale è finalmente uscita dagli schermi. Grazie alla conve
 
 <iframe width="100%" height="315" src="https://www.youtube.com/embed/fXQFZpRI-zk" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0;"></iframe>
 
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/UAG_FBZJVJ8" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0;"></iframe>
+
 💡 *Te lo spiega Dem*: "Non sono più solo i robot della Boston Dynamics che ballano, ma i carrelli della spesa intelligenti o i droni per le consegne che ora vediamo in città.
 
 ---
@@ -73,6 +75,8 @@ Con l'esplosione dei consumi energetici dovuti ai data center, la sostenibilità
 </ol>
 
 <em>Puoi anche provare altri modelli come <code>mistral</code> o <code>codellama</code> per programmare.</em></div>
+
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/MnQ4F5v-0HQ" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0;"></iframe>
 
 💡 *Te lo spiega Dem*: "La Green AI non è solo una scelta etica, è una necessità. E penso che nel 2026 vedremo sempre più aziende che adotteranno Small Language Models per ridurre i costi e l'impatto ambientale.
 Potrebbe essere una vera svolta, come anche l'AI in locale è qualcosa che potrebbe andar bene per molti compiti!"
