@@ -25,7 +25,7 @@ Se il 2024 e il 2025 sono stati gli anni della generazione di testi e immagini, 
 - **Sistemi Multi-Agente**: Diversi software IA che collaborano tra loro senza l'intervento umano costante per risolvere problemi aziendali complessi.
 - **Personal Intelligence**: L'integrazione profonda dell'IA nei nostri dati (email, calendari, file) per agire proattivamente come un vero "collega digitale".
 
-💡 *Il tocco di Demetrio*: "Immaginate di dire al vostro telefono 'Organizzami il weekend a Berlino con un budget di 400€' e lui prenota voli, hotel e ristorante mentre voi prendete il caffè."
+💡 *Te lo spiega Dem*: "Immaginate di dire al vostro telefono 'Organizzami il weekend a Berlino con un budget di 400€' e lui prenota voli, hotel e ristorante mentre voi prendete il caffè."
 
 ---
 
@@ -37,7 +37,7 @@ L'intelligenza artificiale è finalmente uscita dagli schermi. Grazie alla conve
 - **Edge Intelligence**: I dispositivi (dai droni ai macchinari industriali) elaborano dati in tempo reale localmente, riducendo la dipendenza dal cloud e permettendo reazioni istantanee.
 - **Mobilità Autonoma**: Il 2026 vede il consolidamento dei servizi di trasporto autonomo (eVTOL e robotaxi) in diverse metropoli globali.
 
-💡 *Il tocco di Demetrio*: "Non sono più solo i robot della Boston Dynamics che ballano, ma i carrelli della spesa intelligenti o i droni per le consegne che ora vediamo in città."
+💡 *Te lo spiega Dem*: "Non sono più solo i robot della Boston Dynamics che ballano, ma i carrelli della spesa intelligenti o i droni per le consegne che ora vediamo in città."
 
 ---
 
@@ -49,7 +49,7 @@ Con l'esplosione dei consumi energetici dovuti ai data center, la sostenibilità
 - **Infrastrutture Ibride e Sovrane**: Una spinta verso data center alimentati da fonti rinnovabili e sistemi di raffreddamento a liquido, unita alla necessità di mantenere la sovranità dei dati a livello regionale.
 - **Digital Provenance**: Tecnologie per certificare l'origine dei contenuti (watermarking crittografico) per combattere i deepfake e garantire l'autenticità in un web saturo di contenuti sintetici.
 
-💡 *Il tocco di Demetrio*: "La Green AI non è solo una scelta etica, è una necessità. E penso che nel 2026 vedremo sempre più aziende che adotteranno Small Language Models per ridurre i costi e l'impatto ambientale."
+💡 *Te lo spiega Dem*: "La Green AI non è solo una scelta etica, è una necessità. E penso che nel 2026 vedremo sempre più aziende che adotteranno Small Language Models per ridurre i costi e l'impatto ambientale."
 
 ---
 
