@@ -6,4 +6,19 @@ layout: default
   <p class="post-date">{{ page.date | date: "%d %B %Y" }}</p>
   {{ content }}
 </article>
-<a href="/" class="back-link">← Torna alla home</a>
+
+<nav class="post-nav">
+  {% if page.previous %}
+    <a href="{{ page.previous.url }}" class="nav-link nav-prev">← {{ page.previous.title }}</a>
+  {% else %}
+    <span class="nav-link nav-prev disabled"></span>
+  {% endif %}
+  
+  <a href="/" class="nav-link nav-home">🏠 Home</a>
+  
+  {% if page.next %}
+    <a href="{{ page.next.url }}" class="nav-link nav-next">{{ page.next.title }} →</a>
+  {% else %}
+    <span class="nav-link nav-next disabled"></span>
+  {% endif %}
+</nav>
