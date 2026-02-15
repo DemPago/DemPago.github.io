@@ -3,7 +3,7 @@ layout: post
 title: "Il 2026 non è l'anno dei chatbot, è l'anno dell'azione"
 date: 2026-02-15
 description: "Benvenuti su Tech Illuminato. Vi spiego perché quest'anno l'IA smette di parlare e inizia a lavorare al posto nostro."
-cover: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200"
+cover: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200"
 ---
 
 Iniziare un blog nel 2026 sembra un atto di ribellione. Tra capi che spariscono, lavori che cambiano e un'incertezza che sembra sabbia nelle scarpe, ho deciso di accendere questa luce: **Tech Illuminato**.
@@ -30,6 +30,8 @@ Se il 2024 e il 2025 sono stati gli anni in cui l'IA ci rispondeva, il 2026 è l
 - **Sistemi Multi-Agente**: Diversi software IA che collaborano tra loro per risolvere problemi complessi.
 - **Personal Intelligence**: L'IA che conosce le nostre email, calendari e file, e agisce proattivamente come un vero "collega digitale".
 
+![Agentic AI - Interfaccia olografica](https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800)
+
 💡 *Te lo spiega Dem*: "Immaginate di dire al vostro telefono 'Organizzami il weekend a Berlino con un budget di 400€' e lui prenota voli, hotel e ristorante mentre voi prendete il caffè."
 
 ---
@@ -44,6 +46,8 @@ L'intelligenza artificiale è finalmente uscita dagli schermi. Non è più chius
 - **Edge Intelligence**: Droni e macchinari industriali che elaborano dati in tempo reale, senza dipendere dal cloud.
 - **Mobilità Autonoma**: Robotaxi e droni per consegne che ormai vediamo in diverse città.
 
+![Physical AI - Braccio robotico](https://images.unsplash.com/photo-1485827404703-89b55fcc595e)
+
 💡 *Te lo spiega Dem*: "Non sono più solo i robot della Boston Dynamics che ballano, ma i carrelli della spesa intelligenti o i droni per le consegne che ora vediamo in città."
 
 ---
@@ -55,6 +59,8 @@ Siamo onesti: tutta questa potenza consuma. Il 2026 è l'anno in cui l'**efficie
 - **Small Language Models**: Modelli più piccoli e ottimizzati che richiedono meno potenza di calcolo.
 - **AI in locale**: Invece di mandare i dati a server remoti, l'IA gira direttamente sul vostro pc o telefono.
 - **Digital Provenance**: Tecnologie per certificare l'origine dei contenuti e combattere i deepfake.
+
+![Green AI - Chip sostenibile](https://images.unsplash.com/photo-1518770660439-4636190af475?w=800)
 
 💡 *Te lo spiega Dem*: "La Green AI non è solo una scelta etica, è una necessità. Un esempio? **Ollama** permette di scaricare modelli come Llama e usarli in locale, sul vostro computer. Più veloce, più privato, meno energia."
 
