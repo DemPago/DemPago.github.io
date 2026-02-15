@@ -151,17 +151,18 @@
       font-size: 1.05rem;
     }
 
-    .post-content img {
+    .post-content img, .post-cover {
       max-width: 100%;
       height: auto;
       border-radius: 8px;
       margin: 1rem 0;
       border: 1px solid var(--border);
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease !important;
+      cursor: pointer;
     }
 
-    .post-content img:hover {
-      transform: scale(1.02);
+    .post-content img:hover, .post-cover:hover {
+      transform: scale(1.05) !important;
     }
 
     .reading-time {

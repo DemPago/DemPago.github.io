@@ -9,12 +9,12 @@ layout: default
   {% endif %}
   
   <h1>{{ page.title }}</h1>
-  <p class="post-date">{{ page.date | date: "%d %B %Y" }} · {{ content | number_of_words | divided_by: 200 | ceil }} min di lettura</p>
+  <p class="post-date">{{ page.date | date: "%d %B %Y" }} · {{ page.reading_time | default: "5" }} min di lettura</p>
 
   <div class="share-buttons">
-    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ site.url }}{{ page.url }}" target="_blank" class="share-btn share-linkedin">LinkedIn</a>
-    <a href="https://twitter.com/intent/tweet?text={{ page.title }}&url={{ site.url }}{{ page.url }}" target="_blank" class="share-btn share-twitter">Twitter/X</a>
-    <button onclick="navigator.clipboard.writeText('{{ site.url }}{{ page.url }}')" class="share-btn share-copy">Copia link</button>
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ site.url }}{{ page.url }}" target="_blank" class="share-btn share-linkedin">📤 LinkedIn</a>
+    <a href="https://twitter.com/intent/tweet?text={{ page.title }}&url={{ site.url }}{{ page.url }}" target="_blank" class="share-btn share-twitter">🐦 X</a>
+    <button onclick="navigator.clipboard.writeText('{{ site.url }}{{ page.url }}'); alert('Link copiato!')" class="share-btn share-copy">🔗 Copia</button>
   </div>
 
   {{ content }}
