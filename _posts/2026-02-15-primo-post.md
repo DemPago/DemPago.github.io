@@ -6,7 +6,7 @@ description: "Benvenuti su Tech Illuminato. Vi spiego perché quest'anno l'IA sm
 cover: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200"
 ---
 
-Iniziare un blog nel 2026 sembra un atto di ribellione. Tra capi che spariscono, lavori che cambiano e un'incertezza che sembra sabbia nelle scarpe, ho deciso di accendere questa luce: **Tech Illuminato**.
+Iniziare un blog nel 2026 sembra un atto di ribellione. Tra aziende che spariscono, mestieri che cambiano e una velocità di esecuzione a livelli pazzeschi, ho deciso di accendere questa luce: **Tech Illuminato**.
 
 Qui non vedremo solo il codice, ma come la tecnologia ci aiuta a non impazzire.
 
