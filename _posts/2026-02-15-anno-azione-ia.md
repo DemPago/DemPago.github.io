@@ -59,13 +59,16 @@ Con l'esplosione dei consumi energetici dovuti ai data center, la sostenibilità
 
 <strong>🚀 Come provarlo (in 2 minuti):</strong>
 
-1. Scarica Ollama dal sito ufficiale (Mac, Linux o Windows)
-
-2. Apri il terminale e scrivi:
+<ol>
+<li>Scarica Ollama dal sito ufficiale (Mac, Linux o Windows)</li>
+<li>Apri il terminale e scrivi:</li>
+</ol>
 
 <pre><code>ollama run llama3</code></pre>
 
-3. Inizia a chattare!
+<ol start="3">
+<li>Inizia a chattare!</li>
+</ol>
 
 <em>Puoi anche provare altri modelli come <code>mistral</code> o <code>codellama</code> per programmare.</em></div>
 
