@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Primo post"
+title: "Benvenuti nel 2026: Quando l'IA ha smesso di parlare e ha iniziato a fare."
 date: 2026-02-15
 ---
 
