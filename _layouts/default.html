@@ -192,6 +192,23 @@
       font-size: 0.75rem;
     }
 
+    .esempio-tech {
+      background: linear-gradient(135deg, #1a1f2e 0%, #161b22 100%);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .esempio-tech strong {
+      color: var(--accent);
+    }
+
+    .esempio-tech a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
     .post-list a {
       color: var(--text);
       text-decoration: none;
@@ -396,10 +413,14 @@
       {{ content }}
     </main>
   </div>
+  <footer>
+    <p>👀 <span id="counter">-</span> visite</p>
+  </footer>
   <script>
     fetch('https://api.countapi.xyz/hit/DemPago/github.io')
       .then(r => r.json())
-      .then(data => document.getElementById('counter').innerText = data.value);
+      .then(data => document.getElementById('counter').innerText = data.value)
+      .catch(() => document.getElementById('counter').innerText = "?");
   </script>
 </body>
 </html>

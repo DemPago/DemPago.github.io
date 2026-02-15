@@ -22,9 +22,11 @@ I primi 3 temi dell'anno sono **AI, AI e un altro tipo di AI**.
 
 Se il 2024 e il 2025 sono stati gli anni della generazione di testi e immagini, il 2026 è l'anno della **Agentic AI**. Non più semplici assistenti che rispondono a domande, ma agenti autonomi capaci di:
 
-- **Pianificare ed eseguire**: Gestire intere catene di processi (es. prenotare un viaggio intere gestendo budget e imprevisti, o negoziare contratti tra fornitori).
+- **Pianificare ed eseguire**: Gestire intere catene di processi (es. prenotare un viaggio gestendo budget e imprevisti, o negoziare contratti tra fornitori).
 - **Sistemi Multi-Agente**: Diversi software IA che collaborano tra loro senza l'intervento umano costante per risolvere problemi aziendali complessi.
 - **Personal Intelligence**: L'integrazione profonda dell'IA nei nostri dati (email, calendari, file) per agire proattivamente come un vero "collega digitale".
+
+<div class="esempio-tech">📦 <strong>Esempio tech</strong>: Prova <a href="https://agentgpt.reworkd.ai" target="_blank">AgentGPT</a> - un agente AI che puoi configurare per completare obiettivi complessi automaticamente.</div>
 
 💡 *Te lo spiega Dem*: "Immaginate di dire al vostro telefono 'Organizzami il weekend a Berlino con un budget di 400€' e lui prenota voli, hotel e ristorante mentre voi prendete il caffè.
 Chissà dove ci ritroveremmo però..."
@@ -39,8 +41,9 @@ L'intelligenza artificiale è finalmente uscita dagli schermi. Grazie alla conve
 - **Edge Intelligence**: I dispositivi (dai droni ai macchinari industriali) elaborano dati in tempo reale localmente, riducendo la dipendenza dal cloud e permettendo reazioni istantanee.
 - **Mobilità Autonoma**: Il 2026 vede il consolidamento dei servizi di trasporto autonomo (eVTOL e robotaxi) in diverse metropoli globali.
 
+<div class="esempio-tech">📦 <strong>Esempio tech</strong>: Guarda i <a href="https://bostondynamics.com" target="_blank">robot di Boston Dynamics</a> in azione - dalla fabbrica alla logistica.</div>
+
 💡 *Te lo spiega Dem*: "Non sono più solo i robot della Boston Dynamics che ballano, ma i carrelli della spesa intelligenti o i droni per le consegne che ora vediamo in città.
-Speriamo che il carello della spesa non se ne vada ballando con la mia spesa però!"
 
 ---
 
@@ -51,6 +54,8 @@ Con l'esplosione dei consumi energetici dovuti ai data center, la sostenibilità
 - **Algoritmi Energy-Aware**: Sviluppo di modelli più piccoli e ottimizzati (Small Language Models) che richiedono meno potenza di calcolo.
 - **Infrastrutture Ibride e Sovrane**: Una spinta verso data center alimentati da fonti rinnovabili e sistemi di raffreddamento a liquido, unita alla necessità di mantenere la sovranità dei dati a livello regionale.
 - **Digital Provenance**: Tecnologie per certificare l'origine dei contenuti (watermarking crittografico) per combattere i deepfake e garantire l'autenticità in un web saturo di contenuti sintetici.
+
+<div class="esempio-tech">📦 <strong>Esempio tech</strong>: <a href="https://ollama.com" target="_blank">Ollama</a> ti permette di far girare modelli AI direttamente sul tuo PC - nessun cloud, massima privacy, consumo ridotto.</div>
 
 💡 *Te lo spiega Dem*: "La Green AI non è solo una scelta etica, è una necessità. E penso che nel 2026 vedremo sempre più aziende che adotteranno Small Language Models per ridurre i costi e l'impatto ambientale.
 Potrebbe essere una vera svolta, come anche l'AI in locale è qualcosa che potrebbe andar bene per molti compiti!"
