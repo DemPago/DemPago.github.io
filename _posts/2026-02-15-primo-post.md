@@ -49,6 +49,8 @@ Con l'esplosione dei consumi energetici dovuti ai data center, la sostenibilità
 - **Infrastrutture Ibride e Sovrane**: Una spinta verso data center alimentati da fonti rinnovabili e sistemi di raffreddamento a liquido, unita alla necessità di mantenere la sovranità dei dati a livello regionale.
 - **Digital Provenance**: Tecnologie per certificare l'origine dei contenuti (watermarking crittografico) per combattere i deepfake e garantire l'autenticità in un web saturo di contenuti sintetici.
 
+💡 *Il tocco di Demetrio*: "La Green AI non è solo una scelta etica, è una necessità. E penso che nel 2026 vedremo sempre più aziende che adotteranno Small Language Models per ridurre i costi e l'impatto ambientale."
+
 ---
 
 ## Cosa ne pensi?
