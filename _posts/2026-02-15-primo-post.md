@@ -49,7 +49,8 @@ Con l'esplosione dei consumi energetici dovuti ai data center, la sostenibilità
 - **Infrastrutture Ibride e Sovrane**: Una spinta verso data center alimentati da fonti rinnovabili e sistemi di raffreddamento a liquido, unita alla necessità di mantenere la sovranità dei dati a livello regionale.
 - **Digital Provenance**: Tecnologie per certificare l'origine dei contenuti (watermarking crittografico) per combattere i deepfake e garantire l'autenticità in un web saturo di contenuti sintetici.
 
-💡 *Te lo spiega Dem*: "La Green AI non è solo una scelta etica, è una necessità. E penso che nel 2026 vedremo sempre più aziende che adotteranno Small Language Models per ridurre i costi e l'impatto ambientale."
+💡 *Te lo spiega Dem*: "La Green AI non è solo una scelta etica, è una necessità. E penso che nel 2026 vedremo sempre più aziende che adotteranno Small Language Models per ridurre i costi e l'impatto ambientale. 
+Cosa si intende per AI in locale? In pratica invece di mandare i dati a server remoti, l'IA gira direttamente sul vostro pc o telefono. Un esempio? **Ollama** permette di scaricare modelli come Llama o Mistral e usarli in locale, senza mandare i dati a Big Tech. È più veloce, più privato e consuma meno energia."
 
 ---
 
