@@ -28,6 +28,8 @@ Se il 2024 e il 2025 sono stati gli anni della generazione di testi e immagini, 
 
 <div class="esempio-tech">📦 <strong>Esempio tech</strong>: Prova <a href="https://agentgpt.reworkd.ai" target="_blank">AgentGPT</a> - un agente AI che puoi configurare per completare obiettivi complessi automaticamente.</div>
 
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/MSUVRUegoIA" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0;"></iframe>
+
 💡 *Te lo spiega Dem*: "Immaginate di dire al vostro telefono 'Organizzami il weekend a Berlino con un budget di 400€' e lui prenota voli, hotel e ristorante mentre voi prendete il caffè.
 Chissà dove ci ritroveremmo però..."
 
