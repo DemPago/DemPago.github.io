@@ -43,6 +43,8 @@ L'intelligenza artificiale è finalmente uscita dagli schermi. Grazie alla conve
 
 <div class="esempio-tech">📦 <strong>Esempio tech</strong>: Guarda i <a href="https://bostondynamics.com" target="_blank">robot di Boston Dynamics</a> in azione - dalla fabbrica alla logistica.</div>
 
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/fXQFZpRI-zk" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0;"></iframe>
+
 💡 *Te lo spiega Dem*: "Non sono più solo i robot della Boston Dynamics che ballano, ma i carrelli della spesa intelligenti o i droni per le consegne che ora vediamo in città.
 
 ---
