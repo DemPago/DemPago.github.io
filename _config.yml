@@ -5,9 +5,4 @@ url: "https://DemPago.github.io"
 
 markdown: kramdown
 
-collections:
-  posts:
-    title: Posts
-    output: true
-
 permalink: /:title/
