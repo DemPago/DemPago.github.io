@@ -63,9 +63,7 @@ Con l'esplosione dei consumi energetici dovuti ai data center, la sostenibilità
 
 2. Apri il terminale e scrivi:
 
-```bash
-ollama run llama3
-```
+<pre><code>ollama run llama3</code></pre>
 
 3. Inizia a chattare!
 
