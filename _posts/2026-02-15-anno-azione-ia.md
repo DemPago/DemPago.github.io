@@ -55,7 +55,15 @@ Con l'esplosione dei consumi energetici dovuti ai data center, la sostenibilità
 - **Infrastrutture Ibride e Sovrane**: Una spinta verso data center alimentati da fonti rinnovabili e sistemi di raffreddamento a liquido, unita alla necessità di mantenere la sovranità dei dati a livello regionale.
 - **Digital Provenance**: Tecnologie per certificare l'origine dei contenuti (watermarking crittografico) per combattere i deepfake e garantire l'autenticità in un web saturo di contenuti sintetici.
 
-<div class="esempio-tech">📦 <strong>Esempio tech</strong>: <a href="https://ollama.com" target="_blank">Ollama</a> ti permette di far girare modelli AI direttamente sul tuo PC - nessun cloud, massima privacy, consumo ridotto.</div>
+<div class="esempio-tech">📦 <strong>Esempio tech</strong>: <a href="https://ollama.com" target="_blank">Ollama</a> ti permette di far girare modelli AI direttamente sul tuo PC - nessun cloud, massima privacy, consumo ridotto.
+
+<strong>🚀 Come provarlo (in 2 minuti):</strong>
+
+1. Scarica Ollama dal sito ufficiale (Mac, Linux o Windows)
+2. Apri il terminale e scrivi: <code>ollama run llama3</code>
+3. Inizia a chattare!
+
+Puoi anche provare altri modelli come <code>mistral</code> o <code>codellama</code> per programmare.</div>
 
 💡 *Te lo spiega Dem*: "La Green AI non è solo una scelta etica, è una necessità. E penso che nel 2026 vedremo sempre più aziende che adotteranno Small Language Models per ridurre i costi e l'impatto ambientale.
 Potrebbe essere una vera svolta, come anche l'AI in locale è qualcosa che potrebbe andar bene per molti compiti!"
