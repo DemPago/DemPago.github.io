@@ -12,6 +12,8 @@ Qui non vedremo solo il codice, ma come la tecnologia ci aiuta a non impazzire.
 
 I primi 3 temi dell'anno sono **AI, AI e un altro tipo di AI**.
 
+![Tech 2026](https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800)
+
 ---
 
 > "Il 2026 è l'anno in cui l'IA esce dallo schermo e tocca la realtà."
@@ -27,7 +29,9 @@ Questa è l'**Agentic AI**: l'IA che agisce.
 Se il 2024 e il 2025 sono stati gli anni in cui l'IA ci rispondeva, il 2026 è l'anno in cui l'IA **lavora per noi**. Non più assistenti passivi, ma agenti autonomi capaci di:
 
 - **Pianificare ed eseguire**: Gestire intere catene di processi (es. prenotare un viaggio gestendo budget e imprevisti).
+
 - **Sistemi Multi-Agente**: Diversi software IA che collaborano tra loro per risolvere problemi complessi.
+
 - **Personal Intelligence**: L'IA che conosce le nostre email, calendari e file, e agisce proattivamente come un vero "collega digitale".
 
 ![Agentic AI - Interfaccia olografica](https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800)
@@ -43,7 +47,9 @@ L'intelligenza artificiale è finalmente uscita dagli schermi. Non è più chius
 È il momento in cui i **bit diventano atomi**.
 
 - **Robot Umanoidi e Collaborativi (Cobots)**: Robot capaci di operare in ambienti non strutturati (ospedali, magazzini, persino case).
+
 - **Edge Intelligence**: Droni e macchinari industriali che elaborano dati in tempo reale, senza dipendere dal cloud.
+
 - **Mobilità Autonoma**: Robotaxi e droni per consegne che ormai vediamo in diverse città.
 
 ![Physical AI - Braccio robotico](https://images.unsplash.com/photo-1485827404703-89b55fcc595e)
@@ -57,7 +63,9 @@ L'intelligenza artificiale è finalmente uscita dagli schermi. Non è più chius
 Siamo onesti: tutta questa potenza consuma. Il 2026 è l'anno in cui l'**efficienza** diventa più importante della potenza pura.
 
 - **Small Language Models**: Modelli più piccoli e ottimizzati che richiedono meno potenza di calcolo.
+
 - **AI in locale**: Invece di mandare i dati a server remoti, l'IA gira direttamente sul vostro pc o telefono.
+
 - **Digital Provenance**: Tecnologie per certificare l'origine dei contenuti e combattere i deepfake.
 
 ![Green AI - Chip sostenibile](https://images.unsplash.com/photo-1518770660439-4636190af475?w=800)
