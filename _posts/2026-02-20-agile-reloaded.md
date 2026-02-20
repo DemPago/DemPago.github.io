@@ -66,7 +66,7 @@ I dati parlano chiaro:
 - **3x** più probabilità di consegnare in tempo rispetto a metodi tradizionali
 - **85%** dei team che usano DevOps (che è Agile-driven) rilasciano ogni giorno
 
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/aUC-2D6A4x8" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0;"></iframe>
+<div class="esempio-tech">📊 <strong>Dati</strong>: Secondo il <a href="https://www.zealousys.com/blog/agile-statistics/" target="_blank">State of Agile Report 2025</a>, il 94% delle aziende tech usa Agile.</div>
 
 ---
 
@@ -103,7 +103,7 @@ I piani a 6 mesi sono morti. In un mondo dove l'AI cambia le regole del gioco og
 
 Il cliente non è più chi firma il contratto. È l'utente finale. Con i feedback in tempo reale (analytics, heatmaps, crash reports), la collaborazione è **continua**, non più solo al kickoff.
 
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/Wm5uO4_U2mQ" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0;"></iframe>
+<div class="esempio-tech">📦 <strong>Esempio tech</strong>: <a href="https://linear.app" target="_blank">Linear</a> combina project management con GitHub, creando un flusso seamless tra pianificazione e codice.</div>
 
 #### 4. Humans + AI: The Dream Team
 
