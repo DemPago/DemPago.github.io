@@ -461,13 +461,13 @@
     <p>👀 Visite: <span id="counter">-</span></p>
   </footer>
   <script>
-    function formatCounter(num) {
-      return num < 10 ? "0" + num : num;
-    }
-    var count = localStorage.getItem("visit_count") || 0;
-    count = parseInt(count) + 1;
-    localStorage.setItem("visit_count", count);
-    document.getElementById("counter").innerText = formatCounter(count);
+    fetch('https://api.countapi.xyz/hit/dempago-blog')
+      .then(r => r.json())
+      .then(data => {
+        const n = data.value;
+        document.getElementById("counter").innerText = n < 10 ? "0" + n : n;
+      })
+      .catch(() => document.getElementById("counter").innerText = "--");
   </script>
 </body>
 </html>
