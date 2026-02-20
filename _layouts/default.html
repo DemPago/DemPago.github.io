@@ -446,9 +446,14 @@
     <p>👀 <span id="counter">-</span> visite</p>
   </footer>
   <script>
+    function formatCounter(num) {
+      if (num < 10) return "0" + num;
+      if (num < 100) return "" + num;
+      return num;
+    }
     fetch('https://api.countapi.xyz/hit/DemPago/github.io')
       .then(r => r.json())
-      .then(data => document.getElementById('counter').innerText = data.value)
+      .then(data => document.getElementById('counter').innerText = formatCounter(data.value))
       .catch(() => document.getElementById('counter').innerText = "?");
   </script>
 </body>
