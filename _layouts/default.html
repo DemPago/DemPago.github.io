@@ -458,7 +458,16 @@
     </main>
   </div>
   <footer>
-    <p>👀 Visite: <a href="https://freecountercode.com" target="_blank"><img src="https://counter.frek.net/48871.png" alt="free counter"></a></p>
+    <p>👀 Visite: <span id="counter">-</span></p>
   </footer>
+  <script>
+    function formatCounter(num) {
+      return num < 10 ? "0" + num : num;
+    }
+    var count = localStorage.getItem("visit_count") || 0;
+    count = parseInt(count) + 1;
+    localStorage.setItem("visit_count", count);
+    document.getElementById("counter").innerText = formatCounter(count);
+  </script>
 </body>
 </html>
