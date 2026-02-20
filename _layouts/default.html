@@ -466,10 +466,10 @@
       if (num < 100) return "" + num;
       return num;
     }
-    fetch('https://api.countapi.xyz/hit/DemPago/github.io')
+    fetch('https://api.countapi.dev/hit/dempago.github.io')
       .then(r => r.json())
-      .then(data => document.getElementById('counter').innerText = formatCounter(data.value))
-      .catch(() => document.getElementById('counter').innerText = "?");
+      .then(data => document.getElementById('counter').innerText = formatCounter(data.count))
+      .catch(() => document.getElementById('counter').innerText = "-");
   </script>
 </body>
 </html>
