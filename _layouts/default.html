@@ -460,16 +460,5 @@
   <footer>
     <p>👀 Visite: <img src="https://www.counter-zaehler.de/hit.php?cnt=48971&fmt=co" alt="counter" style="vertical-align:middle"></p>
   </footer>
-  <script>
-    function formatCounter(num) {
-      if (num < 10) return "0" + num;
-      if (num < 100) return "" + num;
-      return num;
-    }
-    fetch('https://visitor.6developer.com/visit?domain=dempago.github.io')
-      .then(r => r.json())
-      .then(data => document.getElementById('counter').innerText = formatCounter(data.totalCount))
-      .catch(() => document.getElementById('counter').innerText = "-");
-  </script>
 </body>
 </html>
