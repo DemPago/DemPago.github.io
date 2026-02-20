@@ -417,6 +417,31 @@
       border-top: 1px solid var(--border);
     }
 
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--accent);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 100;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-3px);
+    }
+
     footer {
       text-align: center;
       padding: 2rem;
@@ -506,6 +531,7 @@
     <div class="loader-spinner"></div>
     <div class="loader-text">⚡ Blog Tech Illuminato</div>
   </div>
+  <button class="back-to-top" id="backToTop" title="Torna su">↑</button>
   <div class="container">
     <aside class="sidebar">
       <img src="/profilo.png" alt="Foto profilo">
@@ -539,6 +565,19 @@
     count = parseInt(count) + 1;
     localStorage.setItem("visit_count", count);
     document.getElementById("counter").innerText = count < 10 ? "0" + count : count;
+
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('backToTop');
+      if (window.scrollY > 300) {
+        btn.classList.add('visible');
+      } else {
+        btn.classList.remove('visible');
+      }
+    });
+
+    document.getElementById('backToTop').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   </script>
 </body>
 </html>
