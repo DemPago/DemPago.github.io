@@ -16,6 +16,26 @@ Ma prima di parlare del futuro, dobbiamo capire il passato.
 
 > "Nel 2001, 17 sviluppatori si sono chiusi in una stanza d'hotel in Utah. Quello che è uscito ha rivoluzionato il modo di sviluppare software."
 
+I 17 guru che hanno scritto la storia:
+
+- **Kent Beck** (Extreme Programming)
+- **Mike Beedle** (Scrum)
+- **Arie van Bennekum**
+- **Alistair Cockburn** (Crystal)
+- **Ward Cunningham** (Wiki)
+- **Martin Fowler**
+- **James Grenning**
+- **Jim Highsmith** (Adaptive Software Development)
+- **Andrew Hunt** (Pragmatic Programmer)
+- **Ron Jeffries** (eXtreme Programming)
+- **Jon Kern** (Feature-Driven Development)
+- **Brian Marick**
+- **Robert C. Martin** (Clean Code)
+- **Steve Mellor**
+- **Ken Schwaber** (Scrum)
+- **Jeff Sutherland** (Scrum)
+- **Dave Thomas** (Pragmatic Programmer)
+
 ---
 
 ## La Storia: Dalle Cascade alle Pulley
