@@ -466,9 +466,9 @@
       if (num < 100) return "" + num;
       return num;
     }
-    fetch('https://api.countapi.dev/hit/dempago.github.io')
+    fetch('https://visitor.6developer.com/visit?domain=dempago.github.io')
       .then(r => r.json())
-      .then(data => document.getElementById('counter').innerText = formatCounter(data.count))
+      .then(data => document.getElementById('counter').innerText = formatCounter(data.totalCount))
       .catch(() => document.getElementById('counter').innerText = "-");
   </script>
 </body>
