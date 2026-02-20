@@ -460,12 +460,10 @@
   <footer>
     <p>👀 Visite: <span id="counter">-</span></p>
   </footer>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-  <script>
-    function formatCounter(num) {
-      return num < 10 ? "0" + num : num;
-    }
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyAcoVUGZkrGuUM9GmCTQbC1boGX2rieDLE",
       authDomain: "blog-b28f6.firebaseapp.com",
@@ -474,24 +472,32 @@
       messagingSenderId: "844692580262",
       appId: "1:844692580262:web:c56ca7feeebd1d3b241167"
     };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const counterRef = db.collection("counters").doc("blog");
-    db.runTransaction(t => {
-      return t.get(counterRef).then(doc => {
-        if (!doc.exists) {
-          t.set(counterRef, { count: 1 });
-          return 1;
-        }
-        const newCount = doc.data().count + 1;
-        t.update(counterRef, { count: newCount });
-        return newCount;
-      });
-    }).then(result => {
-      document.getElementById("counter").innerText = formatCounter(result);
-    }).catch(() => {
-      document.getElementById("counter").innerText = "--";
-    });
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const counterRef = doc(db, "counters", "blog");
+
+    async function updateCounter() {
+      try {
+        const result = await runTransaction(db, async (transaction) => {
+          const doc = await transaction.get(counterRef);
+          if (!doc.exists()) {
+            transaction.set(counterRef, { count: 1 });
+            return 1;
+          }
+          const newCount = doc.data().count + 1;
+          transaction.update(counterRef, { count: newCount });
+          return newCount;
+        });
+        const n = result;
+        document.getElementById("counter").innerText = n < 10 ? "0" + n : n;
+      } catch (e) {
+        console.error(e);
+        document.getElementById("counter").innerText = "--";
+      }
+    }
+
+    updateCounter();
   </script>
 </body>
 </html>
