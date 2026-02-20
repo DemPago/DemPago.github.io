@@ -531,53 +531,14 @@
   </div>
   <footer>
     <div class="brand">⚡ Tech Illuminato Blog</div>
-    <p>👀 Visite: <span id="counter">-</p>
+    <p>👀 Visite: <span id="counter">-</span></p>
     <p class="copyright">© 2026 DemPago • Made with ☕ and code</p>
   </footer>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, doc, getDoc, setDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAcoVUGZkrGuUM9GmCTQbC1boGX2rieDLE",
-      authDomain: "blog-b28f6.firebaseapp.com",
-      projectId: "blog-b28f6",
-      storageBucket: "blog-b28f6.firebasestorage.app",
-      messagingSenderId: "844692580262",
-      appId: "1:844692580262:web:c56ca7feeebd1d3b241167"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const counterRef = doc(db, "counters", "blog");
-
-    async function updateCounter() {
-      try {
-        const result = await runTransaction(db, async (transaction) => {
-          const doc = await transaction.get(counterRef);
-          if (!doc.exists()) {
-            transaction.set(counterRef, { count: 1 });
-            return 1;
-          }
-          const newCount = doc.data().count + 1;
-          transaction.update(counterRef, { count: newCount });
-          return newCount;
-        });
-        const n = result;
-        document.getElementById("counter").innerText = n < 10 ? "0" + n : n;
-      } catch (e) {
-        console.error(e);
-        document.getElementById("counter").innerText = "--";
-      }
-    }
-
-    updateCounter();
-
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.getElementById('loader').classList.add('hidden');
-      }, 800);
-    });
+  <script>
+    var count = localStorage.getItem("visit_count") || 0;
+    count = parseInt(count) + 1;
+    localStorage.setItem("visit_count", count);
+    document.getElementById("counter").innerText = count < 10 ? "0" + count : count;
   </script>
 </body>
 </html>
