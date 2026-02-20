@@ -66,7 +66,7 @@ I dati parlano chiaro:
 - **3x** più probabilità di consegnare in tempo rispetto a metodi tradizionali
 - **85%** dei team che usano DevOps (che è Agile-driven) rilasciano ogni giorno
 
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/gy5g33K0f8Y" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0;"></iframe>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/aUC-2D6A4x8" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0;"></iframe>
 
 ---
 
