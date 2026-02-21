@@ -63,7 +63,7 @@ Non esiste una regola fissa, ma ecco alcuni segnali:
 3. **Hai bisogno di stabilità** - Un indirizzo fisico
 4. **Vuoi assumere qualcuno** - Per delegare
 
-> **Nota:** Molti创始人 iniziano con un ufficio virtuale o coworking. Non servono investimenti enormi.
+> **Nota:** Molti founder iniziano con un ufficio virtuale o coworking. Non servono investimenti enormi.
 
 ---
 
