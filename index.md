@@ -7,6 +7,7 @@ title: Home
 
 <ul class="post-grid">
 {% for post in site.posts %}
+{% if post.category != "business" %}
   <li class="post-card">
     {% if post.cover %}
     <a href="{{ post.url }}" class="post-card-cover">
@@ -19,6 +20,7 @@ title: Home
       <span class="post-card-date">{{ post.date | date: "%d %B %Y" }}</span>
     </div>
   </li>
+{% endif %}
 {% endfor %}
 </ul>
 
@@ -28,7 +30,7 @@ title: Home
 
 <ul class="post-grid">
 {% for post in site.posts %}
-  {% if post.category == "business" %}
+{% if post.category == "business" %}
   <li class="post-card">
     {% if post.cover %}
     <a href="{{ post.url }}" class="post-card-cover">
@@ -41,6 +43,6 @@ title: Home
       <span class="post-card-date">{{ post.date | date: "%d %B %Y" }}</span>
     </div>
   </li>
-  {% endif %}
+{% endif %}
 {% endfor %}
 </ul>
