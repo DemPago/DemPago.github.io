@@ -176,7 +176,9 @@ Usiamo più tool che mai (Jira, GitHub, CI/CD, AI). Ma contano le **persone**. L
 
 > "There is no Agile methodology. There is only Agile thinking."
 
-Agile non è un framework. Non è Scrum, Kanban o Spotify Model. È un **mindset**: collaborare, adattarsi, consegnare valore.
+Agile non è un framework. Non è Scrum, Kanban o Spotify Model.
+
+È un **mindset**: collaborare, adattarsi, consegnare valore.
 
 L'AI è il nuovo teammate. Usiamolo bene.
 
