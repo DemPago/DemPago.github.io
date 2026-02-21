@@ -2,6 +2,7 @@
 layout: post
 title: "Tech 2026: i 3 trend che cambieranno il nostro futuro"
 date: 2026-02-15
+categories: tech
 description: "Scopri i 3 trend tech del 2026: Agentic AI, Physical AI e Green AI. Spiegati in modo semplice e chiaro."
 permalink: /anno-azione-ia/
 cover: https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800

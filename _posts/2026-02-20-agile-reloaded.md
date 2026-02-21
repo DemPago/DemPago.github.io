@@ -3,6 +3,7 @@ layout: post
 title: "Agile Reloaded: la storia, i numeri e il futuro"
 description: "Dai 17 sviluppatori dell'Utah all'AI: come Agile è diventata la metodologia più importante dello sviluppo software."
 date: 2026-02-20
+categories: tech
 cover: https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800
 ---
 

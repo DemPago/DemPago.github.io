@@ -415,9 +415,24 @@ li {
 }
 
 .post-content ol li > blockquote,
-.post-content ul li > blockquote {
-  margin: 0.5rem 0 0.5rem 1rem;
+.post-content ul li  margin:  > blockquote {
+0.5rem 0 0.5rem 1rem;
   padding: 0.75rem 1rem;
+}
+
+.company-logos {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+  justify-content: center;
+}
+
+.company-logos img {
+  width: 30%;
+  border-radius: 8px;
+  object-fit: contain;
+  background: white;
+  padding: 10px;
 }
 
 .post-content table {
