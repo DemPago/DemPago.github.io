@@ -20,11 +20,9 @@ title: Home
       <span class="post-card-date">{{ post.date | date: "%d %B %Y" }}</span>
     </div>
   </li>
-{% endif %}
+{% endunless %}
 {% endfor %}
 </ul>
-
-<hr style="border: none; border-top: 1px solid var(--border); margin: 3rem 0;">
 
 <h2 style="color: var(--accent); margin-bottom: 1rem;">🏢 Costruisci la tua azienda</h2>
 
