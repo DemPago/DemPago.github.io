@@ -243,6 +243,21 @@
       text-align: center;
     }
 
+    @media (max-width: 600px) {
+      .post-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      }
+      .post-card-cover {
+        height: 100px;
+      }
+      .post-card h3 {
+        font-size: 0.9rem;
+      }
+      .post-card-desc {
+        display: none;
+      }
+    }
+
     .esempio-tech {
       background: linear-gradient(135deg, #1a1f2e 0%, #161b22 100%);
       border: 1px solid var(--accent);
