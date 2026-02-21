@@ -155,7 +155,7 @@ Il cliente non è più chi firma il contratto. È l'utente finale. Con i feedbac
 
 Usiamo più tool che mai (Jira, GitHub, CI/CD, AI). Ma contano le **persone**. L'AI può automatizzare il processo, ma non può sostituire la comunicazione umana.
 
-<div class="esempio-tech">📦 <strong>Esempio tech</strong>: <a href="https://linear.app" target="_blank">Linear</a> combina项目管理 con GitHub, creando un flusso seamless tra pianificazione e codice.</div>
+<div class="esempio-tech">📦 <strong>Esempio tech</strong>: <a href="https://linear.app" target="_blank">Linear</a> combina project management con GitHub, creando un flusso seamless tra pianificazione e codice.</div>
 
 ---
 
