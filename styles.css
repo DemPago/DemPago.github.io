@@ -149,6 +149,16 @@ header p {
   border-color: var(--accent);
 }
 
+ul, ol {
+  margin: 1rem 0 1rem 1.5rem;
+  padding-left: 0.5rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
 .post-card-cover {
   display: block;
   width: 100%;
@@ -396,6 +406,18 @@ header p {
   border-radius: 0 6px 6px 0;
   font-style: italic;
   color: #8b949e;
+}
+
+.post-content ol li,
+.post-content ul li {
+  margin-bottom: 0.75rem;
+  padding-left: 0.25rem;
+}
+
+.post-content ol li > blockquote,
+.post-content ul li > blockquote {
+  margin: 0.5rem 0 0.5rem 1rem;
+  padding: 0.75rem 1rem;
 }
 
 .post-content table {
