@@ -2,7 +2,7 @@
 layout: post
 title: "Ufficio Zero: dove inizia ogni azienda"
 description: "Startup, PMI o freelance? L'importanza di partire dal problema, non dalla formula legale. Guida al primo passo."
-date: 2026-02-22
+date: 2026-02-21
 categories: business
 cover: https://images.unsplash.com/photo-1553484771-371a605b060b?w=800
 ---
