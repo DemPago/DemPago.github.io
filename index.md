@@ -7,7 +7,7 @@ title: Home
 
 <ul class="post-grid">
 {% for post in site.posts %}
-{% if post.category != "business" %}
+{% unless post.categories contains "business" %}
   <li class="post-card">
     {% if post.cover %}
     <a href="{{ post.url }}" class="post-card-cover">
@@ -30,7 +30,7 @@ title: Home
 
 <ul class="post-grid">
 {% for post in site.posts %}
-{% if post.category == "business" %}
+{% if post.categories contains "business" %}
   <li class="post-card">
     {% if post.cover %}
     <a href="{{ post.url }}" class="post-card-cover">
