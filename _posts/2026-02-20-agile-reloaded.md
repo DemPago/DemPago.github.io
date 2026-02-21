@@ -40,20 +40,61 @@ I 17 guru che hanno scritto la storia:
 
 ## La Storia: Dalle Cascade alle Pulley
 
-Prima di Agile, c'era il **Waterfall** (a cascata). Anni '70, IBM, militari. Un metodo lineare: prima requisiti, poi design, poi codice, poi test, poi deploy. Funzionava? Sì, per progetti prevedibili. Ma il mondo non è prevedibile.
+### Il Waterfall (1970)
 
-Nel 1986, i guru giapponesi **Takeuchi e Nonaka** introducono il concetto di **Scrum** nel loro paper "The New New Product Development Game". Nasce l'idea del team cross-functional che lavora in iterazioni.
+Prima di Agile, c'era il **Waterfall** (a cascata). Nato negli anni '70 principalmente da **Winston Royce** (che in realtà lo criticò!) e adottato da **IBM** e dal **settore militare** (specialmente il Dipartimento della Difesa USA).
+
+Era un metodo **lineare e sequenziale**:
+1. **Requisiti** - Si raccoglie tutto quello che il cliente vuole
+2. **Design** - Si progetta l'architettura
+3. **Implementazione** - Si scrive il codice
+4. **Verifica** - Si testano i componenti
+5. **Manutenzione** - Si deploya e mantiene
+
+Funzionava? Sì, per progetti **prevedibili** come:
+- Sistemi bancari con regole fisse
+- Software militare con requisiti stabili
+- Progetti con budget illimitato e timeline lunga
+
+Ma il mondo reale non è prevedibile. I requisiti cambiano, il mercato si muove, i clienti capiscono cosa vogliono solo vedendo il prodotto.
+
+<div class="esempio-tech">📦 <strong>Problema fondamentale</strong>: Nel Waterfall, se scopri un errore nei requisiti al punto 5, devi tornare a monte. È come scoprire che la fondamenta sono sbagliate dopo aver costruito il tetto.</div>
+
+---
+
+### La Svolta Giapponese: Scrum (1986)
+
+Nel 1986, due guru giapponesi **Takeuchi e Nonaka** pubblicano il paper *"The New New Product Development Game"* nella Harvard Business Review.
+
+La loro intuizione? I team di successo (come Honda, Canon, Fuji-Xerox) condividevano queste caratteristiche:
+- **Team cross-functional** - Tutte le competenze dentro il team
+- **Iterazioni brevi** - "Sprint" prima del nome
+- **Auto-organizzazione** - Nessuna gerarchia rigida
+- **Feedback continuo** - Miglioramento costante
+
+Nasce il concetto di **Scrum** (termine preso dal rugby - placcaggio di gruppo). Non era ancora una metodologia, ma un nuovo modo di pensare.
+
+---
 
 ### Il Manifesto (2001)
 
-L'11 febbraio 2001, 17 sviluppatori si riuniscono allo **Snowbird resort** in Utah. Passano 2 giorni a litigare su come sviluppare software meglio. Il risultato? Il **Manifesto Agile**:
+L'**11 febbraio 2001**, 17 sviluppatori si riuniscono allo **Snowbird Resort** in Utah (una stazione sciistica). Passano 2 giorni a discutere, litigare, e alla fine scrivono qualcosa che ancora oggi definisce come scriviamo software.
+
+Il risultato? Il **Manifesto Agile** (4 valori):
 
 1. **Individuals and interactions** over processes and tools
-2. **Working software** over comprehensive documentation
-3. **Customer collaboration** over contract negotiation
-4. **Responding to change** over following a plan
+   > *Non è che i processi non importano. È che le **persone** e come lavorano insieme contano di più di un documento di 200 pagine.*
 
-<div class="esempio-tech">📦 <strong>Curiosità</strong>: Il meeting è durato 2 giorni, bevendo birra e mangiando pizza. Nessuno sapeva che stava scrivendo la storia.</div>
+2. **Working software** over comprehensive documentation
+   > *Un software che funziona vale più di un documento perfetto. La documentazione serve, ma non deve bloccare il progresso.*
+
+3. **Customer collaboration** over contract negotiation
+   > *Il contratto non è una garanzia. La collaborazione continua con il cliente porta a risultati migliori.*
+
+4. **Responding to change** over following a plan
+   > *I piani sono utili, ma il cambiamento è inevitabile. Chi si adatta vince.*
+
+<div class="esempio-tech">📦 <strong>Curiosità</strong>: Il meeting è durato 2 giorni, bevendo birra e mangiando pizza in una stanza d'hotel. Nessuno sapeva che stava scrivendo la storia del software.</div>
 
 ---
 
