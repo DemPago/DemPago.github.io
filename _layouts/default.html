@@ -315,6 +315,42 @@
       overflow-x: auto;
       margin: 1rem 0;
       border: 1px solid var(--border);
+      position: relative;
+    }
+
+    .post-content pre code {
+      background: transparent;
+      padding: 0;
+      color: #7ee787;
+      font-size: 0.85rem;
+      font-family: 'Fira Code', 'Consolas', monospace;
+      line-height: 1.5;
+      display: block;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid var(--border);
+      color: #8b949e;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255,255,255,0.2);
+      color: var(--text);
+    }
+
+    .copy-btn.copied {
+      background: #238636;
+      color: white;
+      border-color: #238636;
     }
 
     .post-list a {
@@ -723,6 +759,26 @@
 
     document.getElementById('backToTop').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Copy button for code blocks
+    document.querySelectorAll('.post-content pre').forEach(pre => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.innerText = 'Copia';
+      btn.onclick = () => {
+        const code = pre.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.innerText = 'Copiato!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.innerText = 'Copia';
+            btn.classList.remove('copied');
+          }, 2000);
+        });
+      };
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
     });
   </script>
 </body>
