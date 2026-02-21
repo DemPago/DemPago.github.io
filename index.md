@@ -7,7 +7,7 @@ title: Home
 
 <ul class="post-grid">
 {% for post in site.posts %}
-{% if post.categories == nil or post.categories contains "business" == false %}
+{% unless post.categories contains "business" %}
   <li class="post-card">
     {% if post.cover %}
     <a href="{{ post.url }}" class="post-card-cover">
