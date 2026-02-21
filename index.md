@@ -7,7 +7,7 @@ title: Home
 
 <ul class="post-grid">
 {% for post in site.posts %}
-{% unless post.categories contains "business" %}
+{% if post.categories == nil or post.categories contains "business" == false %}
   <li class="post-card">
     {% if post.cover %}
     <a href="{{ post.url }}" class="post-card-cover">
@@ -20,7 +20,7 @@ title: Home
       <span class="post-card-date">{{ post.date | date: "%d %B %Y" }}</span>
     </div>
   </li>
-{% endunless %}
+{% endif %}
 {% endfor %}
 </ul>
 
