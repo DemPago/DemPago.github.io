@@ -11,6 +11,12 @@ Ciao! Bentornati su **Tech Illuminato**.
 
 Oggi iniziamo una nuova sezione: **Costruisci la tua azienda**.
 
+<div style="display: flex; gap: 10px; margin: 20px 0; justify-content: center;">
+  <img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=300" alt="Google" style="width: 30%; border-radius: 8px; object-fit: cover;">
+  <img src="https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=300" alt="Apple" style="width: 30%; border-radius: 8px; object-fit: cover;">
+  <img src="https://images.unsplash.com/photo-1553484771-371a605b060b?w=300" alt="Amazon" style="width: 30%; border-radius: 8px; object-fit: cover;">
+</div>
+
 Ma prima di parlare di uffici e organigrammi, dobbiamo rispondere a una domanda fondamentale: **serve davvero essere una startup?**
 
 ---
