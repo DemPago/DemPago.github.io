@@ -208,6 +208,41 @@
       font-size: 0.75rem;
     }
 
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .pagination a, .pagination span {
+      padding: 0.5rem 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: #8b949e;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .pagination a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .pagination .page-current {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .pagination .page-num {
+      min-width: 36px;
+      text-align: center;
+    }
+
     .esempio-tech {
       background: linear-gradient(135deg, #1a1f2e 0%, #161b22 100%);
       border: 1px solid var(--accent);

@@ -6,3 +6,6 @@ url: "https://DemPago.github.io"
 markdown: kramdown
 
 permalink: /:title/
+
+paginate: 6
+paginate_path: "/page:num/"
