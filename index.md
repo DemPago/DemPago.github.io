@@ -3,8 +3,10 @@ layout: default
 title: Home
 ---
 
+<h2 style="color: var(--accent); margin-bottom: 1rem;">💻 Tech</h2>
+
 <ul class="post-grid" id="post-grid">
-{% for post in site.posts limit: 6 %}
+{% for post in site.posts %}
   <li class="post-card">
     {% if post.cover %}
     <a href="{{ post.url }}" class="post-card-cover">
@@ -20,6 +22,10 @@ title: Home
 {% endfor %}
 </ul>
 
-<p id="more-msg" style="text-align:center; color:#8b949e; margin-top:2rem;">
-  🚀 Altri post in arrivo!
+<hr style="border: none; border-top: 1px solid var(--border); margin: 3rem 0;">
+
+<h2 style="color: var(--accent); margin-bottom: 1rem;">🏢 Costruisci la tua azienda</h2>
+
+<p style="color: #8b949e; text-align: center; margin: 2rem 0;">
+  🚀 Sezione in arrivo!
 </p>
