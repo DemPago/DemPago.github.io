@@ -5,7 +5,7 @@ title: Home
 
 <h2 style="color: var(--accent); margin-bottom: 1rem;">💻 Tech</h2>
 
-<ul class="post-grid" id="post-grid">
+<ul class="post-grid">
 {% for post in site.posts %}
   <li class="post-card">
     {% if post.cover %}
@@ -26,6 +26,21 @@ title: Home
 
 <h2 style="color: var(--accent); margin-bottom: 1rem;">🏢 Costruisci la tua azienda</h2>
 
-<p style="color: #8b949e; text-align: center; margin: 2rem 0;">
-  🚀 Sezione in arrivo!
-</p>
+<ul class="post-grid">
+{% for post in site.posts %}
+  {% if post.category == "business" %}
+  <li class="post-card">
+    {% if post.cover %}
+    <a href="{{ post.url }}" class="post-card-cover">
+      <img src="{{ post.cover }}" alt="{{ post.title }}">
+    </a>
+    {% endif %}
+    <div class="post-card-content">
+      <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+      <p class="post-card-desc">{{ post.description }}</p>
+      <span class="post-card-date">{{ post.date | date: "%d %B %Y" }}</span>
+    </div>
+  </li>
+  {% endif %}
+{% endfor %}
+</ul>
