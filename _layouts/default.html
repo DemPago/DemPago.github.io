@@ -294,14 +294,27 @@
       border-radius: 6px;
       overflow-x: auto;
       margin: 0.5rem 0;
+      border: 1px solid var(--border);
     }
 
     .esempio-tech pre code, .post-content pre code {
-      background: none;
+      background: transparent;
       padding: 0;
       color: #7ee787;
-      font-size: 0.9rem;
-      font-family: monospace;
+      font-size: 0.85rem;
+      font-family: 'Fira Code', 'Consolas', monospace;
+      line-height: 1.5;
+      display: block;
+      white-space: pre;
+    }
+
+    .post-content pre {
+      background: #0d1117;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1rem 0;
+      border: 1px solid var(--border);
     }
 
     .post-list a {
