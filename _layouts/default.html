@@ -583,11 +583,42 @@
     <p>👀 Visite: <span id="counter">-</span></p>
     <p class="copyright">© 2026 DemPago • Made with ☕ and code</p>
   </footer>
-  <script>
-    var count = localStorage.getItem("visit_count") || 0;
-    count = parseInt(count) + 1;
-    localStorage.setItem("visit_count", count);
-    document.getElementById("counter").innerText = count < 10 ? "0" + count : count;
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA7YbK9xW2OiGXZu55mvlTLSw2enQf4Efg",
+      authDomain: "blog-a5907.firebaseapp.com",
+      projectId: "blog-a5907",
+      storageBucket: "blog-a5907.firebasestorage.app",
+      messagingSenderId: "271024686592",
+      appId: "1:271024686592:web:6e5609f3a841cb2cf77ae5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function updateCounter() {
+      try {
+        const result = await runTransaction(db, async (t) => {
+          const docRef = doc(db, "counters", "blog");
+          const docSnap = await t.get(docRef);
+          if (!docSnap.exists()) {
+            t.set(docRef, { count: 1 });
+            return 1;
+          }
+          const newCount = docSnap.data().count + 1;
+          t.update(docRef, { count: newCount });
+          return newCount;
+        });
+        document.getElementById("counter").innerText = result < 10 ? "0" + result : result;
+      } catch (e) {
+        document.getElementById("counter").innerText = "--";
+      }
+    }
+
+    updateCounter();
 
     window.addEventListener('load', () => {
       setTimeout(() => {
