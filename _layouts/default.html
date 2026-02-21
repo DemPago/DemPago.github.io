@@ -425,6 +425,29 @@
       color: #8b949e;
     }
 
+    .post-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.9rem;
+    }
+
+    .post-content th, .post-content td {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .post-content th {
+      background: var(--card);
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .post-content tr:nth-child(even) {
+      background: rgba(255,255,255,0.02);
+    }
+
     .post-content hr {
       border: none;
       border-top: 1px solid var(--border);
