@@ -697,9 +697,9 @@ body:not([data-layout="post"]) .progress-bar {
   background: var(--card);
   border: 1px solid var(--accent);
   border-radius: 16px;
-  padding: 2rem;
-  max-width: 420px;
-  width: 90%;
+  padding: 1.5rem;
+  max-width: 580px;
+  width: 95%;
   position: relative;
   transform: translateY(20px);
   transition: transform 0.3s;
