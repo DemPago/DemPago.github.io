@@ -169,6 +169,58 @@ function initShareCopy() {
   });
 }
 
+// Newsletter popup — appare dopo 80% di lettura, una volta per sessione
+function initNewsletterPopup() {
+  const overlay = document.getElementById('newsletterOverlay');
+  if (!overlay) return;
+
+  // Non mostrare se già visto o iscritto
+  if (sessionStorage.getItem('newsletter_shown') || localStorage.getItem('newsletter_subscribed')) return;
+
+  let triggered = false;
+
+  function showPopup() {
+    if (triggered) return;
+    triggered = true;
+    sessionStorage.setItem('newsletter_shown', '1');
+    overlay.classList.add('visible');
+  }
+
+  function hidePopup() {
+    overlay.classList.remove('visible');
+  }
+
+  // Mostra popup all'80% di scroll
+  window.addEventListener('scroll', () => {
+    if (triggered) return;
+    const scrolled = window.scrollY + window.innerHeight;
+    const total = document.documentElement.scrollHeight;
+    if (scrolled / total >= 0.80) showPopup();
+  });
+
+  // Chiudi con X
+  document.getElementById('newsletterClose')?.addEventListener('click', hidePopup);
+
+  // Chiudi con "No grazie"
+  document.getElementById('newsletterSkip')?.addEventListener('click', hidePopup);
+
+  // Chiudi cliccando fuori
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) hidePopup();
+  });
+
+  // Chiudi con ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') hidePopup();
+  });
+
+  // Salva iscrizione
+  document.getElementById('newsletterForm')?.addEventListener('submit', () => {
+    localStorage.setItem('newsletter_subscribed', '1');
+    hidePopup();
+  });
+}
+
 // Initialize all
 document.addEventListener('DOMContentLoaded', () => {
   initCounter();
@@ -178,4 +230,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initCopyButtons();
   initShareCopy();
   initTabs();
+  initNewsletterPopup();
 });

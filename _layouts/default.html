@@ -27,6 +27,9 @@
   {% if page.cover %}<meta name="twitter:image" content="{{ site.url }}{{ page.cover }}">{% endif %}
 
   <link rel="stylesheet" href="/styles.css">
+  {% if page.layout == 'post' %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  {% endif %}
 </head>
 <body data-layout="{{ page.layout | default: 'default' }}">
   <div class="loader" id="loader">
@@ -34,6 +37,21 @@
     <div class="loader-text">⚡ Blog Tech Illuminato</div>
   </div>
   <button class="back-to-top" id="backToTop" aria-label="Torna in cima alla pagina" title="Torna su">↑</button>
+
+  {% if page.layout == 'post' %}
+  <div class="newsletter-overlay" id="newsletterOverlay" role="dialog" aria-modal="true" aria-label="Iscriviti alla newsletter">
+    <div class="newsletter-box">
+      <button class="newsletter-close" id="newsletterClose" aria-label="Chiudi">&times;</button>
+      <h3>⚡ Resta aggiornato</h3>
+      <p>Ti è piaciuto l'articolo? Iscriviti e ricevi i prossimi direttamente nella tua inbox — niente spam, solo tech illuminato.</p>
+      <form id="newsletterForm" action="BREVO_FORM_URL" method="POST" target="_blank">
+        <input type="email" name="EMAIL" placeholder="La tua email" required autocomplete="email">
+        <button type="submit" class="newsletter-submit">Iscrivimi</button>
+      </form>
+      <button class="newsletter-skip" id="newsletterSkip">No grazie, ho già abbastanza email</button>
+    </div>
+  </div>
+  {% endif %}
   <div class="container">
     <aside class="sidebar" aria-label="Profilo autore">
       <img src="/profilo.png" alt="Demetrio Ferraro" loading="lazy">
@@ -79,5 +97,9 @@
     <p class="copyright">© 2026 DemPago • Made with ☕ and code</p>
   </footer>
   <script src="/main.js"></script>
+  {% if page.layout == 'post' %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  {% endif %}
 </body>
 </html>
