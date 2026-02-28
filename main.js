@@ -1,7 +1,7 @@
 // Firebase Counter
 async function initCounter() {
   try {
-    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js");
+    const { initializeApp, getApps, getApp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js");
     const { getFirestore, doc, runTransaction } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
 
     const firebaseConfig = {
@@ -13,7 +13,7 @@ async function initCounter() {
       appId: "1:271024686592:web:6e5609f3a841cb2cf77ae5"
     };
 
-    const app = initializeApp(firebaseConfig);
+    const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
     const result = await runTransaction(db, async (t) => {
@@ -38,12 +38,17 @@ async function initCounter() {
   }
 }
 
-// Loader hide
+// Loader hide — gestisce anche il caso in cui load sia già scattato
 function initLoader() {
-  window.addEventListener('load', () => {
+  const hide = () => {
     const loader = document.getElementById('loader');
     if (loader) loader.classList.add('hidden');
-  });
+  };
+  if (document.readyState === 'complete') {
+    hide();
+  } else {
+    window.addEventListener('load', hide);
+  }
 }
 
 // Back to top
@@ -51,11 +56,7 @@ function initBackToTop() {
   window.addEventListener('scroll', () => {
     const btn = document.getElementById('backToTop');
     if (btn) {
-      if (window.scrollY > 300) {
-        btn.classList.add('visible');
-      } else {
-        btn.classList.remove('visible');
-      }
+      btn.classList.toggle('visible', window.scrollY > 300);
     }
   });
 
@@ -72,10 +73,9 @@ function initProgressBar() {
   window.addEventListener('scroll', function() {
     const progress = document.getElementById("progress");
     if (progress) {
-      var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      var scrolled = height > 0 ? (winScroll / height) * 100 : 0;
-      progress.style.width = scrolled + "%";
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      progress.style.width = height > 0 ? (winScroll / height) * 100 + "%" : "0%";
     }
   });
 }
@@ -89,18 +89,65 @@ function initCopyButtons() {
     btn.onclick = () => {
       const code = pre.querySelector('code');
       if (code) {
-        navigator.clipboard.writeText(code.innerText).then(() => {
-          btn.innerText = 'Copiato!';
-          btn.classList.add('copied');
-          setTimeout(() => {
-            btn.innerText = 'Copia';
-            btn.classList.remove('copied');
-          }, 2000);
-        });
+        navigator.clipboard.writeText(code.innerText)
+          .then(() => {
+            btn.innerText = 'Copiato!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+              btn.innerText = 'Copia';
+              btn.classList.remove('copied');
+            }, 2000);
+          })
+          .catch(() => {
+            btn.innerText = 'Errore';
+            setTimeout(() => { btn.innerText = 'Copia'; }, 2000);
+          });
       }
     };
     pre.style.position = 'relative';
     pre.appendChild(btn);
+  });
+}
+
+// Tab pill switching
+function initTabs() {
+  const buttons = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+  const indicator = document.querySelector('.tab-indicator');
+
+  if (!buttons.length || !indicator) return;
+
+  function moveIndicator(btn) {
+    indicator.style.width = btn.offsetWidth + 'px';
+    indicator.style.transform = 'translateX(' + btn.offsetLeft + 'px)';
+  }
+
+  // Posiziona l'indicatore sul tab attivo iniziale
+  const activeBtn = document.querySelector('.tab-btn.active');
+  if (activeBtn) moveIndicator(activeBtn);
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.tab;
+
+      // Aggiorna bottoni
+      buttons.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+
+      // Aggiorna pannelli
+      panels.forEach(panel => {
+        const isTarget = panel.id === 'panel-' + target;
+        panel.classList.toggle('active', isTarget);
+        panel.hidden = !isTarget;
+      });
+
+      // Muovi indicatore
+      moveIndicator(btn);
+    });
   });
 }
 
@@ -111,4 +158,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initBackToTop();
   initProgressBar();
   initCopyButtons();
+  initTabs();
 });
