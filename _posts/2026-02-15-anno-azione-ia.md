@@ -30,7 +30,7 @@ Se il 2024 e il 2025 sono stati gli anni della generazione di testi e immagini, 
 
 <div class="esempio-tech">📦 <strong>Esempio tech</strong>: Prova <a href="https://agentgpt.reworkd.ai" target="_blank">AgentGPT</a> - un agente AI che puoi configurare per completare obiettivi complessi automaticamente.</div>
 
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/MSUVRUegoIA" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0;"></iframe>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/MSUVRUegoIA" title="Video: Agentic AI" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
 
 💡 *Te lo spiega Dem*: "Immaginate di dire al vostro telefono 'Organizzami il weekend a Berlino con un budget di 400€' e lui prenota voli, hotel e ristorante mentre voi prendete il caffè.
 Chissà dove ci ritroveremmo però..."
@@ -47,9 +47,9 @@ L'intelligenza artificiale è finalmente uscita dagli schermi. Grazie alla conve
 
 <div class="esempio-tech">📦 <strong>Esempio tech</strong>: Guarda i <a href="https://bostondynamics.com" target="_blank">robot di Boston Dynamics</a> in azione - dalla fabbrica alla logistica.</div>
 
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/fXQFZpRI-zk" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0;"></iframe>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/fXQFZpRI-zk" title="Video: Physical AI - Boston Dynamics" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
 
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/UAG_FBZJVJ8" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0;"></iframe>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/UAG_FBZJVJ8" title="Video: Robot e automazione" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
 
 💡 *Te lo spiega Dem*: "Non sono più solo i robot della Boston Dynamics che ballano, ma i carrelli della spesa intelligenti o i droni per le consegne che ora vediamo in città.
 
@@ -80,7 +80,7 @@ Con l'esplosione dei consumi energetici dovuti ai data center, la sostenibilità
 
 <em>Puoi anche provare altri modelli come <code>mistral</code> o <code>codellama</code> per programmare.</em></div>
 
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/MnQ4F5v-0HQ" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0;"></iframe>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/MnQ4F5v-0HQ" title="Video: Green AI e sostenibilità" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
 
 💡 *Te lo spiega Dem*: "La Green AI non è solo una scelta etica, è una necessità. E penso che nel 2026 vedremo sempre più aziende che adotteranno Small Language Models per ridurre i costi e l'impatto ambientale.
 Potrebbe essere una vera svolta, come anche l'AI in locale è qualcosa che potrebbe andar bene per molti compiti!"

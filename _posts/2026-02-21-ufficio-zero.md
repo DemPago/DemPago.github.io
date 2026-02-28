@@ -23,7 +23,7 @@ Ma prima di parlare di uffici e organigrammi, dobbiamo rispondere a una domanda 
 
 ## Startup: Rivoluzione o Americanata?
 
-Il termine "startup" è ovunque. Venture capital, unicorni, unicorni, exit strategy... Sembra che l'unico modo per creare qualcosa di importante sia fondare una startup.
+Il termine "startup" è ovunque. Venture capital, unicorni, exit strategy... Sembra che l'unico modo per creare qualcosa di importante sia fondare una startup.
 
 Ma è davvero così?
 

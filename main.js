@@ -41,10 +41,8 @@ async function initCounter() {
 // Loader hide
 function initLoader() {
   window.addEventListener('load', () => {
-    setTimeout(() => {
-      const loader = document.getElementById('loader');
-      if (loader) loader.classList.add('hidden');
-    }, 800);
+    const loader = document.getElementById('loader');
+    if (loader) loader.classList.add('hidden');
   });
 }
 
@@ -71,15 +69,15 @@ function initBackToTop() {
 
 // Progress bar
 function initProgressBar() {
-  window.onscroll = function() {
+  window.addEventListener('scroll', function() {
     const progress = document.getElementById("progress");
     if (progress) {
       var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
       var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      var scrolled = (winScroll / height) * 100;
+      var scrolled = height > 0 ? (winScroll / height) * 100 : 0;
       progress.style.width = scrolled + "%";
     }
-  };
+  });
 }
 
 // Copy button for code blocks

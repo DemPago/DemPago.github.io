@@ -110,7 +110,7 @@ I dati parlano chiaro:
 
 📊 **Fonte**: <a href="https://www.zealousys.com/blog/agile-statistics/" target="_blank">State of Agile Report 2025</a>
 
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/Oo7gdvJ6FaU" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0;"></iframe>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/Oo7gdvJ6FaU" title="Video: Agile Methodology" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
 
 ---
 
@@ -149,7 +149,7 @@ Il cliente non è più chi firma il contratto. È l'utente finale. Con i feedbac
 
 💡 **Te lo spiega Dem**: "Il cliente è l'utente finale, non chi firma il contratto. Con gli analytics in tempo reale, collaboriamo sempre."
 
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/tIA3sBIj0cg" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0;"></iframe>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/tIA3sBIj0cg" title="Video: Agile nel 2026" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
 
 #### 4. Humans + AI: The Dream Team
 
@@ -165,7 +165,7 @@ Usiamo più tool che mai (Jira, GitHub, CI/CD, AI). Ma contano le **persone**. L
 |-----------|-------|------|
 | Daily | 15 min in piedi | 5 min, solo async (Slack/Teams) |
 | Planning | 4 ore | 1 ora, outcome-based |
-| Review | Demo con slide | Demo del proditore reale |
+| Review | Demo con slide | Demo del prodotto reale |
 | Retro | 2 ore | 30 min, action-oriented |
 
 ---

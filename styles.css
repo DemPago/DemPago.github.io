@@ -1,6 +1,7 @@
 :root {
   --bg: #0d1117;
   --text: #c9d1d9;
+  --text-muted: #8b949e;
   --accent: #58a6ff;
   --accent-hover: #79c0ff;
   --card: #161b22;
@@ -55,12 +56,12 @@ body {
 
 .sidebar p {
   font-size: 0.85rem;
-  color: #8b949e;
+  color: var(--text-muted);
 }
 
 .sidebar .bio {
   font-size: 0.8rem;
-  color: #8b949e;
+  color: var(--text-muted);
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border);
@@ -97,8 +98,9 @@ body {
 }
 
 .social-links a {
-  color: #8b949e;
-  font-size: 1.3rem;
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
   transition: color 0.2s;
 }
 
@@ -123,7 +125,7 @@ header h1 a {
 }
 
 header p {
-  color: #8b949e;
+  color: var(--text-muted);
   margin-top: 0.3rem;
 }
 
@@ -197,7 +199,7 @@ li {
 }
 
 .post-card-desc {
-  color: #8b949e;
+  color: var(--text-muted);
   font-size: 0.85rem;
   line-height: 1.4;
   margin-bottom: 0.8rem;
@@ -208,7 +210,7 @@ li {
 }
 
 .post-card-date {
-  color: #8b949e;
+  color: var(--text-muted);
   font-size: 0.75rem;
 }
 
@@ -241,7 +243,7 @@ li {
   padding: 0.5rem 0.8rem;
   border: 1px solid var(--border);
   border-radius: 6px;
-  color: #8b949e;
+  color: var(--text-muted);
   text-decoration: none;
   font-size: 0.85rem;
   transition: all 0.2s;
@@ -321,7 +323,7 @@ li {
 .post-content h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
 
 .post-date {
-  color: #8b949e;
+  color: var(--text-muted);
   margin-bottom: 1.5rem;
 }
 
@@ -369,19 +371,13 @@ li {
   position: relative;
 }
 
-.post-content pre code {
-  background: transparent;
-  color: #7ee787;
-  font-family: 'Fira Code', 'Consolas', monospace;
-}
-
 .copy-btn {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
   background: rgba(255,255,255,0.1);
   border: 1px solid var(--border);
-  color: #8b949e;
+  color: var(--text-muted);
   padding: 0.3rem 0.6rem;
   border-radius: 4px;
   font-size: 0.75rem;
@@ -405,7 +401,7 @@ li {
   background: var(--card);
   border-radius: 0 6px 6px 0;
   font-style: italic;
-  color: #8b949e;
+  color: var(--text-muted);
 }
 
 .post-content ol li,
@@ -415,8 +411,8 @@ li {
 }
 
 .post-content ol li > blockquote,
-.post-content ul li  margin:  > blockquote {
-0.5rem 0 0.5rem 1rem;
+.post-content ul li > blockquote {
+  margin: 0.5rem 0 0.5rem 1rem;
   padding: 0.75rem 1rem;
 }
 
@@ -485,7 +481,7 @@ li {
 
 .share-label {
   font-size: 0.85rem;
-  color: #8b949e;
+  color: var(--text-muted);
   margin-right: 0.2rem;
 }
 
@@ -580,7 +576,7 @@ li {
 footer {
   text-align: center;
   padding: 2rem;
-  color: #8b949e;
+  color: var(--text-muted);
   font-size: 0.9rem;
   border-top: 1px solid var(--border);
   margin-top: 2rem;
