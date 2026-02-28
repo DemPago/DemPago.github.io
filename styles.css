@@ -472,6 +472,21 @@ li {
   border-radius: 0 6px 6px 0;
   font-style: italic;
   color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.post-content blockquote::before {
+  content: "";
+  display: block;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  background-image: url('/telodiceDem.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .post-content ol li,
@@ -725,3 +740,4 @@ footer .copyright {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
+
