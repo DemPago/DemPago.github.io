@@ -32,6 +32,15 @@ body {
   .container { grid-template-columns: 1fr; }
 }
 
+body[data-layout="post"] .sidebar {
+  display: none;
+}
+
+body[data-layout="post"] .container {
+  grid-template-columns: 1fr;
+  max-width: 780px;
+}
+
 /* Sidebar */
 .sidebar {
   text-align: left;
