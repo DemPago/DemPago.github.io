@@ -151,6 +151,24 @@ function initTabs() {
   });
 }
 
+// Share copy button
+function initShareCopy() {
+  document.querySelectorAll('.share-copy[data-url]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const url = btn.dataset.url;
+      navigator.clipboard.writeText(url)
+        .then(() => {
+          btn.textContent = '✓ Copiato!';
+          setTimeout(() => { btn.textContent = '🔗 Copia link'; }, 2000);
+        })
+        .catch(() => {
+          btn.textContent = 'Errore';
+          setTimeout(() => { btn.textContent = '🔗 Copia link'; }, 2000);
+        });
+    });
+  });
+}
+
 // Initialize all
 document.addEventListener('DOMContentLoaded', () => {
   initCounter();
@@ -158,5 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initBackToTop();
   initProgressBar();
   initCopyButtons();
+  initShareCopy();
   initTabs();
 });

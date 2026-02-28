@@ -543,6 +543,11 @@ li {
   z-index: 1000;
 }
 
+/* Nascondi progress bar su pagine non-post */
+body:not([data-layout="post"]) .progress-bar {
+  display: none;
+}
+
 /* Share Buttons */
 .share-buttons {
   display: flex;

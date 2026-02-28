@@ -6,11 +6,13 @@
   <title>{% if page.title and page.title != "Home" %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
   <meta name="description" content="{{ page.description | default: site.description }}">
   <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ site.url }}/feed.xml">
   <meta name="theme-color" content="#0d1117">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
   <!-- Open Graph -->
   <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+  <meta property="og:locale" content="it_IT">
   <meta property="og:title" content="{% if page.title and page.title != 'Home' %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
   <meta property="og:description" content="{{ page.description | default: site.description }}">
   <meta property="og:url" content="{{ site.url }}{{ page.url }}">
@@ -19,13 +21,14 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="{% if page.cover %}summary_large_image{% else %}summary{% endif %}">
+  <meta name="twitter:site" content="@DemPago">
   <meta name="twitter:title" content="{% if page.title and page.title != 'Home' %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
   <meta name="twitter:description" content="{{ page.description | default: site.description }}">
   {% if page.cover %}<meta name="twitter:image" content="{{ site.url }}{{ page.cover }}">{% endif %}
 
   <link rel="stylesheet" href="/styles.css">
 </head>
-<body>
+<body data-layout="{{ page.layout | default: 'default' }}">
   <div class="loader" id="loader">
     <div class="loader-spinner"></div>
     <div class="loader-text">⚡ Blog Tech Illuminato</div>
@@ -33,7 +36,7 @@
   <button class="back-to-top" id="backToTop" aria-label="Torna in cima alla pagina" title="Torna su">↑</button>
   <div class="container">
     <aside class="sidebar" aria-label="Profilo autore">
-      <img src="/profilo.png" alt="Demetrio Ferraro">
+      <img src="/profilo.png" alt="Demetrio Ferraro" loading="lazy">
       <h2>Dem</h2>
       <p>Cerco di portare luce nel tech - Grey Jedi del codice.</p>
       <div class="bio">

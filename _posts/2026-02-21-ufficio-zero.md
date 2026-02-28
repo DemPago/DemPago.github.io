@@ -12,9 +12,9 @@ Ciao! Bentornati su **Tech Illuminato**.
 Oggi iniziamo una nuova sezione: **Costruisci la tua azienda**.
 
 <div class="company-logos">
-  <img src="/google_inizi.jpg" alt="Google">
-  <img src="/Apple_inizi.jpg" alt="Apple">
-  <img src="/amazon.jpg" alt="Amazon">
+  <img src="/google_inizi.jpg" alt="Google" loading="lazy">
+  <img src="/Apple_inizi.jpg" alt="Apple" loading="lazy">
+  <img src="/amazon.jpg" alt="Amazon" loading="lazy">
 </div>
 
 Ma prima di parlare di uffici e organigrammi, dobbiamo rispondere a una domanda fondamentale: **serve davvero essere una startup?**

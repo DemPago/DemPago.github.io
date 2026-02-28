@@ -8,7 +8,7 @@ layout: default
   {% endif %}
 
   <h1>{{ page.title }}</h1>
-  <p class="post-date">{{ page.date | date: "%d %B %Y" }} · {{ page.reading_time | default: "5" }} min di lettura</p>
+  <p class="post-date">{{ page.date | date: "%d %B %Y" }} · {% assign words = content | number_of_words %}{% assign mins = words | divided_by: 200 %}{% if mins < 1 %}1{% else %}{{ mins }}{% endif %} min di lettura</p>
 
   <div class="share-buttons">
     <span class="share-label">Condividi:</span>
@@ -20,7 +20,7 @@ layout: default
       <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
       Post
     </a>
-    <button onclick="navigator.clipboard.writeText('{{ site.url }}{{ page.url }}').then(function(){ var btn = this; btn.textContent = '✓ Copiato!'; setTimeout(function(){ btn.textContent = '🔗 Copia link'; }, 2000); }.bind(this))" class="share-btn share-copy">🔗 Copia link</button>
+    <button class="share-btn share-copy" data-url="{{ site.url }}{{ page.url }}">🔗 Copia link</button>
   </div>
 
   {{ content }}
