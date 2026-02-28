@@ -11,7 +11,7 @@ title: Home
   <li class="post-card">
     {% if post.cover %}
     <a href="{{ post.url }}" class="post-card-cover">
-      <img src="{{ post.cover }}" alt="{{ post.title }}">
+      <img src="{{ post.cover }}" alt="{{ post.title | xml_escape }}">
     </a>
     {% endif %}
     <div class="post-card-content">
@@ -32,7 +32,7 @@ title: Home
   <li class="post-card">
     {% if post.cover %}
     <a href="{{ post.url }}" class="post-card-cover">
-      <img src="{{ post.cover }}" alt="{{ post.title }}">
+      <img src="{{ post.cover }}" alt="{{ post.title | xml_escape }}">
     </a>
     {% endif %}
     <div class="post-card-content">
