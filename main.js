@@ -169,8 +169,9 @@ function initShareCopy() {
   });
 }
 
-// Newsletter popup — appare dopo 80% di lettura, una volta per sessione
+// Newsletter popup — disabilitato temporaneamente (manca URL Brevo)
 function initNewsletterPopup() {
+  return; // rimuovere quando configurato Brevo
   const overlay = document.getElementById('newsletterOverlay');
   if (!overlay) return;
 
