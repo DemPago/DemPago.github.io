@@ -28,7 +28,7 @@ Se il 2024 e il 2025 sono stati gli anni della generazione di testi e immagini, 
 - **Sistemi Multi-Agente**: Diversi software IA che collaborano tra loro senza l'intervento umano costante per risolvere problemi aziendali complessi.
 - **Personal Intelligence**: L'integrazione profonda dell'IA nei nostri dati (email, calendari, file) per agire proattivamente come un vero "collega digitale".
 
-<div class="esempio-tech">📦 <strong>Esempio tech</strong>: Prova <a href="https://agentgpt.reworkd.ai" target="_blank">AgentGPT</a> - un agente AI che puoi configurare per completare obiettivi complessi automaticamente.</div>
+<div class="esempio-tech">📦 <strong>Esempio tech</strong>: Prova <a href="https://agentgpt.reworkd.ai" target="_blank" rel="noopener noreferrer">AgentGPT</a> - un agente AI che puoi configurare per completare obiettivi complessi automaticamente.</div>
 
 <iframe width="100%" height="315" src="https://www.youtube.com/embed/MSUVRUegoIA" title="Video: Agentic AI" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
 
@@ -45,13 +45,13 @@ L'intelligenza artificiale è finalmente uscita dagli schermi. Grazie alla conve
 - **Edge Intelligence**: I dispositivi (dai droni ai macchinari industriali) elaborano dati in tempo reale localmente, riducendo la dipendenza dal cloud e permettendo reazioni istantanee.
 - **Mobilità Autonoma**: Il 2026 vede il consolidamento dei servizi di trasporto autonomo (eVTOL e robotaxi) in diverse metropoli globali.
 
-<div class="esempio-tech">📦 <strong>Esempio tech</strong>: Guarda i <a href="https://bostondynamics.com" target="_blank">robot di Boston Dynamics</a> in azione - dalla fabbrica alla logistica.</div>
+<div class="esempio-tech">📦 <strong>Esempio tech</strong>: Guarda i <a href="https://bostondynamics.com" target="_blank" rel="noopener noreferrer">robot di Boston Dynamics</a> in azione - dalla fabbrica alla logistica.</div>
 
 <iframe width="100%" height="315" src="https://www.youtube.com/embed/fXQFZpRI-zk" title="Video: Physical AI - Boston Dynamics" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
 
 <iframe width="100%" height="315" src="https://www.youtube.com/embed/UAG_FBZJVJ8" title="Video: Robot e automazione" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
 
-💡 *Te lo spiega Dem*: "Non sono più solo i robot della Boston Dynamics che ballano, ma i carrelli della spesa intelligenti o i droni per le consegne che ora vediamo in città.
+💡 *Te lo spiega Dem*: "Non sono più solo i robot della Boston Dynamics che ballano, ma i carrelli della spesa intelligenti o i droni per le consegne che ora vediamo in città."
 
 ---
 
@@ -63,7 +63,7 @@ Con l'esplosione dei consumi energetici dovuti ai data center, la sostenibilità
 - **Infrastrutture Ibride e Sovrane**: Una spinta verso data center alimentati da fonti rinnovabili e sistemi di raffreddamento a liquido, unita alla necessità di mantenere la sovranità dei dati a livello regionale.
 - **Digital Provenance**: Tecnologie per certificare l'origine dei contenuti (watermarking crittografico) per combattere i deepfake e garantire l'autenticità in un web saturo di contenuti sintetici.
 
-<div class="esempio-tech">📦 <strong>Esempio tech</strong>: <a href="https://ollama.com" target="_blank">Ollama</a> ti permette di far girare modelli AI direttamente sul tuo PC - nessun cloud, massima privacy, consumo ridotto.
+<div class="esempio-tech">📦 <strong>Esempio tech</strong>: <a href="https://ollama.com" target="_blank" rel="noopener noreferrer">Ollama</a> ti permette di far girare modelli AI direttamente sul tuo PC - nessun cloud, massima privacy, consumo ridotto.
 
 <strong>🚀 Come provarlo (in 2 minuti):</strong>
 

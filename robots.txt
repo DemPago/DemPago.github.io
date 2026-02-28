@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://DemPago.github.io/sitemap.xml

@@ -108,7 +108,7 @@ I dati parlano chiaro:
 - **3x** più probabilità di consegnare in tempo rispetto a metodi tradizionali
 - **85%** dei team che usano DevOps (che è Agile-driven) rilasciano ogni giorno
 
-📊 **Fonte**: <a href="https://www.zealousys.com/blog/agile-statistics/" target="_blank">State of Agile Report 2025</a>
+📊 **Fonte**: <a href="https://www.zealousys.com/blog/agile-statistics/" target="_blank" rel="noopener noreferrer">State of Agile Report 2025</a>
 
 <iframe width="100%" height="315" src="https://www.youtube.com/embed/Oo7gdvJ6FaU" title="Video: Agile Methodology" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
 
@@ -126,7 +126,7 @@ E arriviamo a oggi. L'AI ha cambiato tutto. Come dice il proverbio:
 
 La documentazione la scrive l'AI. I test li genera l'AI. Ma il software che **funziona** resta il metro di misura. Un codice che non gira è teoria, non pratica.
 
-<div class="esempio-tech">📦 <strong>Esempio tech</strong>: Usa <a href="https://github.com/features/copilot" target="_blank">GitHub Copilot</a> per generare test automatici in pochi secondi.</div>
+<div class="esempio-tech">📦 <strong>Esempio tech</strong>: Usa <a href="https://github.com/features/copilot" target="_blank" rel="noopener noreferrer">GitHub Copilot</a> per generare test automatici in pochi secondi.</div>
 
 ```python
 # Il nuovo developer flow
@@ -155,7 +155,7 @@ Il cliente non è più chi firma il contratto. È l'utente finale. Con i feedbac
 
 Usiamo più tool che mai (Jira, GitHub, CI/CD, AI). Ma contano le **persone**. L'AI può automatizzare il processo, ma non può sostituire la comunicazione umana.
 
-<div class="esempio-tech">📦 <strong>Esempio tech</strong>: <a href="https://linear.app" target="_blank">Linear</a> combina project management con GitHub, creando un flusso seamless tra pianificazione e codice.</div>
+<div class="esempio-tech">📦 <strong>Esempio tech</strong>: <a href="https://linear.app" target="_blank" rel="noopener noreferrer">Linear</a> combina project management con GitHub, creando un flusso seamless tra pianificazione e codice.</div>
 
 ---
 
