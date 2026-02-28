@@ -4,7 +4,6 @@ title: "Tech 2026: i 3 trend che cambieranno il nostro futuro"
 date: 2026-02-15
 categories: tech
 description: "Scopri i 3 trend tech del 2026: Agentic AI, Physical AI e Green AI. Spiegati in modo semplice e chiaro."
-permalink: /anno-azione-ia/
 cover: https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800
 ---
 
@@ -63,22 +62,20 @@ Con l'esplosione dei consumi energetici dovuti ai data center, la sostenibilità
 - **Infrastrutture Ibride e Sovrane**: Una spinta verso data center alimentati da fonti rinnovabili e sistemi di raffreddamento a liquido, unita alla necessità di mantenere la sovranità dei dati a livello regionale.
 - **Digital Provenance**: Tecnologie per certificare l'origine dei contenuti (watermarking crittografico) per combattere i deepfake e garantire l'autenticità in un web saturo di contenuti sintetici.
 
-<div class="esempio-tech">📦 <strong>Esempio tech</strong>: <a href="https://ollama.com" target="_blank" rel="noopener noreferrer">Ollama</a> ti permette di far girare modelli AI direttamente sul tuo PC - nessun cloud, massima privacy, consumo ridotto.
+<div class="esempio-tech">📦 <strong>Esempio tech</strong>: <a href="https://ollama.com" target="_blank" rel="noopener noreferrer">Ollama</a> ti permette di far girare modelli AI direttamente sul tuo PC - nessun cloud, massima privacy, consumo ridotto.</div>
 
-<strong>🚀 Come provarlo (in 2 minuti):</strong>
+**🚀 Come provarlo (in 2 minuti):**
 
-<ol>
-<li>Scarica Ollama dal sito ufficiale (Mac, Linux o Windows)</li>
-<li>Apri il terminale e scrivi:</li>
-</ol>
+1. Scarica Ollama dal sito ufficiale (Mac, Linux o Windows)
+2. Apri il terminale e scrivi:
 
-<pre><code>ollama run llama3</code></pre>
+```bash
+ollama run llama3
+```
 
-<ol start="3">
-<li>Inizia a chattare!</li>
-</ol>
+3. Inizia a chattare!
 
-<em>Puoi anche provare altri modelli come <code>mistral</code> o <code>codellama</code> per programmare.</em></div>
+*Puoi anche provare altri modelli come `mistral` o `codellama` per programmare.*
 
 <iframe width="100%" height="315" src="https://www.youtube.com/embed/MnQ4F5v-0HQ" title="Video: Green AI e sostenibilità" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
 

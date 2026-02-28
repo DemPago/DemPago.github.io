@@ -7,7 +7,7 @@ categories: tech
 cover: /ai-cazzara-cover.jpg
 ---
 
-![L'AI Cazzara - illustrazione Gemini](/ai-cazzara-thumb.jpeg)
+![Illustrazione: un robot che parla con sicurezza mentre inventa fatti assurdi](/ai-cazzara-thumb.jpeg)
 
 Ciao! Bentornati su **Tech Illuminato**.
 
@@ -23,7 +23,7 @@ I modelli linguistici (LLM) non sono enciclopedie che consultano fatti, ma **mot
 
 L'AI non vede le parole come noi, ma le frammenta in **token** (sillabe o pezzi di parola). Qui scattano due dinamiche cruciali:
 
-<div class="esempio-tech">⚙️ <strong>Le due trappole statistiche:</strong></div>
+<div class="esempio-tech">📦 <strong>Le due trappole statistiche:</strong></div>
 
 - **Previsione statistica:** Il sistema si chiede costantemente: *"Data questa sequenza, qual è il prossimo tassello più probabile secondo i miliardi di testi che ho letto?"*
 
@@ -68,7 +68,7 @@ L'AI vede che "Napoleone" e "Waterloo" appaiono spesso vicini. Senza una vera co
 
 Sapere *perché* l'AI mente è già metà della battaglia. Ecco le contromisure pratiche:
 
-<div class="esempio-tech">🛡️ <strong>Strategie anti-allucinazione:</strong></div>
+<div class="esempio-tech">📦 <strong>Strategie anti-allucinazione:</strong></div>
 
 1. **Verifica sempre le fonti** — non fidarti ciecamente di nessuna risposta su fatti specifici, date o nomi.
 2. **Usa RAG (Retrieval-Augmented Generation)** — sistemi che fanno cercare all'AI le informazioni in un database verificato *prima* di rispondere.

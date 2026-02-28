@@ -147,7 +147,7 @@ I piani a 6 mesi sono morti. In un mondo dove l'AI cambia le regole del gioco og
 
 Il cliente non è più chi firma il contratto. È l'utente finale. Con i feedback in tempo reale (analytics, heatmaps, crash reports), la collaborazione è **continua**, non più solo al kickoff.
 
-💡 **Te lo spiega Dem**: "Il cliente è l'utente finale, non chi firma il contratto. Con gli analytics in tempo reale, collaboriamo sempre."
+💡 *Te lo spiega Dem*: "Il cliente è l'utente finale, non chi firma il contratto. Con gli analytics in tempo reale, collaboriamo sempre."
 
 <iframe width="100%" height="315" src="https://www.youtube.com/embed/tIA3sBIj0cg" title="Video: Agile nel 2026" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
 
