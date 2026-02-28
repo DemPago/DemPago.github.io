@@ -38,6 +38,8 @@ In parole povere: se la prima parola è corretta, la seconda è verosimile, la t
 
 Se un'AI è ciò che mangia, **una dieta fatta di informazioni parziali o contraddittorie produrrà risultati indigesti**.
 
+> 💡 *Te lo spiega Dem*: "Siamo quello che mangiamo — vale per noi e vale per l'AI. Se la nutri di spazzatura, ti risponde con spazzatura. Garbage in, garbage out: uno dei principi più antichi dell'informatica, ancora validissimo."
+
 ### La scarsità di dati (Low-resource topics)
 
 Sui grandi temi — come la vita di Steve Jobs — l'AI è ferratissima. Sulle **nicchie** (la sagra di un piccolo paese o un vecchio linguaggio di programmazione) la rete statistica è debole. Invece di dire *"non lo so"*, il modello colma il vuoto usando schemi di argomenti simili, mescolando verità e pura invenzione.
