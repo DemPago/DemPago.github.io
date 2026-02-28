@@ -477,22 +477,39 @@ li {
 /* Share Buttons */
 .share-buttons {
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.6rem;
   margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.share-label {
+  font-size: 0.85rem;
+  color: #8b949e;
+  margin-right: 0.2rem;
 }
 
 .share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   text-decoration: none;
   font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s, transform 0.1s;
+  line-height: 1;
 }
 
-.share-btn:hover { opacity: 0.8; }
+.share-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+.share-btn:active { transform: translateY(0); }
 
 .share-linkedin { background: #0077b5; color: white; }
-.share-twitter { background: #1da1f2; color: white; }
-.share-copy { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+.share-twitter { background: #000; color: white; }
+.share-copy { background: var(--card); color: var(--text); border: 1px solid var(--border); font-family: inherit; }
 
 /* Post Nav */
 .post-nav {
