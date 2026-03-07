@@ -87,7 +87,7 @@ Il merito si sposta su chi possiede la consapevolezza Jedi: **chi sa orchestrare
 
 <div class="esempio-tech">📦 <strong>Vuoi imparare il Prompt Engineering?</strong> Inizia da <a href="https://www.promptingguide.ai/it" target="_blank" rel="noopener noreferrer">Prompting Guide</a> — la risorsa più completa e gratuita disponibile oggi.</div>
 
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/n0yiuKNOBiM" title="Video: Prompt Engineering — Introduzione di Andrej Karpathy" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/_ZvnD73m40o" title="Video: Prompt Engineering Tutorial — Master ChatGPT and LLM Responses" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
 
 ---
 
