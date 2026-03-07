@@ -310,41 +310,6 @@ li {
   }
 }
 
-/* Pagination */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 2rem;
-  flex-wrap: wrap;
-}
-
-.pagination a, .pagination span {
-  padding: 0.5rem 0.8rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--text-muted);
-  text-decoration: none;
-  font-size: 0.85rem;
-  transition: all 0.2s;
-}
-
-.pagination a:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.pagination .page-current {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
-}
-
-.pagination .page-num {
-  min-width: 36px;
-  text-align: center;
-}
 
 /* Esempio Tech Box */
 .esempio-tech {
@@ -719,41 +684,6 @@ body:not([data-layout="post"]) .progress-bar {
   font-size: 0.9rem;
   color: var(--text-muted);
   margin-bottom: 1.2rem;
-}
-
-.newsletter-box input[type="email"] {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--text);
-  font-size: 0.95rem;
-  margin-bottom: 0.75rem;
-  font-family: inherit;
-}
-
-.newsletter-box input[type="email"]:focus {
-  outline: none;
-  border-color: var(--accent);
-}
-
-.newsletter-box .newsletter-submit {
-  width: 100%;
-  padding: 0.75rem;
-  background: var(--accent);
-  color: var(--bg);
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s;
-  font-family: inherit;
-}
-
-.newsletter-box .newsletter-submit:hover {
-  background: var(--accent-hover);
 }
 
 .newsletter-close {
