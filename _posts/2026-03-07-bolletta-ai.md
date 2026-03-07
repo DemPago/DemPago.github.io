@@ -99,7 +99,7 @@ La "Sostenibilità Digitale" non è solo differenziare la spazzatura: è anche c
 
 Portiamo luce.
 
-> 💡 **Grey Jedi Tip per il tuo Workflow:** La prossima volta che scrivi un prompt chilometrico e vago, ricordati che stai sprecando calcolo. Impara l'arte della sintesi: risparmi tempo tu, risparmi energia al server e rendi il tuo workflow a prova di futuro.
+> 💡 *Te lo spiega Dem* — **Grey Jedi Tip per il tuo Workflow:** La prossima volta che scrivi un prompt chilometrico e vago, ricordati che stai sprecando calcolo. Impara l'arte della sintesi: risparmi tempo tu, risparmi energia al server e rendi il tuo workflow a prova di futuro.
 
 ---
 
