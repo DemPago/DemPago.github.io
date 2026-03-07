@@ -8,7 +8,22 @@ layout: default
   {% endif %}
 
   <h1>{{ page.title }}</h1>
-  <p class="post-date">{{ page.date | date: "%d %B %Y" }} · {% assign words = content | number_of_words %}{% assign mins = words | divided_by: 200 %}{% if mins < 1 %}1{% else %}{{ mins }}{% endif %} min di lettura</p>
+  {% assign m = page.date | date: "%-m" %}
+  {% case m %}
+    {% when "1" %}{% assign mese = "gennaio" %}
+    {% when "2" %}{% assign mese = "febbraio" %}
+    {% when "3" %}{% assign mese = "marzo" %}
+    {% when "4" %}{% assign mese = "aprile" %}
+    {% when "5" %}{% assign mese = "maggio" %}
+    {% when "6" %}{% assign mese = "giugno" %}
+    {% when "7" %}{% assign mese = "luglio" %}
+    {% when "8" %}{% assign mese = "agosto" %}
+    {% when "9" %}{% assign mese = "settembre" %}
+    {% when "10" %}{% assign mese = "ottobre" %}
+    {% when "11" %}{% assign mese = "novembre" %}
+    {% when "12" %}{% assign mese = "dicembre" %}
+  {% endcase %}
+  <p class="post-date">{{ page.date | date: "%d" }} {{ mese }} {{ page.date | date: "%Y" }} · {% assign words = content | number_of_words %}{% assign mins = words | divided_by: 200 %}{% if mins < 1 %}1{% else %}{{ mins }}{% endif %} min di lettura</p>
 
   {{ content }}
 

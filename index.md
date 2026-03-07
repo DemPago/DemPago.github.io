@@ -22,6 +22,21 @@ title: Home
       {% assign words = post.content | number_of_words %}
       {% assign mins = words | divided_by: 200 %}
       {% if mins < 1 %}{% assign mins = 1 %}{% endif %}
+      {% assign m = post.date | date: "%-m" %}
+      {% case m %}
+        {% when "1" %}{% assign mese = "gennaio" %}
+        {% when "2" %}{% assign mese = "febbraio" %}
+        {% when "3" %}{% assign mese = "marzo" %}
+        {% when "4" %}{% assign mese = "aprile" %}
+        {% when "5" %}{% assign mese = "maggio" %}
+        {% when "6" %}{% assign mese = "giugno" %}
+        {% when "7" %}{% assign mese = "luglio" %}
+        {% when "8" %}{% assign mese = "agosto" %}
+        {% when "9" %}{% assign mese = "settembre" %}
+        {% when "10" %}{% assign mese = "ottobre" %}
+        {% when "11" %}{% assign mese = "novembre" %}
+        {% when "12" %}{% assign mese = "dicembre" %}
+      {% endcase %}
       {% if forloop.first %}
       <a href="{{ post.url }}" class="post-hero">
         {% if post.cover %}
@@ -31,7 +46,7 @@ title: Home
           <span class="post-card-category cat-tech">Tech</span>
           <h2>{{ post.title }}</h2>
           <p>{{ post.description }}</p>
-          <span class="post-card-date">{{ post.date | date: "%d %B %Y" }} · {{ mins }} min di lettura</span>
+          <span class="post-card-date">{{ post.date | date: "%d" }} {{ mese }} {{ post.date | date: "%Y" }} · {{ mins }} min di lettura</span>
         </div>
       </a>
       <ul class="post-grid">
@@ -46,7 +61,7 @@ title: Home
           <span class="post-card-category cat-tech">Tech</span>
           <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
           <p class="post-card-desc">{{ post.description }}</p>
-          <span class="post-card-date">{{ post.date | date: "%d %B %Y" }} · {{ mins }} min di lettura</span>
+          <span class="post-card-date">{{ post.date | date: "%d" }} {{ mese }} {{ post.date | date: "%Y" }} · {{ mins }} min di lettura</span>
         </div>
       </li>
       {% endif %}
@@ -61,6 +76,21 @@ title: Home
       {% assign words = post.content | number_of_words %}
       {% assign mins = words | divided_by: 200 %}
       {% if mins < 1 %}{% assign mins = 1 %}{% endif %}
+      {% assign m = post.date | date: "%-m" %}
+      {% case m %}
+        {% when "1" %}{% assign mese = "gennaio" %}
+        {% when "2" %}{% assign mese = "febbraio" %}
+        {% when "3" %}{% assign mese = "marzo" %}
+        {% when "4" %}{% assign mese = "aprile" %}
+        {% when "5" %}{% assign mese = "maggio" %}
+        {% when "6" %}{% assign mese = "giugno" %}
+        {% when "7" %}{% assign mese = "luglio" %}
+        {% when "8" %}{% assign mese = "agosto" %}
+        {% when "9" %}{% assign mese = "settembre" %}
+        {% when "10" %}{% assign mese = "ottobre" %}
+        {% when "11" %}{% assign mese = "novembre" %}
+        {% when "12" %}{% assign mese = "dicembre" %}
+      {% endcase %}
       {% if forloop.first %}
       <a href="{{ post.url }}" class="post-hero">
         {% if post.cover %}
@@ -70,7 +100,7 @@ title: Home
           <span class="post-card-category cat-business">Business</span>
           <h2>{{ post.title }}</h2>
           <p>{{ post.description }}</p>
-          <span class="post-card-date">{{ post.date | date: "%d %B %Y" }} · {{ mins }} min di lettura</span>
+          <span class="post-card-date">{{ post.date | date: "%d" }} {{ mese }} {{ post.date | date: "%Y" }} · {{ mins }} min di lettura</span>
         </div>
       </a>
       <ul class="post-grid">
@@ -85,7 +115,7 @@ title: Home
           <span class="post-card-category cat-business">Business</span>
           <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
           <p class="post-card-desc">{{ post.description }}</p>
-          <span class="post-card-date">{{ post.date | date: "%d %B %Y" }} · {{ mins }} min di lettura</span>
+          <span class="post-card-date">{{ post.date | date: "%d" }} {{ mese }} {{ post.date | date: "%Y" }} · {{ mins }} min di lettura</span>
         </div>
       </li>
       {% endif %}

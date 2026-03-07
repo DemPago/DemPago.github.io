@@ -126,6 +126,18 @@ header {
   border-bottom: 1px solid var(--border);
   padding-bottom: 1.5rem;
   margin-bottom: 2rem;
+  position: relative;
+}
+
+header::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
 }
 
 header h1 a {
@@ -156,6 +168,7 @@ header p {
   border-radius: 12px;
   overflow: hidden;
   transition: transform 0.2s, border-color 0.2s;
+  min-height: 220px;
 }
 
 .post-card:hover {
@@ -465,6 +478,13 @@ li {
   background-position: center;
 }
 
+@media (max-width: 600px) {
+  .post-content blockquote::before {
+    width: 36px;
+    height: 36px;
+  }
+}
+
 .post-content ol li,
 .post-content ul li {
   margin-bottom: 0.75rem;
@@ -622,6 +642,7 @@ body:not([data-layout="post"]) .progress-bar {
   margin: 0.4rem 0;
   color: var(--text);
   line-height: 1.3;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
 }
 
 .post-hero-content p {
@@ -632,6 +653,7 @@ body:not([data-layout="post"]) .progress-bar {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
 }
 
 @media (max-width: 600px) {
@@ -806,9 +828,9 @@ footer .copyright {
 }
 
 #counter {
-  color: var(--accent);
-  font-weight: bold;
-  font-size: 1.1rem;
+  color: var(--text-muted);
+  font-weight: normal;
+  font-size: 0.9rem;
 }
 
 /* Loader */
