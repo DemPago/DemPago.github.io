@@ -1,0 +1,79 @@
+---
+layout: default
+title: "Pagina non trovata"
+description: "Questa pagina non esiste — ma il blog sì."
+permalink: /404.html
+---
+
+<style>
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 1rem;
+    min-height: 60vh;
+  }
+
+  .not-found .code {
+    font-size: 6rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    letter-spacing: -4px;
+  }
+
+  .not-found h2 {
+    font-size: 1.5rem;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .not-found p {
+    color: var(--text-muted);
+    max-width: 420px;
+    margin-bottom: 2rem;
+    line-height: 1.7;
+  }
+
+  .not-found .dem-quote {
+    background: var(--card);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.5rem;
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.95rem;
+    text-align: left;
+  }
+
+  .not-found .home-btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #0d1117;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.2s;
+  }
+
+  .not-found .home-btn:hover {
+    background: var(--accent-hover);
+  }
+</style>
+
+<div class="not-found">
+  <div class="code">404</div>
+  <h2>Questa pagina non esiste.</h2>
+  <p>L'URL che hai cercato non è stato trovato. Forse è stato spostato, rinominato, o semplicemente non è mai esistito.</p>
+  <div class="dem-quote">
+    💡 <em>Te lo spiega Dem</em>: "Anche i migliori Jedi ogni tanto prendono la strada sbagliata nella Foresta di Endor. L'importante è tornare sulla rotta giusta."
+  </div>
+  <a href="/" class="home-btn">⚡ Torna alla Home</a>
+</div>
