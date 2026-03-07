@@ -33,17 +33,17 @@ Partiamo dalle basi. Come misuriamo questa "pesantezza"? Con il **Wattora (Wh)**
 
 Ora, facciamo il paragone che ti farà guardare il browser in modo diverso:
 
-| Operazione | Consumo energetico |
+| Operazione | Consumo energetico (stima) |
 |---|---|
 | Una ricerca standard su Google | ~0,3 Wh |
-| Un singolo prompt AI (testo o immagine) | ~2,9 Wh |
+| Un singolo prompt AI testuale | ~0,3 – 2,9 Wh |
 
 **Il Paragone "Tech Illuminato":**
-Chiedere all'AI di scriverti una mail non è come fare una ricerca. È come chiedere a un server di *pensare* e *creare* qualcosa da zero. Energeticamente, un prompt equivale a tenere accesa una **lampadina LED ad alta efficienza per circa 15-20 minuti**. Oppure, a caricare il tuo iPhone del 15%.
+Chiedere all'AI di scriverti una mail non è come fare una ricerca. È come chiedere a un server di *pensare* e *creare* qualcosa da zero. Le stime sul consumo esatto variano parecchio a seconda del modello, del provider e della complessità della risposta — c'è chi dice pochi decimi di Wh, chi arriva a quasi 3 Wh per prompt. Il video qui sotto ti dà un'idea concreta, e ti lasciamo trarre le tue conclusioni.
 
-> 💡 *Te lo spiega Dem*: "Moltiplica 2,9 Wh per i miliardi di prompt inviati ogni giorno e capirai perché Sam Altman (OpenAI) e Mark Zuckerberg (Meta) stanno girando il mondo cercando di comprarsi centrali nucleari o investendo miliardi in parchi eolici. Non lo fanno perché sono diventati hippy — lo fanno perché è l'unico modo per non far collassare i loro bilanci e la rete elettrica mondiale."
+> 💡 *Te lo spiega Dem*: "Qualunque numero sia quello giusto, moltiplica quella cifra per i miliardi di prompt inviati ogni giorno e capirai perché Sam Altman (OpenAI) e Mark Zuckerberg (Meta) stanno girando il mondo cercando di comprarsi centrali nucleari o investendo miliardi in parchi eolici. Non lo fanno perché sono diventati hippy — lo fanno perché è l'unico modo per non far collassare i loro bilanci e la rete elettrica mondiale."
 
-<iframe width="100%" height="560" src="https://www.youtube.com/embed/9o_wAzERvag" title="Video: Il vero costo energetico dell'AI" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
+<div class="esempio-tech">🎬 <strong>Guarda il video:</strong> <a href="https://www.youtube.com/shorts/9o_wAzERvag" target="_blank" rel="noopener noreferrer">Quanta energia consuma una domanda a ChatGPT?</a> — le stime in giro sono diverse, giudica tu quale ti convince di più.</div>
 
 ---
 
