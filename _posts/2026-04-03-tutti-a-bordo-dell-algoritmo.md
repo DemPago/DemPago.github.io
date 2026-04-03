@@ -36,7 +36,7 @@ Le caldaie non bruciano carbone. Bruciano la nostra storia digitale: ogni tweet,
 
 <div class="esempio-tech">🌊 <strong>L'Hybris Moderna:</strong> I progettisti giurano che la nave è sicura. "Abbiamo compartimenti stagni: firewall, etica integrata, regolamentazioni." Ma nessuno ha testato in tempesta vera. Perché fermarsi? Il mercato non aspetta.</div>
 
-![Iceberg in mare — il pericolo nascosto dietro l'ottimismo AI](https://images.unsplash.com/photo-1520637836862-4d197d17c155?w=800)
+![Iceberg in mare — il pericolo nascosto dietro l'ottimismo AI](https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800)
 
 ---
 
