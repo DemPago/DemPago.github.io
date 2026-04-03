@@ -36,6 +36,18 @@ Le caldaie non bruciano carbone. Bruciano la nostra storia digitale: ogni tweet,
 
 <div class="esempio-tech">🌊 <strong>L'Hybris Moderna:</strong> I progettisti giurano che la nave è sicura. "Abbiamo compartimenti stagni: firewall, etica integrata, regolamentazioni." Ma nessuno ha testato in tempesta vera. Perché fermarsi? Il mercato non aspetta.</div>
 
+<div class="esempio-tech">💻 <strong>Codice d'esempio:</strong> Un semplice script Python per simulare l'entusiasmo dei passeggeri che salgono sulla nave AI.</div>
+
+```python
+# Simulazione metaforica dell'entusiasmo per l'AI
+passeggeri = ["Investitore", "CEO", "Utente", "Sviluppatore"]
+
+for passeggero in passeggeri:
+    print(f"{passeggero} sale a bordo: 'L'AI è il futuro! Ignoriamo gli iceberg!'")
+```
+
+<div class="esempio-tech">🎬 <strong>Guarda il video:</strong> <a href="https://www.youtube.com/watch?v=p4kCQOceAX8" target="_blank" rel="noopener noreferrer">L'AI ci sostituirà tutti? Un parallelo con il progresso tecnologico</a> — riflessioni sul rischio e l'ottimismo.</div>
+
 ![Iceberg in mare — il pericolo nascosto dietro l'ottimismo AI](https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800)
 
 ---
