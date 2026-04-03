@@ -5,7 +5,7 @@ description: "L'IA come il Titanic del 1912: un miracolo ingegneristico che tutt
 date: 2026-04-03
 categories: tech
 tags: [AI, Tech, Innovazione]
-cover: https://images.unsplash.com/photo-1558470012-aca33c2bb553?w=800
+cover: https://images.unsplash.com/photo-1622020223772-2c5c3a6e4e4b?w=800
 ---
 
 Ciao! Bentornati su **Tech Illuminato**.
@@ -20,7 +20,7 @@ Nel 2026, stiamo rivivendo quella stessa hybris. L'AI non è un software: è un 
 
 Non c'è fumo sopra il molo moderno. C'è solo il calore elettrico dei data center, il peso invisibile di petabyte di dati gettati nelle fornaci digitali. Passeggeri di terza classe – utenti comuni con i loro prompt quotidiani – sognano una vita più facile. I miliardari in prima classe – investitori e CEO – hanno già prenotato il loro posto al comando, sicuri che questa nave li porterà alla ricchezza eterna.
 
-![Folla al porto con nave in partenza — la metafora dell'entusiasmo per l'AI](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800)
+![Folla al porto con nave in partenza — la metafora dell'entusiasmo per l'AI](https://images.unsplash.com/photo-1511578314322-379afb476865?w=800)
 
 Il rumore? Non il fischio del vapore, ma il beep delle notifiche, il clic dei mouse che confermano acquisti. L'odore? Non sale marina, ma ozono dell'elettricità statica. Tutti sentono l'eccitazione: abbiamo costruito qualcosa di più grande di noi. Il silicio contro il neurone. L'algoritmo contro l'intuizione.
 
@@ -36,7 +36,7 @@ Le caldaie non bruciano carbone. Bruciano la nostra storia digitale: ogni tweet,
 
 <div class="esempio-tech">🌊 <strong>L'Hybris Moderna:</strong> I progettisti giurano che la nave è sicura. "Abbiamo compartimenti stagni: firewall, etica integrata, regolamentazioni." Ma nessuno ha testato in tempesta vera. Perché fermarsi? Il mercato non aspetta.</div>
 
-![Iceberg in mare — il pericolo nascosto dietro l'ottimismo AI](https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800)
+![Iceberg in mare — il pericolo nascosto dietro l'ottimismo AI](https://images.unsplash.com/photo-1520637836862-4d197d17c155?w=800)
 
 ---
 
