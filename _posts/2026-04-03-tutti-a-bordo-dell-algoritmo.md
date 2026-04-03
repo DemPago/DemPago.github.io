@@ -20,7 +20,7 @@ Nel 2026, stiamo rivivendo quella stessa hybris. L'AI non è un software: è un 
 
 Non c'è fumo sopra il molo moderno. C'è solo il calore elettrico dei data center, il peso invisibile di petabyte di dati gettati nelle fornaci digitali. Passeggeri di terza classe – utenti comuni con i loro prompt quotidiani – sognano una vita più facile. I miliardari in prima classe – investitori e CEO – hanno già prenotato il loro posto al comando, sicuri che questa nave li porterà alla ricchezza eterna.
 
-![Folla al porto con nave in partenza — la metafora dell'entusiasmo per l'AI](https://images.unsplash.com/photo-1511578314322-379afb476865?w=800)
+![Folla al porto con nave in partenza — la metafora dell'entusiasmo per l'AI](titanic.png)
 
 Il rumore? Non il fischio del vapore, ma il beep delle notifiche, il clic dei mouse che confermano acquisti. L'odore? Non sale marina, ma ozono dell'elettricità statica. Tutti sentono l'eccitazione: abbiamo costruito qualcosa di più grande di noi. Il silicio contro il neurone. L'algoritmo contro l'intuizione.
 
