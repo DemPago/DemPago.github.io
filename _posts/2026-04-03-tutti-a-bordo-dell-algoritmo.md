@@ -5,7 +5,7 @@ description: "L'IA come il Titanic del 1912: un miracolo ingegneristico che tutt
 date: 2026-04-03
 categories: tech
 tags: [AI, Tech, Innovazione]
-cover: https://images.unsplash.com/photo-1622020223772-2c5c3a6e4e4b?w=800
+cover: /titanic.png
 ---
 
 Ciao! Bentornati su **Tech Illuminato**.
