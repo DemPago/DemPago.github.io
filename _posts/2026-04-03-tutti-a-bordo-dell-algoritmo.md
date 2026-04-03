@@ -5,7 +5,7 @@ description: "L'IA come il Titanic del 1912: un miracolo ingegneristico che tutt
 date: 2026-04-03
 categories: tech
 tags: [AI, Tech, Innovazione]
-cover: https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800
+cover: https://images.unsplash.com/photo-1558470012-aca33c2bb553?w=800
 ---
 
 Ciao! Bentornati su **Tech Illuminato**.
@@ -22,7 +22,7 @@ Immagina la scena: il porto di Southampton, aprile 1912. Ma invece di passeggeri
 
 Tutti accalcati per salire sulla **Nave dell'Intelligenza**. È il nuovo Titanic: un colosso di silicio e algoritmi che promette di portarci dall'altra parte dell'oceano digitale. "Inaffondabile", dicevano. "Il futuro dell'umanità", gridano oggi.
 
-![Folla al porto con nave in partenza — la metafora dell'entusiasmo per l'AI](https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800)
+![Folla al porto con nave in partenza — la metafora dell'entusiasmo per l'AI](https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800)
 
 Il parallelo è lampante. Il Titanic rappresentava il trionfo del progresso umano sui limiti naturali: il vapore contro il vento, l'acciaio contro le onde. L'AI? È il trionfo del silicio sui limiti biologici. Il neurone contro il chip? Scordatelo. Ora abbiamo modelli che "pensano" più veloce di qualsiasi cervello organico, che apprendono da dati che riempirebbero biblioteche intere.
 
