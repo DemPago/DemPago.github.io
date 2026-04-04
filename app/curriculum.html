@@ -497,7 +497,7 @@ input[type="month"]:disabled { opacity: 0.35; }
 
     <div class="cv-field">
       <label>Titolo professionale</label>
-      <input type="text" id="f-titolo" placeholder="es. Senior Software Engineer" list="sector-titles-list" oninput="renderCV()">
+      <input type="text" id="f-titolo" placeholder="es. Senior Software Engineer" list="sector-titles-list" oninput="onTitleInput(this)">
     </div>
     <button class="ob-sector-badge" id="sectorBadge" onclick="openOnboarding()" style="display:none">
       ✦ <span id="sectorLabel"></span> — cambia settore
@@ -627,8 +627,9 @@ const SECTOR_NAMES = {
 const SECTOR_ROLES = {
   tech: ['Software Developer','Frontend Developer','Backend Developer','Full Stack Developer',
     'Data Analyst','Data Scientist','DevOps Engineer','Cloud Architect','Product Manager',
-    'UX/UI Designer','Cybersecurity Analyst','Machine Learning Engineer','Mobile Developer',
-    'QA Engineer','Technical Lead','CTO','Solution Architect','Scrum Master',
+    'IT Service Manager','Service Manager','UX/UI Designer','Cybersecurity Analyst',
+    'Machine Learning Engineer','Mobile Developer','QA Engineer','Technical Lead','CTO',
+    'Solution Architect','Scrum Master',
     'Sviluppatore Software','Analista Dati','Architetto Cloud','Sviluppatore Mobile','Ingegnere QA'],
   marketing: ['Marketing Manager','Digital Marketing Specialist','Content Creator','SEO Specialist',
     'Social Media Manager','Brand Manager','Copywriter','Growth Hacker','Email Marketing Specialist',
@@ -700,17 +701,35 @@ function confirmOnboarding() {
 }
 function setSector(key) {
   if (!key) return;
-  // Populate role datalist
-  const rolesDl  = document.getElementById('sector-roles-list');
-  const titlesDl = document.getElementById('sector-titles-list');
-  rolesDl.innerHTML  = (SECTOR_ROLES[key]  || []).map(r => `<option value="${r}">`).join('');
-  titlesDl.innerHTML = (SECTOR_TITLES[key] || []).map(t => `<option value="${t}">`).join('');
+  state.sector = key;
   // Update badge
   const badge = document.getElementById('sectorBadge');
   const label = document.getElementById('sectorLabel');
   if (badge && label) { label.textContent = SECTOR_NAMES[key] || key; badge.style.display = 'inline-flex'; }
-  // Persist in state
-  state.sector = key;
+  // Reset datalists to full list
+  refreshDatalist('sector-roles-list',  SECTOR_ROLES[key]  || []);
+  refreshDatalist('sector-titles-list', SECTOR_TITLES[key] || []);
+}
+
+function refreshDatalist(id, items) {
+  const dl = document.getElementById(id);
+  if (dl) dl.innerHTML = items.map(r => `<option value="${r}">`).join('');
+}
+
+function onRoleInput(input) {
+  const items = SECTOR_ROLES[state.sector] || [];
+  const val = input.value.toLowerCase();
+  const filtered = val ? items.filter(r => r.toLowerCase().startsWith(val)) : items;
+  refreshDatalist('sector-roles-list', filtered);
+  renderCV();
+}
+
+function onTitleInput(input) {
+  const items = SECTOR_TITLES[state.sector] || [];
+  const val = input.value.toLowerCase();
+  const filtered = val ? items.filter(t => t.toLowerCase().startsWith(val)) : items;
+  refreshDatalist('sector-titles-list', filtered);
+  renderCV();
 }
 
 /* ── State ─────────────────────────────────────────────── */
@@ -741,7 +760,7 @@ function addEntry(type) {
       counter: () => expCount++,
       fields: `
         <div class="cv-row2">
-          <div class="cv-field"><label>Ruolo *</label><input type="text" placeholder="Senior Dev" list="sector-roles-list" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Ruolo *</label><input type="text" placeholder="Senior Dev" list="sector-roles-list" oninput="onRoleInput(this)"></div>
           <div class="cv-field"><label>Azienda *</label><input type="text" placeholder="Acme Srl" oninput="renderCV()"></div>
         </div>
         <div class="cv-row2">
