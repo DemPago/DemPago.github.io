@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Chi sono
-description: Coordinatore IT e Service Manager presso PagoPA S.p.A. — appassionato di tech, AI e innovazione digitale.
+description: Nell'informatica da quando avevo 8 anni e un 486 da smontare. Qui racconto il tech senza gergo inutile.
 permalink: /about/
 ---
 
@@ -9,15 +9,7 @@ permalink: /about/
 
 <img src="/profilo.png" alt="Demetrio Ferraro" style="width:96px;height:96px;border-radius:50%;object-fit:cover;display:block;margin:0 0 1.5rem 0;">
 
-# Demetrio Ferraro
-
-**Coordinatore Supporto Monitoraggio Piattaforme Trasversali** · PagoPA S.p.A.
-
-📍 Roma, Italia &nbsp;·&nbsp; 🇮🇹 🇬🇧 🇪🇸
-
----
-
-## Chi sono
+# Chi sono
 
 Nell'informatica da quando, a 8 anni, scartai il mio primo computer — un 486 a 80 MHz. Cercavo i giochi e mi ritrovai a leggere il manuale del DOS. Da lì non mi sono più fermato.
 
@@ -27,52 +19,11 @@ L'AI è il futuro, il presente, e quasi già il passato. Chi non la abbraccia or
 
 ---
 
-## Esperienza
-
-**Coordinatore Supporto Monitoraggio Piattaforme Trasversali** · PagoPA S.p.A. · *gen 2025 – presente*
-Supervisione sistemi di monitoraggio, coordinamento team Service Management, gestione escalation e relazioni con partner tecnologici. Incident Management e ottimizzazione continua dei processi.
-
-**Service Manager** · PagoPA S.p.A. · *ott 2023 – gen 2025*
-Gestione ed efficientamento delle procedure di Service Management. Supporto tecnico III livello, monitoraggio infrastrutturale e applicativo, interfaccia con i team di sviluppo per bug e anomalie.
-
-**Operations Specialist** · PagoPA S.p.A. · *giu 2022 – feb 2024*
-Supporto tecnico II livello su App IO (Cashback di Stato, pagamenti pagoPA). Gestione anomalie di pagamento e assistenza agli utilizzatori dei prodotti PagoPA.
-
-**Customer Care Specialist** · InfoCert · *mar 2021 – giu 2022*
-Fatturazione elettronica, firma digitale, log applicativi (Unix, AWS), SQL (Oracle e Postgres). Clienti: Enel, Generali, Banca Mediolanum.
-
-**IT Support Specialist** · Vantea SMART · *feb 2021 – giu 2022*
-Help desk II livello e Top Client. QA, problem analysis, DB SQL, log applicativi, formazione nuove risorse.
-
-**Technical Support QA** · NIUMA · *dic 2019 – feb 2021*
-Supporto I e II livello su piattaforma e-procurement niumActive®. QA, SQL.
-
-**Help Desk I livello** · System House SRL · *ago 2014 – dic 2019*
-Operatore front/back office presso Sogei. Gestione portali PA: Fatture & Corrispettivi, Giustizia Tributaria, ANPR.
-
----
-
-## Formazione
-
-**Master Universitario II Livello** — Governance e Management della Pubblica Amministrazione
-Università degli Studi eCampus · *mar 2026 – mar 2027*
-
----
-
-## Competenze
-
-`Service Management` `Azure` `Python` `Java` `SQL` `NoSQL` `API REST` `App IO` `PagoPA` `Scrum` `Incident Management` `IT Operations` `Leadership tecnica` `Problem Solving`
-
----
-
-## Il blog
-
-Tech Illuminato nasce dall'idea che la tecnologia vada spiegata senza gergo inutile. Scrivo di AI, innovazione digitale e business per chi vuole capire davvero cosa sta succedendo — non solo seguire il trend del momento.
-
-Ho costruito anche un paio di tool gratuiti che uso direttamente:
+Ho costruito qualche tool gratuito che uso direttamente — tutto gira nel browser, nessun dato inviato:
 
 - [**Generatore CV**](/app/curriculum/) — CV professionale con anteprima live e export PDF
 - [**Lettera di Presentazione**](/app/cover-letter/) — lettera in IT/EN con tono personalizzato
+- [**IP Tool**](/app/ip-tool/) — scopri il tuo IP pubblico e calcola subnet e CIDR
 
 ---
 
