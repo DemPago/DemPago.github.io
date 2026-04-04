@@ -664,9 +664,6 @@ function buildLetter() {
           : 'I have a flexible, results-oriented profile: I can work independently when needed and I&rsquo;m a strong team player when the context calls for it.';
   }
 
-  // Contact line
-  const contactLine = [email, tel, citta].filter(Boolean).map(s => esc(s)).join(' &middot; ') || '&nbsp;';
-
   // Subject
   const subjectLabel = lang === 'it'
     ? `Candidatura per il ruolo di ${esc(ruoloStr)}`
@@ -674,21 +671,26 @@ function buildLetter() {
 
   const locationDate = esc((citta ? citta + ', ' : '') + dateStr);
 
+  // Sender contact items — rendered as separate lines, not as a single eyebrow subtitle
+  const contactItems = [email, tel, citta].filter(Boolean)
+    .map(s => `<div style="font-size:9pt;color:#666;line-height:1.6;">${esc(s)}</div>`)
+    .join('');
+
   return `<div style="width:794px;min-height:1123px;background:#fff;color:#1a1a2a;
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
     font-size:11pt;line-height:1.8;padding:56px 64px;box-sizing:border-box;">
 
-  <div style="margin-bottom:28px;padding-bottom:14px;border-bottom:2.5px solid #1a1a2e;">
-    <div style="font-size:19pt;font-weight:700;color:#1a1a2e;letter-spacing:-0.02em;">${esc(nomeCompl)}</div>
-    <div style="font-size:9pt;color:#666;margin-top:5px;">${contactLine}</div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;padding-bottom:14px;border-bottom:2.5px solid #1a1a2e;">
+    <div>
+      <div style="font-size:19pt;font-weight:700;color:#1a1a2e;letter-spacing:-0.02em;">${esc(nomeCompl)}</div>
+      ${contactItems ? `<div style="margin-top:6px;">${contactItems}</div>` : ''}
+    </div>
+    <div style="font-size:9.5pt;color:#555;text-align:right;padding-top:4px;white-space:nowrap;">${locationDate}</div>
   </div>
 
-  <div style="margin-bottom:22px;">
-    <div style="text-align:right;font-size:9.5pt;color:#555;">${locationDate}</div>
-    <div style="margin-top:12px;font-size:10pt;color:#333;">
-      <div>${esc(referente)}</div>
-      <div style="font-weight:600;">${esc(aziendaStr)}</div>
-    </div>
+  <div style="margin-bottom:22px;font-size:10pt;color:#333;">
+    <div>${esc(referente)}</div>
+    <div style="font-weight:600;">${esc(aziendaStr)}</div>
   </div>
 
   <div style="margin-bottom:20px;padding:9px 14px;background:#f5f6f8;border-left:3px solid #1a1a2e;border-radius:0 4px 4px 0;">
@@ -704,7 +706,6 @@ function buildLetter() {
   <div>
     <div style="margin-bottom:18px;color:#444;">${firmaLabel}</div>
     <div style="font-weight:700;font-size:12pt;color:#1a1a2e;">${esc(nomeCompl)}</div>
-    <div style="font-size:9pt;color:#666;margin-top:3px;">${contactLine}</div>
   </div>
 
 </div>`;
