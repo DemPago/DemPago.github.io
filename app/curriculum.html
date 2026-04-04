@@ -130,6 +130,22 @@ permalink: /app/curriculum/
 }
 .add-entry-btn:hover { border-color: var(--accent); background: rgba(88,166,255,0.06); color: var(--text); }
 
+/* Month picker — dark theme */
+input[type="month"] { color-scheme: dark; }
+
+/* Checkbox "Attuale" */
+.cv-field .present-label {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-size: 0.78rem; color: var(--text-muted);
+  margin-top: 0.35rem; cursor: pointer;
+  margin-bottom: 0;
+}
+.cv-field .present-label input[type="checkbox"] {
+  width: auto; padding: 0; border: none; background: none;
+  accent-color: var(--accent); cursor: pointer;
+}
+input[type="month"]:disabled { opacity: 0.35; }
+
 /* Skills / Languages */
 .tags-input-wrap { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
 .skill-tag {
@@ -487,8 +503,12 @@ function addEntry(type) {
           <div class="cv-field"><label>Azienda *</label><input type="text" placeholder="Acme Srl" oninput="renderCV()"></div>
         </div>
         <div class="cv-row2">
-          <div class="cv-field"><label>Da</label><input type="text" placeholder="Gen 2020" oninput="renderCV()"></div>
-          <div class="cv-field"><label>A</label><input type="text" placeholder="Oggi" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Da</label><input type="month" oninput="renderCV()"></div>
+          <div class="cv-field to-field">
+            <label>A</label>
+            <input type="month" oninput="renderCV()">
+            <label class="present-label"><input type="checkbox" class="present-check" onchange="togglePresent(this)"> <span>Attuale</span></label>
+          </div>
         </div>
         <div class="cv-field"><label>Descrizione</label><textarea placeholder="Attivita svolte, risultati, tecnologie..." oninput="renderCV()"></textarea></div>`,
     },
@@ -500,8 +520,12 @@ function addEntry(type) {
           <div class="cv-field"><label>Istituto *</label><input type="text" placeholder="Universita di Bologna" oninput="renderCV()"></div>
         </div>
         <div class="cv-row2">
-          <div class="cv-field"><label>Da</label><input type="text" placeholder="2016" oninput="renderCV()"></div>
-          <div class="cv-field"><label>A</label><input type="text" placeholder="2018" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Da</label><input type="month" oninput="renderCV()"></div>
+          <div class="cv-field to-field">
+            <label>A</label>
+            <input type="month" oninput="renderCV()">
+            <label class="present-label"><input type="checkbox" class="present-check" onchange="togglePresent(this)"> <span>In corso</span></label>
+          </div>
         </div>
         <div class="cv-field"><label>Note</label><textarea placeholder="Voto, tesi, specializzazione..." oninput="renderCV()"></textarea></div>`,
     },
@@ -513,8 +537,12 @@ function addEntry(type) {
           <div class="cv-field"><label>Ruolo</label><input type="text" placeholder="Lead Developer" oninput="renderCV()"></div>
         </div>
         <div class="cv-row2">
-          <div class="cv-field"><label>Da</label><input type="text" placeholder="2023" oninput="renderCV()"></div>
-          <div class="cv-field"><label>A</label><input type="text" placeholder="2024" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Da</label><input type="month" oninput="renderCV()"></div>
+          <div class="cv-field to-field">
+            <label>A</label>
+            <input type="month" oninput="renderCV()">
+            <label class="present-label"><input type="checkbox" class="present-check" onchange="togglePresent(this)"> <span>In corso</span></label>
+          </div>
         </div>
         <div class="cv-field"><label>Descrizione</label><textarea placeholder="Di cosa si tratta, tecnologie usate, impatto..." oninput="renderCV()"></textarea></div>
         <div class="cv-field"><label>Link (opzionale)</label><input type="text" placeholder="https://github.com/..." oninput="renderCV()"></div>`,
@@ -527,8 +555,12 @@ function addEntry(type) {
           <div class="cv-field"><label>Organizzazione *</label><input type="text" placeholder="Croce Rossa" oninput="renderCV()"></div>
         </div>
         <div class="cv-row2">
-          <div class="cv-field"><label>Da</label><input type="text" placeholder="2019" oninput="renderCV()"></div>
-          <div class="cv-field"><label>A</label><input type="text" placeholder="2021" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Da</label><input type="month" oninput="renderCV()"></div>
+          <div class="cv-field to-field">
+            <label>A</label>
+            <input type="month" oninput="renderCV()">
+            <label class="present-label"><input type="checkbox" class="present-check" onchange="togglePresent(this)"> <span>Attuale</span></label>
+          </div>
         </div>
         <div class="cv-field"><label>Descrizione</label><textarea placeholder="Attivita svolte, impatto..." oninput="renderCV()"></textarea></div>`,
     },
@@ -643,11 +675,32 @@ function renderTags() {
 function collectEntries(listId, fields) {
   const cards = document.querySelectorAll(`#${listId} .entry-card`);
   return Array.from(cards).map(card => {
-    const inputs = card.querySelectorAll('input, textarea');
+    const inputs = card.querySelectorAll('input:not([type="checkbox"]), textarea');
     const obj = {};
     fields.forEach((f, i) => { obj[f] = inputs[i]?.value.trim() || ''; });
+    const presentCheck = card.querySelector('.present-check');
+    if (presentCheck?.checked) obj.to = 'Presente';
     return obj;
   });
+}
+
+/* ── Format YYYY-MM → "Mmm YYYY" ───────────────────────── */
+const IT_MONTHS = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+function formatMonth(val) {
+  if (!val || val === 'Presente') return val;
+  const parts = val.split('-');
+  if (parts.length === 2) {
+    const m = parseInt(parts[1]) - 1;
+    if (m >= 0 && m < 12) return `${IT_MONTHS[m]} ${parts[0]}`;
+  }
+  return val;
+}
+
+/* ── Toggle "Attuale" checkbox ─────────────────────────── */
+function togglePresent(cb) {
+  const toInput = cb.closest('.to-field')?.querySelector('input[type="month"]');
+  if (toInput) toInput.disabled = cb.checked;
+  renderCV();
 }
 
 function v(id) { return document.getElementById(id)?.value.trim() || ''; }
@@ -686,46 +739,54 @@ function renderCV() {
   }
 
   /* -- render helpers -- */
-  const renderExp = e => `
-    <div class="cv-entry">
+  const renderExp = e => {
+    const period = [formatMonth(e.from), formatMonth(e.to)].filter(Boolean).join(' – ');
+    return `<div class="cv-entry">
       <div class="cv-entry-header">
         <span class="cv-entry-title">${e.role || '<em>Ruolo</em>'}</span>
-        <span class="cv-entry-period">${[e.from, e.to].filter(Boolean).join(' – ')}</span>
+        <span class="cv-entry-period">${period}</span>
       </div>
       ${e.company ? `<div class="cv-entry-sub">${e.company}</div>` : ''}
       ${e.desc    ? `<div class="cv-entry-desc">${e.desc.replace(/\n/g,'<br>')}</div>` : ''}
     </div>`;
+  };
 
-  const renderEdu = e => `
-    <div class="cv-entry">
+  const renderEdu = e => {
+    const period = [formatMonth(e.from), formatMonth(e.to)].filter(Boolean).join(' – ');
+    return `<div class="cv-entry">
       <div class="cv-entry-header">
         <span class="cv-entry-title">${e.degree || '<em>Titolo</em>'}</span>
-        <span class="cv-entry-period">${[e.from, e.to].filter(Boolean).join(' – ')}</span>
+        <span class="cv-entry-period">${period}</span>
       </div>
       ${e.school ? `<div class="cv-entry-sub">${e.school}</div>` : ''}
       ${e.note   ? `<div class="cv-entry-desc">${e.note}</div>` : ''}
     </div>`;
+  };
 
-  const renderProj = e => `
-    <div class="cv-entry">
+  const renderProj = e => {
+    const period = [formatMonth(e.from), formatMonth(e.to)].filter(Boolean).join(' – ');
+    return `<div class="cv-entry">
       <div class="cv-entry-header">
         <span class="cv-entry-title">${e.name || '<em>Progetto</em>'}</span>
-        <span class="cv-entry-period">${[e.from, e.to].filter(Boolean).join(' – ')}</span>
+        <span class="cv-entry-period">${period}</span>
       </div>
       ${e.role ? `<div class="cv-entry-sub">${e.role}</div>` : ''}
       ${e.desc ? `<div class="cv-entry-desc">${e.desc.replace(/\n/g,'<br>')}</div>` : ''}
       ${e.link ? `<div class="cv-entry-link">${e.link}</div>` : ''}
     </div>`;
+  };
 
-  const renderVol = e => `
-    <div class="cv-entry">
+  const renderVol = e => {
+    const period = [formatMonth(e.from), formatMonth(e.to)].filter(Boolean).join(' – ');
+    return `<div class="cv-entry">
       <div class="cv-entry-header">
         <span class="cv-entry-title">${e.role || '<em>Ruolo</em>'}</span>
-        <span class="cv-entry-period">${[e.from, e.to].filter(Boolean).join(' – ')}</span>
+        <span class="cv-entry-period">${period}</span>
       </div>
       ${e.org  ? `<div class="cv-entry-sub">${e.org}</div>` : ''}
       ${e.desc ? `<div class="cv-entry-desc">${e.desc.replace(/\n/g,'<br>')}</div>` : ''}
     </div>`;
+  };
 
   const renderPub = e => `
     <div class="cv-entry">
