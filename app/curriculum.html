@@ -191,9 +191,8 @@ input[type="month"]:disabled { opacity: 0.35; }
 .cv-preview-wrap {
   background: white;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 4px 24px rgba(0,0,0,0.4);
-  overflow-y: auto;
 }
 
 /* ── CV Template (rendered inside preview + exported) ── */
@@ -333,6 +332,29 @@ input[type="month"]:disabled { opacity: 0.35; }
 .cv-preview-scaler {
   transform-origin: top left;
   width: 794px;
+  position: relative;
+}
+#pageBreakLine {
+  display: none;
+  position: absolute;
+  top: 1123px;
+  left: 0;
+  width: 794px;
+  border-top: 2px dashed rgba(220,38,38,0.55);
+  pointer-events: none;
+  z-index: 10;
+}
+#pageBreakLine::after {
+  content: 'Pagina 2 ▼';
+  position: absolute;
+  right: 0;
+  top: 4px;
+  font-size: 10px;
+  color: rgba(220,38,38,0.75);
+  background: #fff;
+  padding: 0 6px;
+  font-family: sans-serif;
+  letter-spacing: 0.03em;
 }
 </style>
 
@@ -455,6 +477,7 @@ input[type="month"]:disabled { opacity: 0.35; }
     <div class="cv-preview-label">Anteprima live</div>
     <div class="cv-preview-wrap" id="previewWrap">
       <div class="cv-preview-scaler" id="previewScaler">
+        <div id="pageBreakLine"></div>
         <div id="cv-template">
           <!-- rendered by JS -->
         </div>
@@ -639,7 +662,7 @@ function buildSwatches() {
 }
 
 /* ── Tags (skills) ─────────────────────────────────────── */
-function addTag(e) {
+function addTag(e, _listId) {
   if (e.key !== 'Enter' && e.key !== ',') return;
   e.preventDefault();
   const input = document.getElementById('skill-input');
@@ -867,14 +890,20 @@ function renderCV() {
 function scalePreview() {
   const wrap   = document.getElementById('previewWrap');
   const scaler = document.getElementById('previewScaler');
+  const tpl    = document.getElementById('cv-template');
   const W = 794;
   const available = wrap.clientWidth;
   if (!available) return;
   const scale = available / W;
+  const templateH = tpl.offsetHeight || 1123;
   scaler.style.transform = `scale(${scale})`;
-  scaler.style.height = `${1123 * scale}px`;
-  wrap.style.height   = `${1123 * scale}px`;
+  scaler.style.height = `${templateH * scale}px`;
+  wrap.style.height   = `${templateH * scale}px`;
   wrap.style.aspectRatio = 'unset';
+
+  // Mostra la linea "Pagina 2" solo se il contenuto sfora l'A4
+  const breakLine = document.getElementById('pageBreakLine');
+  if (breakLine) breakLine.style.display = templateH > 1130 ? 'block' : 'none';
 }
 
 window.addEventListener('resize', scalePreview);
@@ -923,18 +952,27 @@ async function downloadPDF() {
     const imgData = canvas.toDataURL('image/jpeg', 0.92);
     const imgH = pdfW * (canvas.height / canvas.width);
 
-    if (imgH <= pdfH) {
-      pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, imgH);
+    if (imgH <= pdfH + 0.5) { // +0.5mm tolerance for floating-point/subpixel rounding
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, Math.min(imgH, pdfH));
     } else {
       const pxPerPage = (canvas.width * pdfH) / pdfW;
       let yOffset = 0;
       while (yOffset < canvas.height) {
+        const sliceH = Math.min(pxPerPage, canvas.height - yOffset);
         const pageCanvas = document.createElement('canvas');
         pageCanvas.width  = canvas.width;
-        pageCanvas.height = Math.min(pxPerPage, canvas.height - yOffset);
-        pageCanvas.getContext('2d').drawImage(canvas, 0, -yOffset);
+        pageCanvas.height = sliceH;
+        pageCanvas.getContext('2d').drawImage(
+          canvas,
+          0, yOffset,              // source x, y
+          canvas.width, sliceH,    // source width, height
+          0, 0,                    // dest x, y
+          canvas.width, sliceH     // dest width, height
+        );
         if (yOffset > 0) pdf.addPage();
-        pdf.addImage(pageCanvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, pdfW, pdfH);
+        // Scale the slice to fill the page width; preserve aspect ratio on last page
+        const renderedH = pdfW * (sliceH / canvas.width);
+        pdf.addImage(pageCanvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, pdfW, renderedH);
         yOffset += pxPerPage;
       }
     }
@@ -958,4 +996,6 @@ addEntry('exp');
 addEntry('edu');
 addEntry('lang');
 renderCV();
+// Ensure preview is correctly scaled after first paint
+requestAnimationFrame(scalePreview);
 </script>
