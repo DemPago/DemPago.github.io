@@ -12,7 +12,7 @@ permalink: /about/
 <img src="/profilo.png" alt="Demetrio Ferraro" style="width:96px;height:96px;border-radius:50%;object-fit:cover;display:block;margin:0 0 1.25rem 0;">
 
 <p style="font-size:1.05rem;line-height:1.75;margin-bottom:1rem;">
-Ho 8 anni, scarto il mio primo computer — un 486 a 80 MHz — e invece di trovare i giochi mi trovo in mano il manuale del DOS. L'ho letto. Da lì non mi sono fermato più.
+A 8 anni ho scartato il mio primo computer — un 486 a 80 MHz — e invece di trovare i giochi mi sono ritrovato in mano il manuale del DOS. L'ho letto. Da lì non mi sono fermato più.
 </p>
 
 <p style="font-size:1.05rem;line-height:1.75;margin-bottom:1rem;">
