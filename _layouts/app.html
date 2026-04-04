@@ -10,17 +10,10 @@
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/styles.css">
   <style>
-    /* App layout overrides */
-    body[data-layout="app"] .container {
-      display: block;
+    .app-wrapper {
       max-width: 1200px;
+      margin: 0 auto;
       padding: 2rem 1.5rem;
-    }
-    body[data-layout="app"] .sidebar {
-      display: none;
-    }
-    body[data-layout="app"] .progress-bar {
-      display: none;
     }
     .app-nav {
       display: flex;
@@ -61,19 +54,17 @@
   {{ page.head_extra }}
 </head>
 <body data-layout="app">
-  <div class="container">
-    <main class="main-content">
-      <header>
-        <h1><a href="/">Tech Illuminato</a></h1>
-        <p>{{ site.description }}</p>
-      </header>
-      <nav class="app-nav" aria-label="Navigazione">
-        <a href="/" class="btn-home">&#8592; Home</a>
-        <span class="sep">/</span>
-        <span class="current">{{ page.title }}</span>
-      </nav>
-      {{ content }}
-    </main>
+  <div class="app-wrapper">
+    <header>
+      <h1><a href="/">Tech Illuminato</a></h1>
+      <p>{{ site.description }}</p>
+    </header>
+    <nav class="app-nav" aria-label="Navigazione">
+      <a href="/" class="btn-home">&#8592; Home</a>
+      <span class="sep">/</span>
+      <span class="current">{{ page.title }}</span>
+    </nav>
+    {{ content }}
   </div>
   <footer>
     <div class="brand">⚡ Tech Illuminato Blog</div>
