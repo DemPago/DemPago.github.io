@@ -550,7 +550,10 @@ li {
 }
 
 .comparison-table thead .col-label {
-  background: var(--bg);
+  background: var(--card);
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 1rem;
 }
 
 .comparison-table thead .col-1912 {

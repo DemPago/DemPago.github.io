@@ -70,7 +70,7 @@ Entrambe le rivoluzioni poggiano su un esercito invisibile che suda affinché la
 <table class="comparison-table">
   <thead>
     <tr>
-      <th class="col-label"></th>
+      <th class="col-label">⚙️ Caratteristica</th>
       <th class="col-1912">🚢 Titanic (1912)</th>
       <th class="col-2026">🤖 AI Engine (2026)</th>
     </tr>
