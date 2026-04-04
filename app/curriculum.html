@@ -177,8 +177,6 @@ permalink: /app/curriculum/
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 24px rgba(0,0,0,0.4);
-  /* A4 aspect ratio at preview width */
-  aspect-ratio: 210 / 297;
   overflow-y: auto;
 }
 
@@ -259,7 +257,7 @@ permalink: /app/curriculum/
   font-size: 0.85rem; color: #374151; line-height: 1.6;
 }
 
-/* Experience / Education entries */
+/* Experience / Education / Project entries */
 .cv-entry { margin-bottom: 1rem; }
 .cv-entry-header {
   display: flex; justify-content: space-between; align-items: baseline;
@@ -269,6 +267,7 @@ permalink: /app/curriculum/
 .cv-entry-period { font-size: 0.75rem; color: #6b7280; white-space: nowrap; flex-shrink: 0; }
 .cv-entry-sub { font-size: 0.8rem; color: #4b5563; margin-top: 0.1rem; font-style: italic; }
 .cv-entry-desc { font-size: 0.82rem; color: #374151; margin-top: 0.3rem; line-height: 1.5; }
+.cv-entry-link { font-size: 0.78rem; color: #0f3460; margin-top: 0.2rem; word-break: break-all; }
 
 /* Skills */
 .cv-skills-list { display: flex; flex-wrap: wrap; gap: 0.35rem; }
@@ -282,6 +281,16 @@ permalink: /app/curriculum/
 .cv-lang-item { display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.82rem; }
 .cv-lang-name { color: #1a1a2e; font-weight: 600; }
 .cv-lang-level { color: #6b7280; }
+
+/* Certifications */
+.cv-cert-item { margin-bottom: 0.5rem; }
+.cv-cert-name { font-size: 0.82rem; font-weight: 600; color: #1a1a2e; }
+.cv-cert-meta { font-size: 0.75rem; color: #6b7280; }
+
+/* Awards */
+.cv-award-item { margin-bottom: 0.5rem; }
+.cv-award-name { font-size: 0.82rem; font-weight: 600; color: #1a1a2e; }
+.cv-award-meta { font-size: 0.75rem; color: #6b7280; font-style: italic; }
 
 .cv-placeholder { color: #9ca3af; font-size: 0.82rem; font-style: italic; }
 
@@ -367,6 +376,18 @@ permalink: /app/curriculum/
     <div class="entries-list" id="edu-list"></div>
     <button class="add-entry-btn" onclick="addEntry('edu')">+ Aggiungi titolo</button>
 
+    <p class="cv-section-title">Progetti</p>
+    <div class="entries-list" id="proj-list"></div>
+    <button class="add-entry-btn" onclick="addEntry('proj')">+ Aggiungi progetto</button>
+
+    <p class="cv-section-title">Volontariato</p>
+    <div class="entries-list" id="vol-list"></div>
+    <button class="add-entry-btn" onclick="addEntry('vol')">+ Aggiungi esperienza</button>
+
+    <p class="cv-section-title">Pubblicazioni</p>
+    <div class="entries-list" id="pub-list"></div>
+    <button class="add-entry-btn" onclick="addEntry('pub')">+ Aggiungi pubblicazione</button>
+
     <p class="cv-section-title">Competenze</p>
     <div class="cv-field">
       <div class="tags-input-wrap" id="skills-wrap">
@@ -377,6 +398,14 @@ permalink: /app/curriculum/
     <p class="cv-section-title">Lingue</p>
     <div class="entries-list" id="lang-list"></div>
     <button class="add-entry-btn" onclick="addEntry('lang')">+ Aggiungi lingua</button>
+
+    <p class="cv-section-title">Certificazioni</p>
+    <div class="entries-list" id="cert-list"></div>
+    <button class="add-entry-btn" onclick="addEntry('cert')">+ Aggiungi certificazione</button>
+
+    <p class="cv-section-title">Premi e riconoscimenti</p>
+    <div class="entries-list" id="award-list"></div>
+    <button class="add-entry-btn" onclick="addEntry('award')">+ Aggiungi premio</button>
 
     <button class="cv-download-btn" id="downloadBtn" onclick="downloadPDF()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -407,71 +436,128 @@ permalink: /app/curriculum/
 <script>
 /* ── State ─────────────────────────────────────────────── */
 const state = {
-  photo: null,          // base64 data URL
+  photo: null,
   skills: [],
 };
 
-/* ── Entry templates ───────────────────────────────────── */
-let expCount = 0, eduCount = 0, langCount = 0;
+/* ── Entry counters ────────────────────────────────────── */
+let expCount = 0, eduCount = 0, langCount = 0,
+    certCount = 0, projCount = 0, volCount = 0,
+    pubCount = 0, awardCount = 0;
 
+/* ── Add entry ─────────────────────────────────────────── */
 function addEntry(type) {
-  if (type === 'exp') {
-    const id = expCount++;
-    const div = document.createElement('div');
-    div.className = 'entry-card';
-    div.id = `exp-${id}`;
-    div.innerHTML = `
-      <button class="entry-remove" onclick="removeEl('exp-${id}');renderCV()" title="Rimuovi">&times;</button>
-      <div class="cv-row2">
-        <div class="cv-field"><label>Ruolo *</label><input type="text" placeholder="Senior Dev" oninput="renderCV()"></div>
-        <div class="cv-field"><label>Azienda *</label><input type="text" placeholder="Acme Srl" oninput="renderCV()"></div>
-      </div>
-      <div class="cv-row2">
-        <div class="cv-field"><label>Da</label><input type="text" placeholder="Gen 2020" oninput="renderCV()"></div>
-        <div class="cv-field"><label>A</label><input type="text" placeholder="Oggi" oninput="renderCV()"></div>
-      </div>
-      <div class="cv-field"><label>Descrizione</label><textarea placeholder="Attivita svolte, risultati, tecnologie..." oninput="renderCV()"></textarea></div>
-    `;
-    document.getElementById('exp-list').appendChild(div);
-  } else if (type === 'edu') {
-    const id = eduCount++;
-    const div = document.createElement('div');
-    div.className = 'entry-card';
-    div.id = `edu-${id}`;
-    div.innerHTML = `
-      <button class="entry-remove" onclick="removeEl('edu-${id}');renderCV()" title="Rimuovi">&times;</button>
-      <div class="cv-row2">
-        <div class="cv-field"><label>Titolo *</label><input type="text" placeholder="Laurea Magistrale in Informatica" oninput="renderCV()"></div>
-        <div class="cv-field"><label>Istituto *</label><input type="text" placeholder="Universita di Bologna" oninput="renderCV()"></div>
-      </div>
-      <div class="cv-row2">
-        <div class="cv-field"><label>Da</label><input type="text" placeholder="2016" oninput="renderCV()"></div>
-        <div class="cv-field"><label>A</label><input type="text" placeholder="2018" oninput="renderCV()"></div>
-      </div>
-      <div class="cv-field"><label>Note</label><textarea placeholder="Voto, tesi, specializzazione..." oninput="renderCV()"></textarea></div>
-    `;
-    document.getElementById('edu-list').appendChild(div);
-  } else if (type === 'lang') {
-    const id = langCount++;
-    const div = document.createElement('div');
-    div.className = 'entry-card';
-    div.id = `lang-${id}`;
-    div.innerHTML = `
-      <button class="entry-remove" onclick="removeEl('lang-${id}');renderCV()" title="Rimuovi">&times;</button>
-      <div class="cv-row2">
-        <div class="cv-field"><label>Lingua *</label><input type="text" placeholder="Inglese" oninput="renderCV()"></div>
-        <div class="cv-field"><label>Livello</label><input type="text" placeholder="C1 / Madrelingua" oninput="renderCV()"></div>
-      </div>
-    `;
-    document.getElementById('lang-list').appendChild(div);
-  }
+  const configs = {
+    exp: {
+      counter: () => expCount++,
+      fields: `
+        <div class="cv-row2">
+          <div class="cv-field"><label>Ruolo *</label><input type="text" placeholder="Senior Dev" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Azienda *</label><input type="text" placeholder="Acme Srl" oninput="renderCV()"></div>
+        </div>
+        <div class="cv-row2">
+          <div class="cv-field"><label>Da</label><input type="text" placeholder="Gen 2020" oninput="renderCV()"></div>
+          <div class="cv-field"><label>A</label><input type="text" placeholder="Oggi" oninput="renderCV()"></div>
+        </div>
+        <div class="cv-field"><label>Descrizione</label><textarea placeholder="Attivita svolte, risultati, tecnologie..." oninput="renderCV()"></textarea></div>`,
+    },
+    edu: {
+      counter: () => eduCount++,
+      fields: `
+        <div class="cv-row2">
+          <div class="cv-field"><label>Titolo *</label><input type="text" placeholder="Laurea Magistrale in Informatica" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Istituto *</label><input type="text" placeholder="Universita di Bologna" oninput="renderCV()"></div>
+        </div>
+        <div class="cv-row2">
+          <div class="cv-field"><label>Da</label><input type="text" placeholder="2016" oninput="renderCV()"></div>
+          <div class="cv-field"><label>A</label><input type="text" placeholder="2018" oninput="renderCV()"></div>
+        </div>
+        <div class="cv-field"><label>Note</label><textarea placeholder="Voto, tesi, specializzazione..." oninput="renderCV()"></textarea></div>`,
+    },
+    proj: {
+      counter: () => projCount++,
+      fields: `
+        <div class="cv-row2">
+          <div class="cv-field"><label>Nome progetto *</label><input type="text" placeholder="App meteo" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Ruolo</label><input type="text" placeholder="Lead Developer" oninput="renderCV()"></div>
+        </div>
+        <div class="cv-row2">
+          <div class="cv-field"><label>Da</label><input type="text" placeholder="2023" oninput="renderCV()"></div>
+          <div class="cv-field"><label>A</label><input type="text" placeholder="2024" oninput="renderCV()"></div>
+        </div>
+        <div class="cv-field"><label>Descrizione</label><textarea placeholder="Di cosa si tratta, tecnologie usate, impatto..." oninput="renderCV()"></textarea></div>
+        <div class="cv-field"><label>Link (opzionale)</label><input type="text" placeholder="https://github.com/..." oninput="renderCV()"></div>`,
+    },
+    vol: {
+      counter: () => volCount++,
+      fields: `
+        <div class="cv-row2">
+          <div class="cv-field"><label>Ruolo *</label><input type="text" placeholder="Tutor volontario" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Organizzazione *</label><input type="text" placeholder="Croce Rossa" oninput="renderCV()"></div>
+        </div>
+        <div class="cv-row2">
+          <div class="cv-field"><label>Da</label><input type="text" placeholder="2019" oninput="renderCV()"></div>
+          <div class="cv-field"><label>A</label><input type="text" placeholder="2021" oninput="renderCV()"></div>
+        </div>
+        <div class="cv-field"><label>Descrizione</label><textarea placeholder="Attivita svolte, impatto..." oninput="renderCV()"></textarea></div>`,
+    },
+    pub: {
+      counter: () => pubCount++,
+      fields: `
+        <div class="cv-field"><label>Titolo *</label><input type="text" placeholder="Machine Learning applicato al..." oninput="renderCV()"></div>
+        <div class="cv-row2">
+          <div class="cv-field"><label>Editore / Rivista</label><input type="text" placeholder="IEEE / O'Reilly" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Anno</label><input type="text" placeholder="2024" oninput="renderCV()"></div>
+        </div>
+        <div class="cv-field"><label>Link (opzionale)</label><input type="text" placeholder="https://doi.org/..." oninput="renderCV()"></div>`,
+    },
+    lang: {
+      counter: () => langCount++,
+      fields: `
+        <div class="cv-row2">
+          <div class="cv-field"><label>Lingua *</label><input type="text" placeholder="Inglese" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Livello</label><input type="text" placeholder="C1 / Madrelingua" oninput="renderCV()"></div>
+        </div>`,
+    },
+    cert: {
+      counter: () => certCount++,
+      fields: `
+        <div class="cv-field"><label>Nome certificazione *</label><input type="text" placeholder="AWS Solutions Architect" oninput="renderCV()"></div>
+        <div class="cv-row2">
+          <div class="cv-field"><label>Ente</label><input type="text" placeholder="Amazon Web Services" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Anno</label><input type="text" placeholder="2024" oninput="renderCV()"></div>
+        </div>`,
+    },
+    award: {
+      counter: () => awardCount++,
+      fields: `
+        <div class="cv-field"><label>Premio / Riconoscimento *</label><input type="text" placeholder="Best Innovation Award" oninput="renderCV()"></div>
+        <div class="cv-row2">
+          <div class="cv-field"><label>Organizzazione</label><input type="text" placeholder="Google DevFest" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Anno</label><input type="text" placeholder="2023" oninput="renderCV()"></div>
+        </div>
+        <div class="cv-field"><label>Descrizione (opzionale)</label><textarea placeholder="Motivazione del riconoscimento..." oninput="renderCV()" style="min-height:50px"></textarea></div>`,
+    },
+  };
+
+  const cfg = configs[type];
+  if (!cfg) return;
+  const id = `${type}-${cfg.counter()}`;
+  const div = document.createElement('div');
+  div.className = 'entry-card';
+  div.id = id;
+  div.innerHTML = `
+    <button class="entry-remove" onclick="removeEl('${id}');renderCV()" title="Rimuovi">&times;</button>
+    ${cfg.fields}
+  `;
+  document.getElementById(`${type}-list`).appendChild(div);
   renderCV();
 }
 
 function removeEl(id) { document.getElementById(id)?.remove(); }
 
 /* ── Tags (skills) ─────────────────────────────────────── */
-function addTag(e, type) {
+function addTag(e) {
   if (e.key !== 'Enter' && e.key !== ',') return;
   e.preventDefault();
   const input = document.getElementById('skill-input');
@@ -483,7 +569,7 @@ function addTag(e, type) {
   renderCV();
 }
 
-function removeTag(type, idx) {
+function removeTag(idx) {
   state.skills.splice(idx, 1);
   renderTags();
   renderCV();
@@ -492,17 +578,16 @@ function removeTag(type, idx) {
 function renderTags() {
   const wrap = document.getElementById('skills-wrap');
   const input = document.getElementById('skill-input');
-  // remove old tags
   wrap.querySelectorAll('.skill-tag').forEach(t => t.remove());
   state.skills.forEach((s, i) => {
     const tag = document.createElement('span');
     tag.className = 'skill-tag';
-    tag.innerHTML = `${s}<button onclick="removeTag('skills',${i})" title="Rimuovi">&times;</button>`;
+    tag.innerHTML = `${s}<button onclick="removeTag(${i})" title="Rimuovi">&times;</button>`;
     wrap.insertBefore(tag, input);
   });
 }
 
-/* ── Collect data from DOM ─────────────────────────────── */
+/* ── Collect entries from a list ───────────────────────── */
 function collectEntries(listId, fields) {
   const cards = document.querySelectorAll(`#${listId} .entry-card`);
   return Array.from(cards).map(card => {
@@ -517,51 +602,106 @@ function v(id) { return document.getElementById(id)?.value.trim() || ''; }
 
 /* ── Build CV HTML ─────────────────────────────────────── */
 function renderCV() {
-  const nome = v('f-nome');
+  const nome    = v('f-nome');
   const cognome = v('f-cognome');
   const fullName = [nome, cognome].filter(Boolean).join(' ') || 'Il tuo nome';
 
   const contacts = [
-    v('f-email') && `<span class="cv-contact-item">✉ ${v('f-email')}</span>`,
-    v('f-tel')   && `<span class="cv-contact-item">☎ ${v('f-tel')}</span>`,
-    v('f-citta') && `<span class="cv-contact-item">📍 ${v('f-citta')}</span>`,
+    v('f-email')    && `<span class="cv-contact-item">✉ ${v('f-email')}</span>`,
+    v('f-tel')      && `<span class="cv-contact-item">☎ ${v('f-tel')}</span>`,
+    v('f-citta')    && `<span class="cv-contact-item">📍 ${v('f-citta')}</span>`,
     v('f-linkedin') && `<span class="cv-contact-item">in ${v('f-linkedin')}</span>`,
-    v('f-sito')  && `<span class="cv-contact-item">🌐 ${v('f-sito')}</span>`,
+    v('f-sito')     && `<span class="cv-contact-item">🌐 ${v('f-sito')}</span>`,
   ].filter(Boolean).join('');
 
-  const photoSrc = state.photo;
-
-  const experiences = collectEntries('exp-list', ['role','company','from','to','desc']);
-  const educations  = collectEntries('edu-list',  ['degree','school','from','to','note']);
+  /* -- raccolta dati -- */
+  const experiences = collectEntries('exp-list',   ['role','company','from','to','desc']);
+  const educations  = collectEntries('edu-list',   ['degree','school','from','to','note']);
+  const projects    = collectEntries('proj-list',  ['name','role','from','to','desc','link']);
+  const volunteer   = collectEntries('vol-list',   ['role','org','from','to','desc']);
+  const pubs        = collectEntries('pub-list',   ['title','publisher','year','link']);
   const languages   = collectEntries('lang-list',  ['lang','level']);
+  const certs       = collectEntries('cert-list',  ['name','issuer','year']);
+  const awards      = collectEntries('award-list', ['name','org','year','desc']);
 
-  const expHTML = experiences.length
-    ? experiences.map(e => `
-        <div class="cv-entry">
-          <div class="cv-entry-header">
-            <span class="cv-entry-title">${e.role || '<em>Ruolo</em>'}</span>
-            <span class="cv-entry-period">${[e.from, e.to].filter(Boolean).join(' – ')}</span>
-          </div>
-          ${e.company ? `<div class="cv-entry-sub">${e.company}</div>` : ''}
-          ${e.desc    ? `<div class="cv-entry-desc">${e.desc.replace(/\n/g,'<br>')}</div>` : ''}
-        </div>`).join('')
-    : '<p class="cv-placeholder">Nessuna esperienza aggiunta.</p>';
+  /* -- helper: sezione con entries standard -- */
+  function entrySection(head, items, renderFn) {
+    if (!items.length) return '';
+    return `<div class="cv-section">
+      <div class="cv-section-head">${head}</div>
+      ${items.map(renderFn).join('')}
+    </div>`;
+  }
 
-  const eduHTML = educations.length
-    ? educations.map(e => `
-        <div class="cv-entry">
-          <div class="cv-entry-header">
-            <span class="cv-entry-title">${e.degree || '<em>Titolo</em>'}</span>
-            <span class="cv-entry-period">${[e.from, e.to].filter(Boolean).join(' – ')}</span>
-          </div>
-          ${e.school ? `<div class="cv-entry-sub">${e.school}</div>` : ''}
-          ${e.note   ? `<div class="cv-entry-desc">${e.note}</div>` : ''}
-        </div>`).join('')
-    : '<p class="cv-placeholder">Nessuna istruzione aggiunta.</p>';
+  /* -- render helpers -- */
+  const renderExp = e => `
+    <div class="cv-entry">
+      <div class="cv-entry-header">
+        <span class="cv-entry-title">${e.role || '<em>Ruolo</em>'}</span>
+        <span class="cv-entry-period">${[e.from, e.to].filter(Boolean).join(' – ')}</span>
+      </div>
+      ${e.company ? `<div class="cv-entry-sub">${e.company}</div>` : ''}
+      ${e.desc    ? `<div class="cv-entry-desc">${e.desc.replace(/\n/g,'<br>')}</div>` : ''}
+    </div>`;
 
+  const renderEdu = e => `
+    <div class="cv-entry">
+      <div class="cv-entry-header">
+        <span class="cv-entry-title">${e.degree || '<em>Titolo</em>'}</span>
+        <span class="cv-entry-period">${[e.from, e.to].filter(Boolean).join(' – ')}</span>
+      </div>
+      ${e.school ? `<div class="cv-entry-sub">${e.school}</div>` : ''}
+      ${e.note   ? `<div class="cv-entry-desc">${e.note}</div>` : ''}
+    </div>`;
+
+  const renderProj = e => `
+    <div class="cv-entry">
+      <div class="cv-entry-header">
+        <span class="cv-entry-title">${e.name || '<em>Progetto</em>'}</span>
+        <span class="cv-entry-period">${[e.from, e.to].filter(Boolean).join(' – ')}</span>
+      </div>
+      ${e.role ? `<div class="cv-entry-sub">${e.role}</div>` : ''}
+      ${e.desc ? `<div class="cv-entry-desc">${e.desc.replace(/\n/g,'<br>')}</div>` : ''}
+      ${e.link ? `<div class="cv-entry-link">${e.link}</div>` : ''}
+    </div>`;
+
+  const renderVol = e => `
+    <div class="cv-entry">
+      <div class="cv-entry-header">
+        <span class="cv-entry-title">${e.role || '<em>Ruolo</em>'}</span>
+        <span class="cv-entry-period">${[e.from, e.to].filter(Boolean).join(' – ')}</span>
+      </div>
+      ${e.org  ? `<div class="cv-entry-sub">${e.org}</div>` : ''}
+      ${e.desc ? `<div class="cv-entry-desc">${e.desc.replace(/\n/g,'<br>')}</div>` : ''}
+    </div>`;
+
+  const renderPub = e => `
+    <div class="cv-entry">
+      <div class="cv-entry-header">
+        <span class="cv-entry-title" style="font-size:0.82rem">${e.title || '<em>Titolo</em>'}</span>
+        <span class="cv-entry-period">${e.year}</span>
+      </div>
+      ${e.publisher ? `<div class="cv-entry-sub">${e.publisher}</div>` : ''}
+      ${e.link      ? `<div class="cv-entry-link">${e.link}</div>` : ''}
+    </div>`;
+
+  const renderCert = e => `
+    <div class="cv-cert-item">
+      <div class="cv-cert-name">${e.name || '<em>Certificazione</em>'}</div>
+      <div class="cv-cert-meta">${[e.issuer, e.year].filter(Boolean).join(' · ')}</div>
+    </div>`;
+
+  const renderAward = e => `
+    <div class="cv-award-item">
+      <div class="cv-award-name">${e.name || '<em>Premio</em>'}</div>
+      <div class="cv-award-meta">${[e.org, e.year].filter(Boolean).join(' · ')}</div>
+      ${e.desc ? `<div class="cv-entry-desc" style="margin-top:0.2rem">${e.desc}</div>` : ''}
+    </div>`;
+
+  /* -- skills & languages -- */
   const skillsHTML = state.skills.length
     ? `<div class="cv-skills-list">${state.skills.map(s => `<span class="cv-skill-badge">${s}</span>`).join('')}</div>`
-    : '<p class="cv-placeholder">Nessuna competenza aggiunta.</p>';
+    : '';
 
   const langHTML = languages.length
     ? languages.map(l => `
@@ -569,13 +709,14 @@ function renderCV() {
           <span class="cv-lang-name">${l.lang}</span>
           <span class="cv-lang-level">${l.level}</span>
         </div>`).join('')
-    : '<p class="cv-placeholder">Nessuna lingua aggiunta.</p>';
+    : '';
 
   const profilo = v('f-profilo');
 
+  /* -- assemble -- */
   document.getElementById('cv-template').innerHTML = `
     <div class="cv-header-block">
-      ${photoSrc ? `<img class="cv-photo" src="${photoSrc}" alt="Foto" style="display:block">` : ''}
+      ${state.photo ? `<img class="cv-photo" src="${state.photo}" alt="Foto" style="display:block">` : ''}
       <div class="cv-name-block">
         <h1>${fullName}</h1>
         ${v('f-titolo') ? `<div class="cv-title">${v('f-titolo')}</div>` : ''}
@@ -584,29 +725,18 @@ function renderCV() {
     ${contacts ? `<div class="cv-contact-bar">${contacts}</div>` : ''}
     <div class="cv-body">
       <div class="cv-main-col">
-        ${profilo ? `
-          <div class="cv-section">
-            <div class="cv-section-head">Profilo</div>
-            <div class="cv-profile-text">${profilo.replace(/\n/g,'<br>')}</div>
-          </div>` : ''}
-        <div class="cv-section">
-          <div class="cv-section-head">Esperienza</div>
-          ${expHTML}
-        </div>
-        <div class="cv-section">
-          <div class="cv-section-head">Istruzione</div>
-          ${eduHTML}
-        </div>
+        ${profilo ? `<div class="cv-section"><div class="cv-section-head">Profilo</div><div class="cv-profile-text">${profilo.replace(/\n/g,'<br>')}</div></div>` : ''}
+        ${entrySection('Esperienza', experiences, renderExp)}
+        ${entrySection('Istruzione', educations, renderEdu)}
+        ${entrySection('Progetti', projects, renderProj)}
+        ${entrySection('Volontariato', volunteer, renderVol)}
+        ${entrySection('Pubblicazioni', pubs, renderPub)}
       </div>
       <div class="cv-side-col">
-        <div class="cv-section">
-          <div class="cv-section-head">Competenze</div>
-          ${skillsHTML}
-        </div>
-        <div class="cv-section">
-          <div class="cv-section-head">Lingue</div>
-          ${langHTML}
-        </div>
+        ${skillsHTML ? `<div class="cv-section"><div class="cv-section-head">Competenze</div>${skillsHTML}</div>` : ''}
+        ${langHTML   ? `<div class="cv-section"><div class="cv-section-head">Lingue</div>${langHTML}</div>` : ''}
+        ${entrySection('Certificazioni', certs, renderCert)}
+        ${entrySection('Premi', awards, renderAward)}
       </div>
     </div>
   `;
@@ -616,15 +746,15 @@ function renderCV() {
 
 /* ── Scale preview to fit container ────────────────────── */
 function scalePreview() {
-  const wrap = document.getElementById('previewWrap');
+  const wrap   = document.getElementById('previewWrap');
   const scaler = document.getElementById('previewScaler');
-  const W = 794; // template width
+  const W = 794;
   const available = wrap.clientWidth;
   if (!available) return;
   const scale = available / W;
   scaler.style.transform = `scale(${scale})`;
-  scaler.style.height = `${1123 * scale}px`; // keep A4 height
-  wrap.style.height = `${1123 * scale}px`;
+  scaler.style.height = `${1123 * scale}px`;
+  wrap.style.height   = `${1123 * scale}px`;
   wrap.style.aspectRatio = 'unset';
 }
 
@@ -653,10 +783,8 @@ async function downloadPDF() {
 
   try {
     const { jsPDF } = window.jspdf;
-    const template = document.getElementById('cv-template');
-
-    // Temporarily remove scale transform for accurate capture
-    const scaler = document.getElementById('previewScaler');
+    const template  = document.getElementById('cv-template');
+    const scaler    = document.getElementById('previewScaler');
     const oldTransform = scaler.style.transform;
     scaler.style.transform = 'scale(1)';
 
@@ -670,40 +798,29 @@ async function downloadPDF() {
 
     scaler.style.transform = oldTransform;
 
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4',
-    });
-
-    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    const pdf  = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const pdfW = pdf.internal.pageSize.getWidth();
     const pdfH = pdf.internal.pageSize.getHeight();
-
-    // If content is taller than one page, scale to fit
-    const ratio = canvas.height / canvas.width;
-    const imgH = pdfW * ratio;
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    const imgH = pdfW * (canvas.height / canvas.width);
 
     if (imgH <= pdfH) {
       pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, imgH);
     } else {
-      // Multi-page: split at page boundary
-      const pageH = pdfH;
-      const pxPerPage = (canvas.width * pageH) / pdfW;
+      const pxPerPage = (canvas.width * pdfH) / pdfW;
       let yOffset = 0;
       while (yOffset < canvas.height) {
         const pageCanvas = document.createElement('canvas');
-        pageCanvas.width = canvas.width;
+        pageCanvas.width  = canvas.width;
         pageCanvas.height = Math.min(pxPerPage, canvas.height - yOffset);
-        const ctx = pageCanvas.getContext('2d');
-        ctx.drawImage(canvas, 0, -yOffset);
+        pageCanvas.getContext('2d').drawImage(canvas, 0, -yOffset);
         if (yOffset > 0) pdf.addPage();
-        pdf.addImage(pageCanvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, pdfW, pageH);
+        pdf.addImage(pageCanvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, pdfW, pdfH);
         yOffset += pxPerPage;
       }
     }
 
-    const nome = v('f-nome') || 'curriculum';
+    const nome    = v('f-nome')    || 'curriculum';
     const cognome = v('f-cognome') || '';
     pdf.save(`CV_${nome}_${cognome}.pdf`.replace(/\s+/g, '_'));
 
@@ -717,7 +834,6 @@ async function downloadPDF() {
 }
 
 /* ── Init ───────────────────────────────────────────────── */
-// Start with one experience and one education entry
 addEntry('exp');
 addEntry('edu');
 addEntry('lang');
