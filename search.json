@@ -1,0 +1,4 @@
+---
+layout: null
+---
+[{% for post in site.posts %}{"title":{{ post.title | jsonify }},"description":{{ post.description | default: "" | jsonify }},"url":{{ post.url | jsonify }},"cover":{{ post.cover | default: "" | jsonify }},"categories":{{ post.categories | jsonify }},"tags":{{ post.tags | default: "" | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]

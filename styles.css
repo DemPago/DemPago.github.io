@@ -959,3 +959,89 @@ footer .copyright {
   50% { opacity: 0.5; }
 }
 
+/* ── Search bar ─────────────────────────────────────────── */
+.search-bar-wrap {
+  margin-bottom: 1.25rem;
+}
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.search-icon {
+  position: absolute;
+  left: 0.85rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+#search-input {
+  width: 100%;
+  padding: 0.6rem 2.5rem 0.6rem 2.4rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+#search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+#search-input::placeholder { color: var(--text-muted); }
+.search-clear {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.2rem;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.search-clear:hover { color: var(--text); }
+.search-results-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: 0 0 1rem 0;
+}
+.search-no-results {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin: 2rem 0;
+}
+
+/* ── Tag cloud ──────────────────────────────────────────── */
+.tag-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-muted);
+  font-size: 0.83rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.tag-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.tag-btn.active {
+  background: rgba(88,166,255,0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.tag-count {
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+

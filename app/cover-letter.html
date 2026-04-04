@@ -156,6 +156,43 @@ permalink: /app/cover-letter/
 .cl-btn-danger { background: transparent; color: #f85149; border: 1px solid #f85149; }
 .cl-btn-danger:hover { background: rgba(248,81,73,0.08); }
 
+/* ── CV import banner ──────────────────────────────────── */
+.cl-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.4;
+}
+.cl-banner-success {
+  background: rgba(63,185,80,0.1);
+  border: 1px solid rgba(63,185,80,0.3);
+  color: #3fb950;
+}
+.cl-banner-hint {
+  background: rgba(88,166,255,0.07);
+  border: 1px solid rgba(88,166,255,0.2);
+  color: var(--text-muted);
+}
+.cl-banner-text { flex: 1; }
+.cl-banner-text a { color: var(--accent); text-decoration: none; }
+.cl-banner-text a:hover { text-decoration: underline; }
+.cl-banner-close {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.6;
+  font-size: 1rem;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.cl-banner-close:hover { opacity: 1; }
+
 /* ── Preview column ────────────────────────────────────── */
 .cl-preview-col { position: sticky; top: 1rem; }
 .cl-preview-label {
@@ -204,6 +241,12 @@ permalink: /app/cover-letter/
 
   <!-- ── FORM COLUMN ───────────────────────────────────── -->
   <div class="cl-form-col">
+
+    <!-- CV import banner (shown/hidden by JS) -->
+    <div id="cl-cv-banner" class="cl-banner" hidden>
+      <span class="cl-banner-text" id="cl-cv-banner-text"></span>
+      <button class="cl-banner-close" onclick="document.getElementById('cl-cv-banner').hidden=true" aria-label="Chiudi">&#x2715;</button>
+    </div>
 
     <p class="cl-section-title">Dati personali</p>
     <div class="cl-row2">
@@ -861,9 +904,9 @@ function loadFromStorage() {
 function loadFromCV() {
   try {
     const raw = localStorage.getItem('cv_data_v1');
-    if (!raw) return;
+    if (!raw) return false;
     const data = JSON.parse(raw);
-    if (!data.fields) return;
+    if (!data.fields) return false;
     const map = {
       'f-nome':    'cl-nome',
       'f-cognome': 'cl-cognome',
@@ -871,12 +914,28 @@ function loadFromCV() {
       'f-tel':     'cl-tel',
       'f-citta':   'cl-citta'
     };
+    let imported = false;
     Object.entries(map).forEach(([cvId, clId]) => {
       const val = data.fields[cvId];
       const el  = document.getElementById(clId);
-      if (val && el && !el.value) el.value = val;
+      if (val && el && !el.value) { el.value = val; imported = true; }
     });
-  } catch(e) {}
+    return imported;
+  } catch(e) { return false; }
+}
+
+function showCVBanner(imported) {
+  const banner = document.getElementById('cl-cv-banner');
+  const text   = document.getElementById('cl-cv-banner-text');
+  if (!banner || !text) return;
+  if (imported) {
+    banner.className = 'cl-banner cl-banner-success';
+    text.innerHTML = '&#10003; Dati personali importati dal tuo <a href="/app/curriculum/">Generatore CV</a>.';
+  } else {
+    banner.className = 'cl-banner cl-banner-hint';
+    text.innerHTML = 'Hai gi&agrave; un CV? <a href="/app/curriculum/">Crealo qui</a> e i tuoi dati si pre-compileranno automaticamente.';
+  }
+  banner.hidden = false;
 }
 
 /* ── Init ───────────────────────────────────────────────── */
@@ -887,8 +946,11 @@ if (restored) {
   setLang(clState.lang);
   updateKwState();
   updateKwLabels();
+  const cvImported = loadFromCV();
+  showCVBanner(cvImported);
 } else {
-  loadFromCV();
+  const cvImported = loadFromCV();
+  showCVBanner(cvImported);
 }
 updateValoreCount();
 renderLetter();

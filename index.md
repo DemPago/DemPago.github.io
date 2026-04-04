@@ -3,7 +3,21 @@ layout: default
 title: Home
 ---
 
-<div class="tabs-container">
+<div class="search-bar-wrap">
+  <div class="search-bar">
+    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="search" id="search-input" placeholder="Cerca articoli..." autocomplete="off" aria-label="Cerca articoli">
+    <button id="search-clear" class="search-clear" aria-label="Cancella ricerca" hidden>&#x2715;</button>
+  </div>
+</div>
+
+<div id="search-results" hidden>
+  <p class="search-results-label" id="search-results-label"></p>
+  <ul class="post-grid" id="search-results-grid"></ul>
+  <p class="search-no-results" id="search-no-results" hidden>Nessun articolo trovato per questa ricerca.</p>
+</div>
+
+<div class="tabs-container" id="tabs-container">
   <div class="tabs-pill" role="tablist" aria-label="Categorie articoli">
     <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-tech" id="tab-tech" data-tab="tech">
       💻 Tech
@@ -13,6 +27,9 @@ title: Home
     </button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tools" id="tab-tools" data-tab="tools">
       🛠️ Strumenti
+    </button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tags" id="tab-tags" data-tab="tags">
+      🏷️ Tag
     </button>
     <div class="tab-indicator" aria-hidden="true"></div>
   </div>
@@ -207,4 +224,11 @@ title: Home
       </div>
     </li>
   </ul>
+</div>
+
+<div class="tab-panel" id="panel-tags" role="tabpanel" aria-labelledby="tab-tags" hidden>
+  <div id="tag-cloud" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem;"></div>
+  <p class="search-results-label" id="tag-filter-label" hidden></p>
+  <ul class="post-grid" id="tag-results-grid"></ul>
+  <p class="search-no-results" id="tag-no-results" hidden>Nessun articolo con questo tag.</p>
 </div>
