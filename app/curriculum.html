@@ -195,7 +195,7 @@ permalink: /app/curriculum/
 }
 
 .cv-header-block {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  background: linear-gradient(135deg, var(--cv-header, #1a1a2e) 0%, var(--cv-header-grad, #16213e) 100%);
   color: white;
   padding: 2rem 2.5rem;
   display: flex;
@@ -222,7 +222,7 @@ permalink: /app/curriculum/
 }
 
 .cv-contact-bar {
-  background: #0f3460;
+  background: var(--cv-primary, #0f3460);
   padding: 0.5rem 2.5rem;
   display: flex; flex-wrap: wrap; gap: 1.5rem;
   font-size: 0.78rem; color: rgba(255,255,255,0.85);
@@ -248,8 +248,8 @@ permalink: /app/curriculum/
 
 .cv-section-head {
   font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
-  text-transform: uppercase; color: #0f3460;
-  border-bottom: 2px solid #0f3460;
+  text-transform: uppercase; color: var(--cv-primary, #0f3460);
+  border-bottom: 2px solid var(--cv-primary, #0f3460);
   padding-bottom: 0.2rem; margin-bottom: 0.7rem;
 }
 
@@ -267,12 +267,13 @@ permalink: /app/curriculum/
 .cv-entry-period { font-size: 0.75rem; color: #6b7280; white-space: nowrap; flex-shrink: 0; }
 .cv-entry-sub { font-size: 0.8rem; color: #4b5563; margin-top: 0.1rem; font-style: italic; }
 .cv-entry-desc { font-size: 0.82rem; color: #374151; margin-top: 0.3rem; line-height: 1.5; }
-.cv-entry-link { font-size: 0.78rem; color: #0f3460; margin-top: 0.2rem; word-break: break-all; }
+.cv-entry-link { font-size: 0.78rem; color: var(--cv-primary, #0f3460); margin-top: 0.2rem; word-break: break-all; }
 
 /* Skills */
 .cv-skills-list { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 .cv-skill-badge {
-  background: rgba(15,52,96,0.08); color: #0f3460;
+  background: color-mix(in srgb, var(--cv-primary, #0f3460) 12%, transparent);
+  color: var(--cv-primary, #0f3460);
   border-radius: 20px; padding: 0.15rem 0.6rem;
   font-size: 0.75rem; font-weight: 500;
 }
@@ -291,6 +292,23 @@ permalink: /app/curriculum/
 .cv-award-item { margin-bottom: 0.5rem; }
 .cv-award-name { font-size: 0.82rem; font-weight: 600; color: #1a1a2e; }
 .cv-award-meta { font-size: 0.75rem; color: #6b7280; font-style: italic; }
+
+/* Theme swatches */
+.theme-swatches { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+.theme-swatch {
+  width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+  border: 3px solid transparent; transition: border-color 0.2s, transform 0.15s;
+  position: relative;
+}
+.theme-swatch:hover { transform: scale(1.1); }
+.theme-swatch.active { border-color: var(--accent); transform: scale(1.15); }
+.theme-swatch[title]:hover::after {
+  content: attr(title);
+  position: absolute; bottom: -1.6rem; left: 50%; transform: translateX(-50%);
+  background: var(--card); color: var(--text); font-size: 0.7rem;
+  padding: 0.15rem 0.4rem; border-radius: 4px; white-space: nowrap;
+  pointer-events: none;
+}
 
 .cv-placeholder { color: #9ca3af; font-size: 0.82rem; font-style: italic; }
 
@@ -362,6 +380,9 @@ permalink: /app/curriculum/
       <label>Sito / Portfolio</label>
       <input type="text" id="f-sito" placeholder="https://..." oninput="renderCV()">
     </div>
+
+    <p class="cv-section-title">Tema colore</p>
+    <div class="theme-swatches" id="theme-swatches"></div>
 
     <p class="cv-section-title">Profilo</p>
     <div class="cv-field">
@@ -435,9 +456,19 @@ permalink: /app/curriculum/
 
 <script>
 /* ── State ─────────────────────────────────────────────── */
+const THEMES = [
+  { name: 'Navy',     primary: '#0f3460', header: '#1a1a2e', headerGrad: '#16213e' },
+  { name: 'Foresta',  primary: '#1a6b4a', header: '#0d2e1e', headerGrad: '#0a2416' },
+  { name: 'Bordeaux', primary: '#7b1c3a', header: '#2e0d18', headerGrad: '#200910' },
+  { name: 'Ardesia',  primary: '#374151', header: '#111827', headerGrad: '#1f2937' },
+  { name: 'Rame',     primary: '#92400e', header: '#1c0a00', headerGrad: '#2d1200' },
+  { name: 'Viola',    primary: '#4c1d95', header: '#1e0a3c', headerGrad: '#2d1060' },
+];
+
 const state = {
   photo: null,
   skills: [],
+  theme: THEMES[0],
 };
 
 /* ── Entry counters ────────────────────────────────────── */
@@ -555,6 +586,27 @@ function addEntry(type) {
 }
 
 function removeEl(id) { document.getElementById(id)?.remove(); }
+
+/* ── Theme selector ────────────────────────────────────── */
+function setTheme(idx) {
+  state.theme = THEMES[idx];
+  document.querySelectorAll('.theme-swatch').forEach((s, i) =>
+    s.classList.toggle('active', i === idx));
+  renderCV();
+}
+
+function buildSwatches() {
+  const wrap = document.getElementById('theme-swatches');
+  THEMES.forEach((t, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'theme-swatch' + (i === 0 ? ' active' : '');
+    btn.title = t.name;
+    btn.style.background = `linear-gradient(135deg, ${t.header}, ${t.primary})`;
+    btn.setAttribute('aria-label', `Tema ${t.name}`);
+    btn.onclick = () => setTheme(i);
+    wrap.appendChild(btn);
+  });
+}
 
 /* ── Tags (skills) ─────────────────────────────────────── */
 function addTag(e) {
@@ -714,7 +766,13 @@ function renderCV() {
   const profilo = v('f-profilo');
 
   /* -- assemble -- */
-  document.getElementById('cv-template').innerHTML = `
+  const tpl = document.getElementById('cv-template');
+  tpl.style.cssText = `
+    --cv-primary: ${state.theme.primary};
+    --cv-header: ${state.theme.header};
+    --cv-header-grad: ${state.theme.headerGrad};
+  `;
+  tpl.innerHTML = `
     <div class="cv-header-block">
       ${state.photo ? `<img class="cv-photo" src="${state.photo}" alt="Foto" style="display:block">` : ''}
       <div class="cv-name-block">
@@ -834,6 +892,7 @@ async function downloadPDF() {
 }
 
 /* ── Init ───────────────────────────────────────────────── */
+buildSwatches();
 addEntry('exp');
 addEntry('edu');
 addEntry('lang');
