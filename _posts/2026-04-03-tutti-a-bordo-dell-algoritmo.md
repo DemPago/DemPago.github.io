@@ -16,6 +16,8 @@ L'umanità ha già visto questo film. Quattro volte.
 
 **Prima rivoluzione industriale, 1760** — il vapore batte il muscolo. I telai meccanici distruggono il lavoro dei tessitori. Gli operai bruciano le macchine — i Luddisti — convinti che l'innovazione sia il nemico. Ma il mondo va avanti.
 
+![La prima rivoluzione industriale — fabbriche a vapore e operai](/prima_rivoluzione_industriale.png)
+
 **Seconda rivoluzione, 1870** — l'elettricità batte il buio. Edison contro Tesla, corrente continua contro alternata, mentre le città si illuminano e le fabbriche non si fermano più.
 
 **Terza rivoluzione, 1969–1990** — internet batte la distanza. Le informazioni viaggiano alla velocità della luce e qualcuno — in un garage — diventa miliardario.
