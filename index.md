@@ -127,6 +127,9 @@ title: Home
 </div>
 
 <div class="tab-panel" id="panel-tools" role="tabpanel" aria-labelledby="tab-tools" hidden>
+  <p style="color:var(--text-muted);font-size:0.95rem;margin-bottom:1.5rem;line-height:1.6;">
+    Piccoli tool gratuiti per semplificarti la vita. Niente account, niente server — tutto gira nel tuo browser.
+  </p>
   <ul class="post-grid">
     <li class="post-card">
       <a href="/app/curriculum/" class="post-card-cover" style="height:160px;background:linear-gradient(135deg,#1a1a2e,#0f3460);display:flex;align-items:center;justify-content:center;">
