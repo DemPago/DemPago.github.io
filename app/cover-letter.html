@@ -1,0 +1,904 @@
+---
+layout: app
+title: Lettera di Presentazione
+description: Genera la tua lettera di presentazione professionale in italiano o inglese e scaricala in PDF.
+permalink: /app/cover-letter/
+---
+
+<style>
+/* ── Layout ────────────────────────────────────────────── */
+.cl-app {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .cl-app { grid-template-columns: 1fr; }
+  .cl-preview-col { order: -1; }
+}
+
+/* ── Form ──────────────────────────────────────────────── */
+.cl-form-col { display: flex; flex-direction: column; gap: 0; }
+
+.cl-section-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 1.5rem 0 0.6rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+.cl-section-title:first-child { margin-top: 0; }
+
+.cl-field { margin-bottom: 0.75rem; }
+.cl-field label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+.cl-field input,
+.cl-field textarea {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+}
+.cl-field input:focus,
+.cl-field textarea:focus { outline: none; border-color: var(--accent); }
+.cl-field textarea { resize: vertical; min-height: 80px; }
+
+.cl-row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+/* ── Toggle groups ─────────────────────────────────────── */
+.cl-toggle-group {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+.cl-toggle-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+.cl-toggle-btn {
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.cl-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.cl-toggle-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0d1117;
+  font-weight: 600;
+}
+
+/* ── Keyword tags ──────────────────────────────────────── */
+.kw-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+  line-height: 1.5;
+}
+.kw-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.25rem;
+}
+.kw-tag {
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+  font-family: inherit;
+}
+.kw-tag:hover { border-color: var(--accent); color: var(--accent); }
+.kw-tag.selected {
+  background: rgba(88,166,255,0.15);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+.kw-tag.disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* ── Action buttons ────────────────────────────────────── */
+.cl-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+.cl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.cl-btn-primary { background: var(--accent); color: #0d1117; }
+.cl-btn-primary:hover { background: var(--accent-hover); }
+.cl-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.cl-btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+.cl-btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+.cl-btn-danger { background: transparent; color: #f85149; border: 1px solid #f85149; }
+.cl-btn-danger:hover { background: rgba(248,81,73,0.08); }
+
+/* ── Preview column ────────────────────────────────────── */
+.cl-preview-col { position: sticky; top: 1rem; }
+.cl-preview-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cl-preview-wrap {
+  background: #888;
+  border-radius: 6px;
+  padding: 8px;
+  overflow: hidden;
+}
+.cl-preview-scaler { transform-origin: top left; }
+#cl-template {
+  width: 794px;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.cl-page-break-indicator {
+  display: none;
+  width: 794px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: #c0392b;
+  border-top: 2px dashed #c0392b;
+  background: rgba(192,57,43,0.06);
+  letter-spacing: 0.05em;
+}
+</style>
+
+<!-- CDN: html2canvas + jsPDF (stessi del CV generator) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<div class="cl-app">
+
+  <!-- ── FORM COLUMN ───────────────────────────────────── -->
+  <div class="cl-form-col">
+
+    <p class="cl-section-title">Dati personali</p>
+    <div class="cl-row2">
+      <div class="cl-field">
+        <label>Nome *</label>
+        <input type="text" id="cl-nome" placeholder="Mario" oninput="renderLetter()">
+      </div>
+      <div class="cl-field">
+        <label>Cognome *</label>
+        <input type="text" id="cl-cognome" placeholder="Rossi" oninput="renderLetter()">
+      </div>
+    </div>
+    <div class="cl-row2">
+      <div class="cl-field">
+        <label>Email</label>
+        <input type="email" id="cl-email" placeholder="mario@email.com" oninput="renderLetter()">
+      </div>
+      <div class="cl-field">
+        <label>Telefono</label>
+        <input type="tel" id="cl-tel" placeholder="+39 333 000 0000" oninput="renderLetter()">
+      </div>
+    </div>
+    <div class="cl-field">
+      <label>Città</label>
+      <input type="text" id="cl-citta" placeholder="Milano" oninput="renderLetter()">
+    </div>
+
+    <p class="cl-section-title">Posizione</p>
+    <div class="cl-field">
+      <label>Ruolo cercato *</label>
+      <input type="text" id="cl-ruolo" placeholder="Product Manager" oninput="renderLetter()">
+    </div>
+    <div class="cl-field">
+      <label>Azienda *</label>
+      <input type="text" id="cl-azienda" placeholder="Acme Srl" oninput="renderLetter()">
+    </div>
+    <div class="cl-field">
+      <label>Referente <span style="color:var(--text-muted);font-size:0.75rem;">(opzionale)</span></label>
+      <input type="text" id="cl-referente" placeholder="Responsabile Selezione" oninput="renderLetter()">
+    </div>
+
+    <p class="cl-section-title">Stile</p>
+    <span class="cl-toggle-label">Tono</span>
+    <div class="cl-toggle-group" id="tone-group">
+      <button class="cl-toggle-btn active" data-tone="formale" onclick="setTone('formale')">Formale</button>
+      <button class="cl-toggle-btn" data-tone="semi" onclick="setTone('semi')">Semi-formale</button>
+      <button class="cl-toggle-btn" data-tone="creativo" onclick="setTone('creativo')">Creativo</button>
+    </div>
+    <span class="cl-toggle-label">Lingua</span>
+    <div class="cl-toggle-group" id="lang-group">
+      <button class="cl-toggle-btn active" data-lang="it" onclick="setLang('it')">&#127470;&#127481; Italiano</button>
+      <button class="cl-toggle-btn" data-lang="en" onclick="setLang('en')">&#127468;&#127463; English</button>
+    </div>
+
+    <p class="cl-section-title">
+      Motivazioni
+      <span style="font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;font-size:0.8rem;"> — scegli fino a 3</span>
+    </p>
+    <div class="kw-hint" id="kw-hint">Seleziona le ragioni che ti spingono a candidarti — verranno integrate nel testo in modo naturale.</div>
+    <div class="kw-grid" id="kw-grid"></div>
+
+    <p class="cl-section-title">
+      Valore aggiunto
+      <span style="font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;font-size:0.8rem;"> — opzionale</span>
+    </p>
+    <div class="cl-field">
+      <label>Competenze chiave, punti di forza <span style="color:var(--text-muted);font-size:0.75rem;" id="valore-count">(0/300)</span></label>
+      <textarea id="cl-valore" placeholder="Es. Ho 5 anni di esperienza nella gestione di team agile e ho guidato lanci di prodotto con +30% di conversione rispetto al benchmark..." maxlength="300" oninput="renderLetter(); updateValoreCount()"></textarea>
+    </div>
+
+    <div class="cl-actions">
+      <button class="cl-btn cl-btn-primary" id="downloadBtn" onclick="downloadPDF()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Scarica PDF
+      </button>
+      <button class="cl-btn cl-btn-secondary" onclick="copyText(this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copia testo
+      </button>
+      <button class="cl-btn cl-btn-danger" onclick="resetLetter()">Nuova lettera</button>
+    </div>
+
+    <div style="margin-top:1rem;text-align:center;">
+      <a href="https://ko-fi.com/dem420156" target="_blank" rel="noopener noreferrer"
+         style="font-size:0.8rem;color:var(--text-muted);text-decoration:none;">
+        &#9749; Offrimi un caff&egrave; se ti &egrave; utile
+      </a>
+    </div>
+
+  </div><!-- /form col -->
+
+  <!-- ── PREVIEW COLUMN ────────────────────────────────── -->
+  <div class="cl-preview-col">
+    <div class="cl-preview-label">
+      <span>Anteprima</span>
+      <span id="page-count-label" style="font-size:0.7rem;color:var(--text-muted);"></span>
+    </div>
+    <div class="cl-preview-wrap" id="previewWrap">
+      <div class="cl-preview-scaler" id="previewScaler">
+        <div id="cl-template"></div>
+        <div class="cl-page-break-indicator" id="pageBreakLine">Pagina 2 &#9660;</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /cl-app -->
+
+<script>
+/* ── Helper ─────────────────────────────────────────────── */
+const v = id => (document.getElementById(id)?.value || '').trim();
+
+function esc(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── State ─────────────────────────────────────────────── */
+const clState = {
+  lang: 'it',
+  tone: 'formale',
+  keywords: new Set()
+};
+
+/* ── Keywords ──────────────────────────────────────────── */
+const KEYWORDS = [
+  {
+    id: 'crescita',
+    label: { it: 'Crescita professionale', en: 'Career growth' },
+    phrase: {
+      it: {
+        formale: 'sono alla ricerca di un contesto che mi permetta di crescere professionalmente e ampliare il mio patrimonio di competenze',
+        informal: 'voglio crescere e ampliare le mie competenze in un ambiente davvero stimolante'
+      },
+      en: {
+        formale: 'I am seeking an environment that will allow me to grow professionally and continuously expand my skill set',
+        informal: "I'm looking to grow and expand my skills in a genuinely stimulating environment"
+      }
+    }
+  },
+  {
+    id: 'stipendio',
+    label: { it: 'Progressione economica', en: 'Better compensation' },
+    phrase: {
+      it: {
+        formale: "ritengo opportuno valutare una retribuzione commisurata al valore e all'esperienza che sono in grado di apportare",
+        informal: 'cerco una retribuzione che rispecchi concretamente il valore che porto'
+      },
+      en: {
+        formale: 'I am looking to secure compensation that is properly commensurate with my experience and the value I bring',
+        informal: "I'm looking for compensation that truly reflects the value I contribute"
+      }
+    }
+  },
+  {
+    id: 'responsabilita',
+    label: { it: 'Pi\u00f9 responsabilit\u00e0', en: 'Greater responsibility' },
+    phrase: {
+      it: {
+        formale: 'sono pronto ad assumere un ruolo di maggiore impatto e responsabilit\u00e0 diretta sui risultati',
+        informal: 'sono pronto per un ruolo con pi\u00f9 responsabilit\u00e0 e un impatto concreto e misurabile'
+      },
+      en: {
+        formale: 'I am ready to take on a role with greater impact and direct accountability for results',
+        informal: "I'm ready for a role with more responsibility and real, measurable impact"
+      }
+    }
+  },
+  {
+    id: 'sfida',
+    label: { it: 'Nuova sfida', en: 'New challenge' },
+    phrase: {
+      it: {
+        formale: 'sono motivato a intraprendere una nuova sfida professionale con entusiasmo e piena determinazione',
+        informal: 'sento che \u00e8 il momento giusto per affrontare una nuova sfida professionale'
+      },
+      en: {
+        formale: 'I am motivated to embrace a new professional challenge with full enthusiasm and commitment',
+        informal: "I feel the time is right to take on a genuinely new professional challenge"
+      }
+    }
+  },
+  {
+    id: 'settore',
+    label: { it: 'Cambio settore', en: 'New sector' },
+    phrase: {
+      it: {
+        formale: 'sto compiendo un passo consapevole verso un nuovo ambito, con la volont\u00e0 di apportare una prospettiva trasversale e un approccio fresco',
+        informal: 'sto cambiando settore in modo consapevole, portando uno sguardo nuovo e una prospettiva diversa'
+      },
+      en: {
+        formale: 'I am making a deliberate move into a new sector, eager to bring a cross-functional perspective and a fresh approach',
+        informal: "I'm intentionally transitioning sectors, bringing a fresh perspective and a different viewpoint"
+      }
+    }
+  },
+  {
+    id: 'cultura',
+    label: { it: 'Cultura aziendale', en: 'Company culture' },
+    phrase: {
+      it: {
+        formale: 'sono particolarmente attratto dalla reputazione e dai valori che [AZ] esprime nel mercato',
+        informal: 'mi ha colpito la cultura e i valori di [AZ] \u2014 voglio farne parte'
+      },
+      en: {
+        formale: 'I am particularly drawn to the reputation and values that [AZ] demonstrates in the market',
+        informal: "I've been genuinely impressed by [AZ]'s culture and values, and I want to be part of it"
+      }
+    }
+  },
+  {
+    id: 'progetto',
+    label: { it: 'Progetto stimolante', en: 'Exciting project' },
+    phrase: {
+      it: {
+        formale: "sono motivato dalla natura innovativa e dall'ambizione del progetto che [AZ] sta sviluppando",
+        informal: 'mi entusiasma il progetto che [AZ] sta portando avanti'
+      },
+      en: {
+        formale: 'I am motivated by the innovative nature and ambition of the project that [AZ] is building',
+        informal: "I'm genuinely excited about the project [AZ] is developing"
+      }
+    }
+  },
+  {
+    id: 'team',
+    label: { it: 'Team dinamico', en: 'Dynamic team' },
+    phrase: {
+      it: {
+        formale: 'sono alla ricerca di un ambiente di lavoro collaborativo e dinamico in cui contribuire attivamente al successo del gruppo',
+        informal: 'cerco un team collaborativo e dinamico con cui crescere e costruire qualcosa di concreto'
+      },
+      en: {
+        formale: "I am looking for a collaborative and dynamic work environment in which to actively contribute to the team's success",
+        informal: "I'm looking for a collaborative, dynamic team to grow with and build something meaningful"
+      }
+    }
+  },
+  {
+    id: 'balance',
+    label: { it: 'Work-life balance', en: 'Work-life balance' },
+    phrase: {
+      it: {
+        formale: 'valuto positivamente la flessibilit\u00e0 organizzativa, elemento che ritengo determinante per massimizzare produttivit\u00e0 e benessere professionale',
+        informal: 'do molto valore alla flessibilit\u00e0 lavorativa \u2014 \u00e8 ci\u00f2 che mi permette di dare il meglio'
+      },
+      en: {
+        formale: 'I place great value on organizational flexibility, which I consider key to maximizing both productivity and professional wellbeing',
+        informal: "I really value work flexibility — it's what allows me to consistently perform at my best"
+      }
+    }
+  },
+  {
+    id: 'formazione',
+    label: { it: 'Formazione continua', en: 'Continuous learning' },
+    phrase: {
+      it: {
+        formale: "sono fortemente interessato alle opportunit\u00e0 di sviluppo e aggiornamento professionale che [AZ] \u00e8 in grado di offrire",
+        informal: 'tengo molto alla formazione continua e alle opportunit\u00e0 di crescita che [AZ] offre'
+      },
+      en: {
+        formale: 'I am strongly interested in the professional development and continuous learning opportunities that [AZ] provides',
+        informal: "I care deeply about continuous learning and the growth opportunities [AZ] offers"
+      }
+    }
+  }
+];
+
+/* ── Build keyword grid ─────────────────────────────────── */
+function buildKwGrid() {
+  const grid = document.getElementById('kw-grid');
+  grid.innerHTML = KEYWORDS.map(kw =>
+    `<button class="kw-tag" data-id="${kw.id}" onclick="toggleKeyword('${kw.id}')">${kw.label[clState.lang]}</button>`
+  ).join('');
+}
+
+function updateKwLabels() {
+  KEYWORDS.forEach(kw => {
+    const btn = document.querySelector(`.kw-tag[data-id="${kw.id}"]`);
+    if (btn) btn.textContent = kw.label[clState.lang];
+  });
+  const hint = document.getElementById('kw-hint');
+  if (hint) hint.textContent = clState.lang === 'it'
+    ? 'Seleziona le ragioni che ti spingono a candidarti \u2014 verranno integrate nel testo in modo naturale.'
+    : 'Select the reasons that drive your application \u2014 they will be naturally woven into the letter.';
+}
+
+function toggleKeyword(id) {
+  if (clState.keywords.has(id)) {
+    clState.keywords.delete(id);
+  } else {
+    if (clState.keywords.size >= 3) return;
+    clState.keywords.add(id);
+  }
+  updateKwState();
+  renderLetter();
+}
+
+function updateKwState() {
+  const maxReached = clState.keywords.size >= 3;
+  document.querySelectorAll('.kw-tag').forEach(btn => {
+    const selected = clState.keywords.has(btn.dataset.id);
+    btn.classList.toggle('selected', selected);
+    btn.classList.toggle('disabled', maxReached && !selected);
+  });
+}
+
+/* ── Tone / Lang ────────────────────────────────────────── */
+function setTone(tone) {
+  clState.tone = tone;
+  document.querySelectorAll('#tone-group .cl-toggle-btn').forEach(btn =>
+    btn.classList.toggle('active', btn.dataset.tone === tone)
+  );
+  renderLetter();
+}
+
+function setLang(lang) {
+  clState.lang = lang;
+  document.querySelectorAll('#lang-group .cl-toggle-btn').forEach(btn =>
+    btn.classList.toggle('active', btn.dataset.lang === lang)
+  );
+  document.getElementById('pageBreakLine').textContent =
+    lang === 'it' ? 'Pagina 2 \u25bc' : 'Page 2 \u25bc';
+  updateKwLabels();
+  renderLetter();
+}
+
+/* ── Valore char count ──────────────────────────────────── */
+function updateValoreCount() {
+  const el = document.getElementById('cl-valore');
+  const c  = document.getElementById('valore-count');
+  if (el && c) c.textContent = `(${el.value.length}/300)`;
+}
+
+/* ── Build letter HTML ──────────────────────────────────── */
+function buildLetter() {
+  const nome      = v('cl-nome');
+  const cognome   = v('cl-cognome');
+  const email     = v('cl-email');
+  const tel       = v('cl-tel');
+  const citta     = v('cl-citta');
+  const ruolo     = v('cl-ruolo');
+  const azienda   = v('cl-azienda');
+  const valore    = v('cl-valore');
+  const lang      = clState.lang;
+  const tone      = clState.tone;
+  const isFormale  = tone === 'formale';
+  const isCreativo = tone === 'creativo';
+  const toneKey   = isFormale ? 'formale' : 'informal';
+
+  const referente  = v('cl-referente') ||
+    (lang === 'it' ? 'Responsabile Selezione' : 'Hiring Manager');
+  const nomeCompl  = [nome, cognome].filter(Boolean).join(' ') ||
+    (lang === 'it' ? '[Il tuo nome]' : '[Your name]');
+  const ruoloStr   = ruolo   || (lang === 'it' ? '[Ruolo]'   : '[Position]');
+  const aziendaStr = azienda || (lang === 'it' ? '[Azienda]' : '[Company]');
+
+  // Date
+  const today = new Date();
+  const dateStr = lang === 'it'
+    ? today.toLocaleDateString('it-IT', { day:'numeric', month:'long', year:'numeric' })
+    : today.toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
+
+  // Keyword phrases — replace [AZ] placeholder with actual company name
+  const kwPhrases = [...clState.keywords].map(id => {
+    const kw = KEYWORDS.find(k => k.id === id);
+    if (!kw) return '';
+    return kw.phrase[lang][toneKey].replace(/\[AZ\]/g, esc(aziendaStr));
+  }).filter(Boolean);
+
+  /* ---------- Paragraphs ---------- */
+  let greeting, opening, motivazioni, valoreText, chiusura, firmaLabel;
+
+  if (lang === 'it') {
+    greeting = `Gentile ${esc(referente)},`;
+
+    if (isFormale) {
+      opening = `Mi chiamo <strong>${esc(nomeCompl)}</strong> e, con la presente, desidero candidarmi per la posizione di <strong>${esc(ruoloStr)}</strong> presso <strong>${esc(aziendaStr)}</strong>. Sono convinto che le mie competenze ed esperienze possano rappresentare un contributo concreto al vostro team.`;
+      chiusura = `Rimango a Sua completa disposizione per un colloquio conoscitivo, in presenza o da remoto, nella modalit&agrave; e nei tempi che riterr&agrave; pi&ugrave; opportuni. Allego il mio curriculum vitae a supporto della candidatura.`;
+      firmaLabel = 'Cordialmente,';
+    } else if (tone === 'semi') {
+      opening = `Sono <strong>${esc(nomeCompl)}</strong> e scrivo per candidarmi al ruolo di <strong>${esc(ruoloStr)}</strong> in <strong>${esc(aziendaStr)}</strong>. Ho seguito con interesse la vostra realt&agrave; e credo di avere il profilo giusto per contribuire al vostro percorso di crescita.`;
+      chiusura = `Sarei felice di approfondire la mia candidatura in un colloquio &mdash; sono flessibile sulla modalit&agrave; e sulla tempistica, e mi adatter&ograve; volentieri alle vostre esigenze.`;
+      firmaLabel = 'A presto,';
+    } else {
+      opening = `Ogni grande progetto inizia con la persona giusta nel posto giusto. Credo di essere quella persona per il ruolo di <strong>${esc(ruoloStr)}</strong> in <strong>${esc(aziendaStr)}</strong>. Sono <strong>${esc(nomeCompl)}</strong> e questa non &egrave; una candidatura qualunque &mdash; &egrave; il motivo per cui dovremmo conoscerci.`;
+      chiusura = `Non vedo l&rsquo;ora di raccontarvi di persona cosa posso portare in <strong>${esc(aziendaStr)}</strong>. Quando ci parliamo?`;
+      firmaLabel = 'Con entusiasmo,';
+    }
+
+    if (kwPhrases.length > 0) {
+      if (isFormale) {
+        motivazioni = `Sono motivato a esplorare questa opportunit&agrave; in quanto ${kwPhrases.join('; ')}. Ritengo che questi elementi, uniti alla solidit&agrave; della vostra realt&agrave;, rendano questa posizione particolarmente in linea con il mio percorso professionale.`;
+      } else if (tone === 'semi') {
+        motivazioni = `Mi avvicino a questa opportunit&agrave; perch&eacute; ${kwPhrases.join(' e perch&eacute; ')}. Sono convinto che ci siano le condizioni giuste per lavorare bene insieme.`;
+      } else {
+        motivazioni = `Perch&eacute; proprio <strong>${esc(aziendaStr)}</strong>? Perch&eacute; ${kwPhrases.join(', e perch&eacute; ')}. Non capita spesso di trovare tutto questo in un&rsquo;unica opportunit&agrave;.`;
+      }
+    } else {
+      if (isFormale) {
+        motivazioni = `Sono particolarmente interessato a questa posizione per le sfide professionali che presenta e per la solidit&agrave; della realt&agrave; di <strong>${esc(aziendaStr)}</strong>.`;
+      } else if (tone === 'semi') {
+        motivazioni = `Sono attratto da questa opportunit&agrave; per le sfide che presenta e per ci&ograve; che ho conosciuto di <strong>${esc(aziendaStr)}</strong>.`;
+      } else {
+        motivazioni = `Ho cercato a lungo il contesto giusto &mdash; e <strong>${esc(aziendaStr)}</strong> mi sembra esattamente quello che stavo aspettando.`;
+      }
+    }
+
+    valoreText = valore
+      ? esc(valore).replace(/\n/g,'<br>')
+      : isFormale
+        ? 'Nel corso della mia carriera ho sviluppato competenze solide e versatili, che mi permettono di affrontare le sfide con metodo, proattivit&agrave; e costante attenzione ai risultati.'
+        : isCreativo
+          ? 'Porto con me non solo competenze, ma una prospettiva che fa la differenza: la capacit&agrave; di vedere le cose da angolazioni inaspettate e tradurre quella visione in risultati concreti.'
+          : 'Ho un profilo flessibile e orientato ai risultati: so lavorare in autonomia quando serve, e sono un giocatore di squadra quando il contesto lo richiede.';
+
+  } else {
+    /* ---- ENGLISH ---- */
+    greeting = `Dear ${esc(referente)},`;
+
+    if (isFormale) {
+      opening = `My name is <strong>${esc(nomeCompl)}</strong> and I am writing to apply for the position of <strong>${esc(ruoloStr)}</strong> at <strong>${esc(aziendaStr)}</strong>. I am confident that my skills and experience would make a valuable contribution to your team.`;
+      chiusura = `I would welcome the opportunity to discuss my application further at your convenience, whether in person or remotely. Please find my CV attached for your reference.`;
+      firmaLabel = 'Sincerely,';
+    } else if (tone === 'semi') {
+      opening = `I&rsquo;m <strong>${esc(nomeCompl)}</strong> and I&rsquo;m reaching out to apply for the <strong>${esc(ruoloStr)}</strong> role at <strong>${esc(aziendaStr)}</strong>. I&rsquo;ve been following your work with great interest and I&rsquo;m confident I can contribute meaningfully to your team.`;
+      chiusura = `I&rsquo;d love to chat about my application &mdash; I&rsquo;m flexible on format and timing, and happy to work around your schedule.`;
+      firmaLabel = 'Best regards,';
+    } else {
+      opening = `Every great project starts with the right person in the right role. I believe that person is me for the <strong>${esc(ruoloStr)}</strong> position at <strong>${esc(aziendaStr)}</strong>. I&rsquo;m <strong>${esc(nomeCompl)}</strong>, and this isn&rsquo;t your average cover letter &mdash; it&rsquo;s the reason we should talk.`;
+      chiusura = `I can&rsquo;t wait to tell you in person what I can bring to <strong>${esc(aziendaStr)}</strong>. When can we connect?`;
+      firmaLabel = 'With enthusiasm,';
+    }
+
+    if (kwPhrases.length > 0) {
+      if (isFormale) {
+        motivazioni = `I am drawn to this opportunity because ${kwPhrases.join('; ')}. I believe these factors, combined with the strength of your organisation, make this position particularly well-suited to my professional path.`;
+      } else if (tone === 'semi') {
+        motivazioni = `I&rsquo;m approaching this opportunity because ${kwPhrases.join(' and because ')}. I&rsquo;m confident we have the right conditions to do great work together.`;
+      } else {
+        motivazioni = `Why <strong>${esc(aziendaStr)}</strong>? Because ${kwPhrases.join(', and because ')}. It&rsquo;s rare to find all of this in a single opportunity.`;
+      }
+    } else {
+      if (isFormale) {
+        motivazioni = `I am particularly interested in this position for the professional challenges it presents and the strength of <strong>${esc(aziendaStr)}</strong> as an organisation.`;
+      } else if (tone === 'semi') {
+        motivazioni = `I&rsquo;m drawn to this opportunity for the challenges it presents and what I&rsquo;ve come to know about <strong>${esc(aziendaStr)}</strong>.`;
+      } else {
+        motivazioni = `I&rsquo;ve been looking for the right environment for a while &mdash; and <strong>${esc(aziendaStr)}</strong> feels exactly like what I&rsquo;ve been waiting for.`;
+      }
+    }
+
+    valoreText = valore
+      ? esc(valore).replace(/\n/g,'<br>')
+      : isFormale
+        ? 'Throughout my career, I have developed solid and versatile skills that allow me to approach challenges with method, proactivity, and a constant focus on results.'
+        : isCreativo
+          ? 'I bring more than just skills &mdash; I bring a perspective that makes a difference: the ability to see things from unexpected angles and turn that vision into concrete results.'
+          : 'I have a flexible, results-oriented profile: I can work independently when needed and I&rsquo;m a strong team player when the context calls for it.';
+  }
+
+  // Contact line
+  const contactLine = [email, tel, citta].filter(Boolean).map(s => esc(s)).join(' &middot; ') || '&nbsp;';
+
+  // Subject
+  const subjectLabel = lang === 'it'
+    ? `Candidatura per il ruolo di ${esc(ruoloStr)}`
+    : `Application for the ${esc(ruoloStr)} position`;
+
+  const locationDate = esc((citta ? citta + ', ' : '') + dateStr);
+
+  return `<div style="width:794px;min-height:1123px;background:#fff;color:#1a1a2a;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    font-size:11pt;line-height:1.8;padding:56px 64px;box-sizing:border-box;">
+
+  <div style="margin-bottom:28px;padding-bottom:14px;border-bottom:2.5px solid #1a1a2e;">
+    <div style="font-size:19pt;font-weight:700;color:#1a1a2e;letter-spacing:-0.02em;">${esc(nomeCompl)}</div>
+    <div style="font-size:9pt;color:#666;margin-top:5px;">${contactLine}</div>
+  </div>
+
+  <div style="margin-bottom:22px;">
+    <div style="text-align:right;font-size:9.5pt;color:#555;">${locationDate}</div>
+    <div style="margin-top:12px;font-size:10pt;color:#333;">
+      <div>${esc(referente)}</div>
+      <div style="font-weight:600;">${esc(aziendaStr)}</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px;padding:9px 14px;background:#f5f6f8;border-left:3px solid #1a1a2e;border-radius:0 4px 4px 0;">
+    <span style="font-size:9.5pt;font-weight:700;color:#1a1a2e;">${lang === 'it' ? 'Oggetto' : 'Subject'}: </span><span style="font-size:9.5pt;color:#333;">${subjectLabel}</span>
+  </div>
+
+  <p style="margin:0 0 16px 0;">${greeting}</p>
+  <p style="margin:0 0 14px 0;">${opening}</p>
+  <p style="margin:0 0 14px 0;">${motivazioni}</p>
+  <p style="margin:0 0 14px 0;">${valoreText}</p>
+  <p style="margin:0 0 28px 0;">${chiusura}</p>
+
+  <div>
+    <div style="margin-bottom:18px;color:#444;">${firmaLabel}</div>
+    <div style="font-weight:700;font-size:12pt;color:#1a1a2e;">${esc(nomeCompl)}</div>
+    <div style="font-size:9pt;color:#666;margin-top:3px;">${contactLine}</div>
+  </div>
+
+</div>`;
+}
+
+/* ── Render ─────────────────────────────────────────────── */
+function renderLetter() {
+  document.getElementById('cl-template').innerHTML = buildLetter();
+  scalePreview();
+  checkPageBreak();
+  saveToStorage();
+}
+
+function checkPageBreak() {
+  const tpl     = document.getElementById('cl-template');
+  const lineEl  = document.getElementById('pageBreakLine');
+  const countEl = document.getElementById('page-count-label');
+  if (!tpl || !lineEl) return;
+  const h = tpl.offsetHeight;
+  const over = h > 1123;
+  lineEl.style.display = over ? 'block' : 'none';
+  if (countEl) countEl.textContent = over
+    ? (clState.lang === 'it' ? '2 pagine \u2014 lettera lunga' : '2 pages \u2014 letter is long')
+    : '';
+}
+
+/* ── Scale preview ──────────────────────────────────────── */
+function scalePreview() {
+  const wrap   = document.getElementById('previewWrap');
+  const scaler = document.getElementById('previewScaler');
+  const tpl    = document.getElementById('cl-template');
+  if (!wrap || !scaler || !tpl) return;
+  const wrapW  = wrap.clientWidth - 16;
+  const scale  = wrapW / 794;
+  scaler.style.transform = `scale(${scale})`;
+  const tplH   = tpl.offsetHeight;
+  scaler.style.height = tplH + 'px';
+  wrap.style.height   = (tplH * scale + 16) + 'px';
+}
+
+window.addEventListener('resize', scalePreview);
+
+/* ── Copy plain text ────────────────────────────────────── */
+function copyText(btn) {
+  const tpl = document.getElementById('cl-template');
+  if (!tpl) return;
+  const tmp  = document.createElement('div');
+  tmp.innerHTML = tpl.innerHTML;
+  const text = (tmp.innerText || tmp.textContent || '').trim();
+  const origHTML = btn.innerHTML;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.innerHTML = '\u2713 ' + (clState.lang === 'it' ? 'Copiato!' : 'Copied!');
+    setTimeout(() => { btn.innerHTML = origHTML; }, 2000);
+  }).catch(() => {
+    alert(clState.lang === 'it'
+      ? 'Copia non riuscita \u2014 seleziona il testo manualmente.'
+      : 'Copy failed \u2014 please select the text manually.');
+  });
+}
+
+/* ── PDF Download ───────────────────────────────────────── */
+async function downloadPDF() {
+  const btn = document.getElementById('downloadBtn');
+  btn.disabled = true;
+  btn.textContent = clState.lang === 'it' ? 'Generazione PDF\u2026' : 'Generating PDF\u2026';
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const template = document.getElementById('cl-template');
+    const scaler   = document.getElementById('previewScaler');
+    const old      = scaler.style.transform;
+    scaler.style.transform = 'scale(1)';
+
+    const canvas = await html2canvas(template, {
+      scale: 2, useCORS: true, backgroundColor: '#ffffff', width: 794, windowWidth: 794
+    });
+
+    scaler.style.transform = old;
+
+    const pdf  = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+    const pdfW = pdf.internal.pageSize.getWidth();
+    const pdfH = pdf.internal.pageSize.getHeight();
+    const imgH = pdfW * (canvas.height / canvas.width);
+
+    if (imgH <= pdfH + 0.5) {
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, pdfW, Math.min(imgH, pdfH));
+    } else {
+      const pxPerPage = (canvas.width * pdfH) / pdfW;
+      let yOffset = 0;
+      while (yOffset < canvas.height) {
+        const sliceH   = Math.min(pxPerPage, canvas.height - yOffset);
+        const pc       = document.createElement('canvas');
+        pc.width = canvas.width; pc.height = sliceH;
+        pc.getContext('2d').drawImage(canvas, 0, yOffset, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+        if (yOffset > 0) pdf.addPage();
+        pdf.addImage(pc.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, pdfW, pdfW * (sliceH / canvas.width));
+        yOffset += pxPerPage;
+      }
+    }
+
+    const nome    = v('cl-nome')    || 'lettera';
+    const cognome = v('cl-cognome') || '';
+    pdf.save(`CoverLetter_${nome}_${cognome}.pdf`.replace(/\s+/g, '_'));
+
+  } catch (err) {
+    console.error('PDF error:', err);
+    alert(clState.lang === 'it' ? 'Errore nella generazione del PDF. Riprova.' : 'PDF generation failed. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> ${clState.lang === 'it' ? 'Scarica PDF' : 'Download PDF'}`;
+  }
+}
+
+/* ── Reset ──────────────────────────────────────────────── */
+function resetLetter() {
+  const msg = clState.lang === 'it'
+    ? 'Iniziare una nuova lettera? I dati attuali verranno cancellati.'
+    : 'Start a new letter? Current data will be cleared.';
+  if (!confirm(msg)) return;
+  localStorage.removeItem(STORAGE_KEY);
+  ['cl-nome','cl-cognome','cl-email','cl-tel','cl-citta','cl-ruolo','cl-azienda','cl-referente','cl-valore']
+    .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  clState.keywords.clear();
+  clState.tone = 'formale';
+  clState.lang = 'it';
+  setTone('formale');
+  setLang('it');
+  updateKwState();
+  updateValoreCount();
+}
+
+/* ── LocalStorage ───────────────────────────────────────── */
+const STORAGE_KEY = 'cover_letter_v1';
+
+function saveToStorage() {
+  const data = {
+    fields: {},
+    keywords: [...clState.keywords],
+    tone: clState.tone,
+    lang: clState.lang
+  };
+  ['cl-nome','cl-cognome','cl-email','cl-tel','cl-citta','cl-ruolo','cl-azienda','cl-referente','cl-valore']
+    .forEach(id => { const el = document.getElementById(id); if (el) data.fields[id] = el.value; });
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+}
+
+function loadFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    if (data.fields) Object.entries(data.fields).forEach(([id, val]) => {
+      const el = document.getElementById(id); if (el) el.value = val;
+    });
+    if (Array.isArray(data.keywords)) data.keywords.forEach(id => clState.keywords.add(id));
+    if (data.tone) clState.tone = data.tone;
+    if (data.lang) clState.lang = data.lang;
+    return true;
+  } catch(e) { return false; }
+}
+
+function loadFromCV() {
+  try {
+    const raw = localStorage.getItem('cv_data_v1');
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (!data.fields) return;
+    const map = {
+      'f-nome':    'cl-nome',
+      'f-cognome': 'cl-cognome',
+      'f-email':   'cl-email',
+      'f-tel':     'cl-tel',
+      'f-citta':   'cl-citta'
+    };
+    Object.entries(map).forEach(([cvId, clId]) => {
+      const val = data.fields[cvId];
+      const el  = document.getElementById(clId);
+      if (val && el && !el.value) el.value = val;
+    });
+  } catch(e) {}
+}
+
+/* ── Init ───────────────────────────────────────────────── */
+buildKwGrid();
+const restored = loadFromStorage();
+if (restored) {
+  setTone(clState.tone);
+  setLang(clState.lang);
+  updateKwState();
+  updateKwLabels();
+} else {
+  loadFromCV();
+}
+updateValoreCount();
+renderLetter();
+requestAnimationFrame(scalePreview);
+</script>

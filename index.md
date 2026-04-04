@@ -174,5 +174,37 @@ title: Home
         <p class="post-card-desc">Crea il tuo curriculum vitae professionale con anteprima live e scaricalo in PDF con un click.</p>
       </div>
     </li>
+    <li class="post-card">
+      <a href="/app/cover-letter/" class="post-card-cover" style="height:160px;background:#fff;display:block;overflow:hidden;padding:14px 16px;box-sizing:border-box;text-decoration:none;">
+        <!-- Mini letter mockup -->
+        <div style="height:100%;display:flex;flex-direction:column;gap:6px;">
+          <div style="padding-bottom:6px;border-bottom:2px solid #1a1a2e;margin-bottom:2px;">
+            <div style="height:7px;width:55%;background:#1a1a2e;border-radius:3px;margin-bottom:3px;"></div>
+            <div style="height:4px;width:70%;background:#aaa;border-radius:2px;"></div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;">
+            <div style="height:4px;width:30%;background:#ccc;border-radius:2px;"></div>
+          </div>
+          <div style="padding:4px 6px;background:#f5f6f8;border-left:3px solid #1a1a2e;border-radius:0 2px 2px 0;">
+            <div style="height:3px;width:80%;background:#1a1a2e;border-radius:2px;opacity:0.5;"></div>
+          </div>
+          <div style="height:4px;width:90%;background:#e5e7eb;border-radius:2px;"></div>
+          <div style="height:4px;width:100%;background:#e5e7eb;border-radius:2px;"></div>
+          <div style="height:4px;width:85%;background:#e5e7eb;border-radius:2px;"></div>
+          <div style="height:4px;width:95%;background:#f3f4f6;border-radius:2px;"></div>
+          <div style="height:4px;width:75%;background:#f3f4f6;border-radius:2px;"></div>
+          <div style="display:flex;gap:3px;margin-top:2px;flex-wrap:wrap;">
+            <div style="height:9px;width:44px;background:rgba(15,52,96,0.12);border-radius:10px;border:1px solid rgba(15,52,96,0.2);"></div>
+            <div style="height:9px;width:36px;background:rgba(15,52,96,0.12);border-radius:10px;border:1px solid rgba(15,52,96,0.2);"></div>
+            <div style="height:9px;width:52px;background:rgba(15,52,96,0.12);border-radius:10px;border:1px solid rgba(15,52,96,0.2);"></div>
+          </div>
+        </div>
+      </a>
+      <div class="post-card-content">
+        <span class="post-card-category cat-tech">Tool</span>
+        <h3><a href="/app/cover-letter/">Lettera di Presentazione</a></h3>
+        <p class="post-card-desc">Genera la tua lettera di presentazione in IT o EN con tono e motivazioni personalizzate. Scaricala in PDF o copiala in un click.</p>
+      </div>
+    </li>
   </ul>
 </div>
