@@ -223,6 +223,40 @@ title: Home
         <p class="post-card-desc">Genera la tua lettera di presentazione in IT o EN con tono e motivazioni personalizzate. Scaricala in PDF o copiala in un click.</p>
       </div>
     </li>
+    <li class="post-card">
+      <a href="/app/ip-tool/" class="post-card-cover" style="height:160px;background:#0d1117;display:block;overflow:hidden;padding:14px 16px;box-sizing:border-box;text-decoration:none;">
+        <!-- Mini IP mockup -->
+        <div style="height:100%;display:flex;flex-direction:column;justify-content:center;gap:10px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:#3fb950;flex-shrink:0;box-shadow:0 0 6px #3fb950;"></div>
+            <div style="font-family:monospace;font-size:13px;font-weight:700;color:#58a6ff;letter-spacing:0.05em;">203.0.113.42</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <div style="display:flex;gap:6px;align-items:center;">
+              <div style="height:4px;width:36px;background:#30363d;border-radius:2px;"></div>
+              <div style="height:4px;width:60px;background:#58a6ff;border-radius:2px;opacity:0.5;"></div>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <div style="height:4px;width:36px;background:#30363d;border-radius:2px;"></div>
+              <div style="height:4px;width:48px;background:#58a6ff;border-radius:2px;opacity:0.4;"></div>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <div style="height:4px;width:36px;background:#30363d;border-radius:2px;"></div>
+              <div style="height:4px;width:72px;background:#58a6ff;border-radius:2px;opacity:0.3;"></div>
+            </div>
+          </div>
+          <div style="background:#161b22;border:1px solid #30363d;border-radius:6px;padding:5px 8px;">
+            <div style="font-family:monospace;font-size:10px;color:#8b949e;">192.168.1.0<span style="color:#58a6ff;font-weight:700;">/24</span></div>
+            <div style="font-family:monospace;font-size:9px;color:#3fb950;margin-top:2px;">254 hosts · 255.255.255.0</div>
+          </div>
+        </div>
+      </a>
+      <div class="post-card-content">
+        <span class="post-card-category cat-tech">Tool</span>
+        <h3><a href="/app/ip-tool/">IP Tool</a></h3>
+        <p class="post-card-desc">Scopri il tuo IP pubblico con geolocalizzazione e calcola subnet, range host e subnet mask con il CIDR calculator.</p>
+      </div>
+    </li>
   </ul>
 </div>
 
