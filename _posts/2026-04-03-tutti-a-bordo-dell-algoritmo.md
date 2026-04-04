@@ -30,6 +30,33 @@ Il rumore? Non il fischio del vapore, ma il beep delle notifiche, il clic dei mo
 
 > 💡 *Te lo spiega Dem*: "Ricordate quando tutti correvano a comprare azioni AI? Era come la corsa ai biglietti per il Titanic. Nessuno pensava al ghiaccio. Tutti vedevano solo la gloria."
 
+In prima classe, nel 1912, i milionari sorseggiano champagne e ridono. "I doppi fondi sono impenetrabili," dicono. "La fisica non ci tocca." Nel 2026, i CEO delle Big Tech sorseggiano caffè bio nei campus di Cupertino e Redmond. "I guardrails sono impenetrabili," dicono. "L'etica è integrata nel modello."
+
+Il parallelo è brutale: entrambi ignorano che, quando la massa critica supera una certa velocità, la fisica — o l'algoritmo — prende il comando. E non si ferma con un semplice `CTRL+C`.
+
+---
+
+## La Sala Macchine: L'Esercito Invisibile
+
+Nel 1912, quattro ponti sotto il salone da ballo, i *stokers* spalano carbone. Turni di sei ore, calore a 60 gradi, polmoni neri. Alimentano i motori affinché i passeggeri di prima classe possano ballare il valzer. Nessuno in sala da pranzo conosce il loro nome.
+
+Nel 2026, migliaia di lavoratori fantasma in Kenya, nelle Filippine, in Venezuela siedono davanti a monitor fatiscenti. Etichettano immagini: *violenza / non violenza*. *Hate speech / accettabile*. Ripuliscono i dati tossici affinché i modelli sembrino "educati" e "sicuri". Pagati 1–2 dollari l'ora. Nessuno nel campus della Silicon Valley conosce il loro nome.
+
+Entrambe le rivoluzioni poggiano su un esercito invisibile che suda affinché la classe dirigente possa vantarsi della "pulizia" della macchina. La differenza? Nel 1912, i fochisti almeno erano sulla stessa nave.
+
+> 💡 *Te lo spiega Dem*: "La prossima volta che sentite 'l'AI è sicura e allineata', chiedetevi chi ha letto i 10.000 esempi di contenuto estremo per insegnarglielo."
+
+---
+
+| | **Titanic (1912)** | **AI Engine (2026)** |
+|:---|:---|:---|
+| **Carburante** | Carbone gallese | GPU + Data Lake |
+| **Promessa** | Lusso e velocità | Produttività infinita |
+| **Costruttori** | Harland & Wolff, Belfast | OpenAI, Google, Meta |
+| **Punto cieco** | Iceberg fisico | Allucinazioni + bias etici |
+| **Segnale ignorato** | Telegrafo degli iceberg | Warning dei ricercatori (licenziati) |
+| **Chi paga il prezzo** | Passeggeri di terza classe | Lavoratori, utenti, democrazie |
+
 ---
 
 ## Il Cuore: La Promessa della Velocità
@@ -38,11 +65,15 @@ Perché la nave deve andare veloce. Nel 1912 era per battere i record, per la gl
 
 Le caldaie non bruciano carbone. Bruciano la nostra storia digitale: ogni tweet, ogni foto, ogni libro è combustibile per i motori. E se rallenti per controllare gli iceberg – bias etici, privacy violata, lavori persi – perdi la gara. La velocità non è un rischio. È l'unico parametro di successo.
 
-<div class="esempio-tech">🌊 <strong>L'Hybris Moderna:</strong> I progettisti giurano che la nave è sicura. "Abbiamo compartimenti stagni: firewall, etica integrata, regolamentazioni." Ma nessuno ha testato in tempesta vera. Perché fermarsi? Il mercato non aspetta.</div>
+<div class="esempio-tech">🌊 <strong>L'Inaffondabilità:</strong> "Nemmeno Dio potrebbe affondare questa nave," disse un marinaio nel 1912. "L'AGI risolverà ogni problema umano — dalla fame al cambiamento climatico," dicono i nuovi profeti nel 2026. Il Titanic non è affondato per mancanza di tecnologia. È affondato per troppa fiducia nella tecnologia e troppo poco rispetto per l'imprevisto. L'iceberg non era nel piano di progetto.</div>
 
 <div class="esempio-tech">💻 <strong>AI Risk Score — quanto è grande il tuo iceberg?</strong> Prima di fare deploy, valuta i punti ciechi del tuo progetto AI. Ogni parametro non verificato è ghiaccio sotto la superficie.</div>
 
 ```python
+# Nel 1912 misuravano la pressione del vapore nelle caldaie.
+# Oggi misuriamo la deriva dei dati nei modelli.
+# Ecco il tuo manometro moderno.
+#
 # AI Iceberg Score — valuta il rischio nascosto di un progetto AI
 # Più alto lo score, più grande l'iceberg sotto la superficie
 
@@ -94,7 +125,9 @@ else:
 
 ## La Chiusura: Il Presagio
 
-Mentre la terraferma scompare all'orizzonte, sentite quel piccolo scricchiolio? È il ghiaccio che si avvicina, invisibile nel buio digitale. Sulla carta, tutto è perfetto. Il codice è pulito, i modelli addestrati. Ma chi sta davvero tenendo il timone? I Big Tech? Gli utenti? O l'algoritmo stesso?
+Mentre la terraferma scompare all'orizzonte, sentite quel piccolo scricchiolio?
+
+Nel 1912, l'iceberg era una montagna di ghiaccio solida, scura, ignorata dai binocoli mancanti. Nel 2026, l'iceberg è fatto di allucinazioni algoritmiche, bias cognitivi e perdita di sovranità intellettuale. Non lo vedi sul radar delle trimestrali, perché brilla come un'opportunità. Ma sotto il pelo dell'acqua, dove il codice tocca la realtà sociale, lo scafo sta già iniziando a vibrare.
 
 Questo è l'inizio. Nel prossimo episodio, parleremo di come navigare queste acque – o come costruire scialuppe di salvataggio.
 
