@@ -36,14 +36,47 @@ Le caldaie non bruciano carbone. Bruciano la nostra storia digitale: ogni tweet,
 
 <div class="esempio-tech">🌊 <strong>L'Hybris Moderna:</strong> I progettisti giurano che la nave è sicura. "Abbiamo compartimenti stagni: firewall, etica integrata, regolamentazioni." Ma nessuno ha testato in tempesta vera. Perché fermarsi? Il mercato non aspetta.</div>
 
-<div class="esempio-tech">💻 <strong>Codice d'esempio:</strong> Un semplice script Python per simulare l'entusiasmo dei passeggeri che salgono sulla nave AI.</div>
+<div class="esempio-tech">💻 <strong>AI Risk Score — quanto è grande il tuo iceberg?</strong> Prima di fare deploy, valuta i punti ciechi del tuo progetto AI. Ogni parametro non verificato è ghiaccio sotto la superficie.</div>
 
 ```python
-# Simulazione metaforica dell'entusiasmo per l'AI
-passeggeri = ["Investitore", "CEO", "Utente", "Sviluppatore"]
+# AI Iceberg Score — valuta il rischio nascosto di un progetto AI
+# Più alto lo score, più grande l'iceberg sotto la superficie
 
-for passeggero in passeggeri:
-    print(f"{passeggero} sale a bordo: 'L'AI è il futuro! Ignoriamo gli iceberg!'")
+progetto = {
+    "nome": "RecrutamentoAI v2.0",
+    "bias_testato": False,          # Hai testato per bias demografici?
+    "human_in_the_loop": False,     # C'è supervisione umana nelle decisioni critiche?
+    "dataset_documentato": True,    # Il training set è documentato e tracciabile?
+    "gdpr_compliance": True,        # I dati rispettano la privacy degli utenti?
+    "adversarial_testing": False,   # Testato contro input malevoli o edge case?
+    "monitoring_produzione": False, # Monitorate le performance dopo il deploy?
+}
+
+# Peso di ogni parametro sul rischio totale
+pesi_rischio = {
+    "bias_testato": 30,          # Il rischio più alto: bias = danno reale a persone
+    "human_in_the_loop": 25,     # Senza supervisione umana, chi risponde degli errori?
+    "dataset_documentato": 15,   # Dati opachi = modello opaco
+    "gdpr_compliance": 15,       # Rischio legale immediato
+    "adversarial_testing": 10,   # Vulnerabilità che emergono solo in produzione
+    "monitoring_produzione": 5,  # Senza monitoring, non sai quando le cose vanno storte
+}
+
+score_iceberg = sum(
+    peso for chiave, peso in pesi_rischio.items()
+    if not progetto[chiave]
+)
+
+print(f"Progetto: {progetto['nome']}")
+print(f"Score iceberg: {score_iceberg}/100\n")
+
+if score_iceberg >= 60:
+    print("ICEBERG CRITICO — il 90% del rischio è sott'acqua.")
+    print("Il Titanic aveva compartimenti stagni. Li avete testati?")
+elif score_iceberg >= 30:
+    print("Iceberg parziale — la rotta è rischiosa, naviga con cautela.")
+else:
+    print("Rischio contenuto — ma tieni sempre il binocolo puntato.")
 ```
 
 <div class="esempio-tech">🎬 <strong>Guarda il video:</strong> <a href="https://www.youtube.com/watch?v=p4kCQOceAX8" target="_blank" rel="noopener noreferrer">L'AI ci sostituirà tutti? Un parallelo con il progresso tecnologico</a> — riflessioni sul rischio e l'ottimismo.</div>
