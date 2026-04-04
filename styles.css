@@ -379,6 +379,13 @@ li {
   font-size: 1.05rem;
 }
 
+.post-intro {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 1.2rem;
+  color: var(--text);
+}
+
 .post-content h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
 
 .post-date {

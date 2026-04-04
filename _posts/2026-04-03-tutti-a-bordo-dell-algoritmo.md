@@ -8,7 +8,7 @@ tags: [AI, Tech, Innovazione]
 cover: /titanic.png
 ---
 
-Ciao! Bentornati su **Tech Illuminato**.
+<p class="post-intro">Ciao! Bentornati su <strong>Tech Illuminato</strong>.</p>
 
 Amici, immaginatevi sul molo di Southampton, aprile 1912. Ma invece del fumo nero delle caldaie a carbone, sentite il ronzio bianco di migliaia di ventole che raffreddano chip al silicio. La nave non è di ferro, è di algoritmi. E tutti – dai miliardari in prima classe ai sognatori di terza – si accalcano per salire. "Questa non affonda," giurano i costruttori. "È troppo intelligente per naufragare."
 
