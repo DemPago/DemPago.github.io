@@ -386,6 +386,89 @@ input[type="month"]:disabled { opacity: 0.35; }
 }
 </style>
 
+/* ── Onboarding overlay ─────────────────────────────────── */
+.ob-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(4px);
+  align-items: center; justify-content: center;
+}
+.ob-overlay.visible { display: flex; }
+.ob-card {
+  background: #161b22; border: 1px solid #30363d;
+  border-radius: 14px; padding: 2.2rem 2rem;
+  width: 100%; max-width: 420px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+  animation: obIn 0.25s ease;
+}
+@keyframes obIn { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+.ob-card h2 { margin: 0 0 0.3rem; font-size: 1.4rem; color: #e6edf3; }
+.ob-card p  { margin: 0 0 1.4rem; color: #8b949e; font-size: 0.9rem; }
+.ob-actions { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1.4rem; }
+.ob-btn {
+  padding: 0.8rem; border: none; border-radius: 8px;
+  background: var(--accent); color: #0d1117;
+  font-weight: 700; font-size: 1rem; font-family: inherit;
+  cursor: pointer; transition: background 0.2s;
+}
+.ob-btn:hover { background: var(--accent-hover); }
+.ob-skip {
+  text-align: center; font-size: 0.84rem;
+  color: #8b949e; cursor: pointer; text-decoration: underline;
+  background: none; border: none; font-family: inherit;
+}
+.ob-skip:hover { color: #e6edf3; }
+.ob-sector-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-size: 0.78rem; color: #8b949e; cursor: pointer;
+  margin-top: 0.3rem;
+}
+.ob-sector-badge:hover { color: var(--accent); }
+</style>
+
+<div class="ob-overlay" id="obOverlay">
+  <div class="ob-card">
+    <h2>Ciao! Iniziamo.</h2>
+    <p>Due secondi per personalizzare i suggerimenti del tuo CV.</p>
+    <div class="cv-row2">
+      <div class="cv-field">
+        <label>Nome</label>
+        <input type="text" id="ob-nome" placeholder="Mario" oninput="if(this.value)this.value=this.value[0].toUpperCase()+this.value.slice(1)">
+      </div>
+      <div class="cv-field">
+        <label>Cognome</label>
+        <input type="text" id="ob-cognome" placeholder="Rossi" oninput="if(this.value)this.value=this.value[0].toUpperCase()+this.value.slice(1)">
+      </div>
+    </div>
+    <div class="cv-field" style="margin-top:0.75rem">
+      <label>Settore lavorativo</label>
+      <select id="ob-sector">
+        <option value="">Seleziona un settore...</option>
+        <option value="tech">IT &amp; Tecnologia</option>
+        <option value="marketing">Marketing &amp; Comunicazione</option>
+        <option value="finance">Finanza &amp; Contabilità</option>
+        <option value="health">Sanità &amp; Medicina</option>
+        <option value="education">Istruzione &amp; Formazione</option>
+        <option value="engineering">Ingegneria</option>
+        <option value="legal">Legale &amp; Giuridico</option>
+        <option value="sales">Vendite &amp; Commerciale</option>
+        <option value="design">Design &amp; Creatività</option>
+        <option value="hr">Risorse Umane</option>
+        <option value="other">Altro</option>
+      </select>
+    </div>
+    <div class="ob-actions">
+      <button class="ob-btn" onclick="confirmOnboarding()">Inizia →</button>
+      <button class="ob-skip" onclick="skipOnboarding()">Salta, compilo da solo</button>
+    </div>
+  </div>
+</div>
+
+<!-- datalist ruoli per settore -->
+<datalist id="sector-roles-list"></datalist>
+<datalist id="sector-titles-list"></datalist>
+
 <div class="cv-app">
 
   <!-- ── FORM COLUMN ─────────────────────────── -->
@@ -415,8 +498,11 @@ input[type="month"]:disabled { opacity: 0.35; }
 
     <div class="cv-field">
       <label>Titolo professionale</label>
-      <input type="text" id="f-titolo" placeholder="es. Senior Software Engineer" oninput="renderCV()">
+      <input type="text" id="f-titolo" placeholder="es. Senior Software Engineer" list="sector-titles-list" oninput="renderCV()">
     </div>
+    <button class="ob-sector-badge" id="sectorBadge" onclick="openOnboarding()" style="display:none">
+      ✦ <span id="sectorLabel"></span> — cambia settore
+    </button>
 
     <div class="cv-row2">
       <div class="cv-field">
@@ -530,6 +616,104 @@ input[type="month"]:disabled { opacity: 0.35; }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
+/* ── Sector roles ───────────────────────────────────────── */
+const SECTOR_NAMES = {
+  tech:'IT & Tecnologia', marketing:'Marketing & Comunicazione',
+  finance:'Finanza & Contabilità', health:'Sanità & Medicina',
+  education:'Istruzione & Formazione', engineering:'Ingegneria',
+  legal:'Legale & Giuridico', sales:'Vendite & Commerciale',
+  design:'Design & Creatività', hr:'Risorse Umane', other:'Altro',
+};
+
+const SECTOR_ROLES = {
+  tech: ['Software Developer','Frontend Developer','Backend Developer','Full Stack Developer',
+    'Data Analyst','Data Scientist','DevOps Engineer','Cloud Architect','Product Manager',
+    'UX/UI Designer','Cybersecurity Analyst','Machine Learning Engineer','Mobile Developer',
+    'QA Engineer','Technical Lead','CTO','Solution Architect','Scrum Master',
+    'Sviluppatore Software','Analista Dati','Architetto Cloud','Sviluppatore Mobile','Ingegnere QA'],
+  marketing: ['Marketing Manager','Digital Marketing Specialist','Content Creator','SEO Specialist',
+    'Social Media Manager','Brand Manager','Copywriter','Growth Hacker','Email Marketing Specialist',
+    'Marketing Analyst','CMO','Campaign Manager','Performance Marketing Manager',
+    'Responsabile Marketing','Specialista SEO','Creatore di Contenuti','Analista Marketing'],
+  finance: ['Financial Analyst','Accountant','Controller','CFO','Investment Analyst',
+    'Risk Manager','Auditor','Tax Consultant','Treasurer','Credit Analyst',
+    'Analista Finanziario','Contabile','Revisore Contabile','Consulente Fiscale','Tesoriere'],
+  health: ['Medical Doctor','Nurse','Physiotherapist','Psychologist','Pharmacist',
+    'Surgeon','Clinical Researcher','Radiologist','Dentist','Nutritionist',
+    'Medico','Infermiere','Fisioterapista','Psicologo','Farmacista','Chirurgo',
+    'Ricercatore Clinico','Radiologo','Dentista','Nutrizionista'],
+  education: ['Teacher','Professor','Trainer','Tutor','Lecturer',
+    'Educational Coordinator','Researcher','Curriculum Designer','School Principal',
+    'Insegnante','Professore','Formatore','Docente','Coordinatore Didattico',
+    'Ricercatore','Dirigente Scolastico'],
+  engineering: ['Civil Engineer','Mechanical Engineer','Electrical Engineer','Chemical Engineer',
+    'Aerospace Engineer','Project Engineer','R&D Engineer','Process Engineer',
+    'Structural Engineer','Systems Engineer',
+    'Ingegnere Civile','Ingegnere Meccanico','Ingegnere Elettrico','Ingegnere Chimico',
+    'Ingegnere Aerospaziale','Ingegnere di Processo','Ingegnere Strutturale'],
+  legal: ['Lawyer','Legal Consultant','Notary','Paralegal','Compliance Officer',
+    'Legal Counsel','In-House Counsel','Corporate Lawyer',
+    'Avvocato','Consulente Legale','Notaio','Responsabile Compliance'],
+  sales: ['Sales Manager','Account Manager','Business Development Manager','Sales Representative',
+    'Key Account Manager','Sales Director','Inside Sales','Pre-Sales Consultant',
+    'Direttore Commerciale','Responsabile Vendite','Agente Commerciale','Account Executive'],
+  design: ['UX Designer','UI Designer','Graphic Designer','Motion Designer','Art Director',
+    'Product Designer','Brand Designer','Creative Director','Photographer','Video Editor',
+    'Illustrator','3D Designer',
+    'Direttore Artistico','Grafico','Fotografo','Editor Video','Illustratore'],
+  hr: ['HR Manager','Recruiter','HR Business Partner','HR Generalist',
+    'L&D Manager','Compensation & Benefits Specialist','Employer Branding Specialist',
+    'Talent Acquisition Specialist','People Operations Manager',
+    'Responsabile HR','Selezionatore del Personale','Responsabile Formazione'],
+  other: [],
+};
+
+const SECTOR_TITLES = {
+  tech: ['Software Engineer','Senior Developer','Tech Lead','CTO','Product Manager','Data Scientist'],
+  marketing: ['Marketing Manager','CMO','Brand Strategist','Digital Marketing Manager'],
+  finance: ['CFO','Financial Controller','Investment Manager','Chief Accountant'],
+  health: ['Medico Specialista','Primario','Direttore Sanitario','Responsabile Reparto'],
+  education: ['Docente','Ricercatore','Dirigente Scolastico','Professore Associato'],
+  engineering: ['Lead Engineer','Project Manager','R&D Manager','Chief Engineer'],
+  legal: ['Senior Associate','Partner','General Counsel','Head of Legal'],
+  sales: ['Sales Director','VP Sales','Head of Business Development','Chief Revenue Officer'],
+  design: ['Creative Director','Head of Design','Design Lead','Chief Design Officer'],
+  hr: ['HR Director','Chief People Officer','Head of Talent','VP People'],
+  other: [],
+};
+
+/* ── Onboarding ─────────────────────────────────────────── */
+function openOnboarding() {
+  document.getElementById('obOverlay').classList.add('visible');
+}
+function skipOnboarding() {
+  document.getElementById('obOverlay').classList.remove('visible');
+}
+function confirmOnboarding() {
+  const nome    = document.getElementById('ob-nome').value.trim();
+  const cognome = document.getElementById('ob-cognome').value.trim();
+  const sector  = document.getElementById('ob-sector').value;
+  if (nome)    { const el = document.getElementById('f-nome');    el.value = nome[0].toUpperCase() + nome.slice(1); }
+  if (cognome) { const el = document.getElementById('f-cognome'); el.value = cognome[0].toUpperCase() + cognome.slice(1); }
+  if (sector)  setSector(sector);
+  skipOnboarding();
+  renderCV();
+}
+function setSector(key) {
+  if (!key) return;
+  // Populate role datalist
+  const rolesDl  = document.getElementById('sector-roles-list');
+  const titlesDl = document.getElementById('sector-titles-list');
+  rolesDl.innerHTML  = (SECTOR_ROLES[key]  || []).map(r => `<option value="${r}">`).join('');
+  titlesDl.innerHTML = (SECTOR_TITLES[key] || []).map(t => `<option value="${t}">`).join('');
+  // Update badge
+  const badge = document.getElementById('sectorBadge');
+  const label = document.getElementById('sectorLabel');
+  if (badge && label) { label.textContent = SECTOR_NAMES[key] || key; badge.style.display = 'inline-flex'; }
+  // Persist in state
+  state.sector = key;
+}
+
 /* ── State ─────────────────────────────────────────────── */
 const THEMES = [
   { name: 'Navy',     primary: '#0f3460', header: '#1a1a2e', headerGrad: '#16213e', badgeBg: 'rgba(15,52,96,0.12)'   },
@@ -558,7 +742,7 @@ function addEntry(type) {
       counter: () => expCount++,
       fields: `
         <div class="cv-row2">
-          <div class="cv-field"><label>Ruolo *</label><input type="text" placeholder="Senior Dev" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Ruolo *</label><input type="text" placeholder="Senior Dev" list="sector-roles-list" oninput="renderCV()"></div>
           <div class="cv-field"><label>Azienda *</label><input type="text" placeholder="Acme Srl" oninput="renderCV()"></div>
         </div>
         <div class="cv-row2">
@@ -975,6 +1159,7 @@ function saveToStorage() {
     photo: state.photo,
     skills: state.skills,
     themeIdx: THEMES.indexOf(state.theme),
+    sector: state.sector || null,
     entries: {}
   };
   ['f-nome','f-cognome','f-titolo','f-email','f-tel','f-citta','f-linkedin','f-sito','f-profilo']
@@ -998,6 +1183,7 @@ function loadFromStorage() {
     if (data.themeIdx >= 0 && data.themeIdx < THEMES.length) state.theme = THEMES[data.themeIdx];
     if (Array.isArray(data.skills)) state.skills = data.skills;
     if (data.photo) state.photo = data.photo;
+    if (data.sector) state.sector = data.sector;
     ['exp','edu','proj','vol','pub','lang','cert','award'].forEach(type => {
       const entries = data.entries?.[type];
       if (!entries?.length) return;
@@ -1135,6 +1321,8 @@ if (!restored) {
   addEntry('exp');
   addEntry('edu');
   addEntry('lang');
+  // First visit: show onboarding after a short delay
+  setTimeout(openOnboarding, 350);
 }
 if (restored) {
   // Re-sync theme swatches and skill tags after restore
@@ -1145,6 +1333,7 @@ if (restored) {
     const img = document.getElementById('photo-preview');
     if (img) { img.src = state.photo; img.style.display = 'block'; }
   }
+  if (state.sector) setSector(state.sector);
 }
 renderCV();
 // Ensure preview is correctly scaled after first paint
