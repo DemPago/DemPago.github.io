@@ -64,7 +64,8 @@ permalink: /app/curriculum/
 }
 
 .cv-field input:focus,
-.cv-field textarea:focus {
+.cv-field textarea:focus,
+.cv-field select:focus {
   outline: none;
   border-color: var(--accent);
 }
@@ -610,6 +611,10 @@ input[type="month"]:disabled { opacity: 0.35; }
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="3" x2="12" y2="15"/><polyline points="17 8 12 3 7 8"/></svg>
         Importa dati
       </button>
+      <button class="cv-json-btn" onclick="downloadTemplate()" title="Scarica un file JSON di esempio per capire la struttura">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+        Template
+      </button>
     </div>
     <input type="file" id="json-import-input" accept=".json" style="display:none" onchange="handleJSONImport(event)">
     <button class="cv-reset-btn" onclick="resetCV()" title="Cancella tutto e ricomincia da zero">
@@ -866,7 +871,7 @@ function addEntry(type) {
       fields: `
         <div class="cv-row2">
           <div class="cv-field"><label>Lingua *</label><input type="text" placeholder="Inglese" oninput="renderCV()"></div>
-          <div class="cv-field"><label>Livello</label><input type="text" placeholder="C1 / Madrelingua" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Livello</label><select onchange="renderCV()"><option value="">— Seleziona —</option><option>Madrelingua</option><option>C2 – Padronanza</option><option>C1 – Efficacia</option><option>B2 – Autonomia</option><option>B1 – Soglia</option><option>A2 – Sopravvivenza</option><option>A1 – Contatto</option></select></div>
         </div>`,
     },
     cert: {
@@ -962,7 +967,7 @@ function renderTags() {
 function collectEntries(listId, fields) {
   const cards = document.querySelectorAll(`#${listId} .entry-card`);
   return Array.from(cards).map(card => {
-    const inputs = card.querySelectorAll('input:not([type="checkbox"]), textarea');
+        const inputs = card.querySelectorAll('input:not([type="checkbox"]), textarea, select');
     const obj = {};
     fields.forEach((f, i) => { obj[f] = inputs[i]?.value.trim() || ''; });
     const presentCheck = card.querySelector('.present-check');
@@ -1212,7 +1217,7 @@ function saveToStorage() {
     const list = document.getElementById(`${type}-list`);
     if (!list) return;
     data.entries[type] = Array.from(list.querySelectorAll('.entry-card')).map(card => ({
-      vals: Array.from(card.querySelectorAll('input:not([type="checkbox"]), textarea')).map(i => i.value),
+      vals: Array.from(card.querySelectorAll('input:not([type="checkbox"]), textarea, select')).map(i => i.value),
       present: card.querySelector('.present-check')?.checked || false
     }));
   });
@@ -1235,7 +1240,7 @@ function loadFromStorage() {
       const cards = document.getElementById(`${type}-list`)?.querySelectorAll('.entry-card');
       entries.forEach((entry, i) => {
         const card = cards?.[i]; if (!card) return;
-        const inputs = card.querySelectorAll('input:not([type="checkbox"]), textarea');
+    const inputs = card.querySelectorAll('input:not([type="checkbox"]), textarea, select');
         entry.vals.forEach((val, j) => { if (inputs[j]) inputs[j].value = val; });
         const check = card.querySelector('.present-check');
         if (check && entry.present) { check.checked = true; check.dispatchEvent(new Event('change')); }
@@ -1291,6 +1296,59 @@ function handleJSONImport(e) {
   reader.readAsText(file);
   // Reset input so the same file can be re-imported if needed
   e.target.value = '';
+}
+
+function downloadTemplate() {
+  const template = {
+    fields: {
+      "f-nome":     "Mario",
+      "f-cognome":  "Rossi",
+      "f-titolo":   "Software Engineer",
+      "f-email":    "mario.rossi@email.com",
+      "f-tel":      "+39 333 1234567",
+      "f-citta":    "Milano",
+      "f-linkedin": "https://linkedin.com/in/mario-rossi",
+      "f-sito":     "https://mariorossi.dev",
+      "f-profilo":  "Sviluppatore con 5 anni di esperienza su tecnologie web e cloud. Appassionato di open source e architetture scalabili."
+    },
+    photo: null,
+    skills: ["JavaScript", "React", "Node.js", "Docker", "AWS"],
+    themeIdx: 0,
+    sector: null,
+    entries: {
+      exp: [
+        { vals: ["Software Engineer", "Acme S.p.A.", "2022-01", "2024-06", "Sviluppo e manutenzione del frontend React e delle API REST Node.js. Deploy su AWS con pipeline CI/CD."], present: false },
+        { vals: ["Junior Developer", "Startup XYZ", "2019-06", "2021-12", "Sviluppo funzionalità full stack con Vue.js e Laravel."], present: false }
+      ],
+      edu: [
+        { vals: ["Laurea Magistrale in Informatica", "Università La Sapienza", "2017-09", "2019-03", "110/110 con lode — tesi su architetture microservizi"], present: false }
+      ],
+      proj: [
+        { vals: ["Portfolio Website", "Sviluppatore principale", "2023-01", "2023-03", "Sito portfolio personale in Next.js, deploy su Vercel.", "https://mariorossi.dev"], present: false }
+      ],
+      vol: [
+        { vals: ["Mentore", "CoderDojo Italia", "2021-01", "", "Insegnamento della programmazione a ragazzi 8-14 anni."], present: true }
+      ],
+      pub: [
+        { vals: ["Come strutturare un monorepo nel 2024", "Medium", "2024", "https://medium.com/@mario-rossi/monorepo-2024"], present: false }
+      ],
+      lang: [
+        { vals: ["Inglese", "C1 – Efficacia"], present: false },
+        { vals: ["Spagnolo", "B1 – Soglia"], present: false }
+      ],
+      cert: [
+        { vals: ["AWS Solutions Architect Associate", "Amazon Web Services", "2023"], present: false }
+      ],
+      award: [
+        { vals: ["Best Innovation Award", "Google DevFest Milano", "2022", "Riconoscimento per il progetto open source più innovativo della competizione."], present: false }
+      ]
+    }
+  };
+  const blob = new Blob([JSON.stringify(template, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'CV_template.json'; a.click();
+  URL.revokeObjectURL(url);
 }
 
 /* ── Scale preview to fit container ────────────────────── */
