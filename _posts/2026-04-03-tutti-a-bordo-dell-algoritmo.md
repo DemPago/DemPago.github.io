@@ -14,7 +14,13 @@ Amici, immaginatevi sul molo di Southampton, aprile 1912. Ma invece del fumo ner
 
 L'umanità ha già visto questo film. Quattro volte.
 
-**Prima rivoluzione industriale, 1760**: il vapore batte il muscolo. I telai meccanici distruggono il lavoro dei tessitori. Gli operai bruciano le macchine — i Luddisti — convinti che l'innovazione sia il nemico. Ma il mondo va avanti. **Seconda rivoluzione, 1870**: l'elettricità batte il buio. Edison contro Tesla, corrente continua contro alternata, mentre le città si illuminano e le fabbriche non si fermano più. **Terza rivoluzione, 1969–1990**: internet batte la distanza. Le informazioni viaggiano alla velocità della luce e qualcuno — in un garage — diventa miliardario. Ogni volta, gli stessi ingredienti: un'invenzione che "cambierà tutto", ottimismo isterico, qualcuno che giura che è "assolutamente sicuro". E qualcuno che paga il prezzo di quella certezza.
+**Prima rivoluzione industriale, 1760** — il vapore batte il muscolo. I telai meccanici distruggono il lavoro dei tessitori. Gli operai bruciano le macchine — i Luddisti — convinti che l'innovazione sia il nemico. Ma il mondo va avanti.
+
+**Seconda rivoluzione, 1870** — l'elettricità batte il buio. Edison contro Tesla, corrente continua contro alternata, mentre le città si illuminano e le fabbriche non si fermano più.
+
+**Terza rivoluzione, 1969–1990** — internet batte la distanza. Le informazioni viaggiano alla velocità della luce e qualcuno — in un garage — diventa miliardario.
+
+Ogni volta, gli stessi ingredienti: un'invenzione che "cambierà tutto", ottimismo isterico, qualcuno che giura che è "assolutamente sicuro". E qualcuno che paga il prezzo di quella certezza.
 
 Il Titanic era il figlio più ambizioso della seconda rivoluzione industriale — il pinnacolo dell'ingegneria a vapore. Inaffondabile per design, invincibile per hybris. Oggi, nel 2026, stiamo costruendo la quarta rivoluzione. L'AI è il nostro Titanic. E noi? Saliamo a bordo, ignorando i piccoli scricchiolii che potrebbero rivelarsi iceberg.
 
@@ -30,23 +36,30 @@ Il rumore? Non il fischio del vapore, ma il beep delle notifiche, il clic dei mo
 
 > 💡 *Te lo spiega Dem*: "Ricordate quando tutti correvano a comprare azioni AI? Era come la corsa ai biglietti per il Titanic. Nessuno pensava al ghiaccio. Tutti vedevano solo la gloria."
 
-In prima classe, nel 1912, i milionari sorseggiano champagne e ridono. "I doppi fondi sono impenetrabili," dicono. "La fisica non ci tocca." Nel 2026, i CEO delle Big Tech sorseggiano caffè bio nei campus di Cupertino e Redmond. "I guardrails sono impenetrabili," dicono. "L'etica è integrata nel modello."
-
-Il parallelo è brutale: entrambi ignorano che, quando la massa critica supera una certa velocità, la fisica — o l'algoritmo — prende il comando. E non si ferma con un semplice `CTRL+C`.
+<div class="esempio-tech">🥂 <strong>Il Parallelo delle Classi:</strong>
+<br><br>
+<strong>1912 — Prima classe, RMS Titanic:</strong> I milionari sorseggiano champagne. "I doppi fondi sono impenetrabili. La fisica non ci tocca."
+<br><br>
+<strong>2026 — Campus Silicon Valley:</strong> I CEO sorseggiano caffè bio. "I guardrails sono impenetrabili. L'etica è integrata nel modello."
+<br><br>
+Il parallelo è brutale: entrambi ignorano che, quando la massa critica supera una certa velocità, la fisica — o l'algoritmo — prende il comando. E non si ferma con un semplice <code>CTRL+C</code>.
+</div>
 
 ---
 
 ## La Sala Macchine: L'Esercito Invisibile
 
-Nel 1912, quattro ponti sotto il salone da ballo, i *stokers* spalano carbone. Turni di sei ore, calore a 60 gradi, polmoni neri. Alimentano i motori affinché i passeggeri di prima classe possano ballare il valzer. Nessuno in sala da pranzo conosce il loro nome.
+**1912.** Nel 1912, quattro ponti sotto il salone da ballo, i *stokers* spalano carbone. Turni di sei ore, calore a 60 gradi, polmoni neri. Alimentano i motori affinché i passeggeri di prima classe possano ballare il valzer. Nessuno in sala da pranzo conosce il loro nome.
 
-Nel 2026, migliaia di lavoratori fantasma in Kenya, nelle Filippine, in Venezuela siedono davanti a monitor fatiscenti. Etichettano immagini: *violenza / non violenza*. *Hate speech / accettabile*. Ripuliscono i dati tossici affinché i modelli sembrino "educati" e "sicuri". Pagati 1–2 dollari l'ora. Nessuno nel campus della Silicon Valley conosce il loro nome.
+**2026.** Migliaia di lavoratori fantasma in Kenya, nelle Filippine, in Venezuela siedono davanti a monitor fatiscenti. Etichettano immagini: *violenza / non violenza*. *Hate speech / accettabile*. Ripuliscono i dati tossici affinché i modelli sembrino "educati" e "sicuri". Pagati 1–2 dollari l'ora. Nessuno nel campus della Silicon Valley conosce il loro nome.
 
 Entrambe le rivoluzioni poggiano su un esercito invisibile che suda affinché la classe dirigente possa vantarsi della "pulizia" della macchina. La differenza? Nel 1912, i fochisti almeno erano sulla stessa nave.
 
 > 💡 *Te lo spiega Dem*: "La prossima volta che sentite 'l'AI è sicura e allineata', chiedetevi chi ha letto i 10.000 esempi di contenuto estremo per insegnarglielo."
 
 ---
+
+<div class="esempio-tech">📊 <strong>Il confronto che nessuno mette su un PowerPoint:</strong> sei dimensioni, due epoche, un unico errore di prospettiva.</div>
 
 | | **Titanic (1912)** | **AI Engine (2026)** |
 |:---|:---|:---|
@@ -63,7 +76,13 @@ Entrambe le rivoluzioni poggiano su un esercito invisibile che suda affinché la
 
 Perché la nave deve andare veloce. Nel 1912 era per battere i record, per la gloria dell'impero britannico. Oggi? Per battere la concorrenza, per far salire le trimestrali. Il capitano – Elon, Sam, Sundar – non guarda il mare. Guarda i grafici. "Più veloce!" gridano. "L'AI non ha tempo per pause."
 
-Le caldaie non bruciano carbone. Bruciano la nostra storia digitale: ogni tweet, ogni foto, ogni libro è combustibile per i motori. E se rallenti per controllare gli iceberg – bias etici, privacy violata, lavori persi – perdi la gara. La velocità non è un rischio. È l'unico parametro di successo.
+Le caldaie non bruciano carbone. Bruciano la nostra storia digitale: ogni tweet, ogni foto, ogni libro è combustibile per i motori. E se rallenti per controllare gli iceberg, perdi la gara:
+
+- **Bias etici** — i modelli discriminano, ma il deploy non aspetta l'audit
+- **Privacy violata** — i dati personali sono carburante, non costo
+- **Lavori persi** — le trimestrali non contano le scialuppe
+
+La velocità non è un rischio. È l'unico parametro di successo.
 
 <div class="esempio-tech">🌊 <strong>L'Inaffondabilità:</strong> "Nemmeno Dio potrebbe affondare questa nave," disse un marinaio nel 1912. "L'AGI risolverà ogni problema umano — dalla fame al cambiamento climatico," dicono i nuovi profeti nel 2026. Il Titanic non è affondato per mancanza di tecnologia. È affondato per troppa fiducia nella tecnologia e troppo poco rispetto per l'imprevisto. L'iceberg non era nel piano di progetto.</div>
 
@@ -131,8 +150,14 @@ Nel 1912, l'iceberg era una montagna di ghiaccio solida, scura, ignorata dai bin
 
 Questo è l'inizio. Nel prossimo episodio, parleremo di come navigare queste acque – o come costruire scialuppe di salvataggio.
 
-Cosa ne pensate? State salendo a bordo ciechi dall'euforia, o con il binocolo in mano? Scrivete nei commenti – o su LinkedIn. Sono curioso. Davvero. 👇
-
 Portiamo luce.
 
 > 💡 *Te lo spiega Dem* — **Grey Jedi Tip:** La prossima volta che usate un'AI, ascoltate i scricchiolii. Potrebbero essere iceberg.
+
+---
+
+## Cosa ne pensate?
+
+State salendo a bordo ciechi dall'euforia, o con il binocolo in mano?
+
+Scrivete nei commenti – o su LinkedIn. Sono curioso. Davvero. 👇
