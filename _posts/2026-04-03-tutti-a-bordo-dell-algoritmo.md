@@ -67,14 +67,47 @@ Entrambe le rivoluzioni poggiano su un esercito invisibile che suda affinché la
 
 <div class="esempio-tech">📊 <strong>Il confronto che nessuno mette su un PowerPoint:</strong> sei dimensioni, due epoche, un unico errore di prospettiva.</div>
 
-| | **Titanic (1912)** | **AI Engine (2026)** |
-|:---|:---|:---|
-| **Carburante** | Carbone gallese | GPU + Data Lake |
-| **Promessa** | Lusso e velocità | Produttività infinita |
-| **Costruttori** | Harland & Wolff, Belfast | OpenAI, Google, Meta |
-| **Punto cieco** | Iceberg fisico | Allucinazioni + bias etici |
-| **Segnale ignorato** | Telegrafo degli iceberg | Warning dei ricercatori (licenziati) |
-| **Chi paga il prezzo** | Passeggeri di terza classe | Lavoratori, utenti, democrazie |
+<table class="comparison-table">
+  <thead>
+    <tr>
+      <th class="col-label"></th>
+      <th class="col-1912">🚢 Titanic (1912)</th>
+      <th class="col-2026">🤖 AI Engine (2026)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="row-label">🔥 Carburante</td>
+      <td>Carbone gallese</td>
+      <td>GPU + Data Lake</td>
+    </tr>
+    <tr>
+      <td class="row-label">🎯 Promessa</td>
+      <td>Lusso e velocità</td>
+      <td>Produttività infinita</td>
+    </tr>
+    <tr>
+      <td class="row-label">🏗️ Costruttori</td>
+      <td>Harland &amp; Wolff, Belfast</td>
+      <td>OpenAI, Google, Meta</td>
+    </tr>
+    <tr>
+      <td class="row-label">👁️ Punto cieco</td>
+      <td>Iceberg fisico</td>
+      <td>Allucinazioni + bias etici</td>
+    </tr>
+    <tr>
+      <td class="row-label">📡 Segnale ignorato</td>
+      <td>Telegrafo degli iceberg</td>
+      <td>Warning dei ricercatori (licenziati)</td>
+    </tr>
+    <tr>
+      <td class="row-label">💸 Chi paga il prezzo</td>
+      <td>Passeggeri di terza classe</td>
+      <td>Lavoratori, utenti, democrazie</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 

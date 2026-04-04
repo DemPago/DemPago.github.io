@@ -529,6 +529,75 @@ li {
   font-size: 0.9rem;
 }
 
+/* Comparison Table — 1912 vs 2026 */
+.comparison-table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 0.85rem 1.1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.comparison-table thead .col-label {
+  background: var(--bg);
+}
+
+.comparison-table thead .col-1912 {
+  background: rgba(180, 120, 60, 0.2);
+  color: #e8b97a;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.comparison-table thead .col-2026 {
+  background: rgba(88, 166, 255, 0.15);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.comparison-table .row-label {
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.02);
+  white-space: nowrap;
+  font-size: 0.85rem;
+  letter-spacing: 0.01em;
+}
+
+.comparison-table tbody td:not(.row-label) {
+  color: var(--text);
+}
+
+.comparison-table tbody tr:hover td {
+  background: rgba(88, 166, 255, 0.04);
+}
+
+.comparison-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 600px) {
+  .comparison-table {
+    font-size: 0.8rem;
+  }
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.6rem 0.7rem;
+  }
+}
+
 .post-content th, .post-content td {
   padding: 0.75rem 1rem;
   border: 1px solid var(--border);
