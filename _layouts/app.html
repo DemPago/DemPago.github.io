@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ page.title }} | Tech Illuminato</title>
+  <title>{{ page.title }} | {{ site.title }}</title>
   <meta name="description" content="{{ page.description | default: site.description }}">
   <link rel="canonical" href="{{ site.url }}{{ page.url }}">
   <meta name="theme-color" content="#0d1117">
@@ -56,7 +56,7 @@
 <body data-layout="app">
   <div class="app-wrapper">
     <header>
-      <h1><a href="/">Tech Illuminato</a></h1>
+      <h1><a href="/">{{ site.title }}</a></h1>
       <p>{{ site.description }}</p>
     </header>
     <nav class="app-nav" aria-label="Navigazione">
@@ -67,7 +67,7 @@
     {{ content }}
   </div>
   <footer>
-    <div class="brand">⚡ Tech Illuminato Blog</div>
+    <div class="brand">⚡ {{ site.title }}</div>
     <p class="copyright">© 2026 DemPago • Made with ☕ and code</p>
   </footer>
   <script src="/main.js"></script>

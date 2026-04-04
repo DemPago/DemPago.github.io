@@ -223,12 +223,17 @@ function initNewsletterPopup() {
 
 // Initialize all
 document.addEventListener('DOMContentLoaded', () => {
-  initCounter();
-  initLoader();
-  initBackToTop();
-  initProgressBar();
-  initCopyButtons();
-  initShareCopy();
-  initTabs();
-  initNewsletterPopup();
+  const isApp = document.body.dataset.layout === 'app';
+
+  initLoader(); // needed everywhere
+
+  if (!isApp) {
+    initCounter();
+    initBackToTop();
+    initProgressBar();
+    initCopyButtons();
+    initShareCopy();
+    initTabs();
+    initNewsletterPopup();
+  }
 });
