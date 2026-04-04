@@ -9,7 +9,7 @@ cover: /ai-cazzara-cover.jpg
 
 ![Illustrazione: un robot che parla con sicurezza mentre inventa fatti assurdi](/ai-cazzara-thumb.jpeg)
 
-Ciao! Bentornati su **Tech Illuminato**.
+<p class="post-intro">Ciao! Bentornati su <strong>Tech Illuminato</strong>.</p>
 
 Spesso restiamo a bocca aperta davanti alla capacità dell'intelligenza artificiale di scrivere codici complessi o poesie commoventi. Poi, all'improvviso, la stessa tecnologia afferma con assoluta certezza che **i gatti cucinano lasagne verdi nel lago**.
 

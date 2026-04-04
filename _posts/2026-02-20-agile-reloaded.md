@@ -7,7 +7,7 @@ categories: tech
 cover: https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800
 ---
 
-Ciao! Bentornati su **Tech Illuminato**.
+<p class="post-intro">Ciao! Bentornati su <strong>Tech Illuminato</strong>.</p>
 
 Oggi parliamo di qualcosa che ha cambiato il modo di fare software: **Agile**.
 

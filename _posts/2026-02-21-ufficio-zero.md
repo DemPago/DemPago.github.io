@@ -7,7 +7,7 @@ categories: business
 cover: https://images.unsplash.com/photo-1553484771-371a605b060b?w=800
 ---
 
-Ciao! Bentornati su **Tech Illuminato**.
+<p class="post-intro">Ciao! Bentornati su <strong>Tech Illuminato</strong>.</p>
 
 Oggi iniziamo una nuova sezione: **Costruisci la tua azienda**.
 

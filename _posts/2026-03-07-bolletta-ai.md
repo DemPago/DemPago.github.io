@@ -8,7 +8,7 @@ tags: [Tech, Business, Sostenibilità]
 cover: https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800
 ---
 
-Ciao! Bentornati su **Tech Illuminato**.
+<p class="post-intro">Ciao! Bentornati su <strong>Tech Illuminato</strong>.</p>
 
 Sveglia. È ora di portare un po' di luce nel magico mondo del "Cloud". Spesso immaginiamo l'Intelligenza Artificiale come un'entità eterea, una nuvola digitale pulita che sputa risposte intelligenti dal nulla.
 

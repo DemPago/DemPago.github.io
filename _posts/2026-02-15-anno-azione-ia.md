@@ -7,7 +7,7 @@ description: "Scopri i 3 trend tech del 2026: Agentic AI, Physical AI e Green AI
 cover: https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800
 ---
 
-Ciao! Bentornati su **Tech Illuminato**.
+<p class="post-intro">Ciao! Bentornati su <strong>Tech Illuminato</strong>.</p>
 
 Siamo arrivati al 2026 e la domanda non è più *"cosa può scrivere l'IA?"*, ma *"cosa può fare per noi nel mondo reale?"*. In questo primo post voglio portarvi nel cuore della rivoluzione che stiamo vivendo.
 
