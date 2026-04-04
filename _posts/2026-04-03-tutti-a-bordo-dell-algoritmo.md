@@ -24,6 +24,8 @@ L'umanità ha già visto questo film. Quattro volte.
 
 **Terza rivoluzione, 1969–1990** — internet batte la distanza. Le informazioni viaggiano alla velocità della luce e qualcuno — in un garage — diventa miliardario.
 
+![La terza rivoluzione industriale — internet e l'era digitale](/terza_rivoluzione_industriale.png)
+
 Ogni volta, gli stessi ingredienti: un'invenzione che "cambierà tutto", ottimismo isterico, qualcuno che giura che è "assolutamente sicuro". E qualcuno che paga il prezzo di quella certezza.
 
 Il Titanic era il figlio più ambizioso della seconda rivoluzione industriale — il pinnacolo dell'ingegneria a vapore. Inaffondabile per design, invincibile per hybris. Oggi, nel 2026, stiamo costruendo la quarta rivoluzione. L'AI è il nostro Titanic. E noi? Saliamo a bordo, ignorando i piccoli scricchiolii che potrebbero rivelarsi iceberg.
