@@ -664,11 +664,6 @@ function buildLetter() {
           : 'I have a flexible, results-oriented profile: I can work independently when needed and I&rsquo;m a strong team player when the context calls for it.';
   }
 
-  // Subject
-  const subjectLabel = lang === 'it'
-    ? `Candidatura per il ruolo di ${esc(ruoloStr)}`
-    : `Application for the ${esc(ruoloStr)} position`;
-
   const locationDate = esc((citta ? citta + ', ' : '') + dateStr);
 
   // Sender contact items — rendered as separate lines, not as a single eyebrow subtitle
@@ -691,10 +686,6 @@ function buildLetter() {
   <div style="margin-bottom:22px;font-size:10pt;color:#333;">
     <div>${esc(referente)}</div>
     <div style="font-weight:600;">${esc(aziendaStr)}</div>
-  </div>
-
-  <div style="margin-bottom:20px;padding:9px 14px;background:#f5f6f8;border-left:3px solid #1a1a2e;border-radius:0 4px 4px 0;">
-    <span style="font-size:9.5pt;font-weight:700;color:#1a1a2e;">${lang === 'it' ? 'Oggetto' : 'Subject'}: </span><span style="font-size:9.5pt;color:#333;">${subjectLabel}</span>
   </div>
 
   <p style="margin:0 0 16px 0;">${greeting}</p>
