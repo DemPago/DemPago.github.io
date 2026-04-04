@@ -177,6 +177,29 @@ input[type="month"]:disabled { opacity: 0.35; }
 .cv-download-btn:active { transform: translateY(0); }
 .cv-download-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
+/* Reset + Ko-fi buttons */
+.cv-reset-btn {
+  display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+  width: 100%; padding: 0.65rem;
+  background: transparent; color: var(--text-muted);
+  border: 1px solid #30363d; border-radius: 8px; font-weight: 500;
+  font-size: 0.88rem; font-family: inherit; cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  margin-top: 0.6rem;
+}
+.cv-reset-btn:hover { border-color: #e05454; color: #e05454; }
+
+.cv-kofi-btn {
+  display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+  width: 100%; padding: 0.65rem;
+  background: transparent; color: #a0a0a0;
+  border: 1px dashed #30363d; border-radius: 8px; font-weight: 500;
+  font-size: 0.85rem; text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+  margin-top: 0.5rem;
+}
+.cv-kofi-btn:hover { border-color: #c8a96e; color: #c8a96e; }
+
 /* ── Preview Panel ─────────────────────────────────────── */
 .cv-preview-col {
   position: sticky;
@@ -472,6 +495,13 @@ input[type="month"]:disabled { opacity: 0.35; }
       </svg>
       Scarica PDF
     </button>
+    <button class="cv-reset-btn" onclick="resetCV()" title="Cancella tutto e ricomincia da zero">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.64"/></svg>
+      Nuovo CV
+    </button>
+    <a class="cv-kofi-btn" href="https://ko-fi.com/dem420156" target="_blank" rel="noopener noreferrer">
+      ☕ Offrimi un caffè
+    </a>
   </div>
 
   <!-- ── PREVIEW COLUMN ───────────────────────── -->
@@ -886,6 +916,65 @@ function renderCV() {
   `;
 
   scalePreview();
+  saveToStorage();
+}
+
+/* ── LocalStorage ───────────────────────────────────────── */
+const STORAGE_KEY = 'cv_data_v1';
+
+function saveToStorage() {
+  const data = {
+    fields: {},
+    photo: state.photo,
+    skills: state.skills,
+    themeIdx: THEMES.indexOf(state.theme),
+    entries: {}
+  };
+  ['f-nome','f-cognome','f-titolo','f-email','f-tel','f-citta','f-linkedin','f-sito','f-profilo']
+    .forEach(id => { const el = document.getElementById(id); if (el) data.fields[id] = el.value; });
+  ['exp','edu','proj','vol','pub','lang','cert','award'].forEach(type => {
+    const list = document.getElementById(`${type}-list`);
+    if (!list) return;
+    data.entries[type] = Array.from(list.querySelectorAll('.entry-card')).map(card => ({
+      vals: Array.from(card.querySelectorAll('input:not([type="checkbox"]), textarea')).map(i => i.value),
+      present: card.querySelector('.present-check')?.checked || false
+    }));
+  });
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+}
+
+function loadFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    if (data.themeIdx >= 0 && data.themeIdx < THEMES.length) state.theme = THEMES[data.themeIdx];
+    if (Array.isArray(data.skills)) state.skills = data.skills;
+    if (data.photo) state.photo = data.photo;
+    ['exp','edu','proj','vol','pub','lang','cert','award'].forEach(type => {
+      const entries = data.entries?.[type];
+      if (!entries?.length) return;
+      entries.forEach(() => addEntry(type));
+      const cards = document.getElementById(`${type}-list`)?.querySelectorAll('.entry-card');
+      entries.forEach((entry, i) => {
+        const card = cards?.[i]; if (!card) return;
+        const inputs = card.querySelectorAll('input:not([type="checkbox"]), textarea');
+        entry.vals.forEach((val, j) => { if (inputs[j]) inputs[j].value = val; });
+        const check = card.querySelector('.present-check');
+        if (check && entry.present) { check.checked = true; check.dispatchEvent(new Event('change')); }
+      });
+    });
+    if (data.fields) Object.entries(data.fields).forEach(([id, val]) => {
+      const el = document.getElementById(id); if (el) el.value = val;
+    });
+    return true;
+  } catch(e) { return false; }
+}
+
+function resetCV() {
+  if (!confirm('Cancellare tutti i dati e ricominciare da zero?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
 }
 
 /* ── Scale preview to fit container ────────────────────── */
@@ -994,9 +1083,22 @@ async function downloadPDF() {
 
 /* ── Init ───────────────────────────────────────────────── */
 buildSwatches();
-addEntry('exp');
-addEntry('edu');
-addEntry('lang');
+const restored = loadFromStorage();
+if (!restored) {
+  addEntry('exp');
+  addEntry('edu');
+  addEntry('lang');
+}
+if (restored) {
+  // Re-sync theme swatches and skill tags after restore
+  const themeIdx = THEMES.indexOf(state.theme);
+  document.querySelectorAll('.theme-swatch').forEach((s, i) => s.classList.toggle('active', i === themeIdx));
+  renderTags();
+  if (state.photo) {
+    const img = document.getElementById('photo-preview');
+    if (img) { img.src = state.photo; img.style.display = 'block'; }
+  }
+}
 renderCV();
 // Ensure preview is correctly scaled after first paint
 requestAnimationFrame(scalePreview);
