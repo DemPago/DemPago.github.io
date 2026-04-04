@@ -288,8 +288,6 @@ input[type="month"]:disabled { opacity: 0.35; }
 /* Skills */
 .cv-skills-list { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 .cv-skill-badge {
-  background: color-mix(in srgb, var(--cv-primary, #0f3460) 12%, transparent);
-  color: var(--cv-primary, #0f3460);
   border-radius: 20px; padding: 0.15rem 0.6rem;
   font-size: 0.75rem; font-weight: 500;
 }
@@ -473,12 +471,12 @@ input[type="month"]:disabled { opacity: 0.35; }
 <script>
 /* ── State ─────────────────────────────────────────────── */
 const THEMES = [
-  { name: 'Navy',     primary: '#0f3460', header: '#1a1a2e', headerGrad: '#16213e' },
-  { name: 'Foresta',  primary: '#1a6b4a', header: '#0d2e1e', headerGrad: '#0a2416' },
-  { name: 'Bordeaux', primary: '#7b1c3a', header: '#2e0d18', headerGrad: '#200910' },
-  { name: 'Ardesia',  primary: '#374151', header: '#111827', headerGrad: '#1f2937' },
-  { name: 'Rame',     primary: '#92400e', header: '#1c0a00', headerGrad: '#2d1200' },
-  { name: 'Viola',    primary: '#4c1d95', header: '#1e0a3c', headerGrad: '#2d1060' },
+  { name: 'Navy',     primary: '#0f3460', header: '#1a1a2e', headerGrad: '#16213e', badgeBg: 'rgba(15,52,96,0.12)'   },
+  { name: 'Foresta',  primary: '#1a6b4a', header: '#0d2e1e', headerGrad: '#0a2416', badgeBg: 'rgba(26,107,74,0.12)'  },
+  { name: 'Bordeaux', primary: '#7b1c3a', header: '#2e0d18', headerGrad: '#200910', badgeBg: 'rgba(123,28,58,0.12)'  },
+  { name: 'Ardesia',  primary: '#374151', header: '#111827', headerGrad: '#1f2937', badgeBg: 'rgba(55,65,81,0.12)'   },
+  { name: 'Rame',     primary: '#92400e', header: '#1c0a00', headerGrad: '#2d1200', badgeBg: 'rgba(146,64,14,0.12)'  },
+  { name: 'Viola',    primary: '#4c1d95', header: '#1e0a3c', headerGrad: '#2d1060', badgeBg: 'rgba(76,29,149,0.12)'  },
 ];
 
 const state = {
@@ -813,7 +811,9 @@ function renderCV() {
 
   /* -- skills & languages -- */
   const skillsHTML = state.skills.length
-    ? `<div class="cv-skills-list">${state.skills.map(s => `<span class="cv-skill-badge">${s}</span>`).join('')}</div>`
+    ? `<div class="cv-skills-list">${state.skills.map(s =>
+        `<span class="cv-skill-badge" style="background:${state.theme.badgeBg};color:${state.theme.primary}">${s}</span>`
+      ).join('')}</div>`
     : '';
 
   const langHTML = languages.length
