@@ -9,27 +9,45 @@ permalink: /about/
 
 <a href="/" style="display:inline-flex;align-items:center;gap:0.4rem;font-size:0.85rem;color:var(--text-muted);text-decoration:none;margin-bottom:1.5rem;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">&#8592; Home</a>
 
-<img src="/profilo.png" alt="Demetrio Ferraro" style="width:96px;height:96px;border-radius:50%;object-fit:cover;display:block;margin:0 0 1.5rem 0;">
+<img src="/profilo.png" alt="Demetrio Ferraro" style="width:96px;height:96px;border-radius:50%;object-fit:cover;display:block;margin:0 0 1.25rem 0;">
 
-# Chi sono
-
+<p style="font-size:1.05rem;line-height:1.75;margin-bottom:1rem;">
 Ho 8 anni, scarto il mio primo computer — un 486 a 80 MHz — e invece di trovare i giochi mi trovo in mano il manuale del DOS. L'ho letto. Da lì non mi sono fermato più.
+</p>
 
+<p style="font-size:1.05rem;line-height:1.75;margin-bottom:1rem;">
 Questo blog è il mio modo di restituire qualcosa: provo a dare una visione del tech che sia meno rigida e più utile. Non gergo, non hype — solo punti di vista che spero facciano pensare.
+</p>
 
+<p style="font-size:1.05rem;line-height:1.75;margin-bottom:2rem;">
 L'AI è il futuro, il presente, e ormai quasi il passato di questa rivoluzione. Chi non ci sale su adesso, resta a guardare. Let's rock.
+</p>
 
----
+<div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:2rem;">
+  <a href="/app/curriculum/" style="display:flex;align-items:center;gap:1rem;padding:0.9rem 1.1rem;background:var(--card);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+    <span style="font-size:1.4rem;line-height:1;">&#128196;</span>
+    <div>
+      <div style="font-weight:600;font-size:0.95rem;">Generatore CV</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.15rem;">CV professionale con anteprima live e export PDF</div>
+    </div>
+  </a>
+  <a href="/app/cover-letter/" style="display:flex;align-items:center;gap:1rem;padding:0.9rem 1.1rem;background:var(--card);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+    <span style="font-size:1.4rem;line-height:1;">&#9993;</span>
+    <div>
+      <div style="font-weight:600;font-size:0.95rem;">Lettera di Presentazione</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.15rem;">Lettera in italiano o inglese con tono personalizzato</div>
+    </div>
+  </a>
+  <a href="/app/ip-tool/" style="display:flex;align-items:center;gap:1rem;padding:0.9rem 1.1rem;background:var(--card);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+    <span style="font-size:1.4rem;line-height:1;">&#127760;</span>
+    <div>
+      <div style="font-weight:600;font-size:0.95rem;">IP Tool</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.15rem;">Il tuo IP pubblico e calcolatore CIDR / subnet</div>
+    </div>
+  </a>
+</div>
 
-Ho costruito qualche tool gratuito che uso direttamente — tutto gira nel browser, nessun dato inviato:
-
-- [**Generatore CV**](/app/curriculum/) — CV professionale con anteprima live e export PDF
-- [**Lettera di Presentazione**](/app/cover-letter/) — lettera in IT/EN con tono personalizzato
-- [**IP Tool**](/app/ip-tool/) — scopri il tuo IP pubblico e calcola subnet e CIDR
-
----
-
-<div class="social-links" style="margin-top:0.5rem;">
+<div class="social-links">
   <a href="https://github.com/DemPago" target="_blank" rel="noopener noreferrer" title="GitHub" aria-label="GitHub">
     <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
   </a>
