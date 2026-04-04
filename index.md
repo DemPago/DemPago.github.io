@@ -132,8 +132,41 @@ title: Home
   </p>
   <ul class="post-grid">
     <li class="post-card">
-      <a href="/app/curriculum/" class="post-card-cover" style="height:160px;background:linear-gradient(135deg,#1a1a2e,#0f3460);display:flex;align-items:center;justify-content:center;">
-        <span style="font-size:3rem;">📄</span>
+      <a href="/app/curriculum/" class="post-card-cover" style="height:160px;background:#fff;display:block;overflow:hidden;padding:12px 14px;box-sizing:border-box;text-decoration:none;">
+        <!-- Mini CV mockup -->
+        <div style="display:flex;gap:8px;align-items:flex-start;height:100%;">
+          <div style="flex-shrink:0;">
+            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a1a2e,#0f3460);"></div>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="height:7px;width:70%;background:#1a1a2e;border-radius:3px;margin-bottom:4px;"></div>
+            <div style="height:5px;width:45%;background:#0f3460;border-radius:3px;opacity:0.5;margin-bottom:8px;"></div>
+            <div style="display:flex;gap:4px;margin-bottom:8px;">
+              <div style="height:4px;width:30%;background:#e5e7eb;border-radius:2px;"></div>
+              <div style="height:4px;width:25%;background:#e5e7eb;border-radius:2px;"></div>
+              <div style="height:4px;width:20%;background:#e5e7eb;border-radius:2px;"></div>
+            </div>
+            <div style="height:4px;width:100%;background:#f3f4f6;border-radius:2px;margin-bottom:3px;"></div>
+            <div style="height:4px;width:90%;background:#f3f4f6;border-radius:2px;margin-bottom:3px;"></div>
+            <div style="height:4px;width:80%;background:#f3f4f6;border-radius:2px;margin-bottom:8px;"></div>
+            <div style="display:flex;gap:6px;">
+              <div style="flex:2;">
+                <div style="height:4px;width:50%;background:#0f3460;border-radius:2px;margin-bottom:4px;opacity:0.7;"></div>
+                <div style="height:3px;width:100%;background:#f3f4f6;border-radius:2px;margin-bottom:2px;"></div>
+                <div style="height:3px;width:85%;background:#f3f4f6;border-radius:2px;margin-bottom:2px;"></div>
+                <div style="height:3px;width:95%;background:#f3f4f6;border-radius:2px;"></div>
+              </div>
+              <div style="flex:1;border-left:1px solid #e5e7eb;padding-left:6px;">
+                <div style="height:4px;width:70%;background:#0f3460;border-radius:2px;margin-bottom:4px;opacity:0.7;"></div>
+                <div style="display:flex;flex-wrap:wrap;gap:2px;">
+                  <div style="height:10px;width:28px;background:rgba(15,52,96,0.1);border-radius:10px;"></div>
+                  <div style="height:10px;width:22px;background:rgba(15,52,96,0.1);border-radius:10px;"></div>
+                  <div style="height:10px;width:32px;background:rgba(15,52,96,0.1);border-radius:10px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </a>
       <div class="post-card-content">
         <span class="post-card-category cat-tech">Tool</span>
