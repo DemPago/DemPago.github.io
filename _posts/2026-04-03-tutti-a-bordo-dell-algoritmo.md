@@ -12,7 +12,11 @@ Ciao! Bentornati su **Tech Illuminato**.
 
 Amici, immaginatevi sul molo di Southampton, aprile 1912. Ma invece del fumo nero delle caldaie a carbone, sentite il ronzio bianco di migliaia di ventole che raffreddano chip al silicio. La nave non è di ferro, è di algoritmi. E tutti – dai miliardari in prima classe ai sognatori di terza – si accalcano per salire. "Questa non affonda," giurano i costruttori. "È troppo intelligente per naufragare."
 
-Nel 2026, stiamo rivivendo quella stessa hybris. L'AI non è un software: è un gigante di ferro e silicio che sfida i limiti del cervello umano. E noi? Saliamo a bordo, ignorando i piccoli scricchiolii che potrebbero rivelarsi iceberg.
+L'umanità ha già visto questo film. Quattro volte.
+
+**Prima rivoluzione industriale, 1760**: il vapore batte il muscolo. I telai meccanici distruggono il lavoro dei tessitori. Gli operai bruciano le macchine — i Luddisti — convinti che l'innovazione sia il nemico. Ma il mondo va avanti. **Seconda rivoluzione, 1870**: l'elettricità batte il buio. Edison contro Tesla, corrente continua contro alternata, mentre le città si illuminano e le fabbriche non si fermano più. **Terza rivoluzione, 1969–1990**: internet batte la distanza. Le informazioni viaggiano alla velocità della luce e qualcuno — in un garage — diventa miliardario. Ogni volta, gli stessi ingredienti: un'invenzione che "cambierà tutto", ottimismo isterico, qualcuno che giura che è "assolutamente sicuro". E qualcuno che paga il prezzo di quella certezza.
+
+Il Titanic era il figlio più ambizioso della seconda rivoluzione industriale — il pinnacolo dell'ingegneria a vapore. Inaffondabile per design, invincibile per hybris. Oggi, nel 2026, stiamo costruendo la quarta rivoluzione. L'AI è il nostro Titanic. E noi? Saliamo a bordo, ignorando i piccoli scricchiolii che potrebbero rivelarsi iceberg.
 
 ---
 
@@ -79,9 +83,12 @@ else:
     print("Rischio contenuto — ma tieni sempre il binocolo puntato.")
 ```
 
-<div class="esempio-tech">🎬 <strong>Guarda il video:</strong> <a href="https://www.youtube.com/watch?v=p4kCQOceAX8" target="_blank" rel="noopener noreferrer">L'AI ci sostituirà tutti? Un parallelo con il progresso tecnologico</a> — riflessioni sul rischio e l'ottimismo.</div>
+<div class="esempio-tech">
+🎬 <strong>Guarda il video:</strong> L'AI ci sostituirà tutti? Un parallelo con il progresso tecnologico — riflessioni sul rischio e l'ottimismo.
+<br><br>
+<iframe width="100%" height="360" src="https://www.youtube.com/embed/p4kCQOceAX8" title="L'AI ci sostituirà tutti?" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="border-radius: 8px;"></iframe>
+</div>
 
-![Iceberg in mare — il pericolo nascosto dietro l'ottimismo AI](https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800)
 
 ---
 
