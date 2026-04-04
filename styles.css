@@ -1045,3 +1045,42 @@ footer .copyright {
   opacity: 0.6;
 }
 
+/* ── Accordion (tool: CV, Cover Letter) ────────────────── */
+.acc-item {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 0.4rem;
+  overflow: hidden;
+}
+.acc-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 0.9rem;
+  background: var(--card);
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: color 0.15s, background 0.15s;
+}
+.acc-header:hover { color: var(--text); background: rgba(88,166,255,0.05); }
+.acc-item.acc-open > .acc-header { color: var(--text); border-bottom: 1px solid var(--border); }
+.acc-icon {
+  width: 14px; height: 14px;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.acc-item.acc-open > .acc-header .acc-icon { transform: rotate(180deg); }
+.acc-body {
+  display: none;
+  padding: 1rem 0.9rem 0.75rem;
+}
+.acc-item.acc-open > .acc-body { display: block; }
+

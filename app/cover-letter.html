@@ -21,17 +21,7 @@ permalink: /app/cover-letter/
 /* ── Form ──────────────────────────────────────────────── */
 .cl-form-col { display: flex; flex-direction: column; gap: 0; }
 
-.cl-section-title {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin: 1.5rem 0 0.6rem;
-  padding-bottom: 0.4rem;
-  border-bottom: 1px solid var(--border);
-}
-.cl-section-title:first-child { margin-top: 0; }
+/* Accordion sections defined globally in styles.css */
 
 .cl-field { margin-bottom: 0.75rem; }
 .cl-field label {
@@ -248,73 +238,107 @@ permalink: /app/cover-letter/
       <button class="cl-banner-close" onclick="document.getElementById('cl-cv-banner').hidden=true" aria-label="Chiudi">&#x2715;</button>
     </div>
 
-    <p class="cl-section-title">Dati personali</p>
-    <div class="cl-row2">
-      <div class="cl-field">
-        <label>Nome *</label>
-        <input type="text" id="cl-nome" placeholder="Mario" oninput="renderLetter()">
+    <!-- Accordion: Dati personali (open by default) -->
+    <div class="acc-item acc-open" id="acc-dati">
+      <button class="acc-header" onclick="toggleAcc(this)">
+        Dati personali
+        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="cl-row2">
+          <div class="cl-field">
+            <label>Nome *</label>
+            <input type="text" id="cl-nome" placeholder="Mario" oninput="renderLetter()">
+          </div>
+          <div class="cl-field">
+            <label>Cognome *</label>
+            <input type="text" id="cl-cognome" placeholder="Rossi" oninput="renderLetter()">
+          </div>
+        </div>
+        <div class="cl-row2">
+          <div class="cl-field">
+            <label>Email</label>
+            <input type="email" id="cl-email" placeholder="mario@email.com" oninput="renderLetter()">
+          </div>
+          <div class="cl-field">
+            <label>Telefono</label>
+            <input type="tel" id="cl-tel" placeholder="+39 333 000 0000" oninput="renderLetter()">
+          </div>
+        </div>
+        <div class="cl-field">
+          <label>Città</label>
+          <input type="text" id="cl-citta" placeholder="Milano" oninput="renderLetter()">
+        </div>
       </div>
-      <div class="cl-field">
-        <label>Cognome *</label>
-        <input type="text" id="cl-cognome" placeholder="Rossi" oninput="renderLetter()">
-      </div>
-    </div>
-    <div class="cl-row2">
-      <div class="cl-field">
-        <label>Email</label>
-        <input type="email" id="cl-email" placeholder="mario@email.com" oninput="renderLetter()">
-      </div>
-      <div class="cl-field">
-        <label>Telefono</label>
-        <input type="tel" id="cl-tel" placeholder="+39 333 000 0000" oninput="renderLetter()">
-      </div>
-    </div>
-    <div class="cl-field">
-      <label>Città</label>
-      <input type="text" id="cl-citta" placeholder="Milano" oninput="renderLetter()">
     </div>
 
-    <p class="cl-section-title">Posizione</p>
-    <div class="cl-field">
-      <label>Ruolo cercato *</label>
-      <input type="text" id="cl-ruolo" placeholder="Product Manager" oninput="renderLetter()">
-    </div>
-    <div class="cl-field">
-      <label>Azienda *</label>
-      <input type="text" id="cl-azienda" placeholder="Acme Srl" oninput="renderLetter()">
-    </div>
-    <div class="cl-field">
-      <label>Referente <span style="color:var(--text-muted);font-size:0.75rem;">(opzionale)</span></label>
-      <input type="text" id="cl-referente" placeholder="Responsabile Selezione" oninput="renderLetter()">
-    </div>
-
-    <p class="cl-section-title">Stile</p>
-    <span class="cl-toggle-label">Tono</span>
-    <div class="cl-toggle-group" id="tone-group">
-      <button class="cl-toggle-btn active" data-tone="formale" onclick="setTone('formale')">Formale</button>
-      <button class="cl-toggle-btn" data-tone="semi" onclick="setTone('semi')">Semi-formale</button>
-      <button class="cl-toggle-btn" data-tone="creativo" onclick="setTone('creativo')">Creativo</button>
-    </div>
-    <span class="cl-toggle-label">Lingua</span>
-    <div class="cl-toggle-group" id="lang-group">
-      <button class="cl-toggle-btn active" data-lang="it" onclick="setLang('it')">&#127470;&#127481; Italiano</button>
-      <button class="cl-toggle-btn" data-lang="en" onclick="setLang('en')">&#127468;&#127463; English</button>
+    <!-- Accordion: Posizione -->
+    <div class="acc-item" id="acc-posizione">
+      <button class="acc-header" onclick="toggleAcc(this)">
+        Posizione
+        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="cl-field">
+          <label>Ruolo cercato *</label>
+          <input type="text" id="cl-ruolo" placeholder="Product Manager" oninput="renderLetter()">
+        </div>
+        <div class="cl-field">
+          <label>Azienda *</label>
+          <input type="text" id="cl-azienda" placeholder="Acme Srl" oninput="renderLetter()">
+        </div>
+        <div class="cl-field">
+          <label>Referente <span style="color:var(--text-muted);font-size:0.75rem;">(opzionale)</span></label>
+          <input type="text" id="cl-referente" placeholder="Responsabile Selezione" oninput="renderLetter()">
+        </div>
+      </div>
     </div>
 
-    <p class="cl-section-title">
-      Motivazioni
-      <span style="font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;font-size:0.8rem;"> — scegli fino a 3</span>
-    </p>
-    <div class="kw-hint" id="kw-hint">Seleziona le ragioni che ti spingono a candidarti — verranno integrate nel testo in modo naturale.</div>
-    <div class="kw-grid" id="kw-grid"></div>
+    <!-- Accordion: Stile -->
+    <div class="acc-item" id="acc-stile">
+      <button class="acc-header" onclick="toggleAcc(this)">
+        Stile
+        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="acc-body">
+        <span class="cl-toggle-label">Tono</span>
+        <div class="cl-toggle-group" id="tone-group">
+          <button class="cl-toggle-btn active" data-tone="formale" onclick="setTone('formale')">Formale</button>
+          <button class="cl-toggle-btn" data-tone="semi" onclick="setTone('semi')">Semi-formale</button>
+          <button class="cl-toggle-btn" data-tone="creativo" onclick="setTone('creativo')">Creativo</button>
+        </div>
+        <span class="cl-toggle-label">Lingua</span>
+        <div class="cl-toggle-group" id="lang-group">
+          <button class="cl-toggle-btn active" data-lang="it" onclick="setLang('it')">&#127470;&#127481; Italiano</button>
+          <button class="cl-toggle-btn" data-lang="en" onclick="setLang('en')">&#127468;&#127463; English</button>
+        </div>
+      </div>
+    </div>
 
-    <p class="cl-section-title">
-      Valore aggiunto
-      <span style="font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;font-size:0.8rem;"> — opzionale</span>
-    </p>
-    <div class="cl-field">
-      <label>Competenze chiave, punti di forza <span style="color:var(--text-muted);font-size:0.75rem;" id="valore-count">(0/300)</span></label>
-      <textarea id="cl-valore" placeholder="Es. Ho 5 anni di esperienza nella gestione di team agile e ho guidato lanci di prodotto con +30% di conversione rispetto al benchmark..." maxlength="300" oninput="renderLetter(); updateValoreCount()"></textarea>
+    <!-- Accordion: Motivazioni -->
+    <div class="acc-item" id="acc-motivazioni">
+      <button class="acc-header" onclick="toggleAcc(this)">
+        Motivazioni <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.75rem;opacity:0.7;">— scegli fino a 3</span>
+        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="kw-hint" id="kw-hint">Seleziona le ragioni che ti spingono a candidarti — verranno integrate nel testo in modo naturale.</div>
+        <div class="kw-grid" id="kw-grid"></div>
+      </div>
+    </div>
+
+    <!-- Accordion: Valore aggiunto -->
+    <div class="acc-item" id="acc-valore">
+      <button class="acc-header" onclick="toggleAcc(this)">
+        Valore aggiunto <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.75rem;opacity:0.7;">— opzionale</span>
+        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="cl-field">
+          <label>Competenze chiave, punti di forza <span style="color:var(--text-muted);font-size:0.75rem;" id="valore-count">(0/300)</span></label>
+          <textarea id="cl-valore" placeholder="Es. Ho 5 anni di esperienza nella gestione di team agile e ho guidato lanci di prodotto con +30% di conversione rispetto al benchmark..." maxlength="300" oninput="renderLetter(); updateValoreCount()"></textarea>
+        </div>
+      </div>
     </div>
 
     <div class="cl-actions">
@@ -891,10 +915,21 @@ function loadFromStorage() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return false;
     const data = JSON.parse(raw);
-    if (data.fields) Object.entries(data.fields).forEach(([id, val]) => {
-      const el = document.getElementById(id); if (el) el.value = val;
-    });
-    if (Array.isArray(data.keywords)) data.keywords.forEach(id => clState.keywords.add(id));
+    if (data.fields) {
+      Object.entries(data.fields).forEach(([id, val]) => {
+        const el = document.getElementById(id); if (el) el.value = val;
+      });
+      // Auto-open accordions that have data
+      const datiIds = ['cl-nome','cl-cognome','cl-email','cl-tel','cl-citta'];
+      const posizioneIds = ['cl-ruolo','cl-azienda','cl-referente'];
+      if (datiIds.some(id => data.fields[id])) document.getElementById('acc-dati')?.classList.add('acc-open');
+      if (posizioneIds.some(id => data.fields[id])) document.getElementById('acc-posizione')?.classList.add('acc-open');
+      if (data.fields['cl-valore']) document.getElementById('acc-valore')?.classList.add('acc-open');
+    }
+    if (Array.isArray(data.keywords) && data.keywords.length > 0) {
+      data.keywords.forEach(id => clState.keywords.add(id));
+      document.getElementById('acc-motivazioni')?.classList.add('acc-open');
+    }
     if (data.tone) clState.tone = data.tone;
     if (data.lang) clState.lang = data.lang;
     return true;
@@ -920,6 +955,7 @@ function loadFromCV() {
       const el  = document.getElementById(clId);
       if (val && el && !el.value) { el.value = val; imported = true; }
     });
+    if (imported) document.getElementById('acc-dati')?.classList.add('acc-open');
     return imported;
   } catch(e) { return false; }
 }

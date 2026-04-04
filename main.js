@@ -378,3 +378,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initTags();
   }
 });
+
+/* ── Accordion toggle (used in CV + Cover Letter tools) ── */
+function toggleAcc(btn) {
+  btn.closest('.acc-item').classList.toggle('acc-open');
+}
