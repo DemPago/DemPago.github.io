@@ -7,15 +7,17 @@ permalink: /about/
 
 <div class="post-content">
 
+<a href="/" style="display:inline-flex;align-items:center;gap:0.4rem;font-size:0.85rem;color:var(--text-muted);text-decoration:none;margin-bottom:1.5rem;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">&#8592; Home</a>
+
 <img src="/profilo.png" alt="Demetrio Ferraro" style="width:96px;height:96px;border-radius:50%;object-fit:cover;display:block;margin:0 0 1.5rem 0;">
 
 # Chi sono
 
-Nell'informatica da quando, a 8 anni, scartai il mio primo computer — un 486 a 80 MHz. Cercavo i giochi e mi ritrovai a leggere il manuale del DOS. Da lì non mi sono più fermato.
+Ho 8 anni, scarto il mio primo computer — un 486 a 80 MHz — e invece di trovare i giochi mi trovo in mano il manuale del DOS. L'ho letto. Da lì non mi sono fermato più.
 
-Qui provo a dare una visione diversa: meno tecnicamente rigida, più socialmente utile. La tecnologia non è solo roba da nerd — è il modo in cui il mondo cambia, e capirla prima degli altri fa la differenza.
+Questo blog è il mio modo di restituire qualcosa: provo a dare una visione del tech che sia meno rigida e più utile. Non gergo, non hype — solo punti di vista che spero facciano pensare.
 
-L'AI è il futuro, il presente, e quasi già il passato. Chi non la abbraccia ora resta indietro. Now let's rock.
+L'AI è il futuro, il presente, e ormai quasi il passato di questa rivoluzione. Chi non ci sale su adesso, resta a guardare. Let's rock.
 
 ---
 
