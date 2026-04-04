@@ -20,6 +20,8 @@ L'umanità ha già visto questo film. Quattro volte.
 
 **Seconda rivoluzione, 1870** — l'elettricità batte il buio. Edison contro Tesla, corrente continua contro alternata, mentre le città si illuminano e le fabbriche non si fermano più.
 
+![La seconda rivoluzione industriale — elettricità, Edison e Tesla](/seconda_rivoluzione_industriale.png)
+
 **Terza rivoluzione, 1969–1990** — internet batte la distanza. Le informazioni viaggiano alla velocità della luce e qualcuno — in un garage — diventa miliardario.
 
 Ogni volta, gli stessi ingredienti: un'invenzione che "cambierà tutto", ottimismo isterico, qualcuno che giura che è "assolutamente sicuro". E qualcuno che paga il prezzo di quella certezza.
