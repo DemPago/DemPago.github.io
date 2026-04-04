@@ -688,34 +688,43 @@ input[type="month"]:disabled { opacity: 0.35; }
       </div>
     </div>
 
-    <button class="cv-download-btn" id="downloadBtn" onclick="downloadPDF()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-      </svg>
-      Scarica PDF
-    </button>
-    <div class="cv-json-row">
-      <button class="cv-json-btn" onclick="exportJSON()" title="Scarica i dati del CV in formato JSON">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Esporta dati
+    <!-- Accordion: Azioni (open by default) -->
+    <div class="acc-item acc-open" id="acc-azioni">
+      <button class="acc-header" onclick="toggleAcc(this)">
+        Azioni
+        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
-      <button class="cv-json-btn" onclick="importJSON()" title="Ripristina i dati del CV da un file JSON">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="3" x2="12" y2="15"/><polyline points="17 8 12 3 7 8"/></svg>
-        Importa dati
-      </button>
-      <button class="cv-json-btn" onclick="downloadTemplate()" title="Scarica un file JSON di esempio per capire la struttura">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
-        Template
-      </button>
+      <div class="acc-body">
+        <button class="cv-download-btn" id="downloadBtn" onclick="downloadPDF()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Scarica PDF
+        </button>
+        <div class="cv-json-row">
+          <button class="cv-json-btn" onclick="exportJSON()" title="Scarica i dati del CV in formato JSON">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Esporta dati
+          </button>
+          <button class="cv-json-btn" onclick="importJSON()" title="Ripristina i dati del CV da un file JSON">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="3" x2="12" y2="15"/><polyline points="17 8 12 3 7 8"/></svg>
+            Importa dati
+          </button>
+          <button class="cv-json-btn" onclick="downloadTemplate()" title="Scarica un file JSON di esempio per capire la struttura">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+            Template
+          </button>
+        </div>
+        <input type="file" id="json-import-input" accept=".json" style="display:none" onchange="handleJSONImport(event)">
+        <button class="cv-reset-btn" onclick="resetCV()" title="Cancella tutto e ricomincia da zero">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.64"/></svg>
+          Nuovo CV
+        </button>
+        <a class="cv-kofi-btn" href="https://ko-fi.com/dem420156" target="_blank" rel="noopener noreferrer">
+          ☕ Offrimi un caffè
+        </a>
+      </div>
     </div>
-    <input type="file" id="json-import-input" accept=".json" style="display:none" onchange="handleJSONImport(event)">
-    <button class="cv-reset-btn" onclick="resetCV()" title="Cancella tutto e ricomincia da zero">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.64"/></svg>
-      Nuovo CV
-    </button>
-    <a class="cv-kofi-btn" href="https://ko-fi.com/dem420156" target="_blank" rel="noopener noreferrer">
-      ☕ Offrimi un caffè
-    </a>
   </div>
 
   <!-- ── PREVIEW COLUMN ───────────────────────── -->
