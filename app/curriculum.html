@@ -1,0 +1,725 @@
+---
+layout: app
+title: Generatore CV
+description: Crea il tuo curriculum vitae professionale e scaricalo in PDF con un click.
+permalink: /app/curriculum/
+---
+
+<style>
+/* ── Layout principale ─────────────────────────────────── */
+.cv-app {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .cv-app { grid-template-columns: 1fr; }
+  .cv-preview-col { order: -1; }
+}
+
+/* ── Form ──────────────────────────────────────────────── */
+.cv-form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.cv-section-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 1.5rem 0 0.6rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+.cv-section-title:first-child { margin-top: 0; }
+
+.cv-field {
+  margin-bottom: 0.75rem;
+}
+
+.cv-field label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.cv-field input,
+.cv-field textarea,
+.cv-field select {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+}
+
+.cv-field input:focus,
+.cv-field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.cv-field textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+.cv-row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+/* Photo upload */
+.photo-upload-area {
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  position: relative;
+}
+.photo-upload-area:hover { border-color: var(--accent); }
+.photo-upload-area input[type="file"] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.photo-preview {
+  width: 70px; height: 70px; border-radius: 50%;
+  object-fit: cover; border: 2px solid var(--accent);
+  display: none; margin: 0 auto 0.5rem;
+}
+.photo-placeholder { color: var(--text-muted); font-size: 0.85rem; }
+
+/* Dynamic entries */
+.entries-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+.entry-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  position: relative;
+}
+
+.entry-remove {
+  position: absolute; top: 0.5rem; right: 0.5rem;
+  background: none; border: none; color: var(--text-muted);
+  cursor: pointer; font-size: 1.1rem; line-height: 1;
+  transition: color 0.2s;
+}
+.entry-remove:hover { color: #f85149; }
+
+.add-entry-btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: none; border: 1px dashed var(--border);
+  color: var(--accent); border-radius: 6px;
+  padding: 0.5rem 1rem; font-size: 0.85rem; font-family: inherit;
+  cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  margin-top: 0.5rem;
+}
+.add-entry-btn:hover { border-color: var(--accent); background: rgba(88,166,255,0.06); }
+
+/* Skills / Languages */
+.tags-input-wrap { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+.skill-tag {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: rgba(88,166,255,0.12); color: var(--accent);
+  border-radius: 20px; padding: 0.2rem 0.6rem; font-size: 0.8rem;
+}
+.skill-tag button {
+  background: none; border: none; color: inherit; cursor: pointer;
+  font-size: 0.9rem; line-height: 1; padding: 0;
+}
+.tag-input {
+  background: none; border: none; color: var(--text);
+  font-family: inherit; font-size: 0.85rem; min-width: 120px;
+  padding: 0.2rem 0.4rem; outline: none;
+}
+
+/* Download button */
+.cv-download-btn {
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  width: 100%; padding: 0.9rem;
+  background: var(--accent); color: #0d1117;
+  border: none; border-radius: 8px; font-weight: 700;
+  font-size: 1rem; font-family: inherit; cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  margin-top: 1.5rem;
+}
+.cv-download-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.cv-download-btn:active { transform: translateY(0); }
+.cv-download-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* ── Preview Panel ─────────────────────────────────────── */
+.cv-preview-col {
+  position: sticky;
+  top: 1rem;
+}
+
+.cv-preview-label {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem;
+}
+
+.cv-preview-wrap {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  /* A4 aspect ratio at preview width */
+  aspect-ratio: 210 / 297;
+  overflow-y: auto;
+}
+
+/* ── CV Template (rendered inside preview + exported) ── */
+#cv-template {
+  background: #fff;
+  color: #1a1a2e;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  width: 794px; /* A4 @ 96dpi */
+  min-height: 1123px;
+  padding: 0;
+  box-sizing: border-box;
+  transform-origin: top left;
+}
+
+.cv-header-block {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: white;
+  padding: 2rem 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.cv-photo {
+  width: 90px; height: 90px; border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255,255,255,0.3);
+  flex-shrink: 0;
+  display: none;
+}
+
+.cv-name-block {}
+.cv-name-block h1 {
+  font-size: 1.6rem; font-weight: 700; margin: 0;
+  color: #ffffff; line-height: 1.2;
+}
+.cv-name-block .cv-title {
+  font-size: 0.95rem; color: rgba(255,255,255,0.7);
+  margin-top: 0.2rem; font-weight: 400;
+}
+
+.cv-contact-bar {
+  background: #0f3460;
+  padding: 0.5rem 2.5rem;
+  display: flex; flex-wrap: wrap; gap: 1.5rem;
+  font-size: 0.78rem; color: rgba(255,255,255,0.85);
+}
+.cv-contact-item { display: flex; align-items: center; gap: 0.3rem; }
+
+.cv-body {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0;
+  padding: 1.5rem 2.5rem;
+}
+
+.cv-main-col { padding-right: 1.5rem; }
+.cv-side-col {
+  border-left: 1px solid #e5e7eb;
+  padding-left: 1.5rem;
+}
+
+.cv-section {
+  margin-bottom: 1.4rem;
+}
+
+.cv-section-head {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: #0f3460;
+  border-bottom: 2px solid #0f3460;
+  padding-bottom: 0.2rem; margin-bottom: 0.7rem;
+}
+
+.cv-profile-text {
+  font-size: 0.85rem; color: #374151; line-height: 1.6;
+}
+
+/* Experience / Education entries */
+.cv-entry { margin-bottom: 1rem; }
+.cv-entry-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: 0.5rem;
+}
+.cv-entry-title { font-weight: 700; font-size: 0.9rem; color: #1a1a2e; }
+.cv-entry-period { font-size: 0.75rem; color: #6b7280; white-space: nowrap; flex-shrink: 0; }
+.cv-entry-sub { font-size: 0.8rem; color: #4b5563; margin-top: 0.1rem; font-style: italic; }
+.cv-entry-desc { font-size: 0.82rem; color: #374151; margin-top: 0.3rem; line-height: 1.5; }
+
+/* Skills */
+.cv-skills-list { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.cv-skill-badge {
+  background: rgba(15,52,96,0.08); color: #0f3460;
+  border-radius: 20px; padding: 0.15rem 0.6rem;
+  font-size: 0.75rem; font-weight: 500;
+}
+
+/* Languages */
+.cv-lang-item { display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.82rem; }
+.cv-lang-name { color: #1a1a2e; font-weight: 600; }
+.cv-lang-level { color: #6b7280; }
+
+.cv-placeholder { color: #9ca3af; font-size: 0.82rem; font-style: italic; }
+
+/* Preview scaling */
+.cv-preview-wrap {
+  overflow: hidden;
+}
+.cv-preview-scaler {
+  transform-origin: top left;
+  width: 794px;
+}
+</style>
+
+<div class="cv-app">
+
+  <!-- ── FORM COLUMN ─────────────────────────── -->
+  <div class="cv-form-col">
+
+    <p class="cv-section-title">Dati personali</p>
+
+    <div style="margin-bottom:0.75rem;">
+      <label style="display:block;font-size:0.8rem;color:var(--text-muted);margin-bottom:0.4rem;">Foto profilo</label>
+      <div class="photo-upload-area" id="photoArea">
+        <input type="file" accept="image/*" id="photoInput">
+        <img class="photo-preview" id="photoPreview" alt="Foto profilo">
+        <div class="photo-placeholder" id="photoPlaceholder">Clicca per caricare una foto</div>
+      </div>
+    </div>
+
+    <div class="cv-row2">
+      <div class="cv-field">
+        <label>Nome *</label>
+        <input type="text" id="f-nome" placeholder="Mario" oninput="renderCV()">
+      </div>
+      <div class="cv-field">
+        <label>Cognome *</label>
+        <input type="text" id="f-cognome" placeholder="Rossi" oninput="renderCV()">
+      </div>
+    </div>
+
+    <div class="cv-field">
+      <label>Titolo professionale</label>
+      <input type="text" id="f-titolo" placeholder="es. Senior Software Engineer" oninput="renderCV()">
+    </div>
+
+    <div class="cv-row2">
+      <div class="cv-field">
+        <label>Email</label>
+        <input type="email" id="f-email" placeholder="mario@email.com" oninput="renderCV()">
+      </div>
+      <div class="cv-field">
+        <label>Telefono</label>
+        <input type="tel" id="f-tel" placeholder="+39 333 1234567" oninput="renderCV()">
+      </div>
+    </div>
+
+    <div class="cv-row2">
+      <div class="cv-field">
+        <label>Citta</label>
+        <input type="text" id="f-citta" placeholder="Milano, Italia" oninput="renderCV()">
+      </div>
+      <div class="cv-field">
+        <label>LinkedIn</label>
+        <input type="text" id="f-linkedin" placeholder="linkedin.com/in/..." oninput="renderCV()">
+      </div>
+    </div>
+
+    <div class="cv-field">
+      <label>Sito / Portfolio</label>
+      <input type="text" id="f-sito" placeholder="https://..." oninput="renderCV()">
+    </div>
+
+    <p class="cv-section-title">Profilo</p>
+    <div class="cv-field">
+      <textarea id="f-profilo" placeholder="Scrivi 3-5 righe su chi sei e cosa ti rende unico..." oninput="renderCV()"></textarea>
+    </div>
+
+    <p class="cv-section-title">Esperienze lavorative</p>
+    <div class="entries-list" id="exp-list"></div>
+    <button class="add-entry-btn" onclick="addEntry('exp')">+ Aggiungi esperienza</button>
+
+    <p class="cv-section-title">Istruzione</p>
+    <div class="entries-list" id="edu-list"></div>
+    <button class="add-entry-btn" onclick="addEntry('edu')">+ Aggiungi titolo</button>
+
+    <p class="cv-section-title">Competenze</p>
+    <div class="cv-field">
+      <div class="tags-input-wrap" id="skills-wrap">
+        <input class="tag-input" id="skill-input" placeholder="Scrivi e premi Invio..." onkeydown="addTag(event,'skills')">
+      </div>
+    </div>
+
+    <p class="cv-section-title">Lingue</p>
+    <div class="entries-list" id="lang-list"></div>
+    <button class="add-entry-btn" onclick="addEntry('lang')">+ Aggiungi lingua</button>
+
+    <button class="cv-download-btn" id="downloadBtn" onclick="downloadPDF()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Scarica PDF
+    </button>
+  </div>
+
+  <!-- ── PREVIEW COLUMN ───────────────────────── -->
+  <div class="cv-preview-col">
+    <div class="cv-preview-label">Anteprima live</div>
+    <div class="cv-preview-wrap" id="previewWrap">
+      <div class="cv-preview-scaler" id="previewScaler">
+        <div id="cv-template">
+          <!-- rendered by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CDN libs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+/* ── State ─────────────────────────────────────────────── */
+const state = {
+  photo: null,          // base64 data URL
+  skills: [],
+};
+
+/* ── Entry templates ───────────────────────────────────── */
+let expCount = 0, eduCount = 0, langCount = 0;
+
+function addEntry(type) {
+  if (type === 'exp') {
+    const id = expCount++;
+    const div = document.createElement('div');
+    div.className = 'entry-card';
+    div.id = `exp-${id}`;
+    div.innerHTML = `
+      <button class="entry-remove" onclick="removeEl('exp-${id}');renderCV()" title="Rimuovi">&times;</button>
+      <div class="cv-row2">
+        <div class="cv-field"><label>Ruolo *</label><input type="text" placeholder="Senior Dev" oninput="renderCV()"></div>
+        <div class="cv-field"><label>Azienda *</label><input type="text" placeholder="Acme Srl" oninput="renderCV()"></div>
+      </div>
+      <div class="cv-row2">
+        <div class="cv-field"><label>Da</label><input type="text" placeholder="Gen 2020" oninput="renderCV()"></div>
+        <div class="cv-field"><label>A</label><input type="text" placeholder="Oggi" oninput="renderCV()"></div>
+      </div>
+      <div class="cv-field"><label>Descrizione</label><textarea placeholder="Attivita svolte, risultati, tecnologie..." oninput="renderCV()"></textarea></div>
+    `;
+    document.getElementById('exp-list').appendChild(div);
+  } else if (type === 'edu') {
+    const id = eduCount++;
+    const div = document.createElement('div');
+    div.className = 'entry-card';
+    div.id = `edu-${id}`;
+    div.innerHTML = `
+      <button class="entry-remove" onclick="removeEl('edu-${id}');renderCV()" title="Rimuovi">&times;</button>
+      <div class="cv-row2">
+        <div class="cv-field"><label>Titolo *</label><input type="text" placeholder="Laurea Magistrale in Informatica" oninput="renderCV()"></div>
+        <div class="cv-field"><label>Istituto *</label><input type="text" placeholder="Universita di Bologna" oninput="renderCV()"></div>
+      </div>
+      <div class="cv-row2">
+        <div class="cv-field"><label>Da</label><input type="text" placeholder="2016" oninput="renderCV()"></div>
+        <div class="cv-field"><label>A</label><input type="text" placeholder="2018" oninput="renderCV()"></div>
+      </div>
+      <div class="cv-field"><label>Note</label><textarea placeholder="Voto, tesi, specializzazione..." oninput="renderCV()"></textarea></div>
+    `;
+    document.getElementById('edu-list').appendChild(div);
+  } else if (type === 'lang') {
+    const id = langCount++;
+    const div = document.createElement('div');
+    div.className = 'entry-card';
+    div.id = `lang-${id}`;
+    div.innerHTML = `
+      <button class="entry-remove" onclick="removeEl('lang-${id}');renderCV()" title="Rimuovi">&times;</button>
+      <div class="cv-row2">
+        <div class="cv-field"><label>Lingua *</label><input type="text" placeholder="Inglese" oninput="renderCV()"></div>
+        <div class="cv-field"><label>Livello</label><input type="text" placeholder="C1 / Madrelingua" oninput="renderCV()"></div>
+      </div>
+    `;
+    document.getElementById('lang-list').appendChild(div);
+  }
+  renderCV();
+}
+
+function removeEl(id) { document.getElementById(id)?.remove(); }
+
+/* ── Tags (skills) ─────────────────────────────────────── */
+function addTag(e, type) {
+  if (e.key !== 'Enter' && e.key !== ',') return;
+  e.preventDefault();
+  const input = document.getElementById('skill-input');
+  const val = input.value.trim().replace(/,$/, '');
+  if (!val) return;
+  state.skills.push(val);
+  input.value = '';
+  renderTags();
+  renderCV();
+}
+
+function removeTag(type, idx) {
+  state.skills.splice(idx, 1);
+  renderTags();
+  renderCV();
+}
+
+function renderTags() {
+  const wrap = document.getElementById('skills-wrap');
+  const input = document.getElementById('skill-input');
+  // remove old tags
+  wrap.querySelectorAll('.skill-tag').forEach(t => t.remove());
+  state.skills.forEach((s, i) => {
+    const tag = document.createElement('span');
+    tag.className = 'skill-tag';
+    tag.innerHTML = `${s}<button onclick="removeTag('skills',${i})" title="Rimuovi">&times;</button>`;
+    wrap.insertBefore(tag, input);
+  });
+}
+
+/* ── Collect data from DOM ─────────────────────────────── */
+function collectEntries(listId, fields) {
+  const cards = document.querySelectorAll(`#${listId} .entry-card`);
+  return Array.from(cards).map(card => {
+    const inputs = card.querySelectorAll('input, textarea');
+    const obj = {};
+    fields.forEach((f, i) => { obj[f] = inputs[i]?.value.trim() || ''; });
+    return obj;
+  });
+}
+
+function v(id) { return document.getElementById(id)?.value.trim() || ''; }
+
+/* ── Build CV HTML ─────────────────────────────────────── */
+function renderCV() {
+  const nome = v('f-nome');
+  const cognome = v('f-cognome');
+  const fullName = [nome, cognome].filter(Boolean).join(' ') || 'Il tuo nome';
+
+  const contacts = [
+    v('f-email') && `<span class="cv-contact-item">✉ ${v('f-email')}</span>`,
+    v('f-tel')   && `<span class="cv-contact-item">☎ ${v('f-tel')}</span>`,
+    v('f-citta') && `<span class="cv-contact-item">📍 ${v('f-citta')}</span>`,
+    v('f-linkedin') && `<span class="cv-contact-item">in ${v('f-linkedin')}</span>`,
+    v('f-sito')  && `<span class="cv-contact-item">🌐 ${v('f-sito')}</span>`,
+  ].filter(Boolean).join('');
+
+  const photoSrc = state.photo;
+
+  const experiences = collectEntries('exp-list', ['role','company','from','to','desc']);
+  const educations  = collectEntries('edu-list',  ['degree','school','from','to','note']);
+  const languages   = collectEntries('lang-list',  ['lang','level']);
+
+  const expHTML = experiences.length
+    ? experiences.map(e => `
+        <div class="cv-entry">
+          <div class="cv-entry-header">
+            <span class="cv-entry-title">${e.role || '<em>Ruolo</em>'}</span>
+            <span class="cv-entry-period">${[e.from, e.to].filter(Boolean).join(' – ')}</span>
+          </div>
+          ${e.company ? `<div class="cv-entry-sub">${e.company}</div>` : ''}
+          ${e.desc    ? `<div class="cv-entry-desc">${e.desc.replace(/\n/g,'<br>')}</div>` : ''}
+        </div>`).join('')
+    : '<p class="cv-placeholder">Nessuna esperienza aggiunta.</p>';
+
+  const eduHTML = educations.length
+    ? educations.map(e => `
+        <div class="cv-entry">
+          <div class="cv-entry-header">
+            <span class="cv-entry-title">${e.degree || '<em>Titolo</em>'}</span>
+            <span class="cv-entry-period">${[e.from, e.to].filter(Boolean).join(' – ')}</span>
+          </div>
+          ${e.school ? `<div class="cv-entry-sub">${e.school}</div>` : ''}
+          ${e.note   ? `<div class="cv-entry-desc">${e.note}</div>` : ''}
+        </div>`).join('')
+    : '<p class="cv-placeholder">Nessuna istruzione aggiunta.</p>';
+
+  const skillsHTML = state.skills.length
+    ? `<div class="cv-skills-list">${state.skills.map(s => `<span class="cv-skill-badge">${s}</span>`).join('')}</div>`
+    : '<p class="cv-placeholder">Nessuna competenza aggiunta.</p>';
+
+  const langHTML = languages.length
+    ? languages.map(l => `
+        <div class="cv-lang-item">
+          <span class="cv-lang-name">${l.lang}</span>
+          <span class="cv-lang-level">${l.level}</span>
+        </div>`).join('')
+    : '<p class="cv-placeholder">Nessuna lingua aggiunta.</p>';
+
+  const profilo = v('f-profilo');
+
+  document.getElementById('cv-template').innerHTML = `
+    <div class="cv-header-block">
+      ${photoSrc ? `<img class="cv-photo" src="${photoSrc}" alt="Foto" style="display:block">` : ''}
+      <div class="cv-name-block">
+        <h1>${fullName}</h1>
+        ${v('f-titolo') ? `<div class="cv-title">${v('f-titolo')}</div>` : ''}
+      </div>
+    </div>
+    ${contacts ? `<div class="cv-contact-bar">${contacts}</div>` : ''}
+    <div class="cv-body">
+      <div class="cv-main-col">
+        ${profilo ? `
+          <div class="cv-section">
+            <div class="cv-section-head">Profilo</div>
+            <div class="cv-profile-text">${profilo.replace(/\n/g,'<br>')}</div>
+          </div>` : ''}
+        <div class="cv-section">
+          <div class="cv-section-head">Esperienza</div>
+          ${expHTML}
+        </div>
+        <div class="cv-section">
+          <div class="cv-section-head">Istruzione</div>
+          ${eduHTML}
+        </div>
+      </div>
+      <div class="cv-side-col">
+        <div class="cv-section">
+          <div class="cv-section-head">Competenze</div>
+          ${skillsHTML}
+        </div>
+        <div class="cv-section">
+          <div class="cv-section-head">Lingue</div>
+          ${langHTML}
+        </div>
+      </div>
+    </div>
+  `;
+
+  scalePreview();
+}
+
+/* ── Scale preview to fit container ────────────────────── */
+function scalePreview() {
+  const wrap = document.getElementById('previewWrap');
+  const scaler = document.getElementById('previewScaler');
+  const W = 794; // template width
+  const available = wrap.clientWidth;
+  if (!available) return;
+  const scale = available / W;
+  scaler.style.transform = `scale(${scale})`;
+  scaler.style.height = `${1123 * scale}px`; // keep A4 height
+  wrap.style.height = `${1123 * scale}px`;
+  wrap.style.aspectRatio = 'unset';
+}
+
+window.addEventListener('resize', scalePreview);
+
+/* ── Photo upload ───────────────────────────────────────── */
+document.getElementById('photoInput').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    state.photo = e.target.result;
+    document.getElementById('photoPreview').src = e.target.result;
+    document.getElementById('photoPreview').style.display = 'block';
+    document.getElementById('photoPlaceholder').style.display = 'none';
+    renderCV();
+  };
+  reader.readAsDataURL(file);
+});
+
+/* ── PDF Download ───────────────────────────────────────── */
+async function downloadPDF() {
+  const btn = document.getElementById('downloadBtn');
+  btn.disabled = true;
+  btn.textContent = 'Generazione PDF...';
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const template = document.getElementById('cv-template');
+
+    // Temporarily remove scale transform for accurate capture
+    const scaler = document.getElementById('previewScaler');
+    const oldTransform = scaler.style.transform;
+    scaler.style.transform = 'scale(1)';
+
+    const canvas = await html2canvas(template, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      width: 794,
+      windowWidth: 794,
+    });
+
+    scaler.style.transform = oldTransform;
+
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4',
+    });
+
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    const pdfW = pdf.internal.pageSize.getWidth();
+    const pdfH = pdf.internal.pageSize.getHeight();
+
+    // If content is taller than one page, scale to fit
+    const ratio = canvas.height / canvas.width;
+    const imgH = pdfW * ratio;
+
+    if (imgH <= pdfH) {
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, imgH);
+    } else {
+      // Multi-page: split at page boundary
+      const pageH = pdfH;
+      const pxPerPage = (canvas.width * pageH) / pdfW;
+      let yOffset = 0;
+      while (yOffset < canvas.height) {
+        const pageCanvas = document.createElement('canvas');
+        pageCanvas.width = canvas.width;
+        pageCanvas.height = Math.min(pxPerPage, canvas.height - yOffset);
+        const ctx = pageCanvas.getContext('2d');
+        ctx.drawImage(canvas, 0, -yOffset);
+        if (yOffset > 0) pdf.addPage();
+        pdf.addImage(pageCanvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, pdfW, pageH);
+        yOffset += pxPerPage;
+      }
+    }
+
+    const nome = v('f-nome') || 'curriculum';
+    const cognome = v('f-cognome') || '';
+    pdf.save(`CV_${nome}_${cognome}.pdf`.replace(/\s+/g, '_'));
+
+  } catch (err) {
+    console.error('Errore PDF:', err);
+    alert('Errore nella generazione del PDF. Riprova.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Scarica PDF`;
+  }
+}
+
+/* ── Init ───────────────────────────────────────────────── */
+// Start with one experience and one education entry
+addEntry('exp');
+addEntry('edu');
+addEntry('lang');
+renderCV();
+</script>

@@ -11,6 +11,9 @@ title: Home
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-business" id="tab-business" data-tab="business">
       🏢 Business
     </button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tools" id="tab-tools" data-tab="tools">
+      🛠️ Strumenti
+    </button>
     <div class="tab-indicator" aria-hidden="true"></div>
   </div>
 </div>
@@ -120,5 +123,20 @@ title: Home
       </li>
       {% endif %}
   {% endfor %}
+  </ul>
+</div>
+
+<div class="tab-panel" id="panel-tools" role="tabpanel" aria-labelledby="tab-tools" hidden>
+  <ul class="post-grid">
+    <li class="post-card">
+      <a href="/app/curriculum/" class="post-card-cover" style="height:160px;background:linear-gradient(135deg,#1a1a2e,#0f3460);display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:3rem;">📄</span>
+      </a>
+      <div class="post-card-content">
+        <span class="post-card-category cat-tech">Tool</span>
+        <h3><a href="/app/curriculum/">Generatore CV</a></h3>
+        <p class="post-card-desc">Crea il tuo curriculum vitae professionale con anteprima live e scaricalo in PDF con un click.</p>
+      </div>
+    </li>
   </ul>
 </div>
