@@ -19,13 +19,11 @@ permalink: /about/
 
 ## Chi sono
 
-IT Service Manager con esperienza su App IO e le piattaforme trasversali di PagoPA.
+Nell'informatica da quando, a 8 anni, scartai il mio primo computer — un 486 a 80 MHz. Cercavo i giochi e mi ritrovai a leggere il manuale del DOS. Da lì non mi sono più fermato.
 
-Ho costruito il mio percorso partendo dall'help desk di 1° livello fino alla coordinazione di team tecnici eterogenei, passando per il supporto specialistico, il focal point L2 e la gestione operativa. Nel tempo ho sviluppato una visione a tutto campo dei servizi IT: dalla trincea del troubleshooting fino alla governance dei processi.
+Qui provo a dare una visione diversa: meno tecnicamente rigida, più socialmente utile. La tecnologia non è solo roba da nerd — è il modo in cui il mondo cambia, e capirla prima degli altri fa la differenza.
 
-Oggi coordino le attività di monitoraggio e supporto per le piattaforme trasversali PagoPA e App IO, con focus su continuità operativa, incident management e miglioramento continuo. Lavoro con Scrum, gestisco escalation e stakeholder, e tengo in piedi la documentazione tecnica — anche quella che nessuno vuole scrivere.
-
-Sul fronte tecnico: Azure, Python, Java, SQL/NoSQL, API REST, integrazione di sistemi. Sul fronte umano: mi piace formare le persone nuove e costruire team che funzionano davvero.
+L'AI è il futuro, il presente, e quasi già il passato. Chi non la abbraccia ora resta indietro. Now let's rock.
 
 ---
 
