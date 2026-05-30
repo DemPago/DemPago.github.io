@@ -5,7 +5,7 @@ description: "Il mondo AI misura tutto in token al secondo e benchmark di veloci
 date: 2026-05-30
 categories: tech
 tags: [AI, LLM, Performance, Architettura]
-cover: /telodiceDem.png
+cover: https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&auto=format&fit=crop
 ---
 
 <p class="post-intro">Ciao! Bentornati su <strong>Tech Illuminato</strong>.</p>
@@ -75,6 +75,8 @@ Qui la questione si fa interessante per chi costruisce sistemi. I token non sono
 ```python
 # Stima del costo mensile di un sistema RAG con GPT-4o (maggio 2026)
 # Prezzi indicativi: input $2.50/1M token, output $10.00/1M token
+# Nota: i prezzi reali sono ormai più bassi grazie alla guerra dei prezzi tra provider,
+# ma questi valori restano utili come upper bound per una stima conservativa.
 
 richieste_al_giorno = 10_000
 token_input_medi = 1_500   # contesto + documento recuperato + domanda utente
@@ -211,7 +213,7 @@ Se stai costruendo qualcosa con gli LLM, queste sono le metriche che secondo me 
 
 1. **Task Success Rate** — la percentuale di richieste che producono un output utilizzabile senza revisione
 2. **Cost per correct output** — costo totale diviso per i task risolti correttamente
-3. **Time to first useful token** — non il throughput, ma quanto aspetta l'utente prima di vedere qualcosa di utile
+3. **Time to First Token (TTFT)** — non il throughput, ma quanto aspetta l'utente prima di vedere il primo carattere. Un modello che genera 200 tok/s ma impiega 3 secondi prima di iniziare è percepito come lento da qualsiasi utente umano. Il TTFT è la metrica psicologicamente più rilevante: il cervello interpreta il silenzio iniziale come "sta pensando ancora", e oltre i 2 secondi la fiducia nel sistema cala. Throughput alto con TTFT alto è come un ristorante velocissimo in cucina che però ti fa aspettare 10 minuti prima di portarti il menu.
 4. **Error recovery rate** — quanto spesso il sistema si corregge da solo senza intervento umano
 
 I benchmark di velocità sono utili per confrontare infrastrutture. Non sono utili per decidere se il tuo prodotto funziona.
