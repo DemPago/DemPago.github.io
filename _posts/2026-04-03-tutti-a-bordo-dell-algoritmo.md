@@ -191,7 +191,7 @@ Questo è l'inizio. Nel prossimo episodio, parleremo di come navigare queste acq
 
 Portiamo luce.
 
-> 💡 *Te lo spiega Dem* — **Grey Jedi Tip:** La prossima volta che usate un'AI, ascoltate i scricchiolii. Potrebbero essere iceberg.
+> 💡 *Te lo spiega Dem* — **Grey Jedi Tip:** La prossima volta che usate un'AI, ascoltate gli scricchiolii. Potrebbero essere iceberg.
 
 ---
 

@@ -4,6 +4,7 @@ title: "Agile Reloaded: la storia, i numeri e il futuro"
 description: "Dai 17 sviluppatori dell'Utah all'AI: come Agile è diventata la metodologia più importante dello sviluppo software."
 date: 2026-02-20
 categories: tech
+tags: [Agile, Scrum, Dev, Metodologie]
 cover: https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800
 ---
 
@@ -104,7 +105,7 @@ Il risultato? Il **Manifesto Agile** (4 valori):
 I dati parlano chiaro:
 
 - **94%** delle aziende tech usa Agile (State of Agile Report 2025)
-- **$2.5 trilioni** di valore generato annually grazie a metodologie agili
+- **$2.5 trilioni** di valore generato annualmente grazie a metodologie agili
 - **3x** più probabilità di consegnare in tempo rispetto a metodi tradizionali
 - **85%** dei team che usano DevOps (che è Agile-driven) rilasciano ogni giorno
 

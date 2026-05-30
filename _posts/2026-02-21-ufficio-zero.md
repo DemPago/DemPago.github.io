@@ -4,6 +4,7 @@ title: "Ufficio Zero: dove inizia ogni azienda"
 description: "Startup, PMI o freelance? L'importanza di partire dal problema, non dalla formula legale. Guida al primo passo."
 date: 2026-02-21
 categories: business
+tags: [Business, Startup, PMI, Freelance]
 cover: https://images.unsplash.com/photo-1553484771-371a605b060b?w=800
 ---
 
@@ -56,7 +57,7 @@ Prima di assumere qualcuno o aprire un ufficio, esiste una fase dove "tutti fann
 | Contabilità | Founder (o commercialista) |
 | Pulizia ufficio | Founder 😅 |
 
-L'importante è capire che **è normale**. Amazon è iniziata nel garage di Jeff Bezos. Google nella garage di Larry e Sergey.
+L'importante è capire che **è normale**. Amazon è iniziata nel garage di Jeff Bezos. Google nel garage di Larry e Sergey.
 
 ---
 

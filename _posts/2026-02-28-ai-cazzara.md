@@ -4,10 +4,9 @@ title: "L'AI \"Cazzara\": Perché i modelli linguistici inventano la realtà?"
 description: "Spesso restiamo a bocca aperta davanti all'AI. Poi afferma che i gatti cucinano lasagne verdi nel lago. Ecco perché succede davvero."
 date: 2026-02-28
 categories: tech
+tags: [AI, LLM, Allucinazioni, RAG]
 cover: /ai-cazzara-cover.jpg
 ---
-
-![Illustrazione: un robot che parla con sicurezza mentre inventa fatti assurdi](/ai-cazzara-thumb.jpeg)
 
 <p class="post-intro">Ciao! Bentornati su <strong>Tech Illuminato</strong>.</p>
 
