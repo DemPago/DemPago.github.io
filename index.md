@@ -280,6 +280,16 @@ title: Home
         <p class="post-card-desc">Verifica se un codice SDI è presente nell'Indice delle PA abilitate alla fatturazione elettronica. Dati ufficiali iPA, aggiornati ogni 24h.</p>
       </div>
     </li>
+    <li class="post-card">
+      <a href="/app/lancio-moneta/" class="post-card-cover" style="height:160px;background:radial-gradient(circle at 40% 40%,#f5e6a0,#c8a84b 45%,#7a5c1e);display:block;overflow:hidden;display:flex;align-items:center;justify-content:center;text-decoration:none;">
+        <div style="font-size:5rem;line-height:1;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5));">🪙</div>
+      </a>
+      <div class="post-card-content">
+        <span class="post-card-category cat-tech">Tool</span>
+        <h3><a href="/app/lancio-moneta/">Lancia la Moneta</a></h3>
+        <p class="post-card-desc">Testa o croce? Una moneta da 2 euro con animazione 3D. Tiene il conto dei lanci.</p>
+      </div>
+    </li>
   </ul>
 </div>
 

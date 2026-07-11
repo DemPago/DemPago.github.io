@@ -1,0 +1,363 @@
+---
+layout: app
+title: Lancia la Moneta
+description: Testa o croce? Lancia una moneta da 2 euro e scopri il risultato. Pura fortuna, niente trucchi.
+permalink: /app/lancio-moneta/
+---
+
+<style>
+/* ── Layout ───────────────────────────────────────────────── */
+.coin-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  max-width: 480px;
+  margin: 0 auto;
+  padding-top: 1rem;
+}
+
+/* ── Coin stage ───────────────────────────────────────────── */
+.coin-stage {
+  perspective: 900px;
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.coin {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.05s linear;
+}
+
+/* Faces */
+.coin-face {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ── TESTA — lato italiano Dante ────────────────────────── */
+.coin-testa {
+  background: radial-gradient(circle at 38% 38%, #f5e6a0, #c8a84b 45%, #a07828 70%, #7a5c1e);
+  box-shadow:
+    inset 0 3px 8px rgba(255,255,255,0.35),
+    inset 0 -3px 8px rgba(0,0,0,0.4),
+    0 6px 24px rgba(0,0,0,0.5);
+  border: 3px solid #8a6520;
+}
+
+.coin-testa svg {
+  width: 130px;
+  height: 130px;
+  opacity: 0.92;
+}
+
+/* ── CROCE — lato europeo ──────────────────────────────── */
+.coin-croce {
+  background: radial-gradient(circle at 62% 38%, #f5e6a0, #c8a84b 45%, #a07828 70%, #7a5c1e);
+  box-shadow:
+    inset 0 3px 8px rgba(255,255,255,0.35),
+    inset 0 -3px 8px rgba(0,0,0,0.4),
+    0 6px 24px rgba(0,0,0,0.5);
+  transform: rotateY(180deg);
+  border: 3px solid #8a6520;
+}
+
+.coin-croce svg {
+  width: 150px;
+  height: 150px;
+  opacity: 0.92;
+}
+
+/* ── Rim ─────────────────────────────────────────────────── */
+.coin-rim {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: 0 0 0 6px #9a7230, 0 0 0 7px #c8a84b, 0 0 0 9px #7a5c1e;
+  pointer-events: none;
+}
+
+/* ── Flip animation ──────────────────────────────────────── */
+@keyframes flip-coin {
+  0%   { transform: rotateY(0deg); }
+  100% { transform: rotateY(var(--flip-end)); }
+}
+
+.coin.flipping {
+  animation: flip-coin var(--flip-duration) cubic-bezier(0.4, 0.0, 0.6, 1.0) forwards;
+}
+
+/* ── Button ──────────────────────────────────────────────── */
+.coin-btn {
+  padding: 0.85rem 2.5rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  letter-spacing: 0.02em;
+}
+.coin-btn:hover  { opacity: 0.85; }
+.coin-btn:active { transform: scale(0.97); }
+.coin-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* ── Result ──────────────────────────────────────────────── */
+.coin-result {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  min-height: 3rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.coin-result.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.coin-result.testa { color: #c8a84b; }
+.coin-result.croce { color: #c8a84b; }
+
+/* ── Stats ───────────────────────────────────────────────── */
+.coin-stats {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+.stat-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.stat-value {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Hint ────────────────────────────────────────────────── */
+.coin-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.5;
+}
+</style>
+
+<div class="coin-app">
+
+  <!-- Moneta -->
+  <div class="coin-stage" onclick="lancia()" title="Clicca per lanciare">
+    <div class="coin" id="coin">
+      <!-- TESTA: Dante Alighieri (versione italiana 2€) -->
+      <div class="coin-face coin-testa">
+        <svg viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
+          <!-- Cerchio esterno decorativo -->
+          <circle cx="65" cy="65" r="60" fill="none" stroke="#7a5c1e" stroke-width="1.5" opacity="0.6"/>
+          <!-- Testa di Dante stilizzata di profilo -->
+          <g fill="#5c3d0e" opacity="0.85">
+            <!-- Cappello/corona d'alloro -->
+            <ellipse cx="65" cy="28" rx="22" ry="5" fill="#7a5c1e" opacity="0.7"/>
+            <path d="M43 28 Q55 18 65 16 Q75 18 87 28 Q80 24 65 22 Q50 24 43 28Z" fill="#6b4e18"/>
+            <!-- Foglie alloro -->
+            <ellipse cx="44" cy="30" rx="5" ry="2.5" transform="rotate(-30 44 30)" fill="#5a8a30" opacity="0.8"/>
+            <ellipse cx="50" cy="25" rx="5" ry="2.5" transform="rotate(-15 50 25)" fill="#5a8a30" opacity="0.8"/>
+            <ellipse cx="86" cy="30" rx="5" ry="2.5" transform="rotate(30 86 30)" fill="#5a8a30" opacity="0.8"/>
+            <ellipse cx="80" cy="25" rx="5" ry="2.5" transform="rotate(15 80 25)" fill="#5a8a30" opacity="0.8"/>
+            <!-- Profilo testa -->
+            <path d="M72 32 Q85 36 88 50 Q90 62 85 74 Q80 84 72 88 Q68 92 65 92 Q58 90 54 86 Q48 80 46 70 Q43 58 46 48 Q50 36 60 32 Q65 30 72 32Z"/>
+            <!-- Naso pronunciato (caratteristico di Dante) -->
+            <path d="M80 55 Q88 60 86 66 Q84 68 80 66 Q82 62 80 55Z" fill="#4a2e08"/>
+            <!-- Occhio -->
+            <ellipse cx="77" cy="52" rx="4" ry="3" fill="#3a2008"/>
+            <ellipse cx="78" cy="51" rx="1.5" ry="1.2" fill="#1a0e04"/>
+            <!-- Sopracciglio -->
+            <path d="M73 47 Q77 45 82 47" stroke="#4a2e08" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <!-- Bocca chiusa -->
+            <path d="M68 76 Q72 74 75 76" stroke="#4a2e08" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <!-- Mento -->
+            <path d="M65 88 Q68 92 66 95" stroke="#5c3d0e" stroke-width="1.5" fill="none"/>
+            <!-- Orecchio -->
+            <path d="M46 58 Q42 62 43 68 Q44 72 47 70" fill="#5c3d0e"/>
+          </g>
+          <!-- Testo ITALIA -->
+          <text x="65" y="113" text-anchor="middle" font-size="9" font-weight="700"
+                fill="#5c3d0e" font-family="serif" letter-spacing="3">ITALIA</text>
+          <!-- Anno -->
+          <text x="65" y="123" text-anchor="middle" font-size="7" fill="#7a5c1e"
+                font-family="serif" letter-spacing="1">2€</text>
+          <!-- Stella decorativa -->
+          <text x="32" y="72" font-size="7" fill="#7a5c1e" opacity="0.6">✦</text>
+          <text x="93" y="72" font-size="7" fill="#7a5c1e" opacity="0.6">✦</text>
+        </svg>
+      </div>
+
+      <!-- CROCE: Europa -->
+      <div class="coin-face coin-croce">
+        <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+          <!-- Sfondo -->
+          <circle cx="75" cy="75" r="68" fill="none" stroke="#7a5c1e" stroke-width="1.5" opacity="0.5"/>
+          <!-- Europa stilizzata -->
+          <g transform="translate(75,72) scale(0.55)">
+            <!-- Massa continentale Europa semplificata -->
+            <path d="M-20,-65 Q0,-70 20,-60 Q40,-50 45,-30 Q50,-10 40,10
+                     Q35,25 20,35 Q10,40 0,38 Q-15,42 -25,30
+                     Q-35,18 -30,5 Q-38,-5 -42,-20
+                     Q-45,-40 -35,-55 Q-28,-63 -20,-65Z"
+                  fill="#5c3d0e" opacity="0.75"/>
+            <!-- Penisola iberica -->
+            <path d="M-40,-10 Q-50,0 -48,15 Q-45,25 -35,20 Q-28,15 -30,5 Q-35,-5 -40,-10Z"
+                  fill="#5c3d0e" opacity="0.7"/>
+            <!-- Penisola scandinava -->
+            <path d="M10,-65 Q20,-80 25,-75 Q30,-65 28,-55 Q20,-60 10,-65Z"
+                  fill="#5c3d0e" opacity="0.7"/>
+            <path d="M25,-75 Q35,-85 38,-78 Q40,-68 35,-60 Q30,-65 25,-75Z"
+                  fill="#5c3d0e" opacity="0.65"/>
+            <!-- Italia (penisola) -->
+            <path d="M5,20 Q15,18 18,30 Q20,42 15,52 Q10,55 7,50 Q3,40 5,20Z"
+                  fill="#5c3d0e" opacity="0.7"/>
+            <!-- Grecia -->
+            <path d="M20,28 Q28,25 30,35 Q28,42 22,40 Q18,35 20,28Z"
+                  fill="#5c3d0e" opacity="0.65"/>
+          </g>
+          <!-- Stelle UE (12 stelle in cerchio) -->
+          <g fill="#d4a017" opacity="0.9">
+            <text x="75"  y="18"  text-anchor="middle" font-size="8">★</text>
+            <text x="104" y="27"  text-anchor="middle" font-size="8">★</text>
+            <text x="120" y="52"  text-anchor="middle" font-size="8">★</text>
+            <text x="118" y="82"  text-anchor="middle" font-size="8">★</text>
+            <text x="104" y="108" text-anchor="middle" font-size="8">★</text>
+            <text x="75"  y="120" text-anchor="middle" font-size="8">★</text>
+            <text x="46"  y="108" text-anchor="middle" font-size="8">★</text>
+            <text x="32"  y="82"  text-anchor="middle" font-size="8">★</text>
+            <text x="30"  y="52"  text-anchor="middle" font-size="8">★</text>
+            <text x="46"  y="27"  text-anchor="middle" font-size="8">★</text>
+            <text x="62"  y="16"  text-anchor="middle" font-size="7">★</text>
+            <text x="88"  y="16"  text-anchor="middle" font-size="7">★</text>
+          </g>
+          <!-- 2 EURO testo -->
+          <text x="75" y="143" text-anchor="middle" font-size="10" font-weight="700"
+                fill="#5c3d0e" font-family="serif" letter-spacing="2">2 EURO</text>
+        </svg>
+      </div>
+
+      <div class="coin-rim"></div>
+    </div>
+  </div>
+
+  <!-- Risultato -->
+  <div class="coin-result" id="coin-result"></div>
+
+  <!-- Bottone -->
+  <button class="coin-btn" id="coin-btn" onclick="lancia()">🪙 Lancia la moneta</button>
+
+  <!-- Stats -->
+  <div class="coin-stats">
+    <div class="stat-item">
+      <span class="stat-label">Testa</span>
+      <span class="stat-value" id="stat-testa">0</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Lanci</span>
+      <span class="stat-value" id="stat-totale">0</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Croce</span>
+      <span class="stat-value" id="stat-croce">0</span>
+    </div>
+  </div>
+
+  <p class="coin-hint">Clicca la moneta o il bottone per lanciarla</p>
+
+</div>
+
+<script>
+let isFlipping = false;
+let currentFace = 'testa'; // testa = 0°, croce = 180°
+let totalRotation = 0;
+let stats = { testa: 0, croce: 0 };
+
+function lancia() {
+  if (isFlipping) return;
+  isFlipping = true;
+
+  const btn = document.getElementById('coin-btn');
+  const resultEl = document.getElementById('coin-result');
+  const coin = document.getElementById('coin');
+
+  btn.disabled = true;
+  resultEl.classList.remove('show');
+
+  // Decide risultato
+  const isTesta = Math.random() < 0.5;
+
+  // Calcola rotazione finale
+  // Testa = rotazione pari a multiplo di 360
+  // Croce = rotazione pari a multiplo di 360 + 180
+  const giri = 5 + Math.floor(Math.random() * 4); // 5-8 giri completi
+  const extraGradi = isTesta ? 0 : 180;
+  // Normalizza dalla posizione corrente
+  const currentMod = totalRotation % 360;
+  let targetMod = isTesta ? 0 : 180;
+  // Assicura che ruoti sempre in avanti
+  let delta = targetMod - currentMod;
+  if (delta < 0) delta += 360;
+  const endRotation = totalRotation + (giri * 360) + delta;
+
+  const duration = 1800 + Math.random() * 600; // 1.8-2.4s
+
+  coin.style.setProperty('--flip-end', endRotation + 'deg');
+  coin.style.setProperty('--flip-duration', duration + 'ms');
+  coin.style.removeProperty('transform');
+  coin.classList.add('flipping');
+
+  setTimeout(() => {
+    coin.classList.remove('flipping');
+    totalRotation = endRotation;
+    coin.style.transform = `rotateY(${endRotation}deg)`;
+    currentFace = isTesta ? 'testa' : 'croce';
+
+    // Aggiorna stats
+    stats[currentFace]++;
+    document.getElementById('stat-testa').textContent = stats.testa;
+    document.getElementById('stat-croce').textContent = stats.croce;
+    document.getElementById('stat-totale').textContent = stats.testa + stats.croce;
+
+    // Mostra risultato
+    resultEl.textContent = isTesta ? '🪙 TESTA' : '🌍 CROCE';
+    resultEl.className = 'coin-result show ' + currentFace;
+
+    btn.disabled = false;
+    isFlipping = false;
+  }, duration);
+}
+</script>
