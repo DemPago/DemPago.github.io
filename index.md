@@ -257,6 +257,29 @@ title: Home
         <p class="post-card-desc">Scopri il tuo IP pubblico con geolocalizzazione e calcola subnet, range host e subnet mask con il CIDR calculator.</p>
       </div>
     </li>
+    <li class="post-card">
+      <a href="/app/validatore-sdi/" class="post-card-cover" style="height:160px;background:#0d1117;display:block;overflow:hidden;padding:14px 16px;box-sizing:border-box;text-decoration:none;">
+        <!-- Mini SDI mockup -->
+        <div style="height:100%;display:flex;flex-direction:column;justify-content:center;gap:10px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="font-family:monospace;font-size:1.4rem;font-weight:700;color:#58a6ff;letter-spacing:0.15em;">UFX001</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div style="height:4px;width:80%;background:#30363d;border-radius:2px;"></div>
+            <div style="height:4px;width:55%;background:#30363d;border-radius:2px;"></div>
+          </div>
+          <div style="background:#161b22;border:1px solid rgba(63,185,80,0.4);border-radius:6px;padding:5px 10px;display:flex;align-items:center;gap:6px;">
+            <div style="width:7px;height:7px;border-radius:50%;background:#3fb950;flex-shrink:0;"></div>
+            <div style="font-family:monospace;font-size:10px;color:#3fb950;font-weight:700;">CODICE VALIDO · Comune di Roma</div>
+          </div>
+        </div>
+      </a>
+      <div class="post-card-content">
+        <span class="post-card-category cat-tech">Tool</span>
+        <h3><a href="/app/validatore-sdi/">Validatore SDI PA</a></h3>
+        <p class="post-card-desc">Verifica se un codice SDI è presente nell'Indice delle PA abilitate alla fatturazione elettronica. Dati ufficiali iPA, aggiornati ogni 24h.</p>
+      </div>
+    </li>
   </ul>
 </div>
 
