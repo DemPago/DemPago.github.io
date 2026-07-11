@@ -268,28 +268,32 @@ permalink: /app/lancio-moneta/
             <text x="68"  y="24">★</text>
           </g>
 
-          <!-- Contenuto disco: "Dem" stilizzato -->
+          <!-- Contenuto disco: foto di Dem -->
           <g clip-path="url(#clipT)">
-            <!-- Cerchio decorativo interno -->
-            <circle cx="110" cy="100" r="52" fill="none" stroke="#8a6010" stroke-width="1" opacity="0.4"/>
+            <!-- Foto profilo Dem in bianco e nero stile incisione -->
+            <filter id="incision">
+              <feColorMatrix type="saturate" values="0"/>
+              <feComponentTransfer>
+                <feFuncR type="linear" slope="1.3" intercept="-0.15"/>
+                <feFuncG type="linear" slope="1.3" intercept="-0.15"/>
+                <feFuncB type="linear" slope="1.3" intercept="-0.15"/>
+              </feComponentTransfer>
+              <feBlend in="SourceGraphic" mode="multiply"/>
+            </filter>
+            <image href="/profilo.png"
+                   x="48" y="48" width="124" height="124"
+                   clip-path="url(#clipT)"
+                   filter="url(#incision)"
+                   preserveAspectRatio="xMidYMid slice"
+                   opacity="0.82"/>
 
-            <!-- Lightning bolt — simbolo del blog ⚡ -->
-            <path d="M118 58 L98 105 L112 105 L102 148 L128 95 L113 95 Z"
-                  fill="#5a3808" stroke="#3a2008" stroke-width="1" opacity="0.85"/>
+            <!-- Leggero overlay dorato per effetto moneta -->
+            <circle cx="110" cy="110" r="72" fill="url(#goldT)" opacity="0.18"/>
 
-            <!-- "DEM" testo inciso -->
-            <text x="110" y="162" text-anchor="middle"
-                  font-size="13" font-weight="900" font-family="serif"
+            <!-- "DEM" testo inciso in basso -->
+            <text x="110" y="166" text-anchor="middle"
+                  font-size="11" font-weight="900" font-family="serif"
                   fill="#5a3808" letter-spacing="5" opacity="0.9">DEM</text>
-
-            <!-- Sottotitolo -->
-            <text x="110" y="172" text-anchor="middle"
-                  font-size="6.5" font-family="serif"
-                  fill="#7a5010" letter-spacing="2" opacity="0.7">GREY JEDI</text>
-
-            <!-- Anno -->
-            <text x="82" y="158" text-anchor="middle" font-size="7" fill="#7a5010"
-                  font-family="serif" opacity="0.6">2024</text>
           </g>
 
           <!-- Luce riflessa anello -->
