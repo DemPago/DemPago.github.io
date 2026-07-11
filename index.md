@@ -28,7 +28,7 @@ title: Home
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tools" id="tab-tools" data-tab="tools">
       🛠️ Strumenti
     </button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tags" id="tab-tags" data-tab="tags">
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tags" id="tab-tags" data-tab="tags" style="display:none">
       🏷️ Tag
     </button>
     <div class="tab-indicator" aria-hidden="true"></div>
