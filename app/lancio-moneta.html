@@ -6,7 +6,6 @@ permalink: /app/lancio-moneta/
 ---
 
 <style>
-/* ── Layout ───────────────────────────────────────────────── */
 .coin-app {
   display: flex;
   flex-direction: column;
@@ -17,92 +16,63 @@ permalink: /app/lancio-moneta/
   padding-top: 1rem;
 }
 
-/* ── Coin stage ───────────────────────────────────────────── */
+/* ── Coin stage ─────────────────────────────────────────── */
 .coin-stage {
   perspective: 900px;
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   cursor: pointer;
   user-select: none;
 }
 
 .coin {
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 0.05s linear;
 }
 
-/* Faces */
 .coin-face {
   position: absolute;
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   border-radius: 50%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
 }
 
-/* ── TESTA — lato italiano Dante ────────────────────────── */
+/* Bimetallic: anello esterno argento, disco interno oro */
 .coin-testa {
-  background: radial-gradient(circle at 38% 38%, #f5e6a0, #c8a84b 45%, #a07828 70%, #7a5c1e);
+  /* Anello argento esterno */
+  background: radial-gradient(circle at 40% 35%,
+    #f0f0f0 0%, #d8d8d8 30%, #a8a8a8 50%, #888 65%, #aaa 80%);
   box-shadow:
-    inset 0 3px 8px rgba(255,255,255,0.35),
-    inset 0 -3px 8px rgba(0,0,0,0.4),
-    0 6px 24px rgba(0,0,0,0.5);
-  border: 3px solid #8a6520;
+    inset 0 2px 6px rgba(255,255,255,0.6),
+    inset 0 -2px 6px rgba(0,0,0,0.4),
+    0 8px 30px rgba(0,0,0,0.6);
 }
 
-.coin-testa svg {
-  width: 130px;
-  height: 130px;
-  opacity: 0.92;
-}
-
-/* ── CROCE — lato europeo ──────────────────────────────── */
 .coin-croce {
-  background: radial-gradient(circle at 62% 38%, #f5e6a0, #c8a84b 45%, #a07828 70%, #7a5c1e);
+  background: radial-gradient(circle at 60% 35%,
+    #f0f0f0 0%, #d8d8d8 30%, #a8a8a8 50%, #888 65%, #aaa 80%);
   box-shadow:
-    inset 0 3px 8px rgba(255,255,255,0.35),
-    inset 0 -3px 8px rgba(0,0,0,0.4),
-    0 6px 24px rgba(0,0,0,0.5);
+    inset 0 2px 6px rgba(255,255,255,0.6),
+    inset 0 -2px 6px rgba(0,0,0,0.4),
+    0 8px 30px rgba(0,0,0,0.6);
   transform: rotateY(180deg);
-  border: 3px solid #8a6520;
 }
 
-.coin-croce svg {
-  width: 150px;
-  height: 150px;
-  opacity: 0.92;
-}
-
-/* ── Rim ─────────────────────────────────────────────────── */
-.coin-rim {
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background: transparent;
-  box-shadow: 0 0 0 6px #9a7230, 0 0 0 7px #c8a84b, 0 0 0 9px #7a5c1e;
-  pointer-events: none;
-}
-
-/* ── Flip animation ──────────────────────────────────────── */
+/* ── Flip animation ─────────────────────────────────────── */
 @keyframes flip-coin {
   0%   { transform: rotateY(0deg); }
   100% { transform: rotateY(var(--flip-end)); }
 }
-
 .coin.flipping {
-  animation: flip-coin var(--flip-duration) cubic-bezier(0.4, 0.0, 0.6, 1.0) forwards;
+  animation: flip-coin var(--flip-duration) cubic-bezier(0.4,0,0.6,1) forwards;
 }
 
-/* ── Button ──────────────────────────────────────────────── */
+/* ── Button ─────────────────────────────────────────────── */
 .coin-btn {
   padding: 0.85rem 2.5rem;
   background: var(--accent);
@@ -114,173 +84,316 @@ permalink: /app/lancio-moneta/
   font-family: inherit;
   cursor: pointer;
   transition: opacity 0.2s, transform 0.1s;
-  letter-spacing: 0.02em;
 }
 .coin-btn:hover  { opacity: 0.85; }
 .coin-btn:active { transform: scale(0.97); }
 .coin-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-/* ── Result ──────────────────────────────────────────────── */
+/* ── Result ─────────────────────────────────────────────── */
 .coin-result {
   font-size: 2rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
   min-height: 3rem;
   text-align: center;
+  color: #c8a84b;
   opacity: 0;
   transform: translateY(8px);
   transition: opacity 0.35s ease, transform 0.35s ease;
 }
-.coin-result.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-.coin-result.testa { color: #c8a84b; }
-.coin-result.croce { color: #c8a84b; }
+.coin-result.show { opacity: 1; transform: translateY(0); }
 
-/* ── Stats ───────────────────────────────────────────────── */
+/* ── Stats ──────────────────────────────────────────────── */
 .coin-stats {
   display: flex;
   gap: 1.5rem;
   font-size: 0.9rem;
   color: var(--text-muted);
 }
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.2rem;
-}
-.stat-label {
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-.stat-value {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--text);
-  font-variant-numeric: tabular-nums;
-}
+.stat-item { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
+.stat-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.stat-value { font-size: 1.35rem; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
 
-/* ── Hint ────────────────────────────────────────────────── */
-.coin-hint {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  text-align: center;
-  line-height: 1.5;
-}
+.coin-hint { font-size: 0.8rem; color: var(--text-muted); text-align: center; }
 </style>
 
 <div class="coin-app">
 
-  <!-- Moneta -->
   <div class="coin-stage" onclick="lancia()" title="Clicca per lanciare">
     <div class="coin" id="coin">
-      <!-- TESTA: Dante Alighieri (versione italiana 2€) -->
+
+      <!-- ══════════════════════════════════════════
+           TESTA — Lato italiano: Dante Alighieri
+           Moneta bimetallica 2€ italiana
+      ══════════════════════════════════════════ -->
       <div class="coin-face coin-testa">
-        <svg viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
-          <!-- Cerchio esterno decorativo -->
-          <circle cx="65" cy="65" r="60" fill="none" stroke="#7a5c1e" stroke-width="1.5" opacity="0.6"/>
-          <!-- Testa di Dante stilizzata di profilo -->
-          <g fill="#5c3d0e" opacity="0.85">
-            <!-- Cappello/corona d'alloro -->
-            <ellipse cx="65" cy="28" rx="22" ry="5" fill="#7a5c1e" opacity="0.7"/>
-            <path d="M43 28 Q55 18 65 16 Q75 18 87 28 Q80 24 65 22 Q50 24 43 28Z" fill="#6b4e18"/>
-            <!-- Foglie alloro -->
-            <ellipse cx="44" cy="30" rx="5" ry="2.5" transform="rotate(-30 44 30)" fill="#5a8a30" opacity="0.8"/>
-            <ellipse cx="50" cy="25" rx="5" ry="2.5" transform="rotate(-15 50 25)" fill="#5a8a30" opacity="0.8"/>
-            <ellipse cx="86" cy="30" rx="5" ry="2.5" transform="rotate(30 86 30)" fill="#5a8a30" opacity="0.8"/>
-            <ellipse cx="80" cy="25" rx="5" ry="2.5" transform="rotate(15 80 25)" fill="#5a8a30" opacity="0.8"/>
-            <!-- Profilo testa -->
-            <path d="M72 32 Q85 36 88 50 Q90 62 85 74 Q80 84 72 88 Q68 92 65 92 Q58 90 54 86 Q48 80 46 70 Q43 58 46 48 Q50 36 60 32 Q65 30 72 32Z"/>
-            <!-- Naso pronunciato (caratteristico di Dante) -->
-            <path d="M80 55 Q88 60 86 66 Q84 68 80 66 Q82 62 80 55Z" fill="#4a2e08"/>
-            <!-- Occhio -->
-            <ellipse cx="77" cy="52" rx="4" ry="3" fill="#3a2008"/>
-            <ellipse cx="78" cy="51" rx="1.5" ry="1.2" fill="#1a0e04"/>
+        <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" width="220" height="220">
+          <defs>
+            <!-- Disco interno oro (nikel-ottone) -->
+            <radialGradient id="goldInner" cx="42%" cy="38%" r="55%">
+              <stop offset="0%"   stop-color="#f7e57a"/>
+              <stop offset="35%"  stop-color="#d4a017"/>
+              <stop offset="65%"  stop-color="#b8861a"/>
+              <stop offset="100%" stop-color="#8a6010"/>
+            </radialGradient>
+            <!-- Anello esterno argento (rame-nikel) -->
+            <radialGradient id="silverRing" cx="40%" cy="35%" r="60%">
+              <stop offset="0%"   stop-color="#f5f5f5"/>
+              <stop offset="40%"  stop-color="#d0d0d0"/>
+              <stop offset="70%"  stop-color="#909090"/>
+              <stop offset="100%" stop-color="#b0b0b0"/>
+            </radialGradient>
+            <clipPath id="innerDisc">
+              <circle cx="110" cy="110" r="72"/>
+            </clipPath>
+          </defs>
+
+          <!-- Anello esterno argento -->
+          <circle cx="110" cy="110" r="108" fill="url(#silverRing)"/>
+
+          <!-- Bordo dentellato (simulato con cerchio sottile) -->
+          <circle cx="110" cy="110" r="107" fill="none" stroke="#777" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+
+          <!-- Disco interno oro -->
+          <circle cx="110" cy="110" r="72" fill="url(#goldInner)"/>
+
+          <!-- Bordo separazione bimetallica -->
+          <circle cx="110" cy="110" r="72" fill="none" stroke="#6a4a10" stroke-width="1.5"/>
+          <circle cx="110" cy="110" r="74" fill="none" stroke="#c8a030" stroke-width="0.8" opacity="0.6"/>
+
+          <!-- ── Stelle UE sull'anello esterno (12 stelle) ── -->
+          <g fill="#d4a017" font-size="9" text-anchor="middle" dominant-baseline="central">
+            <!-- 12 stelle a ore: 12,1,2,3,4,5,6,7,8,9,10,11 -->
+            <text x="110" y="13">★</text>
+            <text x="152" y="24">★</text>
+            <text x="184" y="56">★</text>
+            <text x="196" y="100">★</text>
+            <text x="184" y="144">★</text>
+            <text x="152" y="176">★</text>
+            <text x="110" y="188">★</text>
+            <text x="68"  y="176">★</text>
+            <text x="36"  y="144">★</text>
+            <text x="24"  y="100">★</text>
+            <text x="36"  y="56">★</text>
+            <text x="68"  y="24">★</text>
+          </g>
+
+          <!-- ── Dante Alighieri — profilo rivolto a sinistra ── -->
+          <g clip-path="url(#innerDisc)">
+            <!-- Dante: testa di profilo stile incisione numismatica -->
+
+            <!-- Collo e spalla -->
+            <path d="M95 170 Q85 165 82 155 Q80 145 83 135 L90 130 Q95 145 100 155 Q105 162 110 165 Z"
+                  fill="#b8861a" stroke="#8a6010" stroke-width="0.5"/>
+            <!-- Spalla/veste -->
+            <path d="M75 180 Q80 168 88 158 L100 155 Q108 163 115 165 Q120 175 118 183 Z"
+                  fill="#a07010" stroke="#7a5008" stroke-width="0.5"/>
+
+            <!-- Testa — forma -->
+            <path d="M83 135
+                     Q80 120 82 108
+                     Q84 94  90 84
+                     Q96 72 105 66
+                     Q115 60 122 63
+                     Q132 67 136 78
+                     Q140 89 138 102
+                     Q136 116 130 126
+                     Q124 136 116 140
+                     Q107 144 98 142
+                     Q88 139 83 135 Z"
+                  fill="#c89420" stroke="#8a6010" stroke-width="0.8"/>
+
+            <!-- Dettagli viso — ombreggiature -->
+            <path d="M83 120 Q81 112 83 105 Q85 110 84 118 Z" fill="#a07010" opacity="0.5"/>
+
+            <!-- Zigomo / guancia -->
+            <path d="M130 108 Q136 116 130 126 Q124 120 126 112 Z" fill="#a07010" opacity="0.4"/>
+
+            <!-- Naso (prominente, caratteristico di Dante) -->
+            <path d="M118 88 Q128 90 132 96 Q133 100 130 103 Q126 100 122 97 Q119 93 118 88 Z"
+                  fill="#b8861a" stroke="#8a6010" stroke-width="0.5"/>
+
+            <!-- Occhio (profilo destro visibile) -->
+            <ellipse cx="115" cy="84" rx="5" ry="3.5" fill="#3a2008"/>
+            <ellipse cx="116" cy="83" rx="2" ry="1.8" fill="#1a0c04"/>
             <!-- Sopracciglio -->
-            <path d="M73 47 Q77 45 82 47" stroke="#4a2e08" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <!-- Bocca chiusa -->
-            <path d="M68 76 Q72 74 75 76" stroke="#4a2e08" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            <!-- Mento -->
-            <path d="M65 88 Q68 92 66 95" stroke="#5c3d0e" stroke-width="1.5" fill="none"/>
-            <!-- Orecchio -->
-            <path d="M46 58 Q42 62 43 68 Q44 72 47 70" fill="#5c3d0e"/>
+            <path d="M109 79 Q115 76 121 78" stroke="#6a4008" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+
+            <!-- Bocca chiusa, seria -->
+            <path d="M107 120 Q113 117 118 119" stroke="#8a5808" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M109 122 Q113 121 117 122" stroke="#7a5008" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+
+            <!-- Mento con fossetta lieve -->
+            <path d="M103 132 Q110 136 116 133" stroke="#8a6010" stroke-width="1" fill="none"/>
+
+            <!-- Orecchio sinistro (visibile in profilo) -->
+            <path d="M84 104 Q79 108 79 114 Q80 120 84 120 Q82 115 83 110 Z"
+                  fill="#b8861a" stroke="#8a6010" stroke-width="0.5"/>
+
+            <!-- Capelli sotto il cappello -->
+            <path d="M84 98 Q82 90 84 83 Q86 78 90 74 Q87 80 86 88 Q85 94 84 98 Z"
+                  fill="#6a4008" opacity="0.6"/>
+
+            <!-- ── Corona d'alloro (cappello tipico di Dante) ── -->
+            <!-- Base cappello/cuffia -->
+            <path d="M85 82
+                     Q86 70 92 63
+                     Q100 54 110 52
+                     Q121 50 128 57
+                     Q134 64 134 74
+                     Q130 68 122 64
+                     Q112 60 102 62
+                     Q92 65 88 74
+                     Q86 78 85 82 Z"
+                  fill="#7a5008" stroke="#5a3808" stroke-width="0.6"/>
+
+            <!-- Foglie alloro — sinistra -->
+            <ellipse cx="87" cy="70" rx="6" ry="3" transform="rotate(-40 87 70)" fill="#4a7a20" stroke="#3a6010" stroke-width="0.5"/>
+            <ellipse cx="90" cy="62" rx="6" ry="3" transform="rotate(-25 90 62)" fill="#5a8a28" stroke="#3a6010" stroke-width="0.5"/>
+            <ellipse cx="96" cy="55" rx="6" ry="3" transform="rotate(-10 96 55)" fill="#4a7a20" stroke="#3a6010" stroke-width="0.5"/>
+
+            <!-- Foglie alloro — centro -->
+            <ellipse cx="104" cy="51" rx="6" ry="2.8" transform="rotate(0 104 51)" fill="#5a8a28" stroke="#3a6010" stroke-width="0.5"/>
+            <ellipse cx="112" cy="50" rx="6" ry="2.8" transform="rotate(8 112 50)" fill="#4a7a20" stroke="#3a6010" stroke-width="0.5"/>
+
+            <!-- Foglie alloro — destra -->
+            <ellipse cx="120" cy="53" rx="6" ry="3" transform="rotate(20 120 53)" fill="#5a8a28" stroke="#3a6010" stroke-width="0.5"/>
+            <ellipse cx="127" cy="59" rx="6" ry="3" transform="rotate(35 127 59)" fill="#4a7a20" stroke="#3a6010" stroke-width="0.5"/>
+            <ellipse cx="131" cy="67" rx="5.5" ry="2.8" transform="rotate(50 131 67)" fill="#5a8a28" stroke="#3a6010" stroke-width="0.5"/>
+
+            <!-- Bacche rosse alloro -->
+            <circle cx="93" cy="58" r="2" fill="#8a2010" opacity="0.8"/>
+            <circle cx="104" cy="53" r="2" fill="#8a2010" opacity="0.8"/>
+            <circle cx="116" cy="52" r="2" fill="#8a2010" opacity="0.8"/>
+            <circle cx="126" cy="56" r="2" fill="#8a2010" opacity="0.8"/>
+
+            <!-- Fascia corona -->
+            <path d="M86 79 Q100 72 110 70 Q122 68 133 73"
+                  stroke="#c8a020" stroke-width="2.5" fill="none" stroke-linecap="round"/>
           </g>
-          <!-- Testo ITALIA -->
-          <text x="65" y="113" text-anchor="middle" font-size="9" font-weight="700"
-                fill="#5c3d0e" font-family="serif" letter-spacing="3">ITALIA</text>
-          <!-- Anno -->
-          <text x="65" y="123" text-anchor="middle" font-size="7" fill="#7a5c1e"
-                font-family="serif" letter-spacing="1">2€</text>
-          <!-- Stella decorativa -->
-          <text x="32" y="72" font-size="7" fill="#7a5c1e" opacity="0.6">✦</text>
-          <text x="93" y="72" font-size="7" fill="#7a5c1e" opacity="0.6">✦</text>
+
+          <!-- Testo ITALIA sul disco interno (in basso) -->
+          <text x="110" y="171" text-anchor="middle" font-size="9.5" font-weight="bold"
+                fill="#5a3808" font-family="serif" letter-spacing="3">ITALIA</text>
+
+          <!-- Anno (piccolo, in basso a destra del disco) -->
+          <text x="138" y="158" text-anchor="middle" font-size="7" fill="#7a5010"
+                font-family="serif" opacity="0.8">2002</text>
+
+          <!-- Luce riflessa sull'anello -->
+          <ellipse cx="78" cy="62" rx="22" ry="8" fill="white" opacity="0.12" transform="rotate(-45 78 62)"/>
         </svg>
       </div>
 
-      <!-- CROCE: Europa -->
+      <!-- ══════════════════════════════════════════
+           CROCE — Lato europeo comune
+           "2" grande + cartina Europa + stelle
+      ══════════════════════════════════════════ -->
       <div class="coin-face coin-croce">
-        <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
-          <!-- Sfondo -->
-          <circle cx="75" cy="75" r="68" fill="none" stroke="#7a5c1e" stroke-width="1.5" opacity="0.5"/>
-          <!-- Europa stilizzata -->
-          <g transform="translate(75,72) scale(0.55)">
-            <!-- Massa continentale Europa semplificata -->
-            <path d="M-20,-65 Q0,-70 20,-60 Q40,-50 45,-30 Q50,-10 40,10
-                     Q35,25 20,35 Q10,40 0,38 Q-15,42 -25,30
-                     Q-35,18 -30,5 Q-38,-5 -42,-20
-                     Q-45,-40 -35,-55 Q-28,-63 -20,-65Z"
-                  fill="#5c3d0e" opacity="0.75"/>
-            <!-- Penisola iberica -->
-            <path d="M-40,-10 Q-50,0 -48,15 Q-45,25 -35,20 Q-28,15 -30,5 Q-35,-5 -40,-10Z"
-                  fill="#5c3d0e" opacity="0.7"/>
+        <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" width="220" height="220">
+          <defs>
+            <radialGradient id="goldInner2" cx="58%" cy="38%" r="55%">
+              <stop offset="0%"   stop-color="#f7e57a"/>
+              <stop offset="35%"  stop-color="#d4a017"/>
+              <stop offset="65%"  stop-color="#b8861a"/>
+              <stop offset="100%" stop-color="#8a6010"/>
+            </radialGradient>
+            <radialGradient id="silverRing2" cx="60%" cy="35%" r="60%">
+              <stop offset="0%"   stop-color="#f5f5f5"/>
+              <stop offset="40%"  stop-color="#d0d0d0"/>
+              <stop offset="70%"  stop-color="#909090"/>
+              <stop offset="100%" stop-color="#b0b0b0"/>
+            </radialGradient>
+            <clipPath id="innerDisc2">
+              <circle cx="110" cy="110" r="72"/>
+            </clipPath>
+          </defs>
+
+          <!-- Anello esterno argento -->
+          <circle cx="110" cy="110" r="108" fill="url(#silverRing2)"/>
+          <circle cx="110" cy="110" r="107" fill="none" stroke="#777" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+
+          <!-- Disco interno oro -->
+          <circle cx="110" cy="110" r="72" fill="url(#goldInner2)"/>
+          <circle cx="110" cy="110" r="72" fill="none" stroke="#6a4a10" stroke-width="1.5"/>
+          <circle cx="110" cy="110" r="74" fill="none" stroke="#c8a030" stroke-width="0.8" opacity="0.6"/>
+
+          <!-- ── Stelle UE sull'anello esterno ── -->
+          <g fill="#d4a017" font-size="9" text-anchor="middle" dominant-baseline="central">
+            <text x="110" y="13">★</text>
+            <text x="152" y="24">★</text>
+            <text x="184" y="56">★</text>
+            <text x="196" y="100">★</text>
+            <text x="184" y="144">★</text>
+            <text x="152" y="176">★</text>
+            <text x="110" y="188">★</text>
+            <text x="68"  y="176">★</text>
+            <text x="36"  y="144">★</text>
+            <text x="24"  y="100">★</text>
+            <text x="36"  y="56">★</text>
+            <text x="68"  y="24">★</text>
+          </g>
+
+          <!-- ── Cartina Europa sul disco ── -->
+          <g clip-path="url(#innerDisc2)" fill="#a07010" stroke="#7a5008" stroke-width="0.4" opacity="0.75">
+            <!-- Europa occidentale e centrale -->
+            <path d="M68 95 Q72 80 80 72 Q88 65 96 64 Q100 68 98 75
+                     Q104 70 112 68 Q118 70 120 76 Q124 72 130 72
+                     Q136 76 134 84 Q138 82 142 86 Q144 92 140 98
+                     Q136 104 128 106 Q134 110 132 116
+                     Q128 122 120 122 Q116 128 112 132
+                     Q106 136 100 134 Q94 130 92 124
+                     Q86 120 80 116 Q72 110 68 102 Q66 98 68 95Z"/>
             <!-- Penisola scandinava -->
-            <path d="M10,-65 Q20,-80 25,-75 Q30,-65 28,-55 Q20,-60 10,-65Z"
-                  fill="#5c3d0e" opacity="0.7"/>
-            <path d="M25,-75 Q35,-85 38,-78 Q40,-68 35,-60 Q30,-65 25,-75Z"
-                  fill="#5c3d0e" opacity="0.65"/>
-            <!-- Italia (penisola) -->
-            <path d="M5,20 Q15,18 18,30 Q20,42 15,52 Q10,55 7,50 Q3,40 5,20Z"
-                  fill="#5c3d0e" opacity="0.7"/>
-            <!-- Grecia -->
-            <path d="M20,28 Q28,25 30,35 Q28,42 22,40 Q18,35 20,28Z"
-                  fill="#5c3d0e" opacity="0.65"/>
+            <path d="M98 64 Q102 55 108 50 Q114 47 118 52
+                     Q122 57 120 64 Q116 60 112 62 Q106 64 98 64Z"/>
+            <path d="M118 52 Q124 46 128 50 Q130 56 126 62
+                     Q122 60 118 52Z"/>
+            <!-- Penisola iberica -->
+            <path d="M68 95 Q62 96 60 104 Q60 112 66 116
+                     Q70 118 74 114 Q72 108 74 102 Q72 98 68 95Z"/>
+            <!-- Penisola italiana -->
+            <path d="M112 122 Q114 130 116 138 Q114 144 110 146
+                     Q106 143 106 136 Q108 128 112 122Z"/>
+            <!-- Sicilia -->
+            <path d="M108 148 Q112 148 114 152 Q112 155 108 153 Q105 150 108 148Z"/>
+            <!-- Gran Bretagna semplificata (sull'anello quindi piccola) -->
+            <path d="M64 80 Q68 75 72 76 Q74 80 70 84 Q66 84 64 80Z"/>
+            <!-- Irlanda piccola -->
+            <path d="M59 82 Q62 79 64 81 Q63 85 59 84 Z"/>
           </g>
-          <!-- Stelle UE (12 stelle in cerchio) -->
-          <g fill="#d4a017" opacity="0.9">
-            <text x="75"  y="18"  text-anchor="middle" font-size="8">★</text>
-            <text x="104" y="27"  text-anchor="middle" font-size="8">★</text>
-            <text x="120" y="52"  text-anchor="middle" font-size="8">★</text>
-            <text x="118" y="82"  text-anchor="middle" font-size="8">★</text>
-            <text x="104" y="108" text-anchor="middle" font-size="8">★</text>
-            <text x="75"  y="120" text-anchor="middle" font-size="8">★</text>
-            <text x="46"  y="108" text-anchor="middle" font-size="8">★</text>
-            <text x="32"  y="82"  text-anchor="middle" font-size="8">★</text>
-            <text x="30"  y="52"  text-anchor="middle" font-size="8">★</text>
-            <text x="46"  y="27"  text-anchor="middle" font-size="8">★</text>
-            <text x="62"  y="16"  text-anchor="middle" font-size="7">★</text>
-            <text x="88"  y="16"  text-anchor="middle" font-size="7">★</text>
-          </g>
-          <!-- 2 EURO testo -->
-          <text x="75" y="143" text-anchor="middle" font-size="10" font-weight="700"
-                fill="#5c3d0e" font-family="serif" letter-spacing="2">2 EURO</text>
+
+          <!-- ── "2" grande al centro-destra del disco ── -->
+          <text x="118" y="122" text-anchor="middle"
+                font-size="52" font-weight="900" font-family="serif"
+                fill="#5a3808" stroke="#3a2008" stroke-width="0.5"
+                opacity="0.85">2</text>
+
+          <!-- "EURO" sotto il 2 -->
+          <text x="118" y="135" text-anchor="middle"
+                font-size="8.5" font-weight="700" font-family="serif"
+                fill="#5a3808" letter-spacing="2.5">EURO</text>
+
+          <!-- Linee orizzontali decorative (stile reale) -->
+          <line x1="48" y1="96" x2="78" y2="96" stroke="#7a5010" stroke-width="0.8" opacity="0.5"/>
+          <line x1="48" y1="100" x2="75" y2="100" stroke="#7a5010" stroke-width="0.8" opacity="0.5"/>
+          <line x1="48" y1="104" x2="72" y2="104" stroke="#7a5010" stroke-width="0.8" opacity="0.5"/>
+          <line x1="48" y1="108" x2="70" y2="108" stroke="#7a5010" stroke-width="0.8" opacity="0.5"/>
+          <line x1="48" y1="112" x2="70" y2="112" stroke="#7a5010" stroke-width="0.8" opacity="0.5"/>
+          <line x1="48" y1="116" x2="72" y2="116" stroke="#7a5010" stroke-width="0.8" opacity="0.5"/>
+          <line x1="48" y1="120" x2="74" y2="120" stroke="#7a5010" stroke-width="0.8" opacity="0.5"/>
+
+          <!-- Luce riflessa sull'anello -->
+          <ellipse cx="142" cy="62" rx="22" ry="8" fill="white" opacity="0.12" transform="rotate(45 142 62)"/>
         </svg>
       </div>
 
-      <div class="coin-rim"></div>
     </div>
   </div>
 
-  <!-- Risultato -->
   <div class="coin-result" id="coin-result"></div>
 
-  <!-- Bottone -->
   <button class="coin-btn" id="coin-btn" onclick="lancia()">🪙 Lancia la moneta</button>
 
-  <!-- Stats -->
   <div class="coin-stats">
     <div class="stat-item">
       <span class="stat-label">Testa</span>
@@ -301,42 +414,33 @@ permalink: /app/lancio-moneta/
 </div>
 
 <script>
-let isFlipping = false;
-let currentFace = 'testa'; // testa = 0°, croce = 180°
+let isFlipping    = false;
 let totalRotation = 0;
-let stats = { testa: 0, croce: 0 };
+let currentFace   = 'testa';
+let stats         = { testa: 0, croce: 0 };
 
 function lancia() {
   if (isFlipping) return;
   isFlipping = true;
 
-  const btn = document.getElementById('coin-btn');
+  const btn      = document.getElementById('coin-btn');
   const resultEl = document.getElementById('coin-result');
-  const coin = document.getElementById('coin');
+  const coin     = document.getElementById('coin');
 
   btn.disabled = true;
   resultEl.classList.remove('show');
 
-  // Decide risultato
-  const isTesta = Math.random() < 0.5;
-
-  // Calcola rotazione finale
-  // Testa = rotazione pari a multiplo di 360
-  // Croce = rotazione pari a multiplo di 360 + 180
-  const giri = 5 + Math.floor(Math.random() * 4); // 5-8 giri completi
-  const extraGradi = isTesta ? 0 : 180;
-  // Normalizza dalla posizione corrente
-  const currentMod = totalRotation % 360;
-  let targetMod = isTesta ? 0 : 180;
-  // Assicura che ruoti sempre in avanti
+  const isTesta  = Math.random() < 0.5;
+  const giri     = 5 + Math.floor(Math.random() * 4);
+  const currentMod = ((totalRotation % 360) + 360) % 360;
+  const targetMod  = isTesta ? 0 : 180;
   let delta = targetMod - currentMod;
-  if (delta < 0) delta += 360;
+  if (delta <= 0) delta += 360;
   const endRotation = totalRotation + (giri * 360) + delta;
+  const duration    = 1800 + Math.random() * 600;
 
-  const duration = 1800 + Math.random() * 600; // 1.8-2.4s
-
-  coin.style.setProperty('--flip-end', endRotation + 'deg');
-  coin.style.setProperty('--flip-duration', duration + 'ms');
+  coin.style.setProperty('--flip-end',      endRotation + 'deg');
+  coin.style.setProperty('--flip-duration', duration    + 'ms');
   coin.style.removeProperty('transform');
   coin.classList.add('flipping');
 
@@ -346,18 +450,16 @@ function lancia() {
     coin.style.transform = `rotateY(${endRotation}deg)`;
     currentFace = isTesta ? 'testa' : 'croce';
 
-    // Aggiorna stats
     stats[currentFace]++;
-    document.getElementById('stat-testa').textContent = stats.testa;
-    document.getElementById('stat-croce').textContent = stats.croce;
+    document.getElementById('stat-testa').textContent  = stats.testa;
+    document.getElementById('stat-croce').textContent  = stats.croce;
     document.getElementById('stat-totale').textContent = stats.testa + stats.croce;
 
-    // Mostra risultato
     resultEl.textContent = isTesta ? '🪙 TESTA' : '🌍 CROCE';
-    resultEl.className = 'coin-result show ' + currentFace;
+    resultEl.className   = 'coin-result show';
 
     btn.disabled = false;
-    isFlipping = false;
+    isFlipping   = false;
   }, duration);
 }
 </script>
