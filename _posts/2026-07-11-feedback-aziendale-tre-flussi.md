@@ -28,6 +28,43 @@ E quando il feedback esiste solo in alcune direzioni, solo in certi team, solo s
 
 ![Tre persone che comunicano con bolle di dialogo — il feedback fluisce in più direzioni](/feedback-dialogo.png)
 
+```python
+# feedback_aziendale.py
+
+def feedback_system(azienda):
+
+    # Flusso 1: Top-Down
+    for manager in azienda.managers:
+        manager.valuta(collaboratore)
+        if collaboratore.legge_la_valutazione():
+            collaboratore.cresce()
+        else:
+            return "carta"  # il caso più comune
+
+    # Flusso 2: Peer-to-Peer
+    for team in azienda.teams:
+        if team.psychological_safety > 0.7:
+            team.scambia_feedback()
+        else:
+            team.sorride_e_tace()  # classico
+
+    # Flusso 3: Bottom-Up (aka il buco nero)
+    survey = azienda.lancia_survey()
+    risposte = survey.raccogli()
+
+    if azienda.ha_coraggio():
+        azienda.restituisce_risultati(risposte)
+        azienda.cambia_qualcosa()
+    else:
+        risposte.salva_in_cassetto()
+        # TODO: fare qualcosa — dal 2018
+        return "survey fatigue"
+
+    # Il vero problema
+    if not azienda.tutti_i_flussi_attivi():
+        raise Exception("Non è cultura del feedback. È decorazione.")
+```
+
 ## I 3 pilastri del feedback aziendale
 
 ### 1. Dall'alto verso il basso (Top-Down)
