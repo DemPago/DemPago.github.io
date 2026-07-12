@@ -1357,13 +1357,18 @@ el('btnRevote').addEventListener('click', async () => {
   const data = state.cachedData;
   if (!data) return;
   const cardId = data.cards[data.currentCard].id;
+  // Cancella lo stato locale prima di scrivere su Firestore,
+  // così se lo snapshot arriva prima del return non rilegge il voto vecchio
+  delete state.myVotes[cardId];
   try {
     await updateDoc(doc(db, 'poker_sessions', state.sessionCode), {
       ['votes.' + cardId]: deleteField(),
       status: 'voting'
     });
-    delete state.myVotes[cardId];
-  } catch(e) { console.error('Revote error', e); }
+  } catch(e) {
+    console.error('Revote error', e);
+    // in caso di errore non c'è da ripristinare: il render si riallineerà al prossimo snapshot
+  }
 });
 
 el('btnNextCard').addEventListener('click', async () => {
