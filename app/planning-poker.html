@@ -893,7 +893,7 @@ function isOnline(presenceMap, name) {
   const ts = presenceMap[name];
   const ms = ts?.toDate ? ts.toDate().getTime() : (ts?.seconds ? ts.seconds * 1000 : null);
   if (!ms) return false;
-  return (Date.now() - ms) < 300_000; // 5 minuti
+  return (Date.now() - ms) < 90_000; // 90 secondi
 }
 
 /* ══════════════════════════════════════════════════════════ */
