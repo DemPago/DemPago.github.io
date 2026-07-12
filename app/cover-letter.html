@@ -183,7 +183,55 @@ permalink: /app/cover-letter/
 }
 .cl-banner-close:hover { opacity: 1; }
 
-/* ── Preview column ────────────────────────────────────── */
+/* ── Autosave indicator ────────────────────────────────────── */
+.cl-autosave {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.4s;
+  margin-left: 0.5rem;
+}
+.cl-autosave.visible { opacity: 1; }
+
+/* ── Inline confirm ────────────────────────────────────────── */
+.cl-inline-confirm {
+  display: none;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.9rem;
+  background: rgba(248,81,73,0.08);
+  border: 1px solid rgba(248,81,73,0.3);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--text);
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+.cl-inline-confirm.show { display: flex; }
+.cl-confirm-yes {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid #f85149;
+  background: #f85149;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.cl-confirm-yes:hover { opacity: 0.85; }
+.cl-confirm-no {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.cl-confirm-no:hover { border-color: var(--accent); color: var(--accent); }
 .cl-preview-col { position: sticky; top: 1rem; }
 .cl-preview-label {
   font-size: 0.75rem;
@@ -350,7 +398,13 @@ permalink: /app/cover-letter/
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         Copia testo
       </button>
-      <button class="cl-btn cl-btn-danger" onclick="resetLetter()">Nuova lettera</button>
+      <button class="cl-btn cl-btn-danger" onclick="askResetLetter()">Nuova lettera</button>
+      <span class="cl-autosave" id="cl-autosave">✓ Salvato</span>
+    </div>
+    <div class="cl-inline-confirm" id="cl-reset-confirm">
+      <span id="cl-reset-confirm-msg">Iniziare una nuova lettera? I dati attuali verranno cancellati.</span>
+      <button class="cl-confirm-yes" onclick="confirmResetLetter()">Sì, cancella</button>
+      <button class="cl-confirm-no" onclick="cancelResetLetter()">Annulla</button>
     </div>
 
     <div style="margin-top:1rem;text-align:center;">
@@ -391,7 +445,8 @@ function esc(str) {
 const clState = {
   lang: 'it',
   tone: 'formale',
-  keywords: new Set()
+  keywords: new Set(),
+  createdAt: null  // ISO string — set once on first save, never overwritten
 };
 
 /* ── Keywords ──────────────────────────────────────────── */
@@ -627,8 +682,8 @@ function buildLetter() {
   const ruoloStr   = ruolo   || (lang === 'it' ? '[Ruolo]'   : '[Position]');
   const aziendaStr = azienda || (lang === 'it' ? '[Azienda]' : '[Company]');
 
-  // Date
-  const today = new Date();
+  // Date — use stored creation date, not new Date() on every render
+  const today = clState.createdAt ? new Date(clState.createdAt) : new Date();
   const dateStr = lang === 'it'
     ? today.toLocaleDateString('it-IT', { day:'numeric', month:'long', year:'numeric' })
     : today.toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });
@@ -828,7 +883,13 @@ function copyText(btn) {
 async function downloadPDF() {
   const btn = document.getElementById('downloadBtn');
   btn.disabled = true;
-  btn.textContent = clState.lang === 'it' ? 'Generazione PDF\u2026' : 'Generating PDF\u2026';
+  btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> ${clState.lang === 'it' ? 'Generazione PDF\u2026' : 'Generating PDF\u2026'}`;
+  if (!document.getElementById('spin-style')) {
+    const s = document.createElement('style');
+    s.id = 'spin-style';
+    s.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+    document.head.appendChild(s);
+  }
 
   try {
     const { jsPDF } = window.jspdf;
@@ -878,36 +939,60 @@ async function downloadPDF() {
 }
 
 /* ── Reset ──────────────────────────────────────────────── */
-function resetLetter() {
-  const msg = clState.lang === 'it'
+function askResetLetter() {
+  const confirm = document.getElementById('cl-reset-confirm');
+  const msg = document.getElementById('cl-reset-confirm-msg');
+  if (msg) msg.textContent = clState.lang === 'it'
     ? 'Iniziare una nuova lettera? I dati attuali verranno cancellati.'
     : 'Start a new letter? Current data will be cleared.';
-  if (!confirm(msg)) return;
+  confirm?.classList.add('show');
+}
+function cancelResetLetter() {
+  document.getElementById('cl-reset-confirm')?.classList.remove('show');
+}
+function confirmResetLetter() {
+  cancelResetLetter();
+  resetLetter();
+}
+
+function resetLetter() {
   localStorage.removeItem(STORAGE_KEY);
   ['cl-nome','cl-cognome','cl-email','cl-tel','cl-citta','cl-ruolo','cl-azienda','cl-referente','cl-valore']
     .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   clState.keywords.clear();
   clState.tone = 'formale';
   clState.lang = 'it';
+  clState.createdAt = null;
   setTone('formale');
   setLang('it');
   updateKwState();
   updateValoreCount();
+  renderLetter();
 }
 
 /* ── LocalStorage ───────────────────────────────────────── */
 const STORAGE_KEY = 'cover_letter_v1';
 
 function saveToStorage() {
+  if (!clState.createdAt) clState.createdAt = new Date().toISOString();
   const data = {
     fields: {},
     keywords: [...clState.keywords],
     tone: clState.tone,
-    lang: clState.lang
+    lang: clState.lang,
+    createdAt: clState.createdAt
   };
   ['cl-nome','cl-cognome','cl-email','cl-tel','cl-citta','cl-ruolo','cl-azienda','cl-referente','cl-valore']
     .forEach(id => { const el = document.getElementById(id); if (el) data.fields[id] = el.value; });
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+
+  // Autosave indicator
+  const indicator = document.getElementById('cl-autosave');
+  if (indicator) {
+    indicator.classList.add('visible');
+    clearTimeout(indicator._t);
+    indicator._t = setTimeout(() => indicator.classList.remove('visible'), 1800);
+  }
 }
 
 function loadFromStorage() {
@@ -932,6 +1017,7 @@ function loadFromStorage() {
     }
     if (data.tone) clState.tone = data.tone;
     if (data.lang) clState.lang = data.lang;
+    if (data.createdAt) clState.createdAt = data.createdAt;
     return true;
   } catch(e) { return false; }
 }

@@ -247,7 +247,7 @@ permalink: /app/validatore-sdi/
                autocomplete="off" autocorrect="off" spellcheck="false">
       </div>
       <div>
-        <button class="sdi-btn" id="sdi-btn" onclick="validaSDI()">Verifica</button>
+        <button class="sdi-btn" id="sdi-btn" onclick="validaSDI()" disabled>Verifica</button>
       </div>
     </div>
 
@@ -398,7 +398,7 @@ async function caricaDatabase(forceRefresh = false) {
   const btn = document.getElementById('db-refresh-btn');
   btn.disabled = true;
 
-  // Check cache
+    // Check cache
   if (!forceRefresh) {
     try {
       const raw = localStorage.getItem(CACHE_KEY);
@@ -408,6 +408,7 @@ async function caricaDatabase(forceRefresh = false) {
           db = new Map(Object.entries(cached.data));
           const ts = new Date(cached.ts).toLocaleString('it-IT');
           setDbStatus('loaded', `${db.size.toLocaleString('it-IT')} codici · aggiornato ${ts}`);
+          document.getElementById('sdi-btn').disabled = false;
           btn.disabled = false;
           return;
         }
@@ -441,11 +442,18 @@ async function caricaDatabase(forceRefresh = false) {
 
     // Step 4: cache
     const plain = Object.fromEntries(db);
-    localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: plain }));
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: plain }));
+    } catch (e) {
+      if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+        console.warn('localStorage pieno — cache non salvata.');
+      }
+    }
 
     const ts = new Date().toLocaleString('it-IT');
     setDbStatus('loaded', `${db.size.toLocaleString('it-IT')} codici · aggiornato ${ts}`);
     setProgress(false);
+    document.getElementById('sdi-btn').disabled = false;
 
   } catch (e) {
     setDbStatus('error', 'Errore: ' + e.message);
@@ -474,12 +482,6 @@ function validaSDI() {
     input.classList.add('input-invalid');
     showResult('invalid', 'FORMATO NON VALIDO',
       'Il codice deve contenere esattamente 6 caratteri alfanumerici (lettere e numeri).');
-    return;
-  }
-
-  // Codice speciale: 0000000 non è un codice ufficio
-  if (codice === '0000000') {
-    showResult('warn', 'CODICE GENERICO', 'Questo è il codice generico SDI — non identifica un ufficio specifico.');
     return;
   }
 
