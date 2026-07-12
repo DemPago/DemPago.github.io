@@ -298,31 +298,56 @@ permalink: /app/lancio-moneta/
           <!-- Stelle UE sull'anello (12 stelle) -->
           <g id="stars-croce" fill="#d4a017" opacity="0.9"></g>
 
-          <!-- Cartina Europa -->
+          <!-- Cartina Europa — coordinate da proiezione geografica reale
+               Formula: x = 52 + (lon+10)*2.32 | y = 50 + (72-lat)*3.19
+               Disco interno r=78, centro (120,120) -->
           <g clip-path="url(#clipInnerC)" fill="#7a5010" stroke="#5a3808"
-             stroke-width="0.5" opacity="0.8">
-            <path d="M74 104 Q78 87 87 79 Q96 71 105 70
-                     Q109 74 107 82 Q113 76 122 74
-                     Q129 76 130 83 Q135 79 141 79
-                     Q148 83 146 92 Q150 90 154 95
-                     Q156 102 152 108 Q147 115 138 117
-                     Q144 122 142 128 Q138 134 129 134
-                     Q125 140 120 144 Q114 148 108 146
-                     Q101 142 99 135 Q92 131 85 126
-                     Q77 119 74 111 Q72 107 74 104Z"/>
-            <path d="M105 70 Q109 60 116 55 Q123 52 127 57
-                     Q131 63 129 70 Q124 66 119 68 Q113 70 105 70Z"/>
-            <path d="M127 57 Q133 50 138 54 Q140 61 136 68
-                     Q131 65 127 57Z"/>
-            <path d="M74 104 Q67 105 65 114 Q65 123 72 127
-                     Q76 129 80 124 Q78 117 80 110 Q78 107 74 104Z"/>
-            <path d="M120 134 Q122 143 124 152
-                     Q122 158 118 160 Q114 157 114 149
-                     Q116 140 120 134Z"/>
-            <path d="M116 162 Q120 162 122 167
-                     Q120 170 116 168 Q113 165 116 162Z"/>
-            <path d="M68 88 Q73 82 77 84 Q79 89 75 93
-                     Q71 93 68 88Z"/>
+             stroke-width="0.5" opacity="0.85">
+
+            <!-- Massa continentale principale (senso orario da Gibilterra) -->
+            <path d="
+              M 63,162
+              L 70,161 L 73,156 L 80,148
+              L 87,141 L 92,139 L 95,137
+              L 98,140 L 103,146 L 108,151
+              L 111,158
+              Q 115,154 117,151
+              L 118,148 L 116,143
+              Q 111,136 107,134
+              L 110,135 L 114,141 L 117,144
+              L 122,151 L 126,161 L 130,158
+              L 128,149 L 128,143
+              L 134,138 L 140,133
+              L 141,120 L 135,107
+              L 131,98 L 133,90
+              L 138,72 L 135,58 L 125,56
+              L 110,68 L 104,76 L 100,80
+              L 91,88 L 89,92
+              L 96,92 L 100,96 L 104,100
+              L 101,107 L 97,107
+              L 91,108 L 85,110 L 80,116
+              L 70,121 L 64,124
+              L 68,133 L 70,140
+              L 57,140 L 55,147 L 54,156 L 54,160
+              L 61,163 L 63,162 Z
+            "/>
+
+            <!-- Sicilia (triangolare, caratteristica) -->
+            <path d="M 104,159 L 112,159 L 109,164 Z"/>
+
+            <!-- Sardegna -->
+            <ellipse cx="93" cy="150" rx="2.5" ry="4.5"/>
+
+            <!-- Corsica -->
+            <ellipse cx="93" cy="142" rx="1.5" ry="3"/>
+
+            <!-- Gran Bretagna -->
+            <path d="M 62,120 L 65,116 L 78,117 L 74,112 L 68,101
+                     L 66,94 L 63,95 L 61,100 L 63,110 L 62,120 Z"/>
+
+            <!-- Irlanda -->
+            <path d="M 52,109 L 56,104 L 59,108 L 57,114 L 52,112 Z"/>
+
           </g>
 
           <!-- "2" grande -->
