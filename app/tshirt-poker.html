@@ -138,10 +138,21 @@ permalink: /app/tshirt-poker/
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 0.15rem; padding: 0.6rem 0.3rem;
   border-radius: 10px; border: 2px solid var(--border);
-  background: var(--card); cursor: pointer;
+  background: var(--card); cursor: pointer; color: var(--text);
   font-family: inherit; transition: all 0.15s;
   box-shadow: 0 2px 6px rgba(0,0,0,0.07);
 }
+
+/* ── Color picker seme ─────────────────────────────────────── */
+.ts-color-picker { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.4rem; }
+.ts-color-swatch {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 3px solid transparent; cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+.ts-color-swatch:hover { transform: scale(1.15); }
+.ts-color-swatch.selected { border-color: var(--text); transform: scale(1.15); }
 .ts-vote-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 14px rgba(0,0,0,0.13); border-color: var(--accent); }
 .ts-vote-btn.selected { background: var(--accent); border-color: var(--accent); color: #000; }
 .ts-vote-btn.selected .ts-vote-icon { filter: none; }
@@ -341,6 +352,22 @@ permalink: /app/tshirt-poker/
         <button class="ts-btn ts-btn-primary" id="tsBtnAddMember" style="align-self:flex-end;">Aggiungi</button>
       </div>
       <div class="ts-member-list" id="tsMemberList"></div>
+    </div>
+
+    <!-- Colore maglietta -->
+    <div class="ts-panel">
+      <h2>&#127963; Colore maglietta</h2>
+      <p style="font-size:0.83rem;color:var(--text-muted);margin:0 0 0.6rem;">Scegli il colore che verrà usato su tutte le carte.</p>
+      <div class="ts-color-picker" id="tsColorPicker">
+        <button class="ts-color-swatch selected" data-color="#3b82f6" style="background:#3b82f6;" title="Blu" type="button"></button>
+        <button class="ts-color-swatch" data-color="#ef4444" style="background:#ef4444;" title="Rosso" type="button"></button>
+        <button class="ts-color-swatch" data-color="#22c55e" style="background:#22c55e;" title="Verde" type="button"></button>
+        <button class="ts-color-swatch" data-color="#f59e0b" style="background:#f59e0b;" title="Giallo" type="button"></button>
+        <button class="ts-color-swatch" data-color="#a855f7" style="background:#a855f7;" title="Viola" type="button"></button>
+        <button class="ts-color-swatch" data-color="#ec4899" style="background:#ec4899;" title="Rosa" type="button"></button>
+        <button class="ts-color-swatch" data-color="#f97316" style="background:#f97316;" title="Arancione" type="button"></button>
+        <button class="ts-color-swatch" data-color="#6b7280" style="background:#6b7280;" title="Grigio" type="button"></button>
+      </div>
     </div>
 
     <!-- Import CSV -->
@@ -616,6 +643,7 @@ let state = {
   selectedFinal:     null,
   lastCardIdx:       -1,
   cachedData:        null,
+  sessionColor:      '#3b82f6',
 };
 
 /* ── Utils ─────────────────────────────────────────────────── */
@@ -660,6 +688,16 @@ el('tsBtnCreateSession').addEventListener('click', () => {
 /* ── Setup: partecipanti ───────────────────────────────────── */
 el('tsBtnAddMember').addEventListener('click', addMember);
 el('tsMemberInput').addEventListener('keydown', e => { if (e.key === 'Enter') addMember(); });
+
+/* ── Color picker ──────────────────────────────────────────── */
+document.querySelectorAll('.ts-color-swatch').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.ts-color-swatch').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    state.sessionColor = btn.dataset.color;
+  });
+});
+
 function addMember() {
   const name = el('tsMemberInput').value.trim();
   if (!name || state.setupMembers.includes(name)) return;
@@ -810,6 +848,7 @@ el('tsBtnStartSession').addEventListener('click', async () => {
     status:      'voting',
     votes:       {},
     finalVotes:  {},
+    color:       state.sessionColor,
   };
 
   try {
@@ -881,10 +920,11 @@ function startListening() {
 /* ── Render sessione ───────────────────────────────────────── */
 function renderSession(data) {
   state.cachedData = data;
-  const { status, cards, currentCard, votes, finalVotes, members, presence } = data;
+  const { status, cards, currentCard, votes, finalVotes, members, presence, color } = data;
   const isFac   = state.isFacilitator;
   const cardIdx = currentCard ?? 0;
   const card    = cards[cardIdx];
+  const sessionColor = color || '#3b82f6';
 
   if (!card) {
     el('tsWaitingCodeBadge').textContent = state.sessionCode;
@@ -894,12 +934,12 @@ function renderSession(data) {
   const cardVotes = (votes && votes[card.id]) ? votes[card.id] : {};
 
   if (status === 'finished') { renderSummary(cards, finalVotes, votes || {}); return; }
-  if (status === 'voting')   { renderVotingScreen(card, cardIdx, cards.length, cardVotes, members, isFac, presence || {}); return; }
-  if (status === 'revealed') { renderRevealScreen(card, cardIdx, cards.length, cardVotes, members, finalVotes, isFac, presence || {}); return; }
+  if (status === 'voting')   { renderVotingScreen(card, cardIdx, cards.length, cardVotes, members, isFac, presence || {}, sessionColor); return; }
+  if (status === 'revealed') { renderRevealScreen(card, cardIdx, cards.length, cardVotes, members, finalVotes, isFac, presence || {}, sessionColor); return; }
 }
 
 /* ── Voting screen ─────────────────────────────────────────── */
-function renderVotingScreen(card, idx, total, cardVotes, members, isFac, presence) {
+function renderVotingScreen(card, idx, total, cardVotes, members, isFac, presence, sessionColor) {
   el('tsVotingRoleLabel').textContent    = isFac ? '👑 Facilitatore' : '👤 ' + state.myName;
   el('tsVotingCodeBadge').textContent    = state.sessionCode;
   el('tsVotingCardCounter').textContent  = (idx+1) + ' / ' + total;
@@ -919,6 +959,11 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, presenc
   el('tsvDesc').textContent     = card.desc || '';
   el('tsvDesc').style.display   = card.desc ? '' : 'none';
   el('tsvIcon').textContent     = '👕';
+  el('tsvIcon').style.background    = sessionColor ? sessionColor + '33' : '';
+  el('tsvIcon').style.borderRadius  = sessionColor ? '50%' : '';
+  el('tsvIcon').style.padding       = sessionColor ? '0.4rem' : '';
+  el('tsvIcon').style.boxShadow     = sessionColor ? `0 0 0 3px ${sessionColor}66` : '';
+  el('tsvIcon').style.filter        = '';
 
   // Progress
   const memberList  = (members && members.length > 0) ? members : Object.keys(cardVotes);
@@ -948,7 +993,7 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, presenc
     const vCards = el('tsVoteCards');
     vCards.innerHTML = '';
     SIZES.forEach(sz => {
-      vCards.appendChild(makeVoteBtn(sz, myVote === sz.val, () => castVote(card.id, sz.val)));
+      vCards.appendChild(makeVoteBtn(sz, myVote === sz.val, () => castVote(card.id, sz.val), sessionColor));
     });
     const box = el('tsVoteExplainBox');
     if (myVote) {
@@ -968,12 +1013,13 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, presenc
 }
 
 /* ── Crea bottone voto ─────────────────────────────────────── */
-function makeVoteBtn(sz, isSelected, onClick) {
+function makeVoteBtn(sz, isSelected, onClick, color) {
   const btn = document.createElement('button');
   btn.className = 'ts-vote-btn' + (sz.red ? ' red' : '') + (isSelected ? ' selected' : '');
   btn.dataset.val = sz.val;
   btn.title       = sz.sub;
   btn.innerHTML   = `<span class="ts-vote-icon">${sz.icon}</span><span class="ts-vote-label">${escHtml(sz.val)}</span>`;
+  if (color && !sz.red) btn.style.borderTopColor = color;
   btn.addEventListener('click', onClick);
   return btn;
 }
@@ -1000,7 +1046,7 @@ el('tsBtnReveal').addEventListener('click', async () => {
 });
 
 /* ── Reveal screen ─────────────────────────────────────────── */
-function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, isFac, presence) {
+function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, isFac, presence, sessionColor) {
   el('tsRevealRoleLabel').textContent    = isFac ? '👑 Facilitatore' : '👤 ' + state.myName;
   el('tsRevealCodeBadge').textContent    = state.sessionCode;
   el('tsRevealCardCounter').textContent  = (idx+1) + ' / ' + total;
@@ -1092,7 +1138,7 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
     fCards.innerHTML = '';
     const existing = finalVotes && finalVotes[card.id];
     SIZES.filter(sz => !['?','☕','XXL'].includes(sz.val)).forEach(sz => {
-      fCards.appendChild(makeVoteBtn(sz, existing === sz.val, () => selectFinal(card.id, sz.val)));
+      fCards.appendChild(makeVoteBtn(sz, existing === sz.val, () => selectFinal(card.id, sz.val), sessionColor));
     });
     state.selectedFinal = existing || null;
     el('tsBtnNextCard').disabled = !existing;
@@ -1225,7 +1271,9 @@ el('tsBtnCopySummary').addEventListener('click', () => {
 el('tsBtnNewSession').addEventListener('click', () => {
   if (state.unsubscribe) { state.unsubscribe(); state.unsubscribe = null; }
   stopPresence();
-  state = { sessionCode:null, isFacilitator:false, myName:null, unsubscribe:null, presenceInterval:null, setupMembers:[], setupCards:[], myVotes:{}, selectedFinal:null, lastCardIdx:-1, cachedData:null };
+  state = { sessionCode:null, isFacilitator:false, myName:null, unsubscribe:null, presenceInterval:null, setupMembers:[], setupCards:[], myVotes:{}, selectedFinal:null, lastCardIdx:-1, cachedData:null, sessionColor:'#3b82f6' };
+  // Riporta picker al default blu
+  document.querySelectorAll('.ts-color-swatch').forEach(b => b.classList.toggle('selected', b.dataset.color === '#3b82f6'));
   showScreen('tsScreenWelcome');
 });
 </script>
