@@ -27,7 +27,6 @@ permalink: /app/lancio-moneta/
   flex-direction: column;
   gap: 1rem;
 }
-
 .dilemma-card label {
   display: block;
   font-size: 0.75rem;
@@ -37,7 +36,6 @@ permalink: /app/lancio-moneta/
   color: var(--text-muted);
   margin-bottom: 0.35rem;
 }
-
 .dilemma-card input,
 .dilemma-card textarea {
   width: 100%;
@@ -61,12 +59,9 @@ permalink: /app/lancio-moneta/
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
 }
-@media (max-width: 420px) {
-  .alternatives-row { grid-template-columns: 1fr; }
-}
+@media (max-width: 420px) { .alternatives-row { grid-template-columns: 1fr; } }
 
 .alt-field { display: flex; flex-direction: column; }
-
 .alt-badge {
   display: inline-block;
   font-size: 0.7rem;
@@ -82,47 +77,36 @@ permalink: /app/lancio-moneta/
 
 /* ── Coin stage ─────────────────────────────────────────── */
 .coin-stage {
-  perspective: 900px;
-  width: 220px;
-  height: 220px;
+  perspective: 1000px;
+  width: 240px;
+  height: 240px;
   cursor: pointer;
   user-select: none;
-  flex-shrink: 0;
+  filter: drop-shadow(0 12px 32px rgba(0,0,0,0.7));
 }
-
 .coin {
-  width: 220px;
-  height: 220px;
+  width: 240px;
+  height: 240px;
   position: relative;
   transform-style: preserve-3d;
 }
-
 .coin-face {
   position: absolute;
-  width: 220px;
-  height: 220px;
+  width: 240px;
+  height: 240px;
   border-radius: 50%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  overflow: hidden;
+  overflow: visible;
 }
-
-.coin-testa {
-  background: radial-gradient(circle at 40% 35%, #f0f0f0 0%, #d8d8d8 30%, #a8a8a8 50%, #888 65%, #aaa 80%);
-  box-shadow: inset 0 2px 6px rgba(255,255,255,0.6), inset 0 -2px 6px rgba(0,0,0,0.4), 0 8px 30px rgba(0,0,0,0.6);
-}
-.coin-croce {
-  background: radial-gradient(circle at 60% 35%, #f0f0f0 0%, #d8d8d8 30%, #a8a8a8 50%, #888 65%, #aaa 80%);
-  box-shadow: inset 0 2px 6px rgba(255,255,255,0.6), inset 0 -2px 6px rgba(0,0,0,0.4), 0 8px 30px rgba(0,0,0,0.6);
-  transform: rotateY(180deg);
-}
+.coin-croce { transform: rotateY(180deg); }
 
 @keyframes flip-coin {
   0%   { transform: rotateY(0deg); }
   100% { transform: rotateY(var(--flip-end)); }
 }
 .coin.flipping {
-  animation: flip-coin var(--flip-duration) cubic-bezier(0.4,0,0.6,1) forwards;
+  animation: flip-coin var(--flip-duration) cubic-bezier(0.33,0,0.66,1) forwards;
 }
 
 /* ── Button ─────────────────────────────────────────────── */
@@ -153,56 +137,27 @@ permalink: /app/lancio-moneta/
   display: none;
   flex-direction: column;
   gap: 0.5rem;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
 }
-.coin-result.show {
-  display: flex;
-  opacity: 1;
-  transform: translateY(0);
-}
+.coin-result.show { display: flex; }
 .coin-result.res-testa { border-color: rgba(212,160,23,0.4); }
 .coin-result.res-croce { border-color: rgba(88,166,255,0.3); }
-
-.res-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-muted);
-}
-.res-winner {
-  font-size: 1.5rem;
-  font-weight: 800;
-  line-height: 1.3;
-}
+.res-label  { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+.res-winner { font-size: 1.5rem; font-weight: 800; line-height: 1.3; }
 .res-testa .res-winner { color: #c8a020; }
 .res-croce .res-winner { color: var(--accent); }
-
-.res-dilemma {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  font-style: italic;
-}
+.res-dilemma { font-size: 0.82rem; color: var(--text-muted); font-style: italic; }
 
 /* ── Stats ──────────────────────────────────────────────── */
-.coin-stats {
-  display: flex;
-  gap: 1.5rem;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
-.stat-item { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
-.stat-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.coin-stats { display: flex; gap: 1.5rem; }
+.stat-item  { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
+.stat-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
 .stat-value { font-size: 1.35rem; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
-
-.coin-hint { font-size: 0.8rem; color: var(--text-muted); text-align: center; line-height: 1.5; }
+.coin-hint  { font-size: 0.8rem; color: var(--text-muted); text-align: center; line-height: 1.5; }
 </style>
 
 <div class="coin-app">
 
-  <!-- ── Dilemma form ──────────────────────────────────── -->
+  <!-- ── Form dilemma ──────────────────────────────────── -->
   <div class="dilemma-card">
     <div>
       <label for="dilemma-text">Il tuo dilemma</label>
@@ -224,149 +179,173 @@ permalink: /app/lancio-moneta/
   <div class="coin-stage" onclick="lancia()" title="Clicca per lanciare">
     <div class="coin" id="coin">
 
-      <!-- TESTA — lato Dem -->
+      <!-- ══ TESTA — lato Dem ══ -->
       <div class="coin-face coin-testa">
-        <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" width="220" height="220">
+        <svg id="svg-testa" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg"
+             xmlns:xlink="http://www.w3.org/1999/xlink" width="240" height="240">
           <defs>
-            <radialGradient id="goldT" cx="42%" cy="38%" r="55%">
-              <stop offset="0%"   stop-color="#f7e57a"/>
-              <stop offset="35%"  stop-color="#d4a017"/>
-              <stop offset="65%"  stop-color="#b8861a"/>
-              <stop offset="100%" stop-color="#8a6010"/>
+            <!-- Oro disco interno -->
+            <radialGradient id="gGoldT" cx="38%" cy="32%" r="65%">
+              <stop offset="0%"   stop-color="#fdf0a0"/>
+              <stop offset="20%"  stop-color="#e8c040"/>
+              <stop offset="50%"  stop-color="#c49020"/>
+              <stop offset="80%"  stop-color="#a07018"/>
+              <stop offset="100%" stop-color="#7a5010"/>
             </radialGradient>
-            <radialGradient id="silverT" cx="40%" cy="35%" r="60%">
-              <stop offset="0%"   stop-color="#f5f5f5"/>
-              <stop offset="40%"  stop-color="#d0d0d0"/>
-              <stop offset="70%"  stop-color="#909090"/>
-              <stop offset="100%" stop-color="#b0b0b0"/>
+            <!-- Argento anello esterno -->
+            <radialGradient id="gSilverT" cx="35%" cy="28%" r="70%">
+              <stop offset="0%"   stop-color="#ffffff"/>
+              <stop offset="15%"  stop-color="#e8e8e8"/>
+              <stop offset="45%"  stop-color="#b8b8b8"/>
+              <stop offset="75%"  stop-color="#787878"/>
+              <stop offset="100%" stop-color="#a0a0a0"/>
             </radialGradient>
-            <clipPath id="clipT"><circle cx="110" cy="110" r="72"/></clipPath>
-          </defs>
-
-          <!-- Anello argento -->
-          <circle cx="110" cy="110" r="108" fill="url(#silverT)"/>
-          <circle cx="110" cy="110" r="107" fill="none" stroke="#777" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
-
-          <!-- Disco oro -->
-          <circle cx="110" cy="110" r="72" fill="url(#goldT)"/>
-          <circle cx="110" cy="110" r="72" fill="none" stroke="#6a4a10" stroke-width="1.5"/>
-          <circle cx="110" cy="110" r="74" fill="none" stroke="#c8a030" stroke-width="0.8" opacity="0.6"/>
-
-          <!-- 12 stelle UE -->
-          <g fill="#d4a017" font-size="9" text-anchor="middle" dominant-baseline="central">
-            <text x="110" y="13">★</text>
-            <text x="152" y="24">★</text>
-            <text x="184" y="56">★</text>
-            <text x="196" y="100">★</text>
-            <text x="184" y="144">★</text>
-            <text x="152" y="176">★</text>
-            <text x="110" y="188">★</text>
-            <text x="68"  y="176">★</text>
-            <text x="36"  y="144">★</text>
-            <text x="24"  y="100">★</text>
-            <text x="36"  y="56">★</text>
-            <text x="68"  y="24">★</text>
-          </g>
-
-          <!-- Contenuto disco: foto di Dem -->
-          <g clip-path="url(#clipT)">
-            <!-- Foto profilo Dem in bianco e nero stile incisione -->
-            <filter id="incision">
+            <!-- Riflesso speculare -->
+            <radialGradient id="gSpecT" cx="30%" cy="25%" r="45%">
+              <stop offset="0%"  stop-color="rgba(255,255,255,0.55)"/>
+              <stop offset="60%" stop-color="rgba(255,255,255,0.0)"/>
+            </radialGradient>
+            <!-- Filtro foto: b/n + alto contrasto + tint oro -->
+            <filter id="fPhotoT" color-interpolation-filters="sRGB">
               <feColorMatrix type="saturate" values="0"/>
               <feComponentTransfer>
-                <feFuncR type="linear" slope="1.3" intercept="-0.15"/>
-                <feFuncG type="linear" slope="1.3" intercept="-0.15"/>
-                <feFuncB type="linear" slope="1.3" intercept="-0.15"/>
+                <feFuncR type="gamma" amplitude="1.1" exponent="0.85" offset="0.0"/>
+                <feFuncG type="gamma" amplitude="1.0" exponent="0.90" offset="0.0"/>
+                <feFuncB type="gamma" amplitude="0.7" exponent="1.1"  offset="0.0"/>
               </feComponentTransfer>
-              <feBlend in="SourceGraphic" mode="multiply"/>
             </filter>
-            <image href="/profilo.png"
-                   x="48" y="48" width="124" height="124"
-                   clip-path="url(#clipT)"
-                   filter="url(#incision)"
-                   preserveAspectRatio="xMidYMid slice"
-                   opacity="0.82"/>
+            <!-- Incavo del bordo moneta -->
+            <clipPath id="clipInnerT"><circle cx="120" cy="120" r="78"/></clipPath>
+            <clipPath id="clipOuterT"><circle cx="120" cy="120" r="118"/></clipPath>
+          </defs>
 
-            <!-- Leggero overlay dorato per effetto moneta -->
-            <circle cx="110" cy="110" r="72" fill="url(#goldT)" opacity="0.18"/>
+          <!-- BORDO ESTERNO scuro (spessore moneta) -->
+          <circle cx="120" cy="120" r="119" fill="#4a3808"/>
 
-            <!-- "DEM" testo inciso in basso -->
-            <text x="110" y="166" text-anchor="middle"
-                  font-size="11" font-weight="900" font-family="serif"
-                  fill="#5a3808" letter-spacing="5" opacity="0.9">DEM</text>
-          </g>
+          <!-- ANELLO ARGENTO -->
+          <circle cx="120" cy="120" r="118" fill="url(#gSilverT)"/>
 
-          <!-- Luce riflessa anello -->
-          <ellipse cx="78" cy="62" rx="22" ry="8" fill="white" opacity="0.12" transform="rotate(-45 78 62)"/>
+          <!-- Reeding: dentellatura generata via JS, inserita qui -->
+          <g id="reeding-testa" fill="#606060" opacity="0.55"></g>
+
+          <!-- Solco separazione bimetallica -->
+          <circle cx="120" cy="120" r="80" fill="none" stroke="#3a2a08" stroke-width="2.5"/>
+          <circle cx="120" cy="120" r="77" fill="none" stroke="#c8a030" stroke-width="0.8" opacity="0.5"/>
+
+          <!-- DISCO ORO interno -->
+          <circle cx="120" cy="120" r="78" fill="url(#gGoldT)"/>
+
+          <!-- Foto Dem nel disco -->
+          <image href="/profilo.png"
+                 x="42" y="42" width="156" height="156"
+                 clip-path="url(#clipInnerT)"
+                 filter="url(#fPhotoT)"
+                 preserveAspectRatio="xMidYMid slice"/>
+
+          <!-- Velo dorato sulla foto per integrazione -->
+          <circle cx="120" cy="120" r="78" fill="url(#gGoldT)" opacity="0.28" clip-path="url(#clipInnerT)"/>
+
+          <!-- Testo DEM in basso nel disco -->
+          <text x="120" y="186" text-anchor="middle"
+                font-size="11" font-weight="900" font-family="Georgia,serif"
+                fill="#3a2008" letter-spacing="5"
+                style="text-shadow:0 1px 0 rgba(255,220,80,0.4)">DEM</text>
+
+          <!-- Anno in basso a destra -->
+          <text x="158" y="174" text-anchor="middle" font-size="7"
+                fill="#5a3808" font-family="Georgia,serif" opacity="0.75">2024</text>
+
+          <!-- Riflesso speculare su tutto -->
+          <circle cx="120" cy="120" r="118" fill="url(#gSpecT)"/>
         </svg>
       </div>
 
-      <!-- CROCE — lato europeo -->
+      <!-- ══ CROCE — lato europeo 2€ ══ -->
       <div class="coin-face coin-croce">
-        <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" width="220" height="220">
+        <svg id="svg-croce" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg"
+             width="240" height="240">
           <defs>
-            <radialGradient id="goldC" cx="58%" cy="38%" r="55%">
-              <stop offset="0%"   stop-color="#f7e57a"/>
-              <stop offset="35%"  stop-color="#d4a017"/>
-              <stop offset="65%"  stop-color="#b8861a"/>
-              <stop offset="100%" stop-color="#8a6010"/>
+            <radialGradient id="gGoldC" cx="62%" cy="32%" r="65%">
+              <stop offset="0%"   stop-color="#fdf0a0"/>
+              <stop offset="20%"  stop-color="#e8c040"/>
+              <stop offset="50%"  stop-color="#c49020"/>
+              <stop offset="80%"  stop-color="#a07018"/>
+              <stop offset="100%" stop-color="#7a5010"/>
             </radialGradient>
-            <radialGradient id="silverC" cx="60%" cy="35%" r="60%">
-              <stop offset="0%"   stop-color="#f5f5f5"/>
-              <stop offset="40%"  stop-color="#d0d0d0"/>
-              <stop offset="70%"  stop-color="#909090"/>
-              <stop offset="100%" stop-color="#b0b0b0"/>
+            <radialGradient id="gSilverC" cx="65%" cy="28%" r="70%">
+              <stop offset="0%"   stop-color="#ffffff"/>
+              <stop offset="15%"  stop-color="#e8e8e8"/>
+              <stop offset="45%"  stop-color="#b8b8b8"/>
+              <stop offset="75%"  stop-color="#787878"/>
+              <stop offset="100%" stop-color="#a0a0a0"/>
             </radialGradient>
-            <clipPath id="clipC"><circle cx="110" cy="110" r="72"/></clipPath>
+            <radialGradient id="gSpecC" cx="70%" cy="25%" r="45%">
+              <stop offset="0%"  stop-color="rgba(255,255,255,0.55)"/>
+              <stop offset="60%" stop-color="rgba(255,255,255,0.0)"/>
+            </radialGradient>
+            <clipPath id="clipInnerC"><circle cx="120" cy="120" r="78"/></clipPath>
           </defs>
 
-          <circle cx="110" cy="110" r="108" fill="url(#silverC)"/>
-          <circle cx="110" cy="110" r="107" fill="none" stroke="#777" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
-          <circle cx="110" cy="110" r="72" fill="url(#goldC)"/>
-          <circle cx="110" cy="110" r="72" fill="none" stroke="#6a4a10" stroke-width="1.5"/>
-          <circle cx="110" cy="110" r="74" fill="none" stroke="#c8a030" stroke-width="0.8" opacity="0.6"/>
+          <circle cx="120" cy="120" r="119" fill="#4a3808"/>
+          <circle cx="120" cy="120" r="118" fill="url(#gSilverC)"/>
 
-          <g fill="#d4a017" font-size="9" text-anchor="middle" dominant-baseline="central">
-            <text x="110" y="13">★</text>
-            <text x="152" y="24">★</text>
-            <text x="184" y="56">★</text>
-            <text x="196" y="100">★</text>
-            <text x="184" y="144">★</text>
-            <text x="152" y="176">★</text>
-            <text x="110" y="188">★</text>
-            <text x="68"  y="176">★</text>
-            <text x="36"  y="144">★</text>
-            <text x="24"  y="100">★</text>
-            <text x="36"  y="56">★</text>
-            <text x="68"  y="24">★</text>
+          <g id="reeding-croce" fill="#606060" opacity="0.55"></g>
+
+          <circle cx="120" cy="120" r="80" fill="none" stroke="#3a2a08" stroke-width="2.5"/>
+          <circle cx="120" cy="120" r="77" fill="none" stroke="#c8a030" stroke-width="0.8" opacity="0.5"/>
+          <circle cx="120" cy="120" r="78" fill="url(#gGoldC)"/>
+
+          <!-- Stelle UE sull'anello (12 stelle) -->
+          <g id="stars-croce" fill="#d4a017" opacity="0.9"></g>
+
+          <!-- Cartina Europa -->
+          <g clip-path="url(#clipInnerC)" fill="#7a5010" stroke="#5a3808"
+             stroke-width="0.5" opacity="0.8">
+            <path d="M74 104 Q78 87 87 79 Q96 71 105 70
+                     Q109 74 107 82 Q113 76 122 74
+                     Q129 76 130 83 Q135 79 141 79
+                     Q148 83 146 92 Q150 90 154 95
+                     Q156 102 152 108 Q147 115 138 117
+                     Q144 122 142 128 Q138 134 129 134
+                     Q125 140 120 144 Q114 148 108 146
+                     Q101 142 99 135 Q92 131 85 126
+                     Q77 119 74 111 Q72 107 74 104Z"/>
+            <path d="M105 70 Q109 60 116 55 Q123 52 127 57
+                     Q131 63 129 70 Q124 66 119 68 Q113 70 105 70Z"/>
+            <path d="M127 57 Q133 50 138 54 Q140 61 136 68
+                     Q131 65 127 57Z"/>
+            <path d="M74 104 Q67 105 65 114 Q65 123 72 127
+                     Q76 129 80 124 Q78 117 80 110 Q78 107 74 104Z"/>
+            <path d="M120 134 Q122 143 124 152
+                     Q122 158 118 160 Q114 157 114 149
+                     Q116 140 120 134Z"/>
+            <path d="M116 162 Q120 162 122 167
+                     Q120 170 116 168 Q113 165 116 162Z"/>
+            <path d="M68 88 Q73 82 77 84 Q79 89 75 93
+                     Q71 93 68 88Z"/>
           </g>
 
-          <g clip-path="url(#clipC)" fill="#a07010" stroke="#7a5008" stroke-width="0.4" opacity="0.75">
-            <path d="M68 95 Q72 80 80 72 Q88 65 96 64 Q100 68 98 75 Q104 70 112 68 Q118 70 120 76 Q124 72 130 72 Q136 76 134 84 Q138 82 142 86 Q144 92 140 98 Q136 104 128 106 Q134 110 132 116 Q128 122 120 122 Q116 128 112 132 Q106 136 100 134 Q94 130 92 124 Q86 120 80 116 Q72 110 68 102 Q66 98 68 95Z"/>
-            <path d="M98 64 Q102 55 108 50 Q114 47 118 52 Q122 57 120 64 Q116 60 112 62 Q106 64 98 64Z"/>
-            <path d="M118 52 Q124 46 128 50 Q130 56 126 62 Q122 60 118 52Z"/>
-            <path d="M68 95 Q62 96 60 104 Q60 112 66 116 Q70 118 74 114 Q72 108 74 102 Q72 98 68 95Z"/>
-            <path d="M112 122 Q114 130 116 138 Q114 144 110 146 Q106 143 106 136 Q108 128 112 122Z"/>
-            <path d="M108 148 Q112 148 114 152 Q112 155 108 153 Q105 150 108 148Z"/>
-            <path d="M64 80 Q68 75 72 76 Q74 80 70 84 Q66 84 64 80Z"/>
+          <!-- "2" grande -->
+          <text x="128" y="130" text-anchor="middle"
+                font-size="58" font-weight="900" font-family="Georgia,serif"
+                fill="#4a2e08" stroke="#2a1808" stroke-width="0.8"
+                opacity="0.88">2</text>
+          <text x="128" y="143" text-anchor="middle"
+                font-size="9" font-weight="700" font-family="Georgia,serif"
+                fill="#4a2e08" letter-spacing="3">EURO</text>
+
+          <!-- Linee orizzontali campo sinistro -->
+          <g stroke="#6a4010" stroke-width="0.9" opacity="0.5">
+            <line x1="50" y1="102" x2="83" y2="102"/>
+            <line x1="50" y1="107" x2="80" y2="107"/>
+            <line x1="50" y1="112" x2="79" y2="112"/>
+            <line x1="50" y1="117" x2="79" y2="117"/>
+            <line x1="50" y1="122" x2="80" y2="122"/>
+            <line x1="50" y1="127" x2="82" y2="127"/>
+            <line x1="50" y1="132" x2="84" y2="132"/>
           </g>
 
-          <text x="118" y="122" text-anchor="middle"
-                font-size="52" font-weight="900" font-family="serif"
-                fill="#5a3808" stroke="#3a2008" stroke-width="0.5" opacity="0.85">2</text>
-          <text x="118" y="135" text-anchor="middle"
-                font-size="8.5" font-weight="700" font-family="serif"
-                fill="#5a3808" letter-spacing="2.5">EURO</text>
-
-          <line x1="48" y1="96"  x2="78" y2="96"  stroke="#7a5010" stroke-width="0.8" opacity="0.5"/>
-          <line x1="48" y1="100" x2="75" y2="100" stroke="#7a5010" stroke-width="0.8" opacity="0.5"/>
-          <line x1="48" y1="104" x2="72" y2="104" stroke="#7a5010" stroke-width="0.8" opacity="0.5"/>
-          <line x1="48" y1="108" x2="70" y2="108" stroke="#7a5010" stroke-width="0.8" opacity="0.5"/>
-          <line x1="48" y1="112" x2="70" y2="112" stroke="#7a5010" stroke-width="0.8" opacity="0.5"/>
-          <line x1="48" y1="116" x2="72" y2="116" stroke="#7a5010" stroke-width="0.8" opacity="0.5"/>
-          <line x1="48" y1="120" x2="74" y2="120" stroke="#7a5010" stroke-width="0.8" opacity="0.5"/>
-
-          <ellipse cx="142" cy="62" rx="22" ry="8" fill="white" opacity="0.12" transform="rotate(45 142 62)"/>
+          <circle cx="120" cy="120" r="118" fill="url(#gSpecC)"/>
         </svg>
       </div>
 
@@ -375,8 +354,8 @@ permalink: /app/lancio-moneta/
 
   <!-- ── Risultato ─────────────────────────────────────── -->
   <div class="coin-result" id="coin-result">
-    <span class="res-label" id="res-label"></span>
-    <span class="res-winner" id="res-winner"></span>
+    <span class="res-label"   id="res-label"></span>
+    <span class="res-winner"  id="res-winner"></span>
     <span class="res-dilemma" id="res-dilemma"></span>
   </div>
 
@@ -404,6 +383,76 @@ permalink: /app/lancio-moneta/
 </div>
 
 <script>
+/* ── Genera reeding (dentellatura bordo) ─────────────────── */
+function buildReeding(groupId) {
+  const g   = document.getElementById(groupId);
+  const cx  = 120, cy = 120, r = 113;
+  const N   = 140; // numero denti
+  const tw  = 2.2; // larghezza dente (gradi)
+  for (let i = 0; i < N; i++) {
+    const angle = (360 / N) * i - 90;
+    const rad   = angle * Math.PI / 180;
+    const rect  = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('x',         cx + (r - 2.5));
+    rect.setAttribute('y',         cy - tw / 2);
+    rect.setAttribute('width',     5.5);
+    rect.setAttribute('height',    tw);
+    rect.setAttribute('rx',        0.5);
+    rect.setAttribute('transform', `rotate(${angle} ${cx} ${cy})`);
+    g.appendChild(rect);
+  }
+}
+
+/* ── Genera stelle UE sull'anello ────────────────────────── */
+function buildStars(groupId) {
+  const g  = document.getElementById(groupId);
+  const cx = 120, cy = 120, r = 98;
+  for (let i = 0; i < 12; i++) {
+    const angle = (360 / 12) * i - 90;
+    const rad   = angle * Math.PI / 180;
+    const x     = cx + r * Math.cos(rad);
+    const y     = cy + r * Math.sin(rad);
+    const txt   = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('x',                x);
+    txt.setAttribute('y',                y);
+    txt.setAttribute('text-anchor',      'middle');
+    txt.setAttribute('dominant-baseline','central');
+    txt.setAttribute('font-size',        '10');
+    txt.textContent = '★';
+    g.appendChild(txt);
+  }
+}
+
+buildReeding('reeding-testa');
+buildReeding('reeding-croce');
+buildStars('stars-croce');
+
+/* ── Aggiungi stelle anche sul lato Testa sull'anello ─────── */
+(function() {
+  const g  = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  g.setAttribute('fill',    '#d4a017');
+  g.setAttribute('opacity', '0.9');
+  const svg = document.getElementById('svg-testa');
+  // Insert before the specular highlight (last child)
+  svg.insertBefore(g, svg.lastElementChild);
+  const cx = 120, cy = 120, r = 98;
+  for (let i = 0; i < 12; i++) {
+    const angle = (360 / 12) * i - 90;
+    const rad   = angle * Math.PI / 180;
+    const x     = cx + r * Math.cos(rad);
+    const y     = cy + r * Math.sin(rad);
+    const txt   = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('x',                x);
+    txt.setAttribute('y',                y);
+    txt.setAttribute('text-anchor',      'middle');
+    txt.setAttribute('dominant-baseline','central');
+    txt.setAttribute('font-size',        '10');
+    txt.textContent = '★';
+    g.appendChild(txt);
+  }
+})();
+
+/* ── Flip logic ──────────────────────────────────────────── */
 let isFlipping    = false;
 let totalRotation = 0;
 let stats         = { testa: 0, croce: 0 };
@@ -417,8 +466,7 @@ function lancia() {
   const coin     = document.getElementById('coin');
 
   btn.disabled = true;
-  resultEl.className = 'coin-result'; // nascondi
-  void resultEl.offsetWidth;          // reflow per reset transizione
+  resultEl.className = 'coin-result';
 
   const isTesta    = Math.random() < 0.5;
   const giri       = 5 + Math.floor(Math.random() * 4);
@@ -445,14 +493,15 @@ function lancia() {
     document.getElementById('stat-croce').textContent  = stats.croce;
     document.getElementById('stat-totale').textContent = stats.testa + stats.croce;
 
-    // Leggi i valori dal form
     const dilemma  = document.getElementById('dilemma-text').value.trim();
     const altTesta = document.getElementById('alt-testa').value.trim();
     const altCroce = document.getElementById('alt-croce').value.trim();
     const winner   = isTesta ? (altTesta || 'Testa') : (altCroce || 'Croce');
     const emoji    = isTesta ? '🪙' : '🌍';
 
-    document.getElementById('res-label').textContent   = isTesta ? '🪙 È uscita TESTA — la scelta è:' : '🌍 È uscita CROCE — la scelta è:';
+    document.getElementById('res-label').textContent   = isTesta
+      ? '🪙 È uscita TESTA — la scelta è:'
+      : '🌍 È uscita CROCE — la scelta è:';
     document.getElementById('res-winner').textContent  = emoji + ' ' + winner;
     document.getElementById('res-dilemma').textContent = dilemma ? '«' + dilemma + '»' : '';
 
