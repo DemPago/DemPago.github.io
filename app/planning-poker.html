@@ -111,76 +111,68 @@ permalink: /app/planning-poker/
 /* ── Carta da poker (schermata di voto) ───────────────────── */
 .pp-playing-card {
   position: relative;
-  background: linear-gradient(160deg, #fffef7 0%, #f5f0e8 100%);
-  border: 2.5px solid #d4c9a8;
-  border-radius: 20px;
-  padding: 1.3rem 1.4rem 1.4rem;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.09);
+  border-radius: 22px;
+  padding: 1.5rem 1.6rem 1.7rem;
   box-shadow:
-    0 8px 32px rgba(0,0,0,0.18),
-    0 2px 8px rgba(0,0,0,0.10),
-    inset 0 1px 0 rgba(255,255,255,0.9),
-    inset 0 -1px 0 rgba(0,0,0,0.04);
-  min-height: 180px; display: flex; flex-direction: column; overflow: hidden;
+    0 1px 3px rgba(0,0,0,0.05),
+    0 6px 18px rgba(0,0,0,0.09),
+    0 22px 52px rgba(0,0,0,0.13),
+    0 44px 76px rgba(0,0,0,0.06);
+  min-height: 210px; display: flex; flex-direction: column; overflow: hidden;
 }
-/* Bordo interno dorato */
-.pp-playing-card::after {
+/* Bordo interno sottile */
+.pp-playing-card::before {
   content: ''; position: absolute;
-  inset: 6px; border: 1px solid rgba(180,155,90,0.25);
+  inset: 10px; border: 1px solid rgba(0,0,0,0.055);
   border-radius: 14px; pointer-events: none; z-index: 0;
 }
-/* Pattern filigrana */
-.pp-playing-card::before {
-  content: ''; position: absolute; inset: 0;
-  background-image:
-    radial-gradient(circle, rgba(180,155,90,0.08) 1px, transparent 1px);
-  background-size: 18px 18px;
-  border-radius: 18px; pointer-events: none; z-index: 0;
-}
+.pp-playing-card::after { display: none; }
+
 .pp-card-corner {
-  position: absolute; top: 0.65rem; left: 0.8rem;
-  line-height: 1.1; z-index: 2; display: flex; flex-direction: column; align-items: center;
+  position: absolute; top: 1rem; left: 1.15rem;
+  line-height: 1.05; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 0;
 }
 .pp-card-corner-br {
-  position: absolute; bottom: 0.65rem; right: 0.8rem;
-  transform: rotate(180deg); line-height: 1.1; z-index: 2;
-  display: flex; flex-direction: column; align-items: center;
+  position: absolute; bottom: 1rem; right: 1.15rem;
+  transform: rotate(180deg); line-height: 1.05; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 0;
 }
-.pp-corner-num  {
-  font-size: 1.25rem; font-weight: 900; font-family: 'Georgia', serif;
-  display: block; line-height: 1; text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+.pp-corner-num {
+  font-size: 1.8rem; font-weight: 900; font-family: 'Georgia', serif;
+  display: block; line-height: 1; color: #111;
 }
-.pp-corner-suit { font-size: 0.9rem; display: block; line-height: 1; margin-top: 1px; }
+.pp-corner-suit {
+  font-size: 1.2rem; display: block; line-height: 1;
+  margin-top: 1px; color: #111;
+}
 .pp-card-suit-bg {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-  font-size: 7rem; opacity: 0.05; pointer-events: none; user-select: none;
-  line-height: 1; z-index: 0; filter: blur(1px);
+  font-size: 11rem; opacity: 0.04; pointer-events: none; user-select: none;
+  line-height: 1; z-index: 0; color: #000;
 }
-/* Decorazione semi angoli piccoli */
-.pp-card-suit-tl {
-  position: absolute; top: 2.6rem; left: 0.9rem;
-  font-size: 0.65rem; opacity: 0.25; z-index: 1; line-height: 1;
-}
-.pp-card-suit-br {
-  position: absolute; bottom: 2.6rem; right: 0.9rem;
-  font-size: 0.65rem; opacity: 0.25; z-index: 1; line-height: 1;
-  transform: rotate(180deg);
-}
+/* Decorazioni angolo piccole — nascoste */
+.pp-card-suit-tl,
+.pp-card-suit-br { display: none; }
+
 .pp-card-body {
-  position: relative; z-index: 1; padding: 0 2.2rem; flex: 1;
-  display: flex; flex-direction: column; justify-content: center; gap: 0.4rem;
+  position: relative; z-index: 1; padding: 0.4rem 3.5rem; flex: 1;
+  display: flex; flex-direction: column; justify-content: center; gap: 0.6rem;
 }
 .pp-card-issue-key {
-  font-size: 0.68rem; font-weight: 800; color: #b4a060;
-  text-transform: uppercase; letter-spacing: 0.1em;
+  font-size: 0.68rem; font-weight: 800; color: var(--accent);
+  text-transform: uppercase; letter-spacing: 0.12em;
   font-family: 'Courier New', monospace;
 }
 .pp-card-title-main {
-  font-weight: 800; font-size: 1.05rem; color: #1a1414;
+  font-weight: 800; font-size: 1.2rem; color: #111;
   line-height: 1.38; word-break: break-word;
   font-family: Georgia, serif;
 }
 .pp-card-desc-main {
-  font-size: 0.79rem; color: #6b5c4a; line-height: 1.5; word-break: break-word;
+  font-size: 0.82rem; color: #555; line-height: 1.55; word-break: break-word;
 }
 
 /* ── Mini-carte voto ──────────────────────────────────────── */
@@ -359,6 +351,19 @@ permalink: /app/planning-poker/
 .pp-csv-select-all { font-size: 0.78rem; color: var(--accent); cursor: pointer; background: none;
   border: none; padding: 0; font-family: inherit; text-decoration: underline; }
 
+/* ── Auth facilitatore ────────────────────────────────────── */
+.pp-auth-row {
+  display: flex; gap: 0.5rem; width: 100%; max-width: 320px;
+}
+.pp-auth-row input { flex: 1; }
+.pp-lock-badge {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-size: 0.75rem; font-weight: 700; color: var(--text-muted);
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 20px; padding: 0.2rem 0.65rem;
+}
+.pp-lock-badge.unlocked { color: #2ecc71; border-color: #2ecc71; background: rgba(46,204,113,0.08); }
+
 /* ── Riepilogo finale ─────────────────────────────────────── */
 .pp-summary-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
 .pp-summary-table th {
@@ -444,9 +449,17 @@ permalink: /app/planning-poker/
       <div style="font-size:3.5rem;line-height:1;">&#127183;</div>
       <div>
         <p style="font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:0.35rem;">Sei il facilitatore?</p>
-        <p>Crea una nuova sessione, aggiungi le card e condividi il codice al team.</p>
+        <p>Inserisci la password del team per creare una sessione e importare da Jira.</p>
       </div>
-      <button class="pp-btn pp-btn-primary pp-btn-large" id="btnCreateSession">&#43; Crea sessione</button>
+      <div class="pp-auth-row">
+        <div class="pp-field" style="flex:1;">
+          <input type="password" id="facilitatorPwd" placeholder="Password team" autocomplete="off">
+        </div>
+        <button class="pp-btn pp-btn-primary" id="btnUnlock">&#128275; Sblocca</button>
+      </div>
+      <div id="pwdError" style="display:none;font-size:0.8rem;color:#e05c5c;"></div>
+      <span class="pp-lock-badge" id="lockBadge">&#128274; Sessione bloccata</span>
+      <button class="pp-btn pp-btn-primary pp-btn-large" id="btnCreateSession" style="display:none;">&#43; Crea sessione</button>
 
       <div class="pp-divider" style="width:100%;max-width:320px;">oppure</div>
 
@@ -739,6 +752,44 @@ let state = {
   selectedFinal:  null,
 };
 
+/* ── Auth ────────────────────────────────────────────────── */
+const PWD_HASH = '2a43da7cc03407a5c5a2458acee91c7c1e0ced9c9e83ed3df31b0fb73f82bcec';
+let isUnlocked = sessionStorage.getItem('pp_unlocked') === '1';
+
+async function sha256(str) {
+  const buf  = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+function applyUnlockUI() {
+  el('lockBadge').className    = 'pp-lock-badge' + (isUnlocked ? ' unlocked' : '');
+  el('lockBadge').innerHTML    = isUnlocked ? '&#128275; Team sbloccato' : '&#128274; Sessione bloccata';
+  el('btnCreateSession').style.display = isUnlocked ? '' : 'none';
+  el('importPanel').style.display      = isUnlocked ? '' : 'none';
+}
+
+el('btnUnlock').addEventListener('click', async () => {
+  const pwd = el('facilitatorPwd').value;
+  if (!pwd) return;
+  const hash = await sha256(pwd);
+  if (hash === PWD_HASH) {
+    isUnlocked = true;
+    sessionStorage.setItem('pp_unlocked', '1');
+    el('facilitatorPwd').value = '';
+    el('pwdError').style.display = 'none';
+    applyUnlockUI();
+  } else {
+    el('pwdError').textContent = 'Password errata.';
+    el('pwdError').style.display = '';
+    el('facilitatorPwd').value = '';
+    el('facilitatorPwd').focus();
+  }
+});
+el('facilitatorPwd').addEventListener('keydown', e => { if (e.key === 'Enter') el('btnUnlock').click(); });
+
+// applica stato iniziale
+applyUnlockUI();
+
 /* ── Utilità ─────────────────────────────────────────────── */
 function genCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -988,8 +1039,11 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, c
   el('vcSuitBg').textContent      = suit;
   el('vcSuitTL').textContent      = suit;
   el('vcSuitBR').textContent      = suit;
-  el('vcCornerNum').style.color   = color;
-  el('vcCornerNum2').style.color  = color;
+  el('vcCornerNum').style.color    = color;
+  el('vcCornerNum2').style.color   = color;
+  el('vcCornerSuit').style.color   = color;
+  el('vcCornerSuit2').style.color  = color;
+  el('vcSuitBg').style.color       = color;
   el('vcTitle').textContent = card.title;
   el('vcDesc').textContent  = card.desc || '';
   el('vcDesc').style.display = card.desc ? '' : 'none';
