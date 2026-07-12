@@ -660,6 +660,15 @@ async function joinSession() {
   try {
     const snap = await getDoc(doc(db, 'poker_sessions', code));
     if (!snap.exists()) { showJoinError('Sessione non trovata. Controlla il codice.'); return; }
+    const data = snap.data();
+    // Verifica che il nome sia nella lista membri (se lista configurata)
+    if (data.members && data.members.length > 0) {
+      const normalized = data.members.map(m => m.trim().toLowerCase());
+      if (!normalized.includes(name.trim().toLowerCase())) {
+        showJoinError('Non sei nella lista dei partecipanti. Chiedi al facilitatore di aggiungerti.');
+        return;
+      }
+    }
     state.sessionCode   = code;
     state.isFacilitator = false;
     state.myName        = name;
