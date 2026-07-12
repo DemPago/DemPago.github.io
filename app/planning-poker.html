@@ -1234,12 +1234,13 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
   el('revealCardTitle').textContent = card.title;
 
   // Calcola spread
-  const numericVotes = Object.entries(cardVotes)
-    .map(([n,v]) => ({ name: n, val: v, num: parseInt(v) }));
-  const nums    = numericVotes.filter(x => !isNaN(x.num)).map(x => x.num);
-  const maxVal  = nums.length ? Math.max(...nums) : null;
-  const minVal  = nums.length ? Math.min(...nums) : null;
-  const hasDivergence = nums.length >= 2 && (maxVal - minVal) >= 3;
+  const allVoted      = Object.entries(cardVotes);
+  const numericVotes  = allVoted.map(([n,v]) => ({ name: n, val: v, num: parseInt(v) }));
+  const nums          = numericVotes.filter(x => !isNaN(x.num)).map(x => x.num);
+  const allQuestion   = allVoted.length > 0 && allVoted.every(([,v]) => v === '?');
+  const maxVal        = nums.length ? Math.max(...nums) : null;
+  const minVal        = nums.length ? Math.min(...nums) : null;
+  const hasDivergence = !allQuestion && nums.length >= 2 && (maxVal - minVal) >= 3;
 
   // Grid voti
   const grid = el('revealGrid');
@@ -1260,7 +1261,20 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
 
   // Divergenza
   const divBox = el('divergenceBox');
-  if (hasDivergence) {
+  if (allQuestion) {
+    divBox.style.display = '';
+    divBox.innerHTML = `<div class="pp-divergence">
+      <strong>&#10067; Nessuno ha una stima chiara</strong>
+      <p style="margin:0.5rem 0 0;">
+        Il team non ha informazioni sufficienti per votare questa storia. Opzioni:
+      </p>
+      <ul style="margin:0.4rem 0 0;padding-left:1.2rem;line-height:1.8;">
+        <li><strong>Rimetti nel backlog</strong> — affina i criteri di accettazione prima del prossimo sprint</li>
+        <li><strong>Splitta la storia</strong> — potrebbe essere troppo grande o ambigua per essere stimata intera</li>
+        <li><strong>Organizza una call ad hoc</strong> — 15 minuti con i diretti interessati per chiarire i requisiti</li>
+      </ul>
+    </div>`;
+  } else if (hasDivergence) {
     // Split per mediana: chi ha votato ≤ mediana → gruppo basso, chi > mediana → gruppo alto
     const sorted = [...nums].sort((a, b) => a - b);
     const mid    = Math.floor(sorted.length / 2);
