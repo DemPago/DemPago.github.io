@@ -1238,9 +1238,11 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
   const numericVotes  = allVoted.map(([n,v]) => ({ name: n, val: v, num: parseInt(v) }));
   const nums          = numericVotes.filter(x => !isNaN(x.num)).map(x => x.num);
   const allQuestion   = allVoted.length > 0 && allVoted.every(([,v]) => v === '?');
+  const allTwentyOne  = nums.length > 0 && nums.every(n => n === 21) && !allVoted.some(([,v]) => v === '?');
+  const hasTwentyOne  = !allTwentyOne && nums.some(n => n === 21);
   const maxVal        = nums.length ? Math.max(...nums) : null;
   const minVal        = nums.length ? Math.min(...nums) : null;
-  const hasDivergence = !allQuestion && nums.length >= 2 && (maxVal - minVal) >= 3;
+  const hasDivergence = !allQuestion && !allTwentyOne && nums.length >= 2 && (maxVal - minVal) >= 3;
 
   // Grid voti
   const grid = el('revealGrid');
@@ -1274,6 +1276,19 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
         <li><strong>Organizza una call ad hoc</strong> — 15 minuti con i diretti interessati per chiarire i requisiti</li>
       </ul>
     </div>`;
+  } else if (allTwentyOne) {
+    divBox.style.display = '';
+    divBox.innerHTML = `<div class="pp-divergence">
+      <strong>&#128308; Storia troppo grande</strong>
+      <p style="margin:0.5rem 0 0;">
+        Il team è concorde: questa storia supera la soglia massima di stima. Opzioni:
+      </p>
+      <ul style="margin:0.4rem 0 0;padding-left:1.2rem;line-height:1.8;">
+        <li><strong>Splitta la storia</strong> — dividila in sotto-task stimabili separatamente</li>
+        <li><strong>Organizza una sessione di refinement</strong> — dedica tempo prima dello sprint a ridurre la complessità</li>
+        <li><strong>Rimetti nel backlog</strong> — finché non è abbastanza chiara da poter essere splittata</li>
+      </ul>
+    </div>`;
   } else if (hasDivergence) {
     // Split per mediana: chi ha votato ≤ mediana → gruppo basso, chi > mediana → gruppo alto
     const sorted = [...nums].sort((a, b) => a - b);
@@ -1287,6 +1302,15 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
 
     const fmtGroup = g => g.map(x => `<strong>${escHtml(x.name)}</strong> (${x.num})`).join(', ');
 
+    const twentyOneVoters = numericVotes.filter(x => x.num === 21).map(x => x.name);
+    const twentyOneNote   = hasTwentyOne
+      ? `<p style="margin:0.5rem 0 0;font-size:0.8rem;opacity:0.8;">
+           &#128308; ${twentyOneVoters.map(n => `<strong>${escHtml(n)}</strong>`).join(', ')}
+           ${twentyOneVoters.length === 1 ? 'ha' : 'hanno'} votato 21 —
+           spiega perché ritieni la storia così complessa, poi si rivota.
+         </p>`
+      : '';
+
     divBox.style.display = '';
     divBox.innerHTML = `<div class="pp-divergence">
       <strong>&#9888;&#65039; Divergenza rilevata — ${minVal} pt vs ${maxVal} pt</strong>
@@ -1296,6 +1320,7 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
         &#128172; ${fmtGroup(highGroup)}
         — spiega perché ritieni che l'effort sia alto.
       </p>
+      ${twentyOneNote}
       <p style="margin:0.5rem 0 0;font-size:0.8rem;opacity:0.8;">
         Dopo la discussione il facilitatore può azzerare i voti e far rivotare il team.
       </p>
