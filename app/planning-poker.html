@@ -1074,7 +1074,7 @@ function renderSession(data) {
   const cardVotes = (votes && votes[card.id]) ? votes[card.id] : {};
 
   if (status === 'finished') {
-    renderSummary(cards, finalVotes);
+    renderSummary(cards, finalVotes, votes || {});
     return;
   }
 
@@ -1430,7 +1430,7 @@ el('btnNextCard').addEventListener('click', async () => {
 /* ══════════════════════════════════════════════════════════ */
 /* SCREEN: Summary                                           */
 /* ══════════════════════════════════════════════════════════ */
-function renderSummary(cards, finalVotes) {
+function renderSummary(cards, finalVotes, allVotes) {
   const tbody = el('summaryBody');
   tbody.innerHTML = '';
   let total = 0;
@@ -1438,11 +1438,23 @@ function renderSummary(cards, finalVotes) {
     const v = finalVotes && finalVotes[card.id];
     const n = parseInt(v);
     if (!isNaN(n)) total += n;
+
+    // Distribuzione voti individuali per questa card
+    const cardVotes = (allVotes && allVotes[card.id]) || {};
+    const voteEntries = Object.entries(cardVotes);
+    const voteDetail = voteEntries.length
+      ? voteEntries.map(([name, val]) => `${escHtml(name)}: ${escHtml(val)}`).join(', ')
+      : '';
+
+    const noteCell = v
+      ? `${voteInfo(v).label}${voteDetail ? ` &middot; <span style="opacity:0.7">${voteDetail}</span>` : ''}`
+      : `<em>non stimata</em>${voteDetail ? ` &middot; <span style="opacity:0.7">${voteDetail}</span>` : ''}`;
+
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${escHtml(card.title)}</td>
       <td>${v ? escHtml(v) : '—'}</td>
-      <td style="font-size:0.78rem;color:var(--text-muted)">${v ? voteInfo(v).label : '<em>non stimata</em>'}</td>`;
+      <td style="font-size:0.78rem;color:var(--text-muted)">${noteCell}</td>`;
     tbody.appendChild(tr);
   });
   el('summaryTotal').textContent = total + ' pt';
