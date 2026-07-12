@@ -45,6 +45,37 @@ permalink: /app/planning-poker/
 .pp-btn-primary  { background: var(--accent); color: #000; }
 .pp-btn-ghost    { background: var(--border); color: var(--text-muted); }
 .pp-btn-danger   { background: rgba(224,92,92,0.15); color: #e05c5c; border: 1px solid rgba(224,92,92,0.3); }
+
+/* ── Selettore seme ───────────────────────────────────────── */
+.pp-suit-picker { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.pp-suit-btn {
+  width: 56px; height: 72px;
+  border-radius: 10px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 0.2rem;
+  font-size: 1.9rem; line-height: 1;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  position: relative;
+}
+.pp-suit-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,0.14); }
+.pp-suit-btn.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb, 99,179,237), 0.25), 0 6px 18px rgba(0,0,0,0.14);
+  transform: translateY(-3px);
+}
+.pp-suit-btn .pp-suit-name {
+  font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; opacity: 0.65;
+}
+.pp-suit-btn[data-suit="♥"] { color: #c0392b; }
+.pp-suit-btn[data-suit="♦"] { color: #c0392b; }
+.pp-suit-btn[data-suit="♠"] { color: #1a1a1a; }
+.pp-suit-btn[data-suit="♣"] { color: #1a1a1a; }
 .pp-btn-large    { padding: 0.85rem 1.5rem; font-size: 1rem; border-radius: 10px; }
 .pp-btn-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
@@ -614,6 +645,26 @@ permalink: /app/planning-poker/
       <div class="pp-card-list-setup" id="setupCardList"></div>
     </div>
 
+    <!-- Seme della sessione -->
+    <div class="pp-panel">
+      <h2>&#9828; Seme della sessione</h2>
+      <p style="margin-bottom:0.8rem;">Scegli il seme che verrà usato su tutte le carte.</p>
+      <div class="pp-suit-picker" id="suitPicker">
+        <button class="pp-suit-btn selected" data-suit="♠" type="button">
+          <span>♠</span><span class="pp-suit-name">Picche</span>
+        </button>
+        <button class="pp-suit-btn" data-suit="♥" type="button">
+          <span>♥</span><span class="pp-suit-name">Cuori</span>
+        </button>
+        <button class="pp-suit-btn" data-suit="♦" type="button">
+          <span>♦</span><span class="pp-suit-name">Quadri</span>
+        </button>
+        <button class="pp-suit-btn" data-suit="♣" type="button">
+          <span>♣</span><span class="pp-suit-name">Fiori</span>
+        </button>
+      </div>
+    </div>
+
     <div class="pp-btn-row">
       <button class="pp-btn pp-btn-ghost" id="btnAbortSetup">Annulla</button>
       <button class="pp-btn pp-btn-primary pp-btn-large" id="btnStartSession">&#9654;&#65039; Avvia sessione</button>
@@ -808,7 +859,8 @@ let state = {
   isFacilitator:     false,
   myName:            null,
   unsubscribe:       null,
-  presenceInterval:  null, // heartbeat presenza
+  presenceInterval:  null,
+  sessionSuit:       '♠', // seme scelto dal facilitatore
   setupMembers:      [],
   setupCards:        [],
   myVotes:           {},   // cardId → val (locale)
@@ -870,6 +922,15 @@ function showScreen(id) {
 }
 
 function el(id) { return document.getElementById(id); }
+
+/* ── Selettore seme ─────────────────────────────────────── */
+document.querySelectorAll('.pp-suit-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pp-suit-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    state.sessionSuit = btn.dataset.suit;
+  });
+});
 
 /* ── Presenza online ─────────────────────────────────────── */
 function startPresence(name, sessionCode) {
@@ -1054,9 +1115,10 @@ el('btnStartSession').addEventListener('click', async () => {
     members:      state.setupMembers,
     cards:        state.setupCards,
     currentCard:  0,
-    status:       'voting',   // voting | revealed | finished
-    votes:        {},         // { cardId: { memberName: value } }
-    finalVotes:   {},         // { cardId: value }
+    status:       'voting',
+    votes:        {},
+    finalVotes:   {},
+    suit:         state.sessionSuit,
   };
 
   try {
@@ -1087,7 +1149,7 @@ function startListening() {
 
 function renderSession(data) {
   state.cachedData = data;
-  const { status, cards, currentCard, votes, finalVotes, members, presence } = data;
+  const { status, cards, currentCard, votes, finalVotes, members, presence, suit: sessionSuit } = data;
   const isFac   = state.isFacilitator;
   const cardIdx = currentCard ?? 0;
   const card    = cards[cardIdx];
@@ -1100,8 +1162,9 @@ function renderSession(data) {
     return;
   }
 
-  const suit   = suitFor(cardIdx);
-  const color  = colorFor(cardIdx);
+  // Seme fisso per sessione (fallback ♠ per sessioni vecchie)
+  const suit  = sessionSuit || '♠';
+  const color = (suit === '♥' || suit === '♦') ? '#c0392b' : '#1a1a1a';
   const cardVotes = (votes && votes[card.id]) ? votes[card.id] : {};
 
   if (status === 'finished') {
@@ -1548,7 +1611,9 @@ el('btnCopySummary').addEventListener('click', () => {
 el('btnNewSession').addEventListener('click', () => {
   if (state.unsubscribe) { state.unsubscribe(); state.unsubscribe = null; }
   stopPresence();
-  state = { sessionCode:null, isFacilitator:false, myName:null, unsubscribe:null, presenceInterval:null, setupMembers:[], setupCards:[], myVotes:{}, selectedFinal:null, lastCardIdx:-1, cachedData:null };
+  state = { sessionCode:null, isFacilitator:false, myName:null, unsubscribe:null, presenceInterval:null, sessionSuit:'♠', setupMembers:[], setupCards:[], myVotes:{}, selectedFinal:null, lastCardIdx:-1, cachedData:null };
+  // Riporta il picker al default ♠
+  document.querySelectorAll('.pp-suit-btn').forEach(b => b.classList.toggle('selected', b.dataset.suit === '♠'));
   el('joinCodeInput').value = '';
   el('joinNameInput').value = '';
   el('joinError').style.display = 'none';
