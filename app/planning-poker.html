@@ -427,11 +427,11 @@ permalink: /app/planning-poker/
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── Flip animation ───────────────────────────────────────── */
-.pp-card-perspective { perspective: 900px; }
-
+/* perspective() come funzione inline nel transform, non come proprietà del parent:
+   overflow:hidden sul parent schiaccia il 3D se si usa la proprietà perspective sul parent */
 @keyframes cardFlipIn {
-  from { transform: rotateY(90deg) scale(0.94); opacity: 0.2; }
-  to   { transform: rotateY(0deg)  scale(1);    opacity: 1;   }
+  from { transform: perspective(900px) rotateY(90deg) scale(0.94); opacity: 0.2; }
+  to   { transform: perspective(900px) rotateY(0deg)  scale(1);    opacity: 1;   }
 }
 .pp-playing-card.flip-in {
   animation: cardFlipIn 0.42s cubic-bezier(0.25, 0.8, 0.25, 1) both;
@@ -679,9 +679,7 @@ permalink: /app/planning-poker/
         <span class="pp-corner-num" id="vcCornerNum">1</span>
         <span class="pp-corner-suit" id="vcCornerSuit">♠</span>
       </div>
-      <span class="pp-card-suit-tl" id="vcSuitTL">♠</span>
       <div class="pp-card-suit-bg" id="vcSuitBg">♠</div>
-      <span class="pp-card-suit-br" id="vcSuitBR">♠</span>
       <div class="pp-card-corner-br">
         <span class="pp-corner-num" id="vcCornerNum2">1</span>
         <span class="pp-corner-suit" id="vcCornerSuit2">♠</span>
@@ -1136,8 +1134,7 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, c
   el('vcCornerNum2').textContent  = idx+1;
   el('vcCornerSuit2').textContent = suit;
   el('vcSuitBg').textContent      = suit;
-  el('vcSuitTL').textContent      = suit;
-  el('vcSuitBR').textContent      = suit;
+  // vcSuitTL / vcSuitBR sono display:none — niente da aggiornare
   el('vcCornerNum').style.color    = color;
   el('vcCornerNum2').style.color   = color;
   el('vcCornerSuit').style.color   = color;
