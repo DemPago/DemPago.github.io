@@ -282,6 +282,83 @@ permalink: /app/planning-poker/
 }
 .pp-divergence strong { color: #e0b55c; }
 
+/* ── Import Jira CSV ──────────────────────────────────────── */
+.pp-import-panel { overflow: hidden; }
+.pp-import-panel summary {
+  padding: 0.9rem 1.1rem; cursor: pointer; font-weight: 700; font-size: 0.9rem;
+  color: var(--text); list-style: none; display: flex; align-items: center;
+  gap: 0.5rem; user-select: none; margin: -1.25rem; margin-bottom: 0;
+}
+.pp-import-panel summary::-webkit-details-marker { display: none; }
+.pp-import-panel summary::before { content:"▶"; font-size:0.6rem; color:var(--text-muted); transition:transform 0.2s; }
+.pp-import-panel[open] summary::before { transform: rotate(90deg); }
+.pp-import-panel[open] summary { margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.9rem; }
+.pp-import-steps { display: flex; flex-direction: column; gap: 0.5rem; }
+.pp-import-step {
+  display: flex; gap: 0.75rem; align-items: flex-start;
+  font-size: 0.84rem; color: var(--text-muted); line-height: 1.55;
+}
+.pp-import-step-num {
+  background: var(--accent); color: #000; font-weight: 800; font-size: 0.72rem;
+  border-radius: 50%; width: 1.35rem; height: 1.35rem; display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.1rem;
+}
+.pp-import-step a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.pp-import-step a:hover { text-decoration: underline; }
+.pp-import-step code {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 4px;
+  padding: 0.05rem 0.4rem; font-size: 0.78rem; color: var(--accent);
+  font-family: 'Courier New', monospace; word-break: break-all;
+}
+.pp-import-divider {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.75rem; color: var(--text-muted); margin: 0.25rem 0;
+}
+.pp-import-divider::before, .pp-import-divider::after {
+  content:''; flex:1; height:1px; background: var(--border);
+}
+/* Drop zone */
+.pp-dropzone {
+  border: 2px dashed var(--border); border-radius: 10px; padding: 1.4rem 1rem;
+  text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  position: relative;
+}
+.pp-dropzone:hover, .pp-dropzone.drag-over { border-color: var(--accent); background: rgba(255,255,255,0.02); }
+.pp-dropzone-icon { font-size: 2rem; line-height: 1; margin-bottom: 0.4rem; }
+.pp-dropzone p { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+.pp-dropzone strong { color: var(--accent); }
+.pp-dropzone input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+/* Preview */
+.pp-csv-preview { display: flex; flex-direction: column; gap: 0.6rem; }
+.pp-csv-preview-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;
+  font-size: 0.82rem;
+}
+.pp-csv-preview-header strong { color: var(--text); }
+.pp-csv-preview-header span { color: var(--text-muted); }
+.pp-csv-list {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  max-height: 220px; overflow-y: auto;
+}
+.pp-csv-row {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); font-size: 0.82rem;
+}
+.pp-csv-row:last-child { border-bottom: none; }
+.pp-csv-row input[type=checkbox] { margin-top: 0.2rem; flex-shrink: 0; accent-color: var(--accent); }
+.pp-csv-row-body { flex: 1; min-width: 0; }
+.pp-csv-row-key   { font-size: 0.7rem; font-weight: 700; color: var(--accent); font-family: monospace; margin-bottom: 0.1rem; }
+.pp-csv-row-title { font-weight: 600; color: var(--text); word-break: break-word; }
+.pp-csv-row-desc  { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem; word-break: break-word;
+                    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.pp-csv-error { font-size: 0.82rem; color: #e05c5c; padding: 0.5rem 0.75rem;
+  background: rgba(224,92,92,0.08); border-radius: 7px; border: 1px solid rgba(224,92,92,0.2); }
+.pp-csv-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+.pp-csv-select-all { font-size: 0.78rem; color: var(--accent); cursor: pointer; background: none;
+  border: none; padding: 0; font-family: inherit; text-decoration: underline; }
+
 /* ── Riepilogo finale ─────────────────────────────────────── */
 .pp-summary-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
 .pp-summary-table th {
@@ -409,6 +486,54 @@ permalink: /app/planning-poker/
       </div>
       <div class="pp-tags" id="memberTags"></div>
     </div>
+
+    <!-- Import da Jira -->
+    <details class="pp-panel pp-import-panel" id="importPanel">
+      <summary>&#128196; Importa da Jira (SMION)</summary>
+
+      <div class="pp-import-steps">
+        <div class="pp-import-step">
+          <span class="pp-import-step-num">1</span>
+          <span>Apri il <a href="https://pagopa.atlassian.net/jira/software/c/projects/SMION/boards/4731/backlog" target="_blank" rel="noopener">Backlog del progetto SMION ↗</a> su Jira.</span>
+        </div>
+        <div class="pp-import-step">
+          <span class="pp-import-step-num">2</span>
+          <span>In alto a destra clicca su <strong>Visualizza nel Issue Navigator</strong> oppure vai direttamente su <a href="https://pagopa.atlassian.net/issues/?jql=project%20%3D%20SMION%20AND%20sprint%20is%20EMPTY%20AND%20statusCategory%20!%3D%20Done%20ORDER%20BY%20created%20DESC" target="_blank" rel="noopener">Issue Navigator con JQL precompilato ↗</a>.<br>
+          Il JQL usato è: <code>project = SMION AND sprint is EMPTY AND statusCategory != Done ORDER BY created DESC</code></span>
+        </div>
+        <div class="pp-import-step">
+          <span class="pp-import-step-num">3</span>
+          <span>In alto a destra clicca <strong>Esporta</strong> → <strong>Esporta in CSV (tutti i campi)</strong> e salva il file.</span>
+        </div>
+        <div class="pp-import-step">
+          <span class="pp-import-step-num">4</span>
+          <span>Carica il file CSV qui sotto, seleziona le issue da stimare e clicca <strong>Importa selezionate</strong>.</span>
+        </div>
+      </div>
+
+      <div class="pp-import-divider" style="margin-top:1rem;">carica il file</div>
+
+      <div class="pp-dropzone" id="csvDropzone">
+        <div class="pp-dropzone-icon">&#128196;</div>
+        <p>Trascina qui il CSV di Jira oppure <strong>clicca per selezionare</strong></p>
+        <p style="font-size:0.75rem;margin-top:0.3rem;opacity:0.7;">Formato: CSV esportato da Jira Cloud</p>
+        <input type="file" id="csvFileInput" accept=".csv,text/csv">
+      </div>
+
+      <div id="csvError"   style="display:none;" class="pp-csv-error"></div>
+      <div id="csvPreview" style="display:none;" class="pp-csv-preview">
+        <div class="pp-csv-preview-header">
+          <strong id="csvPreviewCount"></strong>
+          <span id="csvPreviewSub"></span>
+        </div>
+        <div class="pp-csv-list" id="csvList"></div>
+        <div class="pp-csv-actions">
+          <button class="pp-csv-select-all" id="csvSelectAll">Seleziona tutte</button>
+          <button class="pp-csv-select-all" id="csvDeselectAll" style="margin-left:0.25rem;">Deseleziona tutte</button>
+          <button class="pp-btn pp-btn-primary" id="csvImportBtn" style="margin-left:auto;">&#43; Importa selezionate</button>
+        </div>
+      </div>
+    </details>
 
     <!-- Card dello sprint -->
     <div class="pp-panel">
@@ -1136,6 +1261,158 @@ el('btnNewSession').addEventListener('click', () => {
   el('joinNameInput').value = '';
   el('joinError').style.display = 'none';
   showScreen('screenWelcome');
+});
+
+/* ══════════════════════════════════════════════════════════ */
+/* Import Jira CSV                                           */
+/* ══════════════════════════════════════════════════════════ */
+let csvParsed = []; // [{key, title, desc}]
+
+// Drag & drop
+const dropzone = el('csvDropzone');
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag-over'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault(); dropzone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) parseCSVFile(file);
+});
+el('csvFileInput').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (file) parseCSVFile(file);
+  e.target.value = ''; // reset per permettere ricarico stesso file
+});
+
+function parseCSVFile(file) {
+  if (!file.name.endsWith('.csv') && file.type !== 'text/csv') {
+    showCsvError('Il file non sembra un CSV. Esporta da Jira in formato CSV.');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      csvParsed = parseJiraCSV(e.target.result);
+      if (csvParsed.length === 0) {
+        showCsvError('Nessuna issue trovata nel CSV. Verifica di aver esportato dal progetto SMION.');
+        return;
+      }
+      el('csvError').style.display = 'none';
+      renderCsvPreview();
+    } catch(err) {
+      showCsvError('Errore nel parsing del CSV: ' + err.message);
+    }
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+function parseJiraCSV(text) {
+  // Parser CSV robusto: gestisce campi tra virgolette con newline/virgole interne
+  const rows = [];
+  let cur = '', inQ = false, fields = [], r = 0;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i], nx = text[i+1];
+    if (inQ) {
+      if (ch === '"' && nx === '"') { cur += '"'; i++; }
+      else if (ch === '"') { inQ = false; }
+      else { cur += ch; }
+    } else {
+      if (ch === '"') { inQ = true; }
+      else if (ch === ',') { fields.push(cur.trim()); cur = ''; }
+      else if (ch === '\n' || (ch === '\r' && nx === '\n')) {
+        if (ch === '\r') i++;
+        fields.push(cur.trim()); cur = '';
+        if (r === 0) { rows.push(fields); } // header
+        else if (fields.some(f => f)) rows.push(fields);
+        fields = []; r++;
+      } else { cur += ch; }
+    }
+  }
+  if (cur || fields.length) { fields.push(cur.trim()); if (fields.some(f => f)) rows.push(fields); }
+
+  if (rows.length < 2) return [];
+  const headers = rows[0].map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
+
+  // Mappa colonne Jira (nomi possibili in italiano/inglese)
+  const idx = {
+    key:     findCol(headers, ['issuekey','key','codice','id']),
+    summary: findCol(headers, ['summary','riepilogo','titolo','title','nome']),
+    desc:    findCol(headers, ['description','descrizione','desc']),
+    type:    findCol(headers, ['issuetype','tipo','type']),
+    status:  findCol(headers, ['status','stato']),
+  };
+
+  if (idx.summary === -1) throw new Error('Colonna "Summary" non trovata. Usa "Esporta in CSV (tutti i campi)".');
+
+  return rows.slice(1).map(row => ({
+    key:   idx.key   >= 0 ? row[idx.key]     || '' : '',
+    title: idx.summary >= 0 ? row[idx.summary] || '' : '',
+    desc:  idx.desc  >= 0 ? row[idx.desc]    || '' : '',
+    type:  idx.type  >= 0 ? row[idx.type]    || '' : '',
+  })).filter(r => r.title.trim());
+}
+
+function findCol(headers, names) {
+  for (const n of names) {
+    const i = headers.findIndex(h => h.includes(n));
+    if (i >= 0) return i;
+  }
+  return -1;
+}
+
+function renderCsvPreview() {
+  const preview = el('csvPreview');
+  const list    = el('csvList');
+  preview.style.display = '';
+  el('csvPreviewCount').textContent = csvParsed.length + ' issue trovate';
+  el('csvPreviewSub').textContent = 'Seleziona quelle da portare in sessione';
+  list.innerHTML = '';
+  csvParsed.forEach((issue, i) => {
+    const row = document.createElement('div');
+    row.className = 'pp-csv-row';
+    row.innerHTML = `
+      <input type="checkbox" id="csv_${i}" checked>
+      <div class="pp-csv-row-body">
+        ${issue.key ? `<div class="pp-csv-row-key">${escHtml(issue.key)}${issue.type ? ' · ' + escHtml(issue.type) : ''}</div>` : ''}
+        <div class="pp-csv-row-title">${escHtml(issue.title)}</div>
+        ${issue.desc ? `<div class="pp-csv-row-desc">${escHtml(issue.desc)}</div>` : ''}
+      </div>`;
+    list.appendChild(row);
+  });
+}
+
+function showCsvError(msg) {
+  el('csvError').textContent = msg;
+  el('csvError').style.display = '';
+  el('csvPreview').style.display = 'none';
+}
+
+el('csvSelectAll').addEventListener('click', () => {
+  el('csvList').querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = true);
+});
+el('csvDeselectAll').addEventListener('click', () => {
+  el('csvList').querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false);
+});
+
+el('csvImportBtn').addEventListener('click', () => {
+  const checkboxes = el('csvList').querySelectorAll('input[type=checkbox]');
+  let imported = 0;
+  checkboxes.forEach((cb, i) => {
+    if (!cb.checked) return;
+    const issue = csvParsed[i];
+    if (!issue) return;
+    const title = (issue.key ? '[' + issue.key + '] ' : '') + issue.title;
+    // evita duplicati (stesso titolo già presente)
+    if (state.setupCards.some(c => c.title === title)) return;
+    state.setupCards.push({ id: 'c' + Date.now() + i, title, desc: issue.desc });
+    imported++;
+  });
+  renderSetupCards();
+  // feedback visivo
+  const btn = el('csvImportBtn');
+  btn.textContent = '✓ ' + imported + ' card importate!';
+  setTimeout(() => { btn.innerHTML = '&#43; Importa selezionate'; }, 2500);
+  // chiudi il pannello
+  el('importPanel').removeAttribute('open');
 });
 
 /* ── Escape HTML ─────────────────────────────────────────── */
