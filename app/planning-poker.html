@@ -980,10 +980,21 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
   // Divergenza
   const divBox = el('divergenceBox');
   if (hasDivergence) {
+    // nomi di chi ha votato min e max
+    const lowVoters  = numericVotes.filter(x => x.num === minVal).map(x => x.name).join(', ');
+    const highVoters = numericVotes.filter(x => x.num === maxVal).map(x => x.name).join(', ');
     divBox.style.display = '';
     divBox.innerHTML = `<div class="pp-divergence">
-      <strong>&#9888;&#65039; Divergenza rilevata (${minVal} → ${maxVal} pt)</strong>
-      I voti sono distanti. Discuti le stime prima di procedere — chi ha votato alto e chi basso motiva la scelta.
+      <strong>&#9888;&#65039; Divergenza rilevata — ${minVal} pt vs ${maxVal} pt</strong>
+      <p style="margin:0.5rem 0 0;">
+        &#128172; <strong>${escHtml(lowVoters)}</strong> ha votato <strong>${minVal}</strong>
+        — spiega perché ritieni che l'effort sia basso.<br>
+        &#128172; <strong>${escHtml(highVoters)}</strong> ha votato <strong>${maxVal}</strong>
+        — spiega perché ritieni che l'effort sia alto.
+      </p>
+      <p style="margin:0.5rem 0 0;font-size:0.8rem;opacity:0.8;">
+        Dopo la discussione il facilitatore può azzerare i voti e far rivotare il team.
+      </p>
     </div>`;
   } else {
     divBox.style.display = 'none';
