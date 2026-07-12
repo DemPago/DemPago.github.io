@@ -458,6 +458,39 @@ permalink: /app/planning-poker/
   color: var(--accent) !important;
 }
 
+/* ── Mini-carta 13 — ritratto Lorenzo (King of Spades) ───── */
+.pp-vote-card-portrait {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  object-fit: cover; object-position: top center;
+  border: 1.5px solid rgba(0,0,0,0.14);
+  display: block; pointer-events: none;
+  filter: grayscale(10%) contrast(1.05);
+}
+
+/* ── Aggiungi membro live (facilitatore) ──────────────────── */
+.pp-add-member-bar {
+  display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  font-size: 0.82rem;
+}
+.pp-add-member-bar label {
+  font-size: 0.73rem; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
+}
+.pp-add-member-bar input {
+  flex: 1; min-width: 130px;
+  background: var(--card); border: 1px solid var(--border); border-radius: 6px;
+  color: var(--text); font-size: 0.85rem; padding: 0.35rem 0.65rem;
+  font-family: inherit; transition: border-color 0.2s;
+}
+.pp-add-member-bar input:focus { outline: none; border-color: var(--accent); }
+.pp-add-member-bar .pp-add-ok {
+  font-size: 0.78rem; color: #2ecc71; font-weight: 700;
+  animation: fadeSlide 0.2s ease;
+}
+
 /* ── Divider ──────────────────────────────────────────────── */
 .pp-divider {
   display: flex; align-items: center; gap: 0.75rem; color: var(--text-muted); font-size: 0.78rem;
@@ -631,6 +664,13 @@ permalink: /app/planning-poker/
       <span>Sessione: <span class="pp-session-code-small" id="votingCodeBadge">—</span></span>
       <span class="pp-card-counter" id="votingCardCounter"></span>
     </div>
+    <!-- Aggiungi partecipante live — solo facilitatore -->
+    <div class="pp-add-member-bar" id="votingAddMemberBar" style="display:none;">
+      <label>+ Partecipante</label>
+      <input type="text" id="votingAddMemberInput" placeholder="Nome da aggiungere" maxlength="30" autocomplete="off">
+      <button class="pp-btn pp-btn-primary" style="padding:0.35rem 0.8rem;font-size:0.8rem;" id="btnVotingAddMember">Aggiungi</button>
+      <span class="pp-add-ok" id="votingAddMemberOk" style="display:none;">✓ aggiunto</span>
+    </div>
 
     <!-- Carta da poker con la card -->
     <div class="pp-card-perspective">
@@ -692,6 +732,13 @@ permalink: /app/planning-poker/
       <span>Sessione: <span class="pp-session-code-small" id="revealCodeBadge">—</span></span>
       <span class="pp-card-counter" id="revealCardCounter"></span>
     </div>
+    <!-- Aggiungi partecipante live — solo facilitatore -->
+    <div class="pp-add-member-bar" id="revealAddMemberBar" style="display:none;">
+      <label>+ Partecipante</label>
+      <input type="text" id="revealAddMemberInput" placeholder="Nome da aggiungere" maxlength="30" autocomplete="off">
+      <button class="pp-btn pp-btn-primary" style="padding:0.35rem 0.8rem;font-size:0.8rem;" id="btnRevealAddMember">Aggiungi</button>
+      <span class="pp-add-ok" id="revealAddMemberOk" style="display:none;">✓ aggiunto</span>
+    </div>
 
     <div class="pp-panel">
       <h2 id="revealCardTitle">—</h2>
@@ -749,7 +796,7 @@ permalink: /app/planning-poker/
 <script type="module">
 import { initializeApp, getApps, getApp }
   from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, serverTimestamp, deleteField }
+import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, serverTimestamp, deleteField, arrayUnion }
   from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 /* ── Firebase ────────────────────────────────────────────── */
@@ -1129,18 +1176,7 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, c
     const vCards = el('voteCards');
     vCards.innerHTML = '';
     VOTES.forEach(vc => {
-      const btn = document.createElement('button');
-      btn.className = 'pp-vote-card' + (vc.red ? ' red' : '') + (myVote === vc.val ? ' selected' : '');
-      btn.dataset.val  = vc.val;
-      btn.dataset.suit = vc.suit;
-      btn.textContent  = vc.val;
-      btn.title        = vc.label;
-      const suitSpan = document.createElement('span');
-      suitSpan.className = 'pp-vote-card-suit';
-      suitSpan.textContent = vc.suit;
-      btn.appendChild(suitSpan);
-      btn.addEventListener('click', () => castVote(card.id, vc.val));
-      vCards.appendChild(btn);
+      vCards.appendChild(makeVoteCard(vc, myVote === vc.val, () => castVote(card.id, vc.val)));
     });
     // Spiegazione
     const box = el('voteExplainBox');
@@ -1160,8 +1196,31 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, c
     el('revealHint').style.display = allVoted ? 'none' : '';
   }
 
+  el('votingAddMemberBar').style.display = isFac ? '' : 'none';
+
   showScreen('screenVoting');
 }
+
+/* ── Aggiungi membro live ────────────────────────────────── */
+async function addMemberLive(inputId, okId) {
+  const input = el(inputId);
+  const name  = input.value.trim();
+  if (!name) return;
+  try {
+    await updateDoc(doc(db, 'poker_sessions', state.sessionCode), {
+      members: arrayUnion(name)
+    });
+    input.value = '';
+    const ok = el(okId);
+    ok.style.display = '';
+    setTimeout(() => { ok.style.display = 'none'; }, 2500);
+  } catch(e) { console.error('Add member error', e); }
+}
+
+el('btnVotingAddMember').addEventListener('click', () => addMemberLive('votingAddMemberInput', 'votingAddMemberOk'));
+el('votingAddMemberInput').addEventListener('keydown', e => { if (e.key === 'Enter') addMemberLive('votingAddMemberInput', 'votingAddMemberOk'); });
+el('btnRevealAddMember').addEventListener('click', () => addMemberLive('revealAddMemberInput', 'revealAddMemberOk'));
+el('revealAddMemberInput').addEventListener('keydown', e => { if (e.key === 'Enter') addMemberLive('revealAddMemberInput', 'revealAddMemberOk'); });
 
 let voteDebounceTimer = null;
 
@@ -1261,18 +1320,7 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
     fCards.innerHTML = '';
     const existing = finalVotes && finalVotes[card.id];
     VOTES.forEach(vc => {
-      const btn = document.createElement('button');
-      btn.className = 'pp-vote-card' + (vc.red ? ' red' : '') + (existing === vc.val ? ' selected' : '');
-      btn.dataset.val  = vc.val;
-      btn.dataset.suit = vc.suit;
-      btn.textContent  = vc.val;
-      btn.title        = vc.label;
-      const suitSpan = document.createElement('span');
-      suitSpan.className = 'pp-vote-card-suit';
-      suitSpan.textContent = vc.suit;
-      btn.appendChild(suitSpan);
-      btn.addEventListener('click', () => selectFinalVote(card.id, vc.val));
-      fCards.appendChild(btn);
+      fCards.appendChild(makeVoteCard(vc, existing === vc.val, () => selectFinalVote(card.id, vc.val)));
     });
     state.selectedFinal = existing || null;
     el('btnNextCard').disabled = !existing;
@@ -1289,6 +1337,8 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
     revealActs.style.display  = 'none';
     revealWait.style.display  = '';
   }
+
+  el('revealAddMemberBar').style.display = isFac ? '' : 'none';
 
   showScreen('screenReveal');
 }
@@ -1551,5 +1601,32 @@ el('csvImportBtn').addEventListener('click', () => {
 /* ── Escape HTML ─────────────────────────────────────────── */
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Crea mini-carta voto ────────────────────────────────── */
+const LORENZO_IMG = 'https://img-c.udemycdn.com/user/200_H/48810756_2aad.jpg';
+
+function makeVoteCard(vc, isSelected, onClick) {
+  const btn = document.createElement('button');
+  btn.className = 'pp-vote-card' + (vc.red ? ' red' : '') + (isSelected ? ' selected' : '');
+  btn.dataset.val  = vc.val;
+  btn.dataset.suit = vc.suit;
+  btn.title        = vc.label;
+  // Card 13 = King → ritratto di Lorenzo
+  if (vc.val === '13') {
+    const img = document.createElement('img');
+    img.className = 'pp-vote-card-portrait';
+    img.src = LORENZO_IMG;
+    img.alt = '';
+    btn.appendChild(img);
+  } else {
+    btn.textContent = vc.val;
+  }
+  const suitSpan = document.createElement('span');
+  suitSpan.className = 'pp-vote-card-suit';
+  suitSpan.textContent = vc.suit;
+  btn.appendChild(suitSpan);
+  btn.addEventListener('click', onClick);
+  return btn;
 }
 </script>
