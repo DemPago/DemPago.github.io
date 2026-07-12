@@ -136,29 +136,18 @@ permalink: /app/tshirt-poker/
 }
 .ts-vote-btn {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 0.15rem; padding: 0.6rem 0.3rem;
+  gap: 0.2rem; padding: 0.75rem 0.3rem; min-height: 82px;
   border-radius: 10px; border: 2px solid var(--border);
   background: var(--card); cursor: pointer; color: var(--text);
   font-family: inherit; transition: all 0.15s;
   box-shadow: 0 2px 6px rgba(0,0,0,0.07);
 }
-
-/* ── Color picker seme ─────────────────────────────────────── */
-.ts-color-picker { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.4rem; }
-.ts-color-swatch {
-  width: 32px; height: 32px; border-radius: 50%;
-  border: 3px solid transparent; cursor: pointer;
-  transition: transform 0.15s, border-color 0.15s;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-}
-.ts-color-swatch:hover { transform: scale(1.15); }
-.ts-color-swatch.selected { border-color: var(--text); transform: scale(1.15); }
-.ts-vote-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 14px rgba(0,0,0,0.13); border-color: var(--accent); }
+.ts-vote-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,0.14); border-color: var(--accent); }
 .ts-vote-btn.selected { background: var(--accent); border-color: var(--accent); color: #000; }
 .ts-vote-btn.selected .ts-vote-icon { filter: none; }
-.ts-vote-icon { font-size: 1.5rem; line-height: 1; }
-.ts-vote-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
-.ts-vote-sub   { font-size: 0.6rem; opacity: 0.65; }
+.ts-vote-icon { font-size: 1.6rem; line-height: 1; }
+.ts-vote-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+.ts-vote-sub   { font-size: 0.58rem; opacity: 0.6; }
 .ts-vote-btn.red .ts-vote-label { color: #e05c5c; }
 
 /* ── Progress votanti ─────────────────────────────────────── */
@@ -276,10 +265,20 @@ permalink: /app/tshirt-poker/
 .ts-member-chip button:hover { color: #e05c5c; }
 
 /* ── Divider ──────────────────────────────────────────────── */
+/* ── Auth facilitatore ────────────────────────────────────── */
+.ts-auth-row { display: flex; gap: 0.5rem; width: 100%; max-width: 320px; }
+.ts-auth-row input { flex: 1; }
+.ts-lock-badge {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-size: 0.75rem; font-weight: 700; color: var(--text-muted);
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 20px; padding: 0.2rem 0.65rem;
+}
+.ts-lock-badge.unlocked { color: #2ecc71; border-color: #2ecc71; background: rgba(46,204,113,0.08); }
+
 .ts-divider {
-  text-align: center; font-size: 0.72rem; font-weight: 700;
-  color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em;
-  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem; width: 100%; max-width: 320px;
 }
 .ts-divider::before, .ts-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 </style>
@@ -290,36 +289,33 @@ permalink: /app/tshirt-poker/
   <div class="ts-header">
     <h1>&#128085; T-Shirt Sizing</h1>
     <p>Stima le user story con le taglie T-shirt. Sessioni real-time, import da Jira CSV.</p>
-    <div style="margin-top:0.6rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
-      <span class="ts-lock-badge" id="tsLockBadge">&#128274; Sessione bloccata</span>
-      <div style="display:flex;gap:0.4rem;align-items:center;">
-        <input type="password" id="tsFacilitatorPwd" placeholder="Password facilitatore"
-          style="font-size:0.82rem;padding:0.3rem 0.65rem;border-radius:7px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;width:180px;">
-        <button class="ts-btn ts-btn-ghost" id="tsBtnUnlock" style="padding:0.3rem 0.75rem;font-size:0.8rem;">&#128275; Sblocca</button>
-      </div>
-      <span id="tsPwdError" style="display:none;color:#e05c5c;font-size:0.78rem;">Password errata</span>
-    </div>
   </div>
 
   <!-- ══ SCREEN: Welcome ══ -->
   <div class="ts-screen active" id="tsScreenWelcome">
-    <div class="ts-panel">
-      <h2>&#127381; Crea una nuova sessione</h2>
+    <div class="ts-panel" style="align-items:center;text-align:center;gap:1.25rem;padding:2rem;">
+      <div style="font-size:3.5rem;line-height:1;">&#128085;</div>
+      <div>
+        <p style="font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:0.35rem;">Sei il facilitatore?</p>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin:0;line-height:1.55;">Inserisci la password del team per creare una sessione e importare da Jira.</p>
+      </div>
+      <div class="ts-auth-row">
+        <input type="password" id="tsFacilitatorPwd" placeholder="Password team"
+          style="font-size:0.88rem;padding:0.55rem 0.8rem;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;flex:1;">
+        <button class="ts-btn ts-btn-primary" id="tsBtnUnlock">&#128275; Sblocca</button>
+      </div>
+      <div id="tsPwdError" style="display:none;font-size:0.8rem;color:#e05c5c;">Password errata</div>
+      <span class="ts-lock-badge" id="tsLockBadge">&#128274; Sessione bloccata</span>
       <button class="ts-btn ts-btn-primary ts-btn-large" id="tsBtnCreateSession" style="display:none;">&#43; Crea sessione</button>
-      <p style="font-size:0.82rem;color:var(--text-muted);margin:0;" id="tsCreateHint">Sblocca con la password per creare una sessione.</p>
-    </div>
 
-    <div class="ts-divider">oppure</div>
+      <div class="ts-divider">oppure</div>
 
-    <div class="ts-panel">
-      <h2>&#128279; Unisciti a una sessione</h2>
-      <div style="width:100%;max-width:320px;">
+      <div style="width:100%;max-width:320px;text-align:left;">
+        <p style="font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:0.75rem;">Hai un codice sessione?</p>
         <div class="ts-field">
-          <label>Codice sessione</label>
           <input type="text" id="tsJoinCodeInput" class="ts-code-input" placeholder="XXXXX" maxlength="6" autocomplete="off" spellcheck="false">
         </div>
-        <div class="ts-field" style="margin-top:0.6rem;">
-          <label>Il tuo nome</label>
+        <div class="ts-field" style="margin-top:0.5rem;">
           <input type="text" id="tsJoinNameInput" placeholder="Il tuo nome" maxlength="30" autocomplete="off">
         </div>
         <button class="ts-btn ts-btn-ghost" id="tsBtnJoinSession" style="width:100%;margin-top:0.5rem;">Unisciti alla sessione</button>
@@ -330,14 +326,10 @@ permalink: /app/tshirt-poker/
 
   <!-- ══ SCREEN: Setup ══ -->
   <div class="ts-screen" id="tsScreenSetup">
-    <div class="ts-panel">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.4rem;">
-        <h2>&#128203; Nuova sessione T-Shirt</h2>
-        <button class="ts-btn ts-btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.7rem;" id="tsBtnCopyCode">&#128203; Copia codice</button>
-      </div>
-      <p style="font-size:0.82rem;color:var(--text-muted);margin:0;">
-        Codice: <span class="ts-session-code-small" id="tsSetupCode">—</span>
-      </p>
+    <div class="ts-session-bar">
+      <span class="ts-session-role">&#128081; Facilitatore</span>
+      <span>Codice sessione: <span class="ts-session-code-small" id="tsSetupCode">—</span></span>
+      <button class="ts-btn ts-btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.7rem;" id="tsBtnCopyCode">&#128203; Copia</button>
     </div>
 
     <!-- Partecipanti -->
@@ -610,7 +602,6 @@ function applyUnlockUI() {
   el('tsLockBadge').className = 'ts-lock-badge' + (isUnlocked ? ' unlocked' : '');
   el('tsLockBadge').innerHTML = isUnlocked ? '&#128275; Team sbloccato' : '&#128274; Sessione bloccata';
   el('tsBtnCreateSession').style.display = isUnlocked ? '' : 'none';
-  el('tsCreateHint').style.display       = isUnlocked ? 'none' : '';
   el('tsImportPanel').style.display      = isUnlocked ? '' : 'none';
 }
 applyUnlockUI();
@@ -1018,7 +1009,7 @@ function makeVoteBtn(sz, isSelected, onClick, color) {
   btn.className = 'ts-vote-btn' + (sz.red ? ' red' : '') + (isSelected ? ' selected' : '');
   btn.dataset.val = sz.val;
   btn.title       = sz.sub;
-  btn.innerHTML   = `<span class="ts-vote-icon">${sz.icon}</span><span class="ts-vote-label">${escHtml(sz.val)}</span>`;
+  btn.innerHTML   = `<span class="ts-vote-icon">${sz.icon}</span><span class="ts-vote-label">${escHtml(sz.val)}</span><span class="ts-vote-sub">${escHtml(sz.sub)}</span>`;
   if (color && !sz.red) btn.style.borderTopColor = color;
   btn.addEventListener('click', onClick);
   return btn;
