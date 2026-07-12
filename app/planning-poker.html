@@ -1163,6 +1163,14 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
     });
     state.selectedFinal = existing || null;
     el('btnNextCard').disabled = !existing;
+    // label contestuale: ultima card → "Termina sessione"
+    const isLast = (idx + 1) >= total;
+    el('btnNextCard').innerHTML = isLast
+      ? '&#10003; Termina sessione'
+      : 'Prossima card &#8594;';
+    el('finalVotePanel').querySelector('h2').textContent = isLast
+      ? '✓ Voto finale — ultima card'
+      : '✓ Voto finale';
   } else {
     finalPanel.style.display  = 'none';
     revealActs.style.display  = 'none';
