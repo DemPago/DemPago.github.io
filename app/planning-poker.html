@@ -1261,16 +1261,25 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
   // Divergenza
   const divBox = el('divergenceBox');
   if (hasDivergence) {
-    // nomi di chi ha votato min e max
-    const lowVoters  = numericVotes.filter(x => x.num === minVal).map(x => x.name).join(', ');
-    const highVoters = numericVotes.filter(x => x.num === maxVal).map(x => x.name).join(', ');
+    // Split per mediana: chi ha votato ≤ mediana → gruppo basso, chi > mediana → gruppo alto
+    const sorted = [...nums].sort((a, b) => a - b);
+    const mid    = Math.floor(sorted.length / 2);
+    const median = sorted.length % 2 !== 0
+      ? sorted[mid]
+      : (sorted[mid - 1] + sorted[mid]) / 2;
+
+    const lowGroup  = numericVotes.filter(x => x.num <= median).sort((a,b) => a.num - b.num);
+    const highGroup = numericVotes.filter(x => x.num >  median).sort((a,b) => a.num - b.num);
+
+    const fmtGroup = g => g.map(x => `<strong>${escHtml(x.name)}</strong> (${x.num})`).join(', ');
+
     divBox.style.display = '';
     divBox.innerHTML = `<div class="pp-divergence">
       <strong>&#9888;&#65039; Divergenza rilevata — ${minVal} pt vs ${maxVal} pt</strong>
       <p style="margin:0.5rem 0 0;">
-        &#128172; <strong>${escHtml(lowVoters)}</strong> ha votato <strong>${minVal}</strong>
+        &#128172; ${fmtGroup(lowGroup)}
         — spiega perché ritieni che l'effort sia basso.<br>
-        &#128172; <strong>${escHtml(highVoters)}</strong> ha votato <strong>${maxVal}</strong>
+        &#128172; ${fmtGroup(highGroup)}
         — spiega perché ritieni che l'effort sia alto.
       </p>
       <p style="margin:0.5rem 0 0;font-size:0.8rem;opacity:0.8;">
