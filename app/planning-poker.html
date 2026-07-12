@@ -913,6 +913,7 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, c
     el('votingSection').style.display = 'none';
     el('voteExplainBox').innerHTML = '';
     el('revealSection').style.display = '';
+    el('btnReveal').disabled = false;  // reset dopo rivota
     const allVoted = memberList.length > 0 && votedCount >= memberList.length;
     el('revealHint').style.display = allVoted ? 'none' : '';
   }
