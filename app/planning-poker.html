@@ -1,0 +1,637 @@
+---
+layout: app
+title: Planning Poker
+description: Valuta le card del tuo sprint con Planning Poker (scala Fibonacci). Inserisci le user story, vota ogni card e ottieni il riepilogo finale. Tutto nel browser, nessun dato inviato.
+permalink: /app/planning-poker/
+---
+
+<style>
+/* ── Layout ───────────────────────────────────────────────── */
+.pp-app {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+.pp-header h1 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0 0 0.25rem;
+  color: var(--text);
+}
+.pp-header p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* ── Istruzioni collassabili ──────────────────────────────── */
+.pp-instructions {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.pp-instructions summary {
+  padding: 0.85rem 1.1rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+}
+.pp-instructions summary::-webkit-details-marker { display: none; }
+.pp-instructions summary::before {
+  content: "▶";
+  font-size: 0.65rem;
+  transition: transform 0.2s;
+}
+.pp-instructions[open] summary::before { transform: rotate(90deg); }
+.pp-instructions .pp-instr-body {
+  padding: 0 1.1rem 1rem;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+  border-top: 1px solid var(--border);
+}
+.pp-instructions .pp-instr-body ol {
+  margin: 0.6rem 0 0.6rem 1.2rem;
+  padding: 0;
+}
+.pp-instructions .pp-instr-body li { margin-bottom: 0.3rem; }
+.pp-fib-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.6rem;
+}
+.pp-fib-legend span {
+  background: var(--accent);
+  color: #000;
+  font-weight: 700;
+  font-size: 0.75rem;
+  border-radius: 5px;
+  padding: 0.15rem 0.5rem;
+}
+.pp-fib-legend span.muted {
+  background: var(--border);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* ── Sezione aggiungi card ────────────────────────────────── */
+.pp-add-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.pp-add-card h2 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text);
+}
+.pp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.pp-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.pp-field input,
+.pp-field textarea {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text);
+  font-size: 0.9rem;
+  padding: 0.55rem 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  resize: vertical;
+}
+.pp-field input:focus,
+.pp-field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.pp-field textarea { min-height: 60px; }
+.pp-btn-row {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+.pp-btn {
+  border: none;
+  border-radius: 7px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.pp-btn:active { transform: scale(0.97); }
+.pp-btn-primary { background: var(--accent); color: #000; }
+.pp-btn-ghost { background: var(--border); color: var(--text-muted); }
+.pp-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Lista card ───────────────────────────────────────────── */
+.pp-cards-section h2 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 0.75rem;
+}
+.pp-empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  padding: 2rem 0;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+}
+
+/* ── Singola card ─────────────────────────────────────────── */
+.pp-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 0.75rem;
+  transition: border-color 0.2s;
+}
+.pp-card.voted { border-color: var(--accent); }
+.pp-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.pp-card-info { flex: 1; min-width: 0; }
+.pp-card-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text);
+  margin: 0 0 0.2rem;
+  word-break: break-word;
+}
+.pp-card-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0;
+  word-break: break-word;
+}
+.pp-card-delete {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.15rem 0.3rem;
+  border-radius: 5px;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+}
+.pp-card-delete:hover { color: #e05c5c; background: rgba(224,92,92,0.08); }
+
+/* ── Voti ─────────────────────────────────────────────────── */
+.pp-votes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+}
+.pp-vote-btn {
+  border: 2px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  padding: 0 0.5rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pp-vote-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.pp-vote-btn.selected {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+  transform: scale(1.1);
+}
+
+/* ── Barra avanzamento ────────────────────────────────────── */
+.pp-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.pp-progress-bar-wrap {
+  flex: 1;
+  height: 6px;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.pp-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 0.35s;
+  width: 0%;
+}
+
+/* ── Riepilogo ────────────────────────────────────────────── */
+.pp-summary {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.1rem;
+}
+.pp-summary h2 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 0.85rem;
+  color: var(--text);
+}
+.pp-summary table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.pp-summary th {
+  text-align: left;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.pp-summary td {
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: top;
+}
+.pp-summary td:last-child {
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.pp-summary tr:last-child td { border-bottom: none; }
+.pp-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+.pp-total-label { font-weight: 600; color: var(--text-muted); }
+.pp-total-value { font-size: 1.4rem; font-weight: 800; color: var(--accent); }
+.pp-summary-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  flex-wrap: wrap;
+}
+.pp-pending-badge {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+</style>
+
+<div class="pp-app">
+
+  <!-- Header -->
+  <div class="pp-header">
+    <h1>&#127183; Planning Poker</h1>
+    <p>Stima le card del tuo sprint con la scala Fibonacci. Tutto nel browser — nessun dato inviato.</p>
+  </div>
+
+  <!-- Istruzioni -->
+  <details class="pp-instructions" id="ppInstructions">
+    <summary>&#128218; Come funziona</summary>
+    <div class="pp-instr-body">
+      <ol>
+        <li>Aggiungi le <strong>user story</strong> o task dello sprint (titolo obbligatorio, descrizione opzionale).</li>
+        <li>Per ogni card seleziona il <strong>valore Fibonacci</strong> che stima la complessità/effort.</li>
+        <li>Quando tutte le card sono votate, il <strong>riepilogo</strong> mostra il totale dei punti.</li>
+        <li>Puoi copiare il riepilogo o <strong>resettare</strong> lo sprint per ricominciare.</li>
+      </ol>
+      <strong>Scala Fibonacci:</strong>
+      <div class="pp-fib-legend">
+        <span>1</span><span>2</span><span>3</span><span>5</span><span>8</span><span>13</span><span>21</span>
+        <span class="muted">?</span><span class="muted">☕</span>
+      </div>
+      <p style="margin-top:0.6rem;">
+        <strong>?</strong> = non abbastanza informazioni per stimare &nbsp;|&nbsp;
+        <strong>☕</strong> = pausa, card troppo grande o da spezzare
+      </p>
+    </div>
+  </details>
+
+  <!-- Aggiungi card -->
+  <div class="pp-add-card">
+    <h2>&#43; Aggiungi card</h2>
+    <div class="pp-field">
+      <label for="ppTitle">Titolo *</label>
+      <input type="text" id="ppTitle" placeholder="Es. Come utente voglio filtrare i risultati per data" maxlength="200" autocomplete="off">
+    </div>
+    <div class="pp-field">
+      <label for="ppDesc">Descrizione (opzionale)</label>
+      <textarea id="ppDesc" placeholder="Criteri di accettazione, note, link..." maxlength="500"></textarea>
+    </div>
+    <div class="pp-btn-row">
+      <button class="pp-btn pp-btn-ghost" id="ppClearForm">Cancella</button>
+      <button class="pp-btn pp-btn-primary" id="ppAddBtn">Aggiungi card</button>
+    </div>
+  </div>
+
+  <!-- Avanzamento -->
+  <div class="pp-progress-row" id="ppProgressRow" style="display:none;">
+    <span id="ppProgressLabel">0 / 0 votate</span>
+    <div class="pp-progress-bar-wrap">
+      <div class="pp-progress-fill" id="ppProgressFill"></div>
+    </div>
+  </div>
+
+  <!-- Lista card -->
+  <div class="pp-cards-section">
+    <h2>Card sprint <span id="ppCardCount" style="color:var(--text-muted);font-weight:400;font-size:0.85rem;"></span></h2>
+    <div id="ppCardList">
+      <div class="pp-empty" id="ppEmpty">Nessuna card ancora. Aggiungine una sopra.</div>
+    </div>
+  </div>
+
+  <!-- Riepilogo -->
+  <div class="pp-summary" id="ppSummary" style="display:none;">
+    <h2>&#128202; Riepilogo sprint</h2>
+    <table id="ppSummaryTable">
+      <thead>
+        <tr>
+          <th>Card</th>
+          <th>Punti</th>
+        </tr>
+      </thead>
+      <tbody id="ppSummaryBody"></tbody>
+    </table>
+    <div class="pp-total-row">
+      <span class="pp-total-label">Totale story points</span>
+      <span class="pp-total-value" id="ppTotal">—</span>
+    </div>
+    <div class="pp-summary-actions">
+      <button class="pp-btn pp-btn-primary" id="ppCopyBtn">&#128203; Copia riepilogo</button>
+      <button class="pp-btn pp-btn-ghost" id="ppResetBtn">&#128260; Nuovo sprint</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  const VOTES = ['1','2','3','5','8','13','21','?','☕'];
+  const STORAGE_KEY = 'pp_sprint_v1';
+
+  let cards = [];
+
+  /* ── Persistenza ─────────────────────────────────────────── */
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(cards)); } catch(e) {}
+  }
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) cards = JSON.parse(raw);
+    } catch(e) { cards = []; }
+  }
+
+  /* ── ID univoco ──────────────────────────────────────────── */
+  let _id = Date.now();
+  function uid() { return 'c' + (++_id); }
+
+  /* ── Render ──────────────────────────────────────────────── */
+  function render() {
+    const list  = document.getElementById('ppCardList');
+    const empty = document.getElementById('ppEmpty');
+    const countEl = document.getElementById('ppCardCount');
+
+    // rimuove le card precedenti (ma non #ppEmpty)
+    Array.from(list.querySelectorAll('.pp-card')).forEach(el => el.remove());
+
+    if (cards.length === 0) {
+      empty.style.display = '';
+      countEl.textContent = '';
+    } else {
+      empty.style.display = 'none';
+      countEl.textContent = '(' + cards.length + ')';
+      cards.forEach(card => list.appendChild(buildCardEl(card)));
+    }
+
+    renderProgress();
+    renderSummary();
+  }
+
+  function buildCardEl(card) {
+    const div = document.createElement('div');
+    div.className = 'pp-card' + (card.vote ? ' voted' : '');
+    div.dataset.id = card.id;
+
+    const top = document.createElement('div');
+    top.className = 'pp-card-top';
+
+    const info = document.createElement('div');
+    info.className = 'pp-card-info';
+    const title = document.createElement('p');
+    title.className = 'pp-card-title';
+    title.textContent = card.title;
+    info.appendChild(title);
+    if (card.desc) {
+      const desc = document.createElement('p');
+      desc.className = 'pp-card-desc';
+      desc.textContent = card.desc;
+      info.appendChild(desc);
+    }
+
+    const del = document.createElement('button');
+    del.className = 'pp-card-delete';
+    del.title = 'Rimuovi card';
+    del.textContent = '✕';
+    del.addEventListener('click', () => {
+      cards = cards.filter(c => c.id !== card.id);
+      save();
+      render();
+    });
+
+    top.appendChild(info);
+    top.appendChild(del);
+    div.appendChild(top);
+
+    // Voti
+    const votesWrap = document.createElement('div');
+    votesWrap.className = 'pp-votes';
+    VOTES.forEach(v => {
+      const btn = document.createElement('button');
+      btn.className = 'pp-vote-btn' + (card.vote === v ? ' selected' : '');
+      btn.textContent = v;
+      btn.title = voteLabel(v);
+      btn.addEventListener('click', () => {
+        const c = cards.find(x => x.id === card.id);
+        if (c) { c.vote = (c.vote === v) ? null : v; save(); render(); }
+      });
+      votesWrap.appendChild(btn);
+    });
+    div.appendChild(votesWrap);
+
+    return div;
+  }
+
+  function voteLabel(v) {
+    const map = {'1':'Banale','2':'Piccolo','3':'Piccolo-medio','5':'Medio',
+                 '8':'Complesso','13':'Molto complesso','21':'Epico',
+                 '?':'Non abbastanza info','☕':'Troppo grande, spezza la card'};
+    return map[v] || v;
+  }
+
+  /* ── Progress ─────────────────────────────────────────────── */
+  function renderProgress() {
+    const row   = document.getElementById('ppProgressRow');
+    const label = document.getElementById('ppProgressLabel');
+    const fill  = document.getElementById('ppProgressFill');
+    if (cards.length === 0) { row.style.display = 'none'; return; }
+    row.style.display = '';
+    const voted = cards.filter(c => c.vote).length;
+    const pct   = Math.round((voted / cards.length) * 100);
+    label.textContent = voted + ' / ' + cards.length + ' votate';
+    fill.style.width  = pct + '%';
+  }
+
+  /* ── Summary ──────────────────────────────────────────────── */
+  function renderSummary() {
+    const box   = document.getElementById('ppSummary');
+    const tbody = document.getElementById('ppSummaryBody');
+    const total = document.getElementById('ppTotal');
+    if (cards.length === 0) { box.style.display = 'none'; return; }
+    box.style.display = '';
+
+    tbody.innerHTML = '';
+    let sum = 0;
+    let allVoted = true;
+    cards.forEach(card => {
+      const tr = document.createElement('tr');
+      const tdTitle = document.createElement('td');
+      tdTitle.textContent = card.title;
+      const tdVote  = document.createElement('td');
+      if (card.vote) {
+        tdVote.textContent = card.vote;
+        const n = parseInt(card.vote);
+        if (!isNaN(n)) sum += n;
+      } else {
+        tdVote.innerHTML = '<span class="pp-pending-badge">— non votata</span>';
+        allVoted = false;
+      }
+      tr.appendChild(tdTitle);
+      tr.appendChild(tdVote);
+      tbody.appendChild(tr);
+    });
+
+    if (allVoted && cards.length > 0) {
+      total.textContent = sum + ' pt';
+    } else {
+      const voted = cards.filter(c => c.vote && !isNaN(parseInt(c.vote)));
+      const partial = voted.reduce((a,c) => a + parseInt(c.vote), 0);
+      total.textContent = partial + ' pt (parziale)';
+    }
+  }
+
+  /* ── Copia riepilogo ─────────────────────────────────────── */
+  document.getElementById('ppCopyBtn').addEventListener('click', () => {
+    let text = '📋 Planning Poker — Sprint\n\n';
+    cards.forEach((c, i) => {
+      text += (i+1) + '. ' + c.title + '  →  ' + (c.vote || '—') + '\n';
+    });
+    const numVoted = cards.filter(c => c.vote && !isNaN(parseInt(c.vote)));
+    const sum = numVoted.reduce((a,c) => a + parseInt(c.vote), 0);
+    text += '\nTotale: ' + sum + ' story point' + (numVoted.length < cards.length ? ' (parziale)' : '');
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('ppCopyBtn');
+      btn.textContent = '✓ Copiato!';
+      setTimeout(() => { btn.innerHTML = '&#128203; Copia riepilogo'; }, 2000);
+    }).catch(() => {
+      alert(text);
+    });
+  });
+
+  /* ── Reset sprint ────────────────────────────────────────── */
+  document.getElementById('ppResetBtn').addEventListener('click', () => {
+    if (!confirm('Resettare lo sprint? Tutte le card e i voti verranno eliminati.')) return;
+    cards = [];
+    save();
+    render();
+  });
+
+  /* ── Aggiungi card ───────────────────────────────────────── */
+  document.getElementById('ppAddBtn').addEventListener('click', addCard);
+  document.getElementById('ppTitle').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addCard();
+  });
+  document.getElementById('ppClearForm').addEventListener('click', () => {
+    document.getElementById('ppTitle').value = '';
+    document.getElementById('ppDesc').value  = '';
+    document.getElementById('ppTitle').focus();
+  });
+
+  function addCard() {
+    const title = document.getElementById('ppTitle').value.trim();
+    if (!title) {
+      document.getElementById('ppTitle').focus();
+      return;
+    }
+    const desc = document.getElementById('ppDesc').value.trim();
+    cards.push({ id: uid(), title, desc, vote: null });
+    save();
+    render();
+    document.getElementById('ppTitle').value = '';
+    document.getElementById('ppDesc').value  = '';
+    document.getElementById('ppTitle').focus();
+    // chiude le istruzioni dopo la prima card
+    document.getElementById('ppInstructions').removeAttribute('open');
+  }
+
+  /* ── Init ────────────────────────────────────────────────── */
+  load();
+  render();
+})();
+</script>

@@ -290,6 +290,16 @@ title: Home
         <p class="post-card-desc">Testa o croce? Una moneta da 2 euro con animazione 3D. Tiene il conto dei lanci.</p>
       </div>
     </li>
+    <li class="post-card">
+      <a href="/app/planning-poker/" class="post-card-cover" style="height:160px;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);display:block;overflow:hidden;display:flex;align-items:center;justify-content:center;text-decoration:none;">
+        <div style="font-size:5rem;line-height:1;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5));">🃏</div>
+      </a>
+      <div class="post-card-content">
+        <span class="post-card-category cat-tech">Tool</span>
+        <h3><a href="/app/planning-poker/">Planning Poker</a></h3>
+        <p class="post-card-desc">Stima le card del tuo sprint con la scala Fibonacci. Vota ogni user story, tieni traccia dei punti e copia il riepilogo.</p>
+      </div>
+    </li>
   </ul>
 </div>
 
