@@ -111,68 +111,75 @@ permalink: /app/planning-poker/
 /* ── Carta da poker (schermata di voto) ───────────────────── */
 .pp-playing-card {
   position: relative;
-  background: #ffffff;
-  border: 1px solid rgba(0,0,0,0.09);
-  border-radius: 22px;
-  padding: 1.5rem 1.6rem 1.7rem;
+  width: min(280px, 100%);
+  min-height: 390px;
+  margin: 0 auto;
+  background: #fff;
+  border: 2px solid #c8c8c8;
+  border-radius: 18px;
   box-shadow:
-    0 1px 3px rgba(0,0,0,0.05),
-    0 6px 18px rgba(0,0,0,0.09),
-    0 22px 52px rgba(0,0,0,0.13),
-    0 44px 76px rgba(0,0,0,0.06);
-  min-height: 210px; display: flex; flex-direction: column; overflow: hidden;
+    0 2px 4px rgba(0,0,0,0.06),
+    0 8px 22px rgba(0,0,0,0.13),
+    0 28px 60px rgba(0,0,0,0.20),
+    0 52px 88px rgba(0,0,0,0.09);
+  display: flex; flex-direction: column; overflow: hidden;
 }
-/* Bordo interno sottile */
+/* Doppio bordo interno — caratteristico delle carte da gioco */
 .pp-playing-card::before {
   content: ''; position: absolute;
-  inset: 10px; border: 1px solid rgba(0,0,0,0.055);
-  border-radius: 14px; pointer-events: none; z-index: 0;
+  inset: 7px; border: 1px solid rgba(0,0,0,0.09);
+  border-radius: 12px; pointer-events: none; z-index: 0;
 }
 .pp-playing-card::after { display: none; }
 
+/* Angolo top-left */
 .pp-card-corner {
-  position: absolute; top: 1rem; left: 1.15rem;
-  line-height: 1.05; z-index: 2;
-  display: flex; flex-direction: column; align-items: center; gap: 0;
+  position: absolute; top: 0.85rem; left: 0.95rem;
+  z-index: 2; display: flex; flex-direction: column; align-items: center;
 }
+/* Angolo bottom-right — ruotato 180° */
 .pp-card-corner-br {
-  position: absolute; bottom: 1rem; right: 1.15rem;
-  transform: rotate(180deg); line-height: 1.05; z-index: 2;
-  display: flex; flex-direction: column; align-items: center; gap: 0;
+  position: absolute; bottom: 0.85rem; right: 0.95rem;
+  transform: rotate(180deg);
+  z-index: 2; display: flex; flex-direction: column; align-items: center;
 }
 .pp-corner-num {
-  font-size: 1.8rem; font-weight: 900; font-family: 'Georgia', serif;
+  font-size: 2.6rem; font-weight: 900; font-family: 'Georgia', serif;
   display: block; line-height: 1; color: #111;
 }
 .pp-corner-suit {
-  font-size: 1.2rem; display: block; line-height: 1;
-  margin-top: 1px; color: #111;
+  font-size: 1.6rem; display: block; line-height: 1.1; color: #111;
 }
+/* Seme centrale — grande watermark */
 .pp-card-suit-bg {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-  font-size: 11rem; opacity: 0.04; pointer-events: none; user-select: none;
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14rem; opacity: 0.055; pointer-events: none; user-select: none;
   line-height: 1; z-index: 0; color: #000;
 }
-/* Decorazioni angolo piccole — nascoste */
-.pp-card-suit-tl,
-.pp-card-suit-br { display: none; }
+.pp-card-suit-tl, .pp-card-suit-br { display: none; }
 
+/* Corpo carta — centrato, schiacciato dagli angoli */
 .pp-card-body {
-  position: relative; z-index: 1; padding: 0.4rem 3.5rem; flex: 1;
-  display: flex; flex-direction: column; justify-content: center; gap: 0.6rem;
+  position: relative; z-index: 1;
+  padding: 5.5rem 1.4rem 5.5rem;
+  flex: 1; display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  gap: 0.65rem; text-align: center;
 }
 .pp-card-issue-key {
-  font-size: 0.68rem; font-weight: 800; color: var(--accent);
-  text-transform: uppercase; letter-spacing: 0.12em;
+  font-size: 0.62rem; font-weight: 800; color: var(--accent);
+  text-transform: uppercase; letter-spacing: 0.14em;
   font-family: 'Courier New', monospace;
 }
 .pp-card-title-main {
-  font-weight: 800; font-size: 1.2rem; color: #111;
-  line-height: 1.38; word-break: break-word;
+  font-weight: 700; font-size: 1rem; color: #111;
+  line-height: 1.45; word-break: break-word;
   font-family: Georgia, serif;
 }
 .pp-card-desc-main {
-  font-size: 0.82rem; color: #555; line-height: 1.55; word-break: break-word;
+  font-size: 0.74rem; color: #666; line-height: 1.5;
+  word-break: break-word;
 }
 
 /* ── Mini-carte voto ──────────────────────────────────────── */
@@ -406,6 +413,17 @@ permalink: /app/planning-poker/
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* ── Flip animation ───────────────────────────────────────── */
+.pp-card-perspective { perspective: 900px; }
+
+@keyframes cardFlipIn {
+  from { transform: rotateY(90deg) scale(0.94); opacity: 0.2; }
+  to   { transform: rotateY(0deg)  scale(1);    opacity: 1;   }
+}
+.pp-playing-card.flip-in {
+  animation: cardFlipIn 0.42s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+}
+
 /* ── Card counter ─────────────────────────────────────────── */
 .pp-card-counter {
   font-size: 0.78rem; color: var(--text-muted); text-align: right; font-weight: 600;
@@ -602,6 +620,7 @@ permalink: /app/planning-poker/
     </div>
 
     <!-- Carta da poker con la card -->
+    <div class="pp-card-perspective">
     <div class="pp-playing-card" id="votingPlayingCard">
       <div class="pp-card-corner">
         <span class="pp-corner-num" id="vcCornerNum">1</span>
@@ -620,6 +639,7 @@ permalink: /app/planning-poker/
         <p class="pp-card-desc-main"  id="vcDesc"></p>
       </div>
     </div>
+    </div><!-- /pp-card-perspective -->
 
     <!-- Progress votanti -->
     <div class="pp-vote-progress">
@@ -742,14 +762,16 @@ const COLORS = ['#1a1a1a','#c0392b','#c0392b','#1a1a1a'];
 
 /* ── Stato locale ────────────────────────────────────────── */
 let state = {
-  sessionCode:    null,
-  isFacilitator:  false,
-  myName:         null,
-  unsubscribe:    null,
-  setupMembers:   [],
-  setupCards:     [],
-  myVotes:        {},   // cardId → val (locale, non inviato finché non confermato)
-  selectedFinal:  null,
+  sessionCode:       null,
+  isFacilitator:     false,
+  myName:            null,
+  unsubscribe:       null,
+  setupMembers:      [],
+  setupCards:        [],
+  myVotes:           {},   // cardId → val (locale)
+  selectedFinal:     null,
+  lastCardIdx:       -1,   // per trigger animazione flip solo a cambio card
+  cachedData:        null, // ultima snapshot Firestore — evita getDoc extra
 };
 
 /* ── Auth ────────────────────────────────────────────────── */
@@ -837,6 +859,11 @@ async function joinSession() {
     const snap = await getDoc(doc(db, 'poker_sessions', code));
     if (!snap.exists()) { showJoinError('Sessione non trovata. Controlla il codice.'); return; }
     const data = snap.data();
+    // Sessione già terminata
+    if (data.status === 'finished') {
+      showJoinError('Questa sessione è già terminata. Chiedi al facilitatore di crearne una nuova.');
+      return;
+    }
     // Verifica che il nome sia nella lista membri (se lista configurata)
     if (data.members && data.members.length > 0) {
       const normalized = data.members.map(m => m.trim().toLowerCase());
@@ -990,6 +1017,7 @@ function startListening() {
 }
 
 function renderSession(data) {
+  state.cachedData = data;
   const { status, cards, currentCard, votes, finalVotes, members } = data;
   const isFac   = state.isFacilitator;
   const cardIdx = currentCard ?? 0;
@@ -1031,7 +1059,15 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, c
   el('votingCodeBadge').textContent = state.sessionCode;
   el('votingCardCounter').textContent = (idx+1) + ' / ' + total;
 
-  // Carta da poker
+  // Carta da poker — flip solo a cambio card
+  if (state.lastCardIdx !== idx) {
+    const cardEl = el('votingPlayingCard');
+    cardEl.classList.remove('flip-in');
+    void cardEl.offsetWidth; // reflow per riavviare animazione
+    cardEl.classList.add('flip-in');
+    state.lastCardIdx = idx;
+  }
+
   el('vcCornerNum').textContent   = idx+1;
   el('vcCornerSuit').textContent  = suit;
   el('vcCornerNum2').textContent  = idx+1;
@@ -1047,7 +1083,9 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, c
   el('vcTitle').textContent = card.title;
   el('vcDesc').textContent  = card.desc || '';
   el('vcDesc').style.display = card.desc ? '' : 'none';
-  el('vcIssueKey').textContent = 'Card ' + (idx+1);
+  // Mostra chiave Jira se presente nel titolo es. "[SMION-123] Titolo"
+  const keyMatch = card.title.match(/^\[([A-Z]+-\d+)\]/);
+  el('vcIssueKey').textContent = keyMatch ? keyMatch[1] : '';
 
   // Progress votanti
   const memberList = members && members.length > 0 ? members : Object.keys(cardVotes);
@@ -1109,6 +1147,8 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, c
   showScreen('screenVoting');
 }
 
+let voteDebounceTimer = null;
+
 async function castVote(cardId, val) {
   state.myVotes[cardId] = val;
   // aggiorna subito UI locale
@@ -1118,11 +1158,14 @@ async function castVote(cardId, val) {
   const info = voteInfo(val);
   el('voteExplainBox').innerHTML = `<div class="pp-vote-explain"><strong>${info.label}</strong>${info.explain}</div>`;
 
-  // scrivi su Firestore
-  try {
-    const path = 'votes.' + cardId + '.' + state.myName;
-    await updateDoc(doc(db, 'poker_sessions', state.sessionCode), { [path]: val });
-  } catch(e) { console.error('Vote error', e); }
+  // debounce: aspetta 300ms prima di scrivere su Firestore
+  clearTimeout(voteDebounceTimer);
+  voteDebounceTimer = setTimeout(async () => {
+    try {
+      const path = 'votes.' + cardId + '.' + state.myName;
+      await updateDoc(doc(db, 'poker_sessions', state.sessionCode), { [path]: val });
+    } catch(e) { console.error('Vote error', e); }
+  }, 300);
 }
 
 el('btnReveal').addEventListener('click', async () => {
@@ -1162,7 +1205,7 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
     if (!isNaN(num) && num === minVal && hasDivergence) chip.classList.add('low');
     chip.innerHTML = `
       <span class="pp-reveal-name">${escHtml(name)}</span>
-      <span class="pp-reveal-value${v === '?' || v === '☕' ? '' : ''}">${v ? escHtml(v) : '—'}</span>`;
+      <span class="pp-reveal-value${v === '?' || v === '☕' ? ' red' : ''}">${v ? escHtml(v) : '—'}</span>`;
     grid.appendChild(chip);
   });
 
@@ -1243,16 +1286,29 @@ async function selectFinalVote(cardId, val) {
   try {
     const path = 'finalVotes.' + cardId;
     await updateDoc(doc(db, 'poker_sessions', state.sessionCode), { [path]: val });
-  } catch(e) { console.error('Final vote error', e); }
+  } catch(e) {
+    console.error('Final vote error', e);
+    // rollback UI: il voto non è stato salvato
+    state.selectedFinal = null;
+    el('finalVoteCards').querySelectorAll('.pp-vote-card').forEach(btn => btn.classList.remove('selected'));
+    el('btnNextCard').disabled = true;
+    const hint = el('revealActions').querySelector('.pp-save-error') || (() => {
+      const d = document.createElement('span');
+      d.className = 'pp-save-error';
+      d.style.cssText = 'font-size:0.8rem;color:#e05c5c;margin-left:0.5rem;';
+      el('revealActions').appendChild(d);
+      return d;
+    })();
+    hint.textContent = '⚠ Salvataggio fallito, riprova.';
+    setTimeout(() => { hint.textContent = ''; }, 3500);
+  }
 }
 
 el('btnRevote').addEventListener('click', async () => {
+  const data = state.cachedData;
+  if (!data) return;
+  const cardId = data.cards[data.currentCard].id;
   try {
-    const snap = await getDoc(doc(db, 'poker_sessions', state.sessionCode));
-    if (!snap.exists()) return;
-    const data = snap.data();
-    const cardId = data.cards[data.currentCard].id;
-    // deleteField() rimuove correttamente la chiave su Firestore
     await updateDoc(doc(db, 'poker_sessions', state.sessionCode), {
       ['votes.' + cardId]: deleteField(),
       status: 'voting'
@@ -1263,10 +1319,9 @@ el('btnRevote').addEventListener('click', async () => {
 
 el('btnNextCard').addEventListener('click', async () => {
   if (!state.selectedFinal) return;
+  const data = state.cachedData;
+  if (!data) return;
   try {
-    const snap = await getDoc(doc(db, 'poker_sessions', state.sessionCode));
-    if (!snap.exists()) return;
-    const data = snap.data();
     const nextIdx = (data.currentCard ?? 0) + 1;
     if (nextIdx >= data.cards.length) {
       await updateDoc(doc(db, 'poker_sessions', state.sessionCode), { status: 'finished' });
@@ -1318,7 +1373,7 @@ el('btnCopySummary').addEventListener('click', () => {
 
 el('btnNewSession').addEventListener('click', () => {
   if (state.unsubscribe) { state.unsubscribe(); state.unsubscribe = null; }
-  state = { sessionCode:null, isFacilitator:false, myName:null, unsubscribe:null, setupMembers:[], setupCards:[], myVotes:{}, selectedFinal:null };
+  state = { sessionCode:null, isFacilitator:false, myName:null, unsubscribe:null, setupMembers:[], setupCards:[], myVotes:{}, selectedFinal:null, lastCardIdx:-1, cachedData:null };
   el('joinCodeInput').value = '';
   el('joinNameInput').value = '';
   el('joinError').style.display = 'none';
