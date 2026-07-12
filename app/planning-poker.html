@@ -110,50 +110,128 @@ permalink: /app/planning-poker/
 
 /* ── Carta da poker (schermata di voto) ───────────────────── */
 .pp-playing-card {
-  position: relative; background: #fafaf5; border: 2px solid #c8c8b0;
-  border-radius: 16px; padding: 1.1rem 1.2rem 1.2rem;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.6);
-  min-height: 160px; display: flex; flex-direction: column; overflow: hidden;
+  position: relative;
+  background: linear-gradient(160deg, #fffef7 0%, #f5f0e8 100%);
+  border: 2.5px solid #d4c9a8;
+  border-radius: 20px;
+  padding: 1.3rem 1.4rem 1.4rem;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.18),
+    0 2px 8px rgba(0,0,0,0.10),
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    inset 0 -1px 0 rgba(0,0,0,0.04);
+  min-height: 180px; display: flex; flex-direction: column; overflow: hidden;
 }
+/* Bordo interno dorato */
+.pp-playing-card::after {
+  content: ''; position: absolute;
+  inset: 6px; border: 1px solid rgba(180,155,90,0.25);
+  border-radius: 14px; pointer-events: none; z-index: 0;
+}
+/* Pattern filigrana */
 .pp-playing-card::before {
   content: ''; position: absolute; inset: 0;
-  background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.025) 0, rgba(0,0,0,0.025) 1px, transparent 0, transparent 50%);
-  background-size: 14px 14px; border-radius: 14px; pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(180,155,90,0.08) 1px, transparent 1px);
+  background-size: 18px 18px;
+  border-radius: 18px; pointer-events: none; z-index: 0;
 }
-.pp-card-corner { position: absolute; top: 0.6rem; left: 0.75rem; line-height: 1; z-index: 1; }
-.pp-card-corner-br { position: absolute; bottom: 0.6rem; right: 0.75rem; transform: rotate(180deg); line-height: 1; z-index: 1; }
-.pp-corner-num  { font-size: 1.1rem; font-weight: 900; font-family: Georgia, serif; display: block; }
-.pp-corner-suit { font-size: 0.8rem; display: block; }
+.pp-card-corner {
+  position: absolute; top: 0.65rem; left: 0.8rem;
+  line-height: 1.1; z-index: 2; display: flex; flex-direction: column; align-items: center;
+}
+.pp-card-corner-br {
+  position: absolute; bottom: 0.65rem; right: 0.8rem;
+  transform: rotate(180deg); line-height: 1.1; z-index: 2;
+  display: flex; flex-direction: column; align-items: center;
+}
+.pp-corner-num  {
+  font-size: 1.25rem; font-weight: 900; font-family: 'Georgia', serif;
+  display: block; line-height: 1; text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+.pp-corner-suit { font-size: 0.9rem; display: block; line-height: 1; margin-top: 1px; }
 .pp-card-suit-bg {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-  font-size: 5rem; opacity: 0.06; pointer-events: none; user-select: none; line-height: 1;
+  font-size: 7rem; opacity: 0.05; pointer-events: none; user-select: none;
+  line-height: 1; z-index: 0; filter: blur(1px);
+}
+/* Decorazione semi angoli piccoli */
+.pp-card-suit-tl {
+  position: absolute; top: 2.6rem; left: 0.9rem;
+  font-size: 0.65rem; opacity: 0.25; z-index: 1; line-height: 1;
+}
+.pp-card-suit-br {
+  position: absolute; bottom: 2.6rem; right: 0.9rem;
+  font-size: 0.65rem; opacity: 0.25; z-index: 1; line-height: 1;
+  transform: rotate(180deg);
 }
 .pp-card-body {
-  position: relative; z-index: 1; padding: 0 2rem; flex: 1;
-  display: flex; flex-direction: column; justify-content: center; gap: 0.35rem;
+  position: relative; z-index: 1; padding: 0 2.2rem; flex: 1;
+  display: flex; flex-direction: column; justify-content: center; gap: 0.4rem;
 }
-.pp-card-issue-key { font-size: 0.72rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.06em; }
-.pp-card-title-main { font-weight: 800; font-size: 1.05rem; color: #1a1a1a; line-height: 1.35; word-break: break-word; }
-.pp-card-desc-main  { font-size: 0.8rem; color: #555; line-height: 1.45; word-break: break-word; }
+.pp-card-issue-key {
+  font-size: 0.68rem; font-weight: 800; color: #b4a060;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  font-family: 'Courier New', monospace;
+}
+.pp-card-title-main {
+  font-weight: 800; font-size: 1.05rem; color: #1a1414;
+  line-height: 1.38; word-break: break-word;
+  font-family: Georgia, serif;
+}
+.pp-card-desc-main {
+  font-size: 0.79rem; color: #6b5c4a; line-height: 1.5; word-break: break-word;
+}
 
 /* ── Mini-carte voto ──────────────────────────────────────── */
-.pp-votes-section { display: flex; flex-direction: column; gap: 0.6rem; }
+.pp-votes-section { display: flex; flex-direction: column; gap: 0.7rem; }
 .pp-votes-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); }
-.pp-votes { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.pp-votes { display: flex; flex-wrap: wrap; gap: 0.6rem; padding: 0.5rem 0; }
 .pp-vote-card {
-  position: relative; width: 3rem; height: 4.3rem;
-  background: #fafaf5; border: 2px solid #c8c8b0; border-radius: 9px;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  font-family: Georgia, serif; font-size: 1.1rem; font-weight: 800; color: #1a1a1a;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  transition: transform 0.12s, border-color 0.12s, box-shadow 0.12s;
+  position: relative;
+  width: 3.4rem; height: 4.8rem;
+  background: linear-gradient(160deg, #fffef7 0%, #f5f0e8 100%);
+  border: 2px solid #d4c9a8;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-family: Georgia, serif; font-size: 1.15rem; font-weight: 900; color: #1a1414;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.8);
+  transition: transform 0.13s cubic-bezier(.2,.8,.3,1.2), border-color 0.13s, box-shadow 0.13s;
   user-select: none; flex-shrink: 0;
 }
-.pp-vote-card:hover   { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 7px 16px rgba(0,0,0,0.22); }
-.pp-vote-card.selected { border-color: var(--accent); background: var(--accent); color: #000; transform: translateY(-7px) scale(1.06); box-shadow: 0 10px 20px rgba(0,0,0,0.28); }
-.pp-vote-card.disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
-.pp-vote-card::before { content: attr(data-val); position: absolute; top: 0.22rem; left: 0.3rem; font-size: 0.52rem; font-weight: 800; opacity: 0.65; }
-.pp-vote-card::after  { content: attr(data-suit); position: absolute; bottom: 0.22rem; right: 0.3rem; font-size: 0.58rem; opacity: 0.45; transform: rotate(180deg); }
+/* Bordo interno */
+.pp-vote-card::before {
+  content: ''; position: absolute; inset: 3px;
+  border: 1px solid rgba(180,155,90,0.2); border-radius: 7px; pointer-events: none;
+}
+/* Valore angolo top-left */
+.pp-vote-card::after {
+  content: attr(data-val);
+  position: absolute; top: 0.22rem; left: 0.28rem;
+  font-size: 0.5rem; font-weight: 900; opacity: 0.6; line-height: 1;
+  font-family: Georgia, serif;
+}
+/* Seme angolo bottom-right */
+.pp-vote-card-suit {
+  position: absolute; bottom: 0.22rem; right: 0.28rem;
+  font-size: 0.55rem; opacity: 0.4; line-height: 1;
+  transform: rotate(180deg); pointer-events: none;
+}
+.pp-vote-card:hover {
+  transform: translateY(-6px) scale(1.04);
+  border-color: var(--accent);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.pp-vote-card.selected {
+  background: linear-gradient(160deg, #ffe97a 0%, var(--accent) 100%);
+  border-color: var(--accent);
+  color: #1a0e00;
+  transform: translateY(-8px) scale(1.08);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.22), 0 0 0 2px var(--accent);
+}
+.pp-vote-card.selected::before { border-color: rgba(0,0,0,0.15); }
+.pp-vote-card.disabled { opacity: 0.35; cursor: not-allowed; transform: none !important; box-shadow: none; }
 .pp-vote-card.red { color: #c0392b; }
 .pp-vote-card.red.selected { color: #7b0000; }
 
@@ -391,7 +469,9 @@ permalink: /app/planning-poker/
         <span class="pp-corner-num" id="vcCornerNum">1</span>
         <span class="pp-corner-suit" id="vcCornerSuit">♠</span>
       </div>
+      <span class="pp-card-suit-tl" id="vcSuitTL">♠</span>
       <div class="pp-card-suit-bg" id="vcSuitBg">♠</div>
+      <span class="pp-card-suit-br" id="vcSuitBR">♠</span>
       <div class="pp-card-corner-br">
         <span class="pp-corner-num" id="vcCornerNum2">1</span>
         <span class="pp-corner-suit" id="vcCornerSuit2">♠</span>
@@ -423,7 +503,7 @@ permalink: /app/planning-poker/
     <!-- Bottone Rivela (solo facilitatore) -->
     <div id="revealSection" style="display:none;">
       <div class="pp-alert pp-alert-info" style="margin-bottom:0.75rem;" id="revealHint">
-        Attendi che tutti votino, poi rivela i voti al team.
+        Puoi rivelare i voti in qualsiasi momento, anche prima che tutti abbiano votato.
       </div>
       <button class="pp-btn pp-btn-primary pp-btn-large" id="btnReveal" style="width:100%;">&#128064; Rivela i voti</button>
     </div>
@@ -495,7 +575,7 @@ permalink: /app/planning-poker/
 <script type="module">
 import { initializeApp, getApps, getApp }
   from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, serverTimestamp }
+import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, serverTimestamp, deleteField }
   from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 /* ── Firebase ────────────────────────────────────────────── */
@@ -772,6 +852,8 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, c
   el('vcCornerNum2').textContent  = idx+1;
   el('vcCornerSuit2').textContent = suit;
   el('vcSuitBg').textContent      = suit;
+  el('vcSuitTL').textContent      = suit;
+  el('vcSuitBR').textContent      = suit;
   el('vcCornerNum').style.color   = color;
   el('vcCornerNum2').style.color  = color;
   el('vcTitle').textContent = card.title;
@@ -811,6 +893,10 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, c
       btn.dataset.suit = vc.suit;
       btn.textContent  = vc.val;
       btn.title        = vc.label;
+      const suitSpan = document.createElement('span');
+      suitSpan.className = 'pp-vote-card-suit';
+      suitSpan.textContent = vc.suit;
+      btn.appendChild(suitSpan);
       btn.addEventListener('click', () => castVote(card.id, vc.val));
       vCards.appendChild(btn);
     });
@@ -922,6 +1008,10 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
       btn.dataset.suit = vc.suit;
       btn.textContent  = vc.val;
       btn.title        = vc.label;
+      const suitSpan = document.createElement('span');
+      suitSpan.className = 'pp-vote-card-suit';
+      suitSpan.textContent = vc.suit;
+      btn.appendChild(suitSpan);
       btn.addEventListener('click', () => selectFinalVote(card.id, vc.val));
       fCards.appendChild(btn);
     });
@@ -950,15 +1040,15 @@ async function selectFinalVote(cardId, val) {
 
 el('btnRevote').addEventListener('click', async () => {
   try {
-    // svuota voti card corrente e torna a voting
     const snap = await getDoc(doc(db, 'poker_sessions', state.sessionCode));
     if (!snap.exists()) return;
     const data = snap.data();
     const cardId = data.cards[data.currentCard].id;
-    const votes = data.votes || {};
-    delete votes[cardId];
-    await updateDoc(doc(db, 'poker_sessions', state.sessionCode), { votes, status: 'voting' });
-    // resetta voto locale
+    // deleteField() rimuove correttamente la chiave su Firestore
+    await updateDoc(doc(db, 'poker_sessions', state.sessionCode), {
+      ['votes.' + cardId]: deleteField(),
+      status: 'voting'
+    });
     delete state.myVotes[cardId];
   } catch(e) { console.error('Revote error', e); }
 });
