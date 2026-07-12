@@ -731,6 +731,7 @@ permalink: /app/planning-poker/
     <!-- Azioni facilitatore -->
     <div class="pp-btn-row" id="revealActions" style="display:none;">
       <button class="pp-btn pp-btn-ghost" id="btnRevote">&#128260; Rivota</button>
+      <button class="pp-btn pp-btn-danger" id="btnReject">&#128683; Boccia — da splittare</button>
       <button class="pp-btn pp-btn-primary" id="btnNextCard">Prossima card &#8594;</button>
     </div>
 
@@ -1233,13 +1234,15 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
   el('revealCardCounter').textContent = (idx+1) + ' / ' + total;
   el('revealCardTitle').textContent = card.title;
 
-  // Calcola spread
+  // Calcola spread — escludi 21, ?, ☕ dal range (non sono stime valide)
   const allVoted      = Object.entries(cardVotes);
   const numericVotes  = allVoted.map(([n,v]) => ({ name: n, val: v, num: parseInt(v) }));
-  const nums          = numericVotes.filter(x => !isNaN(x.num)).map(x => x.num);
+  const EXCLUDED_VALS = new Set(['21', '?', '☕']);
+  const validVotes    = numericVotes.filter(x => !isNaN(x.num) && !EXCLUDED_VALS.has(x.val));
+  const nums          = validVotes.map(x => x.num);
   const allQuestion   = allVoted.length > 0 && allVoted.every(([,v]) => v === '?');
-  const allTwentyOne  = nums.length > 0 && nums.every(n => n === 21) && !allVoted.some(([,v]) => v === '?');
-  const hasTwentyOne  = !allTwentyOne && nums.some(n => n === 21);
+  const allTwentyOne  = allVoted.length > 0 && allVoted.every(([,v]) => v === '21');
+  const hasTwentyOne  = !allTwentyOne && numericVotes.some(x => x.num === 21);
   const maxVal        = nums.length ? Math.max(...nums) : null;
   const minVal        = nums.length ? Math.min(...nums) : null;
   const hasDivergence = !allQuestion && !allTwentyOne && nums.length >= 2 && (maxVal - minVal) >= 3;
@@ -1297,8 +1300,8 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
       ? sorted[mid]
       : (sorted[mid - 1] + sorted[mid]) / 2;
 
-    const lowGroup  = numericVotes.filter(x => x.num <= median).sort((a,b) => a.num - b.num);
-    const highGroup = numericVotes.filter(x => x.num >  median).sort((a,b) => a.num - b.num);
+    const lowGroup  = validVotes.filter(x => x.num <= median).sort((a,b) => a.num - b.num);
+    const highGroup = validVotes.filter(x => x.num >  median).sort((a,b) => a.num - b.num);
 
     const fmtGroup = g => g.map(x => `<strong>${escHtml(x.name)}</strong> (${x.num})`).join(', ');
 
@@ -1410,6 +1413,25 @@ el('btnRevote').addEventListener('click', async () => {
   }
 });
 
+el('btnReject').addEventListener('click', async () => {
+  const data = state.cachedData;
+  if (!data) return;
+  if (!confirm('Bocciare questa issue e segnarla come "da splittare"?')) return;
+  const card    = data.cards[data.currentCard];
+  const nextIdx = (data.currentCard ?? 0) + 1;
+  try {
+    const update = { ['finalVotes.' + card.id]: 'split' };
+    if (nextIdx >= data.cards.length) {
+      update.status = 'finished';
+    } else {
+      update.currentCard = nextIdx;
+      update.status      = 'voting';
+      state.selectedFinal = null;
+    }
+    await updateDoc(doc(db, 'poker_sessions', state.sessionCode), update);
+  } catch(e) { console.error('Reject error', e); }
+});
+
 el('btnNextCard').addEventListener('click', async () => {
   if (!state.selectedFinal) return;
   const data = state.cachedData;
@@ -1435,7 +1457,8 @@ function renderSummary(cards, finalVotes, allVotes) {
   tbody.innerHTML = '';
   let total = 0;
   cards.forEach(card => {
-    const v = finalVotes && finalVotes[card.id];
+    const v       = finalVotes && finalVotes[card.id];
+    const isSplit = v === 'split';
     const n = parseInt(v);
     if (!isNaN(n)) total += n;
 
@@ -1446,14 +1469,17 @@ function renderSummary(cards, finalVotes, allVotes) {
       ? voteEntries.map(([name, val]) => `${escHtml(name)}: ${escHtml(val)}`).join(', ')
       : '';
 
-    const noteCell = v
-      ? `${voteInfo(v).label}${voteDetail ? ` &middot; <span style="opacity:0.7">${voteDetail}</span>` : ''}`
-      : `<em>non stimata</em>${voteDetail ? ` &middot; <span style="opacity:0.7">${voteDetail}</span>` : ''}`;
+    const ptsCell  = isSplit ? '&#128683;' : (v ? escHtml(v) : '—');
+    const noteCell = isSplit
+      ? `<span style="color:#e05c5c;font-weight:700;">Da splittare</span>${voteDetail ? ` &middot; <span style="opacity:0.7">${voteDetail}</span>` : ''}`
+      : v
+        ? `${voteInfo(v).label}${voteDetail ? ` &middot; <span style="opacity:0.7">${voteDetail}</span>` : ''}`
+        : `<em>non stimata</em>${voteDetail ? ` &middot; <span style="opacity:0.7">${voteDetail}</span>` : ''}`;
 
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${escHtml(card.title)}</td>
-      <td>${v ? escHtml(v) : '—'}</td>
+      <td>${ptsCell}</td>
       <td style="font-size:0.78rem;color:var(--text-muted)">${noteCell}</td>`;
     tbody.appendChild(tr);
   });
