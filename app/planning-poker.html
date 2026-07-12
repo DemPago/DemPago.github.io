@@ -162,10 +162,23 @@ permalink: /app/planning-poker/
 /* Corpo carta — centrato, schiacciato dagli angoli */
 .pp-card-body {
   position: relative; z-index: 1;
-  padding: 5.5rem 1.4rem 5.5rem;
+  padding: 4.8rem 1.2rem 4.2rem;
   flex: 1; display: flex; flex-direction: column;
   justify-content: center; align-items: center;
-  gap: 0.65rem; text-align: center;
+  gap: 0.5rem; text-align: center;
+}
+/* Ritratto face-card stile fante di Picche */
+.pp-card-portrait-wrap {
+  display: flex; justify-content: center;
+  margin: 0.15rem 0 0.3rem;
+}
+.pp-card-portrait {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 2.5px solid rgba(0,0,0,0.18);
+  object-fit: cover; object-position: top center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+  filter: grayscale(12%) contrast(1.06);
 }
 .pp-card-issue-key {
   font-size: 0.62rem; font-weight: 800; color: var(--accent);
@@ -173,12 +186,12 @@ permalink: /app/planning-poker/
   font-family: 'Courier New', monospace;
 }
 .pp-card-title-main {
-  font-weight: 700; font-size: 1rem; color: #111;
-  line-height: 1.45; word-break: break-word;
+  font-weight: 700; font-size: 0.88rem; color: #111;
+  line-height: 1.42; word-break: break-word;
   font-family: Georgia, serif;
 }
 .pp-card-desc-main {
-  font-size: 0.74rem; color: #666; line-height: 1.5;
+  font-size: 0.72rem; color: #666; line-height: 1.5;
   word-break: break-word;
 }
 
@@ -635,6 +648,9 @@ permalink: /app/planning-poker/
       </div>
       <div class="pp-card-body">
         <span class="pp-card-issue-key" id="vcIssueKey"></span>
+        <div class="pp-card-portrait-wrap">
+          <img class="pp-card-portrait" src="https://img-c.udemycdn.com/user/200_H/48810756_2aad.jpg" alt="Lorenzo">
+        </div>
         <p class="pp-card-title-main" id="vcTitle">—</p>
         <p class="pp-card-desc-main"  id="vcDesc"></p>
       </div>
