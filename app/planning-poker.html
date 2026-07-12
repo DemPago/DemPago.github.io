@@ -72,10 +72,10 @@ permalink: /app/planning-poker/
   font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
   letter-spacing: 0.06em; opacity: 0.65;
 }
-.pp-suit-btn[data-suit="♥"] { color: #c0392b; }
-.pp-suit-btn[data-suit="♦"] { color: #c0392b; }
-.pp-suit-btn[data-suit="♠"] { color: #1a1a1a; }
-.pp-suit-btn[data-suit="♣"] { color: #1a1a1a; }
+.pp-suit-btn[data-suit="♥"] { color: #e05252; }
+.pp-suit-btn[data-suit="♦"] { color: #e05252; }
+.pp-suit-btn[data-suit="♠"] { color: #e8e8e8; }
+.pp-suit-btn[data-suit="♣"] { color: #e8e8e8; }
 .pp-btn-large    { padding: 0.85rem 1.5rem; font-size: 1rem; border-radius: 10px; }
 .pp-btn-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
@@ -585,19 +585,21 @@ permalink: /app/planning-poker/
       <div class="pp-import-steps">
         <div class="pp-import-step">
           <span class="pp-import-step-num">1</span>
-          <span>Apri il <a href="https://pagopa.atlassian.net/jira/software/c/projects/SMION/boards/4732/backlog" target="_blank" rel="noopener">Backlog del progetto SMION ↗</a> su Jira.</span>
+          <span>Vai sull'<a href="https://pagopa.atlassian.net/issues/" target="_blank" rel="noopener">Issue Navigator di Jira ↗</a> e usa il JQL adatto al tuo caso:<br><br>
+          <strong>Sprint corrente:</strong><br>
+          <code>project = SMION AND sprint in openSprints() ORDER BY created DESC</code>
+          &nbsp;<a href="https://pagopa.atlassian.net/issues/?jql=project%20%3D%20SMION%20AND%20sprint%20in%20openSprints()%20ORDER%20BY%20created%20DESC" target="_blank" rel="noopener" style="font-size:0.8rem;">↗ apri</a><br><br>
+          <strong>Backlog (non ancora in sprint):</strong><br>
+          <code>project = SMION AND sprint is EMPTY AND statusCategory != Done ORDER BY created DESC</code>
+          &nbsp;<a href="https://pagopa.atlassian.net/issues/?jql=project%20%3D%20SMION%20AND%20sprint%20is%20EMPTY%20AND%20statusCategory%20!%3D%20Done%20ORDER%20BY%20created%20DESC" target="_blank" rel="noopener" style="font-size:0.8rem;">↗ apri</a>
+          </span>
         </div>
         <div class="pp-import-step">
           <span class="pp-import-step-num">2</span>
-          <span>In alto a destra clicca su <strong>Visualizza nel Issue Navigator</strong> oppure vai direttamente su <a href="https://pagopa.atlassian.net/issues/?jql=project%20%3D%20SMION%20AND%20sprint%20in%20openSprints()%20ORDER%20BY%20created%20DESC" target="_blank" rel="noopener">Issue Navigator con JQL precompilato ↗</a>.<br>
-          Il JQL usato è: <code>project = SMION AND sprint in openSprints() ORDER BY created DESC</code></span>
-        </div>
-        <div class="pp-import-step">
-          <span class="pp-import-step-num">3</span>
           <span>In alto a destra clicca <strong>Esporta</strong> → <strong>Esporta in CSV (tutti i campi)</strong> e salva il file.</span>
         </div>
         <div class="pp-import-step">
-          <span class="pp-import-step-num">4</span>
+          <span class="pp-import-step-num">3</span>
           <span>Carica il file CSV qui sotto, seleziona le issue da stimare e clicca <strong>Importa selezionate</strong>.</span>
         </div>
       </div>

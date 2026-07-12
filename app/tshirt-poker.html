@@ -1,0 +1,1231 @@
+---
+layout: app
+title: T-Shirt Sizing
+description: Stima le user story con le taglie T-shirt. Sessioni multi-device in tempo reale, import da Jira CSV, reveal collettivo.
+permalink: /app/tshirt-poker/
+---
+
+<style>
+/* ── Base ─────────────────────────────────────────────────── */
+.ts-app {
+  max-width: 700px; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 1.75rem;
+}
+.ts-screen { display: none; flex-direction: column; gap: 1.5rem; }
+.ts-screen.active { display: flex; }
+
+/* ── Header ───────────────────────────────────────────────── */
+.ts-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0 0 0.2rem; color: var(--text); }
+.ts-header p  { color: var(--text-muted); font-size: 0.88rem; margin: 0; }
+
+/* ── Panel ────────────────────────────────────────────────── */
+.ts-panel {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.25rem;
+  display: flex; flex-direction: column; gap: 1rem;
+}
+.ts-panel h2 { font-size: 1rem; font-weight: 700; margin: 0; color: var(--text); }
+
+/* ── Bottoni ──────────────────────────────────────────────── */
+.ts-btn {
+  padding: 0.55rem 1.1rem; border-radius: 8px; border: none;
+  font-size: 0.88rem; font-weight: 600; cursor: pointer;
+  font-family: inherit; transition: opacity 0.15s, transform 0.1s;
+}
+.ts-btn:hover  { opacity: 0.88; }
+.ts-btn:active { transform: scale(0.97); }
+.ts-btn-primary { background: var(--accent); color: #000; }
+.ts-btn-ghost   { background: var(--border); color: var(--text-muted); }
+.ts-btn-danger  { background: rgba(224,92,92,0.15); color: #e05c5c; border: 1px solid rgba(224,92,92,0.3); }
+.ts-btn-large   { padding: 0.75rem 1.6rem; font-size: 1rem; }
+.ts-btn-row     { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; }
+
+/* ── Input ────────────────────────────────────────────────── */
+.ts-field { display: flex; flex-direction: column; gap: 0.3rem; }
+.ts-field label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.ts-field input, .ts-field textarea {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  color: var(--text); font-size: 0.9rem; padding: 0.55rem 0.8rem;
+  font-family: inherit; transition: border-color 0.2s; width: 100%; box-sizing: border-box;
+}
+.ts-field input:focus, .ts-field textarea:focus { outline: none; border-color: var(--accent); }
+.ts-field textarea { min-height: 60px; resize: vertical; }
+
+/* ── Lock badge ───────────────────────────────────────────── */
+.ts-lock-badge {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+  padding: 0.25rem 0.65rem; border-radius: 20px;
+  background: rgba(224,92,92,0.12); color: #e05c5c; border: 1px solid rgba(224,92,92,0.25);
+}
+.ts-lock-badge.unlocked { background: rgba(76,175,80,0.12); color: #4caf50; border-color: rgba(76,175,80,0.3); }
+
+/* ── Session bar ──────────────────────────────────────────── */
+.ts-session-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.8rem; color: var(--text-muted); flex-wrap: wrap; gap: 0.4rem;
+}
+.ts-session-role { font-weight: 700; color: var(--text); }
+.ts-session-code-small {
+  font-weight: 900; font-family: 'Courier New', monospace;
+  letter-spacing: 0.15em; color: var(--accent); font-size: 0.9rem;
+}
+
+/* ── Alert ────────────────────────────────────────────────── */
+.ts-alert { padding: 0.65rem 1rem; border-radius: 8px; font-size: 0.83rem; border: 1px solid; line-height: 1.5; }
+.ts-alert-error { background: rgba(224,92,92,0.1); border-color: rgba(224,92,92,0.3); color: #e05c5c; }
+.ts-alert-info  { background: rgba(92,184,224,0.08); border-color: rgba(92,184,224,0.25); color: var(--text-muted); }
+
+/* ── Codice grande ────────────────────────────────────────── */
+.ts-code-input {
+  font-size: 1.8rem !important; font-weight: 900 !important;
+  letter-spacing: 0.3em !important; text-align: center;
+  text-transform: uppercase; font-family: 'Courier New', monospace !important;
+  color: var(--accent) !important;
+}
+
+/* ── Card lista setup ─────────────────────────────────────── */
+.ts-card-list-setup { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.5rem; }
+.ts-card-item {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.55rem 0.8rem; font-size: 0.85rem;
+}
+.ts-card-item-num { font-weight: 800; color: var(--accent); min-width: 1.4rem; }
+.ts-card-item-text { flex: 1; min-width: 0; }
+.ts-card-item button { background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0; color: var(--text-muted); }
+.ts-card-item button:hover { color: #e05c5c; }
+
+/* ── Spinner ──────────────────────────────────────────────── */
+.ts-spinner {
+  width: 32px; height: 32px; border: 3px solid var(--border);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: tsSpin 0.8s linear infinite; margin: 0 auto 1rem;
+}
+@keyframes tsSpin { to { transform: rotate(360deg); } }
+.ts-waiting-anim { text-align: center; padding: 1.5rem 0; color: var(--text-muted); line-height: 1.8; }
+
+/* ── T-shirt card (schermata di voto) ────────────────────── */
+.ts-card-visual {
+  position: relative; width: min(300px, 100%); margin: 0 auto;
+  background: var(--card); border: 2px solid var(--border);
+  border-radius: 16px; padding: 1.8rem 1.4rem 1.4rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06), 0 8px 22px rgba(0,0,0,0.13), 0 28px 60px rgba(0,0,0,0.18);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem; text-align: center;
+  clip-path: inset(0 round 16px);
+}
+.ts-card-tshirt-icon {
+  font-size: 4rem; line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+}
+.ts-card-counter { font-size: 0.78rem; color: var(--text-muted); text-align: right; font-weight: 600; }
+.ts-card-title { font-size: 1rem; font-weight: 700; color: var(--text); line-height: 1.4; }
+.ts-card-desc  { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+.ts-card-key   { font-size: 0.62rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.14em; font-family: 'Courier New', monospace; }
+
+@keyframes tsFlipIn {
+  from { transform: perspective(900px) rotateY(90deg) scale(0.94); opacity: 0.2; }
+  to   { transform: perspective(900px) rotateY(0deg)  scale(1);    opacity: 1;   }
+}
+.ts-card-visual.flip-in { animation: tsFlipIn 0.42s cubic-bezier(0.25,0.8,0.25,1) both; }
+
+/* ── Bottoni voto T-shirt ─────────────────────────────────── */
+.ts-vote-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;
+  width: 100%;
+}
+.ts-vote-btn {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.15rem; padding: 0.6rem 0.3rem;
+  border-radius: 10px; border: 2px solid var(--border);
+  background: var(--card); cursor: pointer;
+  font-family: inherit; transition: all 0.15s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+}
+.ts-vote-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 14px rgba(0,0,0,0.13); border-color: var(--accent); }
+.ts-vote-btn.selected { background: var(--accent); border-color: var(--accent); color: #000; }
+.ts-vote-btn.selected .ts-vote-icon { filter: none; }
+.ts-vote-icon { font-size: 1.5rem; line-height: 1; }
+.ts-vote-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+.ts-vote-sub   { font-size: 0.6rem; opacity: 0.65; }
+.ts-vote-btn.red .ts-vote-label { color: #e05c5c; }
+
+/* ── Progress votanti ─────────────────────────────────────── */
+.ts-vote-progress { display: flex; flex-direction: column; gap: 0.35rem; }
+.ts-vote-progress-top { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }
+.ts-vote-bar-wrap { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; }
+.ts-vote-bar-fill { height: 100%; background: var(--accent); border-radius: 999px; transition: width 0.4s ease; }
+.ts-voters-list { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.2rem; }
+.ts-voter-chip {
+  font-size: 0.75rem; padding: 0.15rem 0.6rem; border-radius: 20px;
+  border: 1px solid var(--border); color: var(--text-muted); background: var(--bg);
+  transition: all 0.2s; display: flex; align-items: center; gap: 0.3rem;
+}
+.ts-voter-chip.voted { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+.ts-presence-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.ts-presence-dot.online  { background: #4caf50; }
+.ts-presence-dot.offline { background: var(--border); }
+
+/* ── Reveal grid ──────────────────────────────────────────── */
+.ts-reveal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px,1fr)); gap: 0.5rem; }
+.ts-reveal-chip {
+  display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+  padding: 0.65rem 0.5rem; text-align: center;
+}
+.ts-reveal-chip.high { background: rgba(224,92,92,0.08); border-color: rgba(224,92,92,0.35); }
+.ts-reveal-chip.low  { background: rgba(92,184,92,0.08);  border-color: rgba(92,184,92,0.35); }
+.ts-reveal-name  { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); }
+.ts-reveal-value { font-size: 1.4rem; font-weight: 900; }
+.ts-reveal-value.red { color: #e05c5c; }
+
+/* ── Divergenza ───────────────────────────────────────────── */
+.ts-divergence {
+  background: rgba(224,179,92,0.1); border: 1px solid rgba(224,179,92,0.3);
+  border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.83rem; line-height: 1.6;
+}
+.ts-divergence strong { color: #e0b55c; }
+.ts-divergence ul { margin: 0.4rem 0 0; padding-left: 1.2rem; line-height: 1.8; }
+
+/* ── Final vote ───────────────────────────────────────────── */
+.ts-final-panel { display: flex; flex-direction: column; gap: 0.75rem; }
+.ts-final-panel h2 { font-size: 0.92rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 0; }
+
+/* ── Summary table ────────────────────────────────────────── */
+.ts-summary-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.ts-summary-table th { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 2px solid var(--border); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+.ts-summary-table td { padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+.ts-summary-table tr:last-child td { border-bottom: none; }
+.ts-summary-total { font-size: 0.85rem; color: var(--text-muted); text-align: right; margin-top: 0.5rem; }
+
+/* ── Import CSV ───────────────────────────────────────────── */
+.ts-import-steps { display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.84rem; }
+.ts-import-step  { display: flex; gap: 0.6rem; align-items: flex-start; }
+.ts-import-step-num {
+  min-width: 1.4rem; height: 1.4rem; border-radius: 50%;
+  background: var(--accent); color: #000; font-weight: 800; font-size: 0.72rem;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.1rem;
+}
+.ts-dropzone {
+  border: 2px dashed var(--border); border-radius: 10px; padding: 1.5rem;
+  text-align: center; cursor: pointer; transition: border-color 0.2s;
+  font-size: 0.85rem; color: var(--text-muted);
+}
+.ts-dropzone:hover, .ts-dropzone.drag-over { border-color: var(--accent); }
+.ts-dropzone input[type=file] { display: none; }
+.ts-dropzone-icon { font-size: 2rem; margin-bottom: 0.4rem; }
+.ts-csv-list { max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.3rem; }
+.ts-csv-row {
+  display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.4rem 0.5rem;
+  border: 1px solid var(--border); border-radius: 7px; background: var(--bg); font-size: 0.82rem;
+}
+.ts-csv-row-body { flex: 1; min-width: 0; }
+.ts-csv-row-key  { font-size: 0.68rem; font-weight: 800; color: var(--accent); font-family: 'Courier New', monospace; }
+.ts-csv-row-title { font-weight: 600; color: var(--text); overflow: hidden;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ts-csv-actions { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.5rem; }
+.ts-csv-select-all {
+  font-size: 0.73rem; font-weight: 700; cursor: pointer; background: none;
+  border: 1px solid var(--border); border-radius: 6px; padding: 0.2rem 0.6rem;
+  color: var(--text-muted); font-family: inherit;
+}
+.ts-csv-select-all:hover { border-color: var(--accent); color: var(--accent); }
+.ts-csv-error   { color: #e05c5c; font-size: 0.82rem; margin-top: 0.4rem; }
+.ts-csv-preview-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem; font-size: 0.82rem; }
+
+/* ── Add member live ──────────────────────────────────────── */
+.ts-add-member-bar {
+  display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;
+  padding: 0.5rem 0.75rem; background: var(--bg);
+  border: 1px solid var(--border); border-radius: 8px; font-size: 0.82rem;
+}
+.ts-add-member-bar label { font-size: 0.73rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+.ts-add-member-bar input {
+  flex: 1; min-width: 130px; background: var(--card); border: 1px solid var(--border);
+  border-radius: 6px; color: var(--text); font-size: 0.85rem; padding: 0.35rem 0.65rem;
+  font-family: inherit; transition: border-color 0.2s;
+}
+.ts-add-member-bar input:focus { outline: none; border-color: var(--accent); }
+.ts-add-member-ok { font-size: 0.75rem; color: #4caf50; font-weight: 700; }
+
+/* ── Vote explain ─────────────────────────────────────────── */
+.ts-vote-explain { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+/* ── Hint rivelazione ─────────────────────────────────────── */
+.ts-reveal-hint { font-size: 0.78rem; color: var(--text-muted); text-align: center; }
+
+/* ── Members setup ────────────────────────────────────────── */
+.ts-member-list { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.ts-member-chip {
+  display: flex; align-items: center; gap: 0.3rem;
+  font-size: 0.78rem; padding: 0.2rem 0.55rem 0.2rem 0.7rem;
+  border-radius: 20px; background: var(--bg); border: 1px solid var(--border); color: var(--text);
+}
+.ts-member-chip button { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.85rem; padding: 0; line-height: 1; }
+.ts-member-chip button:hover { color: #e05c5c; }
+
+/* ── Divider ──────────────────────────────────────────────── */
+.ts-divider {
+  text-align: center; font-size: 0.72rem; font-weight: 700;
+  color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.ts-divider::before, .ts-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+</style>
+
+<div class="ts-app">
+
+  <!-- Header -->
+  <div class="ts-header">
+    <h1>&#128085; T-Shirt Sizing</h1>
+    <p>Stima le user story con le taglie T-shirt. Sessioni real-time, import da Jira CSV.</p>
+    <div style="margin-top:0.6rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+      <span class="ts-lock-badge" id="tsLockBadge">&#128274; Sessione bloccata</span>
+      <div style="display:flex;gap:0.4rem;align-items:center;">
+        <input type="password" id="tsFacilitatorPwd" placeholder="Password facilitatore"
+          style="font-size:0.82rem;padding:0.3rem 0.65rem;border-radius:7px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;width:180px;">
+        <button class="ts-btn ts-btn-ghost" id="tsBtnUnlock" style="padding:0.3rem 0.75rem;font-size:0.8rem;">&#128275; Sblocca</button>
+      </div>
+      <span id="tsPwdError" style="display:none;color:#e05c5c;font-size:0.78rem;">Password errata</span>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN: Welcome ══ -->
+  <div class="ts-screen active" id="tsScreenWelcome">
+    <div class="ts-panel">
+      <h2>&#127381; Crea una nuova sessione</h2>
+      <button class="ts-btn ts-btn-primary ts-btn-large" id="tsBtnCreateSession" style="display:none;">&#43; Crea sessione</button>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin:0;" id="tsCreateHint">Sblocca con la password per creare una sessione.</p>
+    </div>
+
+    <div class="ts-divider">oppure</div>
+
+    <div class="ts-panel">
+      <h2>&#128279; Unisciti a una sessione</h2>
+      <div style="width:100%;max-width:320px;">
+        <div class="ts-field">
+          <label>Codice sessione</label>
+          <input type="text" id="tsJoinCodeInput" class="ts-code-input" placeholder="XXXXX" maxlength="6" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="ts-field" style="margin-top:0.6rem;">
+          <label>Il tuo nome</label>
+          <input type="text" id="tsJoinNameInput" placeholder="Il tuo nome" maxlength="30" autocomplete="off">
+        </div>
+        <button class="ts-btn ts-btn-ghost" id="tsBtnJoinSession" style="width:100%;margin-top:0.5rem;">Unisciti alla sessione</button>
+        <div id="tsJoinError" style="display:none;margin-top:0.5rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN: Setup ══ -->
+  <div class="ts-screen" id="tsScreenSetup">
+    <div class="ts-panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.4rem;">
+        <h2>&#128203; Nuova sessione T-Shirt</h2>
+        <button class="ts-btn ts-btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.7rem;" id="tsBtnCopyCode">&#128203; Copia codice</button>
+      </div>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin:0;">
+        Codice: <span class="ts-session-code-small" id="tsSetupCode">—</span>
+      </p>
+    </div>
+
+    <!-- Partecipanti -->
+    <div class="ts-panel">
+      <h2>&#128101; Partecipanti</h2>
+      <p style="font-size:0.83rem;color:var(--text-muted);margin:0;">Aggiungi i nomi dei votanti. Lascia vuoto per sessione aperta.</p>
+      <div style="display:flex;gap:0.4rem;">
+        <div class="ts-field" style="flex:1;">
+          <label>Nome</label>
+          <input type="text" id="tsMemberInput" placeholder="Nome membro" maxlength="30" autocomplete="off">
+        </div>
+        <button class="ts-btn ts-btn-primary" id="tsBtnAddMember" style="align-self:flex-end;">Aggiungi</button>
+      </div>
+      <div class="ts-member-list" id="tsMemberList"></div>
+    </div>
+
+    <!-- Import CSV -->
+    <details class="ts-panel" id="tsImportPanel" style="display:none;">
+      <summary style="cursor:pointer;font-weight:700;font-size:0.95rem;">&#128196; Importa da Jira CSV</summary>
+      <div style="margin-top:0.8rem;" class="ts-import-steps">
+        <div class="ts-import-step">
+          <span class="ts-import-step-num">1</span>
+          <span>Vai sull'<a href="https://pagopa.atlassian.net/issues/" target="_blank" rel="noopener">Issue Navigator di Jira ↗</a> e usa il JQL adatto al tuo caso:<br><br>
+          <strong>Sprint corrente:</strong><br>
+          <code>project = SMION AND sprint in openSprints() ORDER BY created DESC</code>
+          &nbsp;<a href="https://pagopa.atlassian.net/issues/?jql=project%20%3D%20SMION%20AND%20sprint%20in%20openSprints()%20ORDER%20BY%20created%20DESC" target="_blank" rel="noopener" style="font-size:0.8rem;">↗ apri</a><br><br>
+          <strong>Backlog (non ancora in sprint):</strong><br>
+          <code>project = SMION AND sprint is EMPTY AND statusCategory != Done ORDER BY created DESC</code>
+          &nbsp;<a href="https://pagopa.atlassian.net/issues/?jql=project%20%3D%20SMION%20AND%20sprint%20is%20EMPTY%20AND%20statusCategory%20!%3D%20Done%20ORDER%20BY%20created%20DESC" target="_blank" rel="noopener" style="font-size:0.8rem;">↗ apri</a>
+          </span>
+        </div>
+        <div class="ts-import-step">
+          <span class="ts-import-step-num">2</span>
+          <span>Esporta in <strong>CSV (tutti i campi)</strong> e carica il file qui sotto.</span>
+        </div>
+      </div>
+      <div style="margin-top:1rem;">
+        <div class="ts-dropzone" id="tsCsvDropzone">
+          <div class="ts-dropzone-icon">&#128196;</div>
+          <p>Trascina il CSV di Jira oppure <strong>clicca per selezionare</strong></p>
+          <input type="file" id="tsCsvFileInput" accept=".csv,text/csv">
+        </div>
+        <div id="tsCsvError" style="display:none;" class="ts-csv-error"></div>
+        <div id="tsCsvPreview" style="display:none;">
+          <div class="ts-csv-preview-header">
+            <strong id="tsCsvPreviewCount"></strong>
+            <span id="tsCsvPreviewSub"></span>
+          </div>
+          <div class="ts-csv-list" id="tsCsvList"></div>
+          <div class="ts-csv-actions">
+            <button class="ts-csv-select-all" id="tsCsvSelectAll">Seleziona tutte</button>
+            <button class="ts-csv-select-all" id="tsCsvDeselectAll" style="margin-left:0.25rem;">Deseleziona tutte</button>
+            <button class="ts-btn ts-btn-primary" id="tsCsvImportBtn" style="margin-left:auto;">&#43; Importa selezionate</button>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Card -->
+    <div class="ts-panel">
+      <h2>&#128203; Card dello sprint</h2>
+      <div class="ts-field">
+        <label>Titolo *</label>
+        <input type="text" id="tsCardTitleInput" placeholder="Es. Come utente voglio…" maxlength="200" autocomplete="off">
+      </div>
+      <div class="ts-field">
+        <label>Descrizione (opzionale)</label>
+        <textarea id="tsCardDescInput" placeholder="Criteri di accettazione, note…" maxlength="500"></textarea>
+      </div>
+      <div class="ts-btn-row">
+        <button class="ts-btn ts-btn-ghost" id="tsBtnClearCard">Cancella</button>
+        <button class="ts-btn ts-btn-primary" id="tsBtnAddCard">Aggiungi card</button>
+      </div>
+      <div class="ts-card-list-setup" id="tsSetupCardList"></div>
+    </div>
+
+    <div class="ts-btn-row">
+      <button class="ts-btn ts-btn-ghost" id="tsBtnAbortSetup">Annulla</button>
+      <button class="ts-btn ts-btn-primary ts-btn-large" id="tsBtnStartSession">&#9654;&#65039; Avvia sessione</button>
+    </div>
+    <div id="tsSetupError" style="display:none;"></div>
+  </div>
+
+  <!-- ══ SCREEN: Waiting ══ -->
+  <div class="ts-screen" id="tsScreenWaiting">
+    <div class="ts-session-bar">
+      <span class="ts-session-role" id="tsWaitingRoleLabel">&#128100; Votante</span>
+      <span>Sessione: <span class="ts-session-code-small" id="tsWaitingCodeBadge">—</span></span>
+    </div>
+    <div class="ts-panel">
+      <div class="ts-waiting-anim">
+        <div class="ts-spinner"></div>
+        <strong>In attesa che il facilitatore avvii la sessione…</strong><br>
+        <span>Siediti comodo, arriva subito.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN: Voting ══ -->
+  <div class="ts-screen" id="tsScreenVoting">
+    <div class="ts-session-bar">
+      <span class="ts-session-role" id="tsVotingRoleLabel">&#128100; Votante</span>
+      <span>Sessione: <span class="ts-session-code-small" id="tsVotingCodeBadge">—</span></span>
+    </div>
+
+    <div class="ts-card-counter" id="tsVotingCardCounter">1 / 1</div>
+
+    <!-- Card visuale -->
+    <div id="tsVotingCard" class="ts-card-visual">
+      <span class="ts-card-key" id="tsvIssueKey"></span>
+      <div class="ts-card-tshirt-icon" id="tsvIcon">👕</div>
+      <p class="ts-card-title" id="tsvTitle">—</p>
+      <p class="ts-card-desc" id="tsvDesc" style="display:none;"></p>
+    </div>
+
+    <!-- Progress -->
+    <div class="ts-vote-progress">
+      <div class="ts-vote-progress-top">
+        <span>Voti ricevuti</span>
+        <span id="tsvProgressCount">0 / 0</span>
+      </div>
+      <div class="ts-vote-bar-wrap"><div class="ts-vote-bar-fill" id="tsvProgressBar" style="width:0%"></div></div>
+      <div class="ts-voters-list" id="tsvVotersList"></div>
+    </div>
+
+    <!-- Aggiungi membro live (solo facilitatore) -->
+    <div class="ts-add-member-bar" id="tsVotingAddMemberBar" style="display:none;">
+      <label>&#43; Aggiungi membro</label>
+      <input type="text" id="tsVotingAddMemberInput" placeholder="Nome da aggiungere" maxlength="30" autocomplete="off">
+      <button class="ts-btn ts-btn-primary" style="padding:0.35rem 0.8rem;font-size:0.8rem;" id="tsBtnVotingAddMember">Aggiungi</button>
+      <span id="tsVotingAddMemberOk" style="display:none;" class="ts-add-member-ok"></span>
+    </div>
+
+    <!-- Mini-carte voto (solo votanti) -->
+    <div id="tsVotingSection" style="display:none;">
+      <div class="ts-vote-grid" id="tsVoteCards"></div>
+      <div id="tsVoteExplainBox" style="margin-top:0.5rem;"></div>
+    </div>
+
+    <!-- Hint rivelazione -->
+    <div class="ts-reveal-hint" id="tsRevealHint" style="display:none;">
+      Aspetta che tutti votino, poi il facilitatore rivelerà i voti.
+    </div>
+
+    <!-- Bottone rivela (solo facilitatore) -->
+    <button class="ts-btn ts-btn-primary ts-btn-large" id="tsBtnReveal" style="width:100%;display:none;">&#128064; Rivela i voti</button>
+  </div>
+
+  <!-- ══ SCREEN: Reveal ══ -->
+  <div class="ts-screen" id="tsScreenReveal">
+    <div class="ts-session-bar">
+      <span class="ts-session-role" id="tsRevealRoleLabel">&#128100; Votante</span>
+      <span>Sessione: <span class="ts-session-code-small" id="tsRevealCodeBadge">—</span></span>
+    </div>
+    <div class="ts-card-counter" id="tsRevealCardCounter">1 / 1</div>
+    <div class="ts-panel">
+      <h2 id="tsRevealCardTitle" style="line-height:1.4;">—</h2>
+      <div class="ts-reveal-grid" id="tsRevealGrid"></div>
+      <div id="tsDivergenceBox" style="display:none;margin-top:0.75rem;"></div>
+    </div>
+
+    <!-- Aggiungi membro live (solo facilitatore) -->
+    <div class="ts-add-member-bar" id="tsRevealAddMemberBar" style="display:none;">
+      <label>&#43; Aggiungi membro</label>
+      <input type="text" id="tsRevealAddMemberInput" placeholder="Nome da aggiungere" maxlength="30" autocomplete="off">
+      <button class="ts-btn ts-btn-primary" style="padding:0.35rem 0.8rem;font-size:0.8rem;" id="tsBtnRevealAddMember">Aggiungi</button>
+      <span id="tsRevealAddMemberOk" style="display:none;" class="ts-add-member-ok"></span>
+    </div>
+
+    <!-- Voto finale (solo facilitatore) -->
+    <div class="ts-final-panel" id="tsFinalVotePanel" style="display:none;">
+      <h2 id="tsFinalVoteLabel">&#10003; Taglia finale</h2>
+      <div class="ts-vote-grid" id="tsFinalVoteCards"></div>
+    </div>
+
+    <!-- Azioni facilitatore -->
+    <div class="ts-btn-row" id="tsRevealActions" style="display:none;">
+      <button class="ts-btn ts-btn-ghost" id="tsBtnRevote">&#128260; Rivota</button>
+      <button class="ts-btn ts-btn-danger" id="tsBtnReject">&#128683; Boccia — da splittare</button>
+      <button class="ts-btn ts-btn-primary" id="tsBtnNextCard">Prossima card &#8594;</button>
+    </div>
+
+    <!-- Attesa votanti -->
+    <div class="ts-waiting-anim" id="tsRevealWaiting" style="display:none;">
+      <div class="ts-spinner"></div>
+      Il facilitatore sta scegliendo la taglia finale…
+    </div>
+  </div>
+
+  <!-- ══ SCREEN: Summary ══ -->
+  <div class="ts-screen" id="tsScreenSummary">
+    <div class="ts-panel">
+      <h2>&#128202; Riepilogo sessione</h2>
+      <table class="ts-summary-table">
+        <thead>
+          <tr><th>Card</th><th>Taglia</th><th>Note</th></tr>
+        </thead>
+        <tbody id="tsSummaryBody"></tbody>
+      </table>
+      <p class="ts-summary-total">Totale story: <strong id="tsSummaryTotal">0</strong></p>
+    </div>
+    <div class="ts-btn-row">
+      <button class="ts-btn ts-btn-primary" id="tsBtnCopySummary">&#128203; Copia riepilogo</button>
+      <button class="ts-btn ts-btn-ghost" id="tsBtnNewSession">&#127183; Nuova sessione</button>
+    </div>
+  </div>
+
+</div><!-- /ts-app -->
+
+<script type="module">
+import { initializeApp }    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot,
+         serverTimestamp, deleteField, arrayUnion }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const app = initializeApp({
+  apiKey:            'AIzaSyA7YbK9xW2OiGXZu55mvlTLSw2enQf4Efg',
+  authDomain:        'blog-a5907.firebaseapp.com',
+  projectId:         'blog-a5907',
+  storageBucket:     'blog-a5907.appspot.com',
+  messagingSenderId: '612926535',
+  appId:             '1:612926535:web:cf5b5e94e70fc7697d3e4c',
+});
+const db = getFirestore(app);
+
+/* ── Taglie T-shirt ────────────────────────────────────────── */
+const SIZES = [
+  { val: 'XS',  icon: '👕', label: 'XS',  sub: 'Extra Small', explain: ' — Banale, pochissimo effort.' },
+  { val: 'S',   icon: '👕', label: 'S',   sub: 'Small',       explain: ' — Piccolo, effort basso.' },
+  { val: 'M',   icon: '👕', label: 'M',   sub: 'Medium',      explain: ' — Media complessità.' },
+  { val: 'L',   icon: '👕', label: 'L',   sub: 'Large',       explain: ' — Complessa, qualche dipendenza.' },
+  { val: 'XL',  icon: '👕', label: 'XL',  sub: 'Extra Large', explain: ' — Molto complessa, alto rischio.' },
+  { val: 'XXL', icon: '👕', label: 'XXL', sub: 'Da splittare',explain: ' — Troppo grande: considera di splitarla.' },
+  { val: '?',   icon: '❓', label: '?',   sub: 'Non so',      explain: ' — Informazioni insufficienti.', red: true },
+  { val: '☕',  icon: '☕', label: '☕',  sub: 'Pausa',        explain: '',                              red: true },
+];
+
+/* Ordine taglia per confronto divergenza (escluso ?, ☕, XXL) */
+const SIZE_ORDER = { XS:1, S:2, M:3, L:4, XL:5 };
+
+/* ── T-shirt icon per la card visuale ──────────────────────── */
+const CARD_ICONS = { XS:'🩴', S:'👕', M:'👔', L:'🧥', XL:'🪄', XXL:'🐘', '?':'❓', '☕':'☕' };
+
+/* ── Auth ──────────────────────────────────────────────────── */
+const PWD_HASH = '2a43da7cc03407a5c5a2458acee91c7c1e0ced9c9e83ed3df31b0fb73f82bcec';
+let isUnlocked = sessionStorage.getItem('ts_unlocked') === '1';
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+function applyUnlockUI() {
+  el('tsLockBadge').className = 'ts-lock-badge' + (isUnlocked ? ' unlocked' : '');
+  el('tsLockBadge').innerHTML = isUnlocked ? '&#128275; Team sbloccato' : '&#128274; Sessione bloccata';
+  el('tsBtnCreateSession').style.display = isUnlocked ? '' : 'none';
+  el('tsCreateHint').style.display       = isUnlocked ? 'none' : '';
+  el('tsImportPanel').style.display      = isUnlocked ? '' : 'none';
+}
+applyUnlockUI();
+
+el('tsBtnUnlock').addEventListener('click', async () => {
+  const pwd = el('tsFacilitatorPwd').value;
+  if (!pwd) return;
+  const hash = await sha256(pwd);
+  if (hash === PWD_HASH) {
+    isUnlocked = true;
+    sessionStorage.setItem('ts_unlocked', '1');
+    el('tsFacilitatorPwd').value = '';
+    el('tsPwdError').style.display = 'none';
+    applyUnlockUI();
+  } else {
+    el('tsPwdError').style.display = '';
+  }
+});
+
+/* ── State ─────────────────────────────────────────────────── */
+let state = {
+  sessionCode:       null,
+  isFacilitator:     false,
+  myName:            null,
+  unsubscribe:       null,
+  presenceInterval:  null,
+  setupMembers:      [],
+  setupCards:        [],
+  myVotes:           {},
+  selectedFinal:     null,
+  lastCardIdx:       -1,
+  cachedData:        null,
+};
+
+/* ── Utils ─────────────────────────────────────────────────── */
+function el(id)           { return document.getElementById(id); }
+function escHtml(s)       { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function randCode()       { return Math.random().toString(36).slice(2,7).toUpperCase(); }
+function sizeInfo(v)      { return SIZES.find(x => x.val === v) || { label: v, explain: '', icon: '👕' }; }
+
+function showScreen(id) {
+  document.querySelectorAll('.ts-screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* ── Presenza ──────────────────────────────────────────────── */
+function startPresence(name, code) {
+  stopPresence();
+  const beat = () => {
+    if (!state.sessionCode) return;
+    updateDoc(doc(db, 'ts_sessions', code), { ['presence.' + name]: serverTimestamp() }).catch(()=>{});
+  };
+  beat();
+  state.presenceInterval = setInterval(beat, 30_000);
+}
+function stopPresence() {
+  if (state.presenceInterval) { clearInterval(state.presenceInterval); state.presenceInterval = null; }
+}
+function isOnline(pmap, name) {
+  if (!pmap || !pmap[name]) return false;
+  const ts = pmap[name];
+  const ms = ts?.toDate ? ts.toDate().getTime() : (ts?.seconds ? ts.seconds * 1000 : null);
+  return ms && (Date.now() - ms) < 90_000;
+}
+
+/* ── Welcome ───────────────────────────────────────────────── */
+el('tsBtnCreateSession').addEventListener('click', () => {
+  state.isFacilitator = true;
+  state.sessionCode   = randCode();
+  el('tsSetupCode').textContent = state.sessionCode;
+  showScreen('tsScreenSetup');
+});
+
+/* ── Setup: partecipanti ───────────────────────────────────── */
+el('tsBtnAddMember').addEventListener('click', addMember);
+el('tsMemberInput').addEventListener('keydown', e => { if (e.key === 'Enter') addMember(); });
+function addMember() {
+  const name = el('tsMemberInput').value.trim();
+  if (!name || state.setupMembers.includes(name)) return;
+  state.setupMembers.push(name);
+  el('tsMemberInput').value = '';
+  renderMemberList();
+}
+function renderMemberList() {
+  const list = el('tsMemberList');
+  list.innerHTML = '';
+  state.setupMembers.forEach(m => {
+    const chip = document.createElement('span');
+    chip.className = 'ts-member-chip';
+    chip.innerHTML = `${escHtml(m)}<button title="Rimuovi">&#10005;</button>`;
+    chip.querySelector('button').addEventListener('click', () => {
+      state.setupMembers = state.setupMembers.filter(x => x !== m);
+      renderMemberList();
+    });
+    list.appendChild(chip);
+  });
+}
+
+/* ── Setup: copia codice ───────────────────────────────────── */
+el('tsBtnCopyCode').addEventListener('click', () => {
+  navigator.clipboard.writeText(state.sessionCode).then(() => {
+    el('tsBtnCopyCode').textContent = '✓ Copiato!';
+    setTimeout(() => { el('tsBtnCopyCode').innerHTML = '&#128203; Copia codice'; }, 2000);
+  });
+});
+
+/* ── Setup: card manuali ───────────────────────────────────── */
+el('tsBtnAddCard').addEventListener('click', addCard);
+el('tsCardTitleInput').addEventListener('keydown', e => { if (e.key === 'Enter') addCard(); });
+function addCard() {
+  const title = el('tsCardTitleInput').value.trim();
+  const desc  = el('tsCardDescInput').value.trim();
+  if (!title) return;
+  state.setupCards.push({ id: 'c' + Date.now(), title, desc });
+  el('tsCardTitleInput').value = '';
+  el('tsCardDescInput').value  = '';
+  renderSetupCardList();
+}
+el('tsBtnClearCard').addEventListener('click', () => {
+  el('tsCardTitleInput').value = '';
+  el('tsCardDescInput').value  = '';
+});
+function renderSetupCardList() {
+  const list = el('tsSetupCardList');
+  list.innerHTML = '';
+  state.setupCards.forEach((c, i) => {
+    const item = document.createElement('div');
+    item.className = 'ts-card-item';
+    item.innerHTML = `
+      <span class="ts-card-item-num">${i+1}</span>
+      <span class="ts-card-item-text">${escHtml(c.title)}</span>
+      <button title="Rimuovi">&#10005;</button>`;
+    item.querySelector('button').addEventListener('click', () => {
+      state.setupCards.splice(i, 1);
+      renderSetupCardList();
+    });
+    list.appendChild(item);
+  });
+}
+
+/* ── Setup: import CSV Jira ────────────────────────────────── */
+const dropzone = el('tsCsvDropzone');
+dropzone.addEventListener('click',      () => el('tsCsvFileInput').click());
+dropzone.addEventListener('dragover',   e  => { e.preventDefault(); dropzone.classList.add('drag-over'); });
+dropzone.addEventListener('dragleave',  ()  => dropzone.classList.remove('drag-over'));
+dropzone.addEventListener('drop',       e  => { e.preventDefault(); dropzone.classList.remove('drag-over'); parseCSV(e.dataTransfer.files[0]); });
+el('tsCsvFileInput').addEventListener('change', e => parseCSV(e.target.files[0]));
+
+function parseCSV(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const lines   = e.target.result.split(/\r?\n/).filter(l => l.trim());
+      const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g,'').trim().toLowerCase());
+      const iSum = headers.findIndex(h => h === 'summary');
+      const iKey = headers.findIndex(h => h === 'issue key');
+      if (iSum === -1 || iKey === -1) { el('tsCsvError').textContent = 'Colonne Summary e Issue key non trovate.'; el('tsCsvError').style.display = ''; return; }
+      el('tsCsvError').style.display = 'none';
+      const rows = lines.slice(1).map(l => {
+        const cells = l.match(/(".*?"|[^,]+|(?<=,)(?=,)|^(?=,)|(?<=,)$)/g) || [];
+        const clean = cells.map(c => c.replace(/^"|"$/g,'').trim());
+        return { key: clean[iKey] || '', title: clean[iSum] || '' };
+      }).filter(r => r.title);
+      renderCsvPreview(rows);
+    } catch(err) { el('tsCsvError').textContent = 'Errore nel parsing CSV.'; el('tsCsvError').style.display = ''; }
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+let csvRows = [];
+function renderCsvPreview(rows) {
+  csvRows = rows;
+  const list = el('tsCsvList');
+  list.innerHTML = '';
+  rows.forEach((r, i) => {
+    const div = document.createElement('div');
+    div.className = 'ts-csv-row';
+    div.innerHTML = `
+      <input type="checkbox" id="tscsv${i}" checked>
+      <div class="ts-csv-row-body">
+        ${r.key ? `<div class="ts-csv-row-key">${escHtml(r.key)}</div>` : ''}
+        <div class="ts-csv-row-title">${escHtml(r.title)}</div>
+      </div>`;
+    list.appendChild(div);
+  });
+  el('tsCsvPreviewCount').textContent = rows.length + ' issue trovate';
+  el('tsCsvPreview').style.display = '';
+}
+el('tsCsvSelectAll').addEventListener('click', () => { csvRows.forEach((_,i) => { const cb = el('tscsv'+i); if(cb) cb.checked = true; }); });
+el('tsCsvDeselectAll').addEventListener('click', () => { csvRows.forEach((_,i) => { const cb = el('tscsv'+i); if(cb) cb.checked = false; }); });
+el('tsCsvImportBtn').addEventListener('click', () => {
+  const sel = csvRows.filter((_,i) => el('tscsv'+i)?.checked);
+  if (!sel.length) return;
+  sel.forEach(r => state.setupCards.push({ id: 'c' + Date.now() + Math.random(), title: (r.key ? '[' + r.key + '] ' : '') + r.title, desc: '' }));
+  renderSetupCardList();
+  el('tsCsvPreview').style.display = 'none';
+});
+
+/* ── Setup: avvia sessione ─────────────────────────────────── */
+el('tsBtnAbortSetup').addEventListener('click', () => {
+  state.sessionCode = null; state.isFacilitator = false;
+  state.setupCards = []; state.setupMembers = [];
+  showScreen('tsScreenWelcome');
+});
+
+el('tsBtnStartSession').addEventListener('click', async () => {
+  if (state.setupCards.length === 0) {
+    const e = el('tsSetupError');
+    e.className = 'ts-alert ts-alert-error';
+    e.textContent = 'Aggiungi almeno una card prima di avviare.';
+    e.style.display = 'block';
+    return;
+  }
+  el('tsSetupError').style.display = 'none';
+  el('tsBtnStartSession').disabled = true;
+  el('tsBtnStartSession').textContent = 'Avvio…';
+
+  const sessionData = {
+    createdAt:   serverTimestamp(),
+    members:     state.setupMembers,
+    cards:       state.setupCards,
+    currentCard: 0,
+    status:      'voting',
+    votes:       {},
+    finalVotes:  {},
+  };
+
+  try {
+    await setDoc(doc(db, 'ts_sessions', state.sessionCode), sessionData);
+    state.myName = 'Facilitatore';
+    startListening();
+  } catch(e) {
+    el('tsSetupError').className = 'ts-alert ts-alert-error';
+    el('tsSetupError').textContent = 'Errore nel creare la sessione. Riprova.';
+    el('tsSetupError').style.display = 'block';
+  } finally {
+    el('tsBtnStartSession').disabled = false;
+    el('tsBtnStartSession').textContent = '▶️ Avvia sessione';
+  }
+});
+
+/* ── Join sessione ─────────────────────────────────────────── */
+el('tsBtnJoinSession').addEventListener('click', joinSession);
+el('tsJoinCodeInput').addEventListener('keydown', e => { if (e.key === 'Enter') joinSession(); });
+
+async function joinSession() {
+  const code = el('tsJoinCodeInput').value.trim().toUpperCase();
+  const name = el('tsJoinNameInput').value.trim();
+  el('tsJoinError').style.display = 'none';
+  if (!code || !name) { showJoinError('Inserisci codice e nome.'); return; }
+  el('tsBtnJoinSession').disabled = true;
+  el('tsBtnJoinSession').textContent = 'Connessione…';
+  try {
+    const snap = await getDoc(doc(db, 'ts_sessions', code));
+    if (!snap.exists()) { showJoinError('Sessione non trovata. Controlla il codice.'); return; }
+    const data = snap.data();
+    if (data.status === 'finished') { showJoinError('Questa sessione è già terminata.'); return; }
+    if (data.members && data.members.length > 0) {
+      const norm = data.members.map(m => m.trim().toLowerCase());
+      if (!norm.includes(name.trim().toLowerCase())) {
+        showJoinError('Non sei nella lista dei partecipanti. Chiedi al facilitatore di aggiungerti.');
+        return;
+      }
+    }
+    state.sessionCode   = code;
+    state.isFacilitator = false;
+    state.myName        = name;
+    startListening();
+  } catch(e) {
+    showJoinError('Errore di connessione. Riprova.');
+  } finally {
+    el('tsBtnJoinSession').disabled = false;
+    el('tsBtnJoinSession').textContent = 'Unisciti alla sessione';
+  }
+}
+function showJoinError(msg) {
+  const d = el('tsJoinError');
+  d.className = 'ts-alert ts-alert-error';
+  d.textContent = msg;
+  d.style.display = 'block';
+}
+
+/* ── Firestore listener ────────────────────────────────────── */
+function startListening() {
+  if (state.unsubscribe) state.unsubscribe();
+  state.unsubscribe = onSnapshot(
+    doc(db, 'ts_sessions', state.sessionCode),
+    snap => { if (snap.exists()) renderSession(snap.data()); },
+    err  => console.error('Firestore error', err)
+  );
+  startPresence(state.myName, state.sessionCode);
+}
+
+/* ── Render sessione ───────────────────────────────────────── */
+function renderSession(data) {
+  state.cachedData = data;
+  const { status, cards, currentCard, votes, finalVotes, members, presence } = data;
+  const isFac   = state.isFacilitator;
+  const cardIdx = currentCard ?? 0;
+  const card    = cards[cardIdx];
+
+  if (!card) {
+    el('tsWaitingCodeBadge').textContent = state.sessionCode;
+    showScreen('tsScreenWaiting');
+    return;
+  }
+  const cardVotes = (votes && votes[card.id]) ? votes[card.id] : {};
+
+  if (status === 'finished') { renderSummary(cards, finalVotes, votes || {}); return; }
+  if (status === 'voting')   { renderVotingScreen(card, cardIdx, cards.length, cardVotes, members, isFac, presence || {}); return; }
+  if (status === 'revealed') { renderRevealScreen(card, cardIdx, cards.length, cardVotes, members, finalVotes, isFac, presence || {}); return; }
+}
+
+/* ── Voting screen ─────────────────────────────────────────── */
+function renderVotingScreen(card, idx, total, cardVotes, members, isFac, presence) {
+  el('tsVotingRoleLabel').textContent    = isFac ? '👑 Facilitatore' : '👤 ' + state.myName;
+  el('tsVotingCodeBadge').textContent    = state.sessionCode;
+  el('tsVotingCardCounter').textContent  = (idx+1) + ' / ' + total;
+
+  // Flip
+  if (state.lastCardIdx !== idx) {
+    const c = el('tsVotingCard');
+    c.classList.remove('flip-in');
+    void c.offsetWidth;
+    c.classList.add('flip-in');
+    state.lastCardIdx = idx;
+  }
+
+  const keyMatch = card.title.match(/^\[([A-Z]+-\d+)\]/);
+  el('tsvIssueKey').textContent = keyMatch ? keyMatch[1] : '';
+  el('tsvTitle').textContent    = card.title.replace(/^\[[A-Z]+-\d+\]\s*/, '');
+  el('tsvDesc').textContent     = card.desc || '';
+  el('tsvDesc').style.display   = card.desc ? '' : 'none';
+  el('tsvIcon').textContent     = '👕';
+
+  // Progress
+  const memberList  = (members && members.length > 0) ? members : Object.keys(cardVotes);
+  const votedCount  = memberList.filter(m => cardVotes[m]).length;
+  el('tsvProgressCount').textContent = votedCount + ' / ' + memberList.length;
+  el('tsvProgressBar').style.width   = (memberList.length > 0 ? Math.round(votedCount / memberList.length * 100) : 0) + '%';
+
+  const vList = el('tsvVotersList');
+  vList.innerHTML = '';
+  memberList.forEach(m => {
+    const chip = document.createElement('span');
+    chip.className = 'ts-voter-chip' + (cardVotes[m] ? ' voted' : '');
+    const dot = document.createElement('span');
+    dot.className = 'ts-presence-dot ' + (isOnline(presence, m) ? 'online' : 'offline');
+    chip.appendChild(dot);
+    chip.appendChild(document.createTextNode(m));
+    vList.appendChild(chip);
+  });
+
+  // Add member bar
+  el('tsVotingAddMemberBar').style.display = isFac ? '' : 'none';
+
+  // Bottoni voto
+  if (!isFac) {
+    el('tsVotingSection').style.display = '';
+    const myVote = cardVotes[state.myName] || state.myVotes[card.id] || null;
+    const vCards = el('tsVoteCards');
+    vCards.innerHTML = '';
+    SIZES.forEach(sz => {
+      vCards.appendChild(makeVoteBtn(sz, myVote === sz.val, () => castVote(card.id, sz.val)));
+    });
+    const box = el('tsVoteExplainBox');
+    if (myVote) {
+      const info = sizeInfo(myVote);
+      box.innerHTML = `<div class="ts-vote-explain"><strong>${escHtml(myVote)}</strong>${info.explain}</div>`;
+    } else {
+      box.innerHTML = '';
+    }
+    el('tsRevealHint').style.display = myVote ? '' : 'none';
+  } else {
+    el('tsVotingSection').style.display = 'none';
+    el('tsRevealHint').style.display    = 'none';
+  }
+
+  el('tsBtnReveal').style.display = isFac ? '' : 'none';
+  showScreen('tsScreenVoting');
+}
+
+/* ── Crea bottone voto ─────────────────────────────────────── */
+function makeVoteBtn(sz, isSelected, onClick) {
+  const btn = document.createElement('button');
+  btn.className = 'ts-vote-btn' + (sz.red ? ' red' : '') + (isSelected ? ' selected' : '');
+  btn.dataset.val = sz.val;
+  btn.title       = sz.sub;
+  btn.innerHTML   = `<span class="ts-vote-icon">${sz.icon}</span><span class="ts-vote-label">${escHtml(sz.val)}</span>`;
+  btn.addEventListener('click', onClick);
+  return btn;
+}
+
+/* ── Cast voto ─────────────────────────────────────────────── */
+let voteTimeout = null;
+async function castVote(cardId, val) {
+  state.myVotes[cardId] = val;
+  if (voteTimeout) clearTimeout(voteTimeout);
+  voteTimeout = setTimeout(async () => {
+    try {
+      await updateDoc(doc(db, 'ts_sessions', state.sessionCode), {
+        ['votes.' + cardId + '.' + state.myName]: val
+      });
+    } catch(e) { console.error('castVote error', e); }
+  }, 300);
+}
+
+/* ── Rivela ────────────────────────────────────────────────── */
+el('tsBtnReveal').addEventListener('click', async () => {
+  try {
+    await updateDoc(doc(db, 'ts_sessions', state.sessionCode), { status: 'revealed' });
+  } catch(e) { console.error('reveal error', e); }
+});
+
+/* ── Reveal screen ─────────────────────────────────────────── */
+function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, isFac, presence) {
+  el('tsRevealRoleLabel').textContent    = isFac ? '👑 Facilitatore' : '👤 ' + state.myName;
+  el('tsRevealCodeBadge').textContent    = state.sessionCode;
+  el('tsRevealCardCounter').textContent  = (idx+1) + ' / ' + total;
+  el('tsRevealCardTitle').textContent    = card.title;
+
+  // Calcola spread (esclude ?, ☕, XXL)
+  const allVoted    = Object.entries(cardVotes);
+  const EXCL        = new Set(['?', '☕', 'XXL']);
+  const validVotes  = allVoted.filter(([,v]) => !EXCL.has(v) && SIZE_ORDER[v]);
+  const allQuestion = allVoted.length > 0 && allVoted.every(([,v]) => v === '?');
+  const allXXL      = allVoted.length > 0 && allVoted.every(([,v]) => v === 'XXL');
+  const hasXXL      = !allXXL && allVoted.some(([,v]) => v === 'XXL');
+  const orders      = validVotes.map(([,v]) => SIZE_ORDER[v]);
+  const maxOrd      = orders.length ? Math.max(...orders) : null;
+  const minOrd      = orders.length ? Math.min(...orders) : null;
+  const maxVal      = maxOrd ? Object.keys(SIZE_ORDER).find(k => SIZE_ORDER[k] === maxOrd) : null;
+  const minVal      = minOrd ? Object.keys(SIZE_ORDER).find(k => SIZE_ORDER[k] === minOrd) : null;
+  const hasDivergence = !allQuestion && !allXXL && orders.length >= 2 && (maxOrd - minOrd) >= 2;
+
+  // Grid
+  const grid = el('tsRevealGrid');
+  grid.innerHTML = '';
+  const allNames = (members && members.length > 0) ? members : Object.keys(cardVotes);
+  allNames.forEach(name => {
+    const v   = cardVotes[name];
+    const ord = SIZE_ORDER[v];
+    const chip = document.createElement('div');
+    chip.className = 'ts-reveal-chip';
+    if (ord && ord === maxOrd && hasDivergence) chip.classList.add('high');
+    if (ord && ord === minOrd && hasDivergence) chip.classList.add('low');
+    const dot = `<span class="ts-presence-dot ${isOnline(presence, name) ? 'online' : 'offline'}" style="display:inline-block;vertical-align:middle;margin-right:3px;"></span>`;
+    chip.innerHTML = `
+      <span class="ts-reveal-name">${dot}${escHtml(name)}</span>
+      <span class="ts-reveal-value${v === '?' || v === '☕' ? ' red' : ''}">${v ? escHtml(v) : '—'}</span>`;
+    grid.appendChild(chip);
+  });
+
+  // Divergenza
+  const divBox = el('tsDivergenceBox');
+  if (allQuestion) {
+    divBox.style.display = '';
+    divBox.innerHTML = `<div class="ts-divergence">
+      <strong>❓ Nessuno ha una stima chiara</strong>
+      <ul>
+        <li><strong>Rimetti nel backlog</strong> — affina i criteri di accettazione</li>
+        <li><strong>Splitta la storia</strong> — troppo grande o ambigua</li>
+        <li><strong>Organizza una call ad hoc</strong> — 15 min per chiarire i requisiti</li>
+      </ul></div>`;
+  } else if (allXXL) {
+    divBox.style.display = '';
+    divBox.innerHTML = `<div class="ts-divergence">
+      <strong>🔴 Storia troppo grande</strong>
+      <ul>
+        <li><strong>Splitta la storia</strong> — dividila in sotto-task stimabili</li>
+        <li><strong>Organizza una sessione di refinement</strong></li>
+        <li><strong>Rimetti nel backlog</strong> — finché non è splittabile</li>
+      </ul></div>`;
+  } else if (hasDivergence) {
+    const sorted = [...validVotes].sort(([,a],[,b]) => SIZE_ORDER[a] - SIZE_ORDER[b]);
+    const midIdx = Math.floor(sorted.length / 2);
+    const medOrd = sorted.length % 2 !== 0
+      ? SIZE_ORDER[sorted[midIdx][1]]
+      : (SIZE_ORDER[sorted[midIdx-1][1]] + SIZE_ORDER[sorted[midIdx][1]]) / 2;
+    const lowG  = sorted.filter(([,v]) => SIZE_ORDER[v] <= medOrd).map(([n,v]) => `<strong>${escHtml(n)}</strong> (${v})`).join(', ');
+    const highG = sorted.filter(([,v]) => SIZE_ORDER[v] >  medOrd).map(([n,v]) => `<strong>${escHtml(n)}</strong> (${v})`).join(', ');
+    const xxlNote = hasXXL
+      ? `<p style="margin:0.4rem 0 0;font-size:0.8rem;opacity:0.8;">🔴 Chi ha votato XXL spiega perché, poi si rivota.</p>`
+      : '';
+    divBox.style.display = '';
+    divBox.innerHTML = `<div class="ts-divergence">
+      <strong>⚠️ Divergenza rilevata — ${minVal} vs ${maxVal}</strong>
+      <p style="margin:0.5rem 0 0;">💬 ${lowG} — effort basso.<br>💬 ${highG} — effort alto.</p>
+      ${xxlNote}
+      <p style="margin:0.4rem 0 0;font-size:0.8rem;opacity:0.8;">Dopo la discussione il facilitatore può azzerare i voti e far rivotare.</p>
+    </div>`;
+  } else {
+    divBox.style.display = 'none';
+  }
+
+  // Voto finale (solo facilitatore, escludi ?, ☕, XXL)
+  const finalPanel = el('tsFinalVotePanel');
+  const revealActs = el('tsRevealActions');
+  const revealWait = el('tsRevealWaiting');
+  if (isFac) {
+    finalPanel.style.display = '';
+    revealActs.style.display = '';
+    revealWait.style.display = 'none';
+    const fCards   = el('tsFinalVoteCards');
+    fCards.innerHTML = '';
+    const existing = finalVotes && finalVotes[card.id];
+    SIZES.filter(sz => !['?','☕','XXL'].includes(sz.val)).forEach(sz => {
+      fCards.appendChild(makeVoteBtn(sz, existing === sz.val, () => selectFinal(card.id, sz.val)));
+    });
+    state.selectedFinal = existing || null;
+    el('tsBtnNextCard').disabled = !existing;
+    const isLast = (idx + 1) >= total;
+    el('tsBtnNextCard').innerHTML = isLast ? '&#10003; Termina sessione' : 'Prossima card &#8594;';
+    el('tsFinalVoteLabel').textContent = isLast ? '✓ Taglia finale — ultima card' : '✓ Taglia finale';
+  } else {
+    finalPanel.style.display  = 'none';
+    revealActs.style.display  = 'none';
+    revealWait.style.display  = '';
+  }
+  el('tsRevealAddMemberBar').style.display = isFac ? '' : 'none';
+  showScreen('tsScreenReveal');
+}
+
+/* ── Select final ──────────────────────────────────────────── */
+async function selectFinal(cardId, val) {
+  state.selectedFinal = val;
+  el('tsBtnNextCard').disabled = false;
+  try {
+    await updateDoc(doc(db, 'ts_sessions', state.sessionCode), { ['finalVotes.' + cardId]: val });
+  } catch(e) { console.error('selectFinal error', e); state.selectedFinal = null; el('tsBtnNextCard').disabled = true; }
+}
+
+/* ── Rivota ────────────────────────────────────────────────── */
+el('tsBtnRevote').addEventListener('click', async () => {
+  const data = state.cachedData;
+  if (!data) return;
+  const cardId = data.cards[data.currentCard].id;
+  delete state.myVotes[cardId];
+  try {
+    await updateDoc(doc(db, 'ts_sessions', state.sessionCode), { ['votes.' + cardId]: deleteField(), status: 'voting' });
+  } catch(e) { console.error('revote error', e); }
+});
+
+/* ── Boccia ────────────────────────────────────────────────── */
+el('tsBtnReject').addEventListener('click', async () => {
+  const data = state.cachedData;
+  if (!data) return;
+  if (!confirm('Bocciare questa issue e segnarla come "da splittare"?')) return;
+  const card    = data.cards[data.currentCard];
+  const nextIdx = (data.currentCard ?? 0) + 1;
+  try {
+    const update = { ['finalVotes.' + card.id]: 'split' };
+    if (nextIdx >= data.cards.length) { update.status = 'finished'; }
+    else { update.currentCard = nextIdx; update.status = 'voting'; state.selectedFinal = null; }
+    await updateDoc(doc(db, 'ts_sessions', state.sessionCode), update);
+  } catch(e) { console.error('reject error', e); }
+});
+
+/* ── Next card ─────────────────────────────────────────────── */
+el('tsBtnNextCard').addEventListener('click', async () => {
+  if (!state.selectedFinal) return;
+  const data = state.cachedData;
+  if (!data) return;
+  try {
+    const nextIdx = (data.currentCard ?? 0) + 1;
+    if (nextIdx >= data.cards.length) {
+      await updateDoc(doc(db, 'ts_sessions', state.sessionCode), { status: 'finished' });
+    } else {
+      await updateDoc(doc(db, 'ts_sessions', state.sessionCode), { currentCard: nextIdx, status: 'voting' });
+      state.selectedFinal = null;
+    }
+  } catch(e) { console.error('nextCard error', e); }
+});
+
+/* ── Add member live ───────────────────────────────────────── */
+async function addMemberLive(inputId, okId) {
+  const input = el(inputId);
+  const name  = input.value.trim();
+  if (!name) return;
+  try {
+    await updateDoc(doc(db, 'ts_sessions', state.sessionCode), { members: arrayUnion(name) });
+    input.value = '';
+    const ok = el(okId);
+    ok.textContent = '✓ ' + name + ' aggiunto';
+    ok.style.color = '';
+    ok.style.display = '';
+    setTimeout(() => { ok.style.display = 'none'; }, 2500);
+  } catch(e) {
+    const ok = el(okId);
+    ok.textContent = '✗ Errore: ' + (e.message || 'scrittura fallita');
+    ok.style.color = '#e05c5c';
+    ok.style.display = '';
+    setTimeout(() => { ok.style.display = 'none'; ok.style.color = ''; }, 4000);
+  }
+}
+el('tsBtnVotingAddMember').addEventListener('click', () => addMemberLive('tsVotingAddMemberInput', 'tsVotingAddMemberOk'));
+el('tsVotingAddMemberInput').addEventListener('keydown', e => { if (e.key === 'Enter') addMemberLive('tsVotingAddMemberInput', 'tsVotingAddMemberOk'); });
+el('tsBtnRevealAddMember').addEventListener('click', () => addMemberLive('tsRevealAddMemberInput', 'tsRevealAddMemberOk'));
+el('tsRevealAddMemberInput').addEventListener('keydown', e => { if (e.key === 'Enter') addMemberLive('tsRevealAddMemberInput', 'tsRevealAddMemberOk'); });
+
+/* ── Summary ───────────────────────────────────────────────── */
+function renderSummary(cards, finalVotes, allVotes) {
+  const tbody = el('tsSummaryBody');
+  tbody.innerHTML = '';
+  let count = 0;
+  cards.forEach(card => {
+    const v       = finalVotes && finalVotes[card.id];
+    const isSplit = v === 'split';
+    if (v && !isSplit) count++;
+    const cardVotes  = (allVotes && allVotes[card.id]) || {};
+    const voteDetail = Object.entries(cardVotes).map(([n,val]) => `${escHtml(n)}: ${escHtml(val)}`).join(', ');
+    const ptsCell  = isSplit ? '🚫' : (v ? escHtml(v) : '—');
+    const noteCell = isSplit
+      ? `<span style="color:#e05c5c;font-weight:700;">Da splittare</span>${voteDetail ? ` · <span style="opacity:0.7">${voteDetail}</span>` : ''}`
+      : v ? `${sizeInfo(v).sub}${voteDetail ? ` · <span style="opacity:0.7">${voteDetail}</span>` : ''}`
+          : `<em>non stimata</em>${voteDetail ? ` · <span style="opacity:0.7">${voteDetail}</span>` : ''}`;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${escHtml(card.title)}</td><td>${ptsCell}</td><td style="font-size:0.78rem;color:var(--text-muted)">${noteCell}</td>`;
+    tbody.appendChild(tr);
+  });
+  el('tsSummaryTotal').textContent = count + ' stimate';
+  showScreen('tsScreenSummary');
+}
+
+el('tsBtnCopySummary').addEventListener('click', () => {
+  const rows = Array.from(el('tsSummaryBody').querySelectorAll('tr'));
+  let text = '👕 T-Shirt Sizing — Riepilogo\n\n';
+  rows.forEach((tr, i) => {
+    const cells = tr.querySelectorAll('td');
+    text += (i+1) + '. ' + cells[0].textContent + '  →  ' + cells[1].textContent + '\n';
+  });
+  navigator.clipboard.writeText(text).then(() => {
+    el('tsBtnCopySummary').textContent = '✓ Copiato!';
+    setTimeout(() => { el('tsBtnCopySummary').innerHTML = '&#128203; Copia riepilogo'; }, 2000);
+  }).catch(() => alert(text));
+});
+
+el('tsBtnNewSession').addEventListener('click', () => {
+  if (state.unsubscribe) { state.unsubscribe(); state.unsubscribe = null; }
+  stopPresence();
+  state = { sessionCode:null, isFacilitator:false, myName:null, unsubscribe:null, presenceInterval:null, setupMembers:[], setupCards:[], myVotes:{}, selectedFinal:null, lastCardIdx:-1, cachedData:null };
+  showScreen('tsScreenWelcome');
+});
+</script>

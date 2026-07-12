@@ -300,6 +300,16 @@ title: Home
         <p class="post-card-desc">Stima le card del tuo sprint con la scala Fibonacci. Vota ogni user story, tieni traccia dei punti e copia il riepilogo.</p>
       </div>
     </li>
+    <li class="post-card">
+      <a href="/app/tshirt-poker/" class="post-card-cover" style="height:160px;background:linear-gradient(135deg,#2d1b4e 0%,#4a2080 50%,#6b35b5 100%);display:block;overflow:hidden;display:flex;align-items:center;justify-content:center;text-decoration:none;">
+        <div style="font-size:5rem;line-height:1;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5));">👕</div>
+      </a>
+      <div class="post-card-content">
+        <span class="post-card-category cat-tech">Tool</span>
+        <h3><a href="/app/tshirt-poker/">T-Shirt Sizing</a></h3>
+        <p class="post-card-desc">Stima le epic del tuo backlog con taglie XS–XXL. Multi-device real-time, import da Jira, voto finale e riepilogo condivisibile.</p>
+      </div>
+    </li>
   </ul>
 </div>
 
