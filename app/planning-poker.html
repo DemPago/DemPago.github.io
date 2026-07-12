@@ -494,12 +494,12 @@ permalink: /app/planning-poker/
       <div class="pp-import-steps">
         <div class="pp-import-step">
           <span class="pp-import-step-num">1</span>
-          <span>Apri il <a href="https://pagopa.atlassian.net/jira/software/c/projects/SMION/boards/4731/backlog" target="_blank" rel="noopener">Backlog del progetto SMION ↗</a> su Jira.</span>
+          <span>Apri il <a href="https://pagopa.atlassian.net/jira/software/c/projects/SMION/boards/4732/backlog" target="_blank" rel="noopener">Backlog del progetto SMION ↗</a> su Jira.</span>
         </div>
         <div class="pp-import-step">
           <span class="pp-import-step-num">2</span>
-          <span>In alto a destra clicca su <strong>Visualizza nel Issue Navigator</strong> oppure vai direttamente su <a href="https://pagopa.atlassian.net/issues/?jql=project%20%3D%20SMION%20AND%20sprint%20is%20EMPTY%20AND%20statusCategory%20!%3D%20Done%20ORDER%20BY%20created%20DESC" target="_blank" rel="noopener">Issue Navigator con JQL precompilato ↗</a>.<br>
-          Il JQL usato è: <code>project = SMION AND sprint is EMPTY AND statusCategory != Done ORDER BY created DESC</code></span>
+          <span>In alto a destra clicca su <strong>Visualizza nel Issue Navigator</strong> oppure vai direttamente su <a href="https://pagopa.atlassian.net/issues/?jql=project%20%3D%20SMION%20AND%20sprint%20in%20openSprints()%20ORDER%20BY%20created%20DESC" target="_blank" rel="noopener">Issue Navigator con JQL precompilato ↗</a>.<br>
+          Il JQL usato è: <code>project = SMION AND sprint in openSprints() ORDER BY created DESC</code></span>
         </div>
         <div class="pp-import-step">
           <span class="pp-import-step-num">3</span>
