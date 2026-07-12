@@ -260,9 +260,12 @@ permalink: /app/planning-poker/
 .pp-voter-chip {
   font-size: 0.75rem; padding: 0.15rem 0.6rem; border-radius: 20px;
   border: 1px solid var(--border); color: var(--text-muted); background: var(--bg);
-  transition: all 0.2s;
+  transition: all 0.2s; display: flex; align-items: center; gap: 0.3rem;
 }
 .pp-voter-chip.voted { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+.pp-presence-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.pp-presence-dot.online  { background: #4caf50; }
+.pp-presence-dot.offline { background: var(--border); }
 
 /* ── Reveal ───────────────────────────────────────────────── */
 .pp-reveal-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; }
@@ -805,6 +808,7 @@ let state = {
   isFacilitator:     false,
   myName:            null,
   unsubscribe:       null,
+  presenceInterval:  null, // heartbeat presenza
   setupMembers:      [],
   setupCards:        [],
   myVotes:           {},   // cardId → val (locale)
@@ -866,6 +870,31 @@ function showScreen(id) {
 }
 
 function el(id) { return document.getElementById(id); }
+
+/* ── Presenza online ─────────────────────────────────────── */
+function startPresence(name, sessionCode) {
+  stopPresence();
+  const writeHeartbeat = () => {
+    if (!state.sessionCode) return;
+    updateDoc(doc(db, 'poker_sessions', sessionCode), {
+      ['presence.' + name]: serverTimestamp()
+    }).catch(() => {});
+  };
+  writeHeartbeat();
+  state.presenceInterval = setInterval(writeHeartbeat, 30_000);
+}
+function stopPresence() {
+  if (state.presenceInterval) { clearInterval(state.presenceInterval); state.presenceInterval = null; }
+}
+
+/* ── Utility: utente online? (heartbeat < 5 min fa) ─────── */
+function isOnline(presenceMap, name) {
+  if (!presenceMap || !presenceMap[name]) return false;
+  const ts = presenceMap[name];
+  const ms = ts?.toDate ? ts.toDate().getTime() : (ts?.seconds ? ts.seconds * 1000 : null);
+  if (!ms) return false;
+  return (Date.now() - ms) < 300_000; // 5 minuti
+}
 
 /* ══════════════════════════════════════════════════════════ */
 /* SCREEN: Welcome                                           */
@@ -1053,11 +1082,12 @@ function startListening() {
     snap => { if (snap.exists()) renderSession(snap.data()); },
     err  => console.error('Firestore error', err)
   );
+  startPresence(state.myName, state.sessionCode);
 }
 
 function renderSession(data) {
   state.cachedData = data;
-  const { status, cards, currentCard, votes, finalVotes, members } = data;
+  const { status, cards, currentCard, votes, finalVotes, members, presence } = data;
   const isFac   = state.isFacilitator;
   const cardIdx = currentCard ?? 0;
   const card    = cards[cardIdx];
@@ -1080,12 +1110,12 @@ function renderSession(data) {
   }
 
   if (status === 'voting') {
-    renderVotingScreen(card, cardIdx, cards.length, cardVotes, members, isFac, suit, color);
+    renderVotingScreen(card, cardIdx, cards.length, cardVotes, members, isFac, suit, color, presence || {});
     return;
   }
 
   if (status === 'revealed') {
-    renderRevealScreen(card, cardIdx, cards.length, cardVotes, members, finalVotes, isFac);
+    renderRevealScreen(card, cardIdx, cards.length, cardVotes, members, finalVotes, isFac, presence || {});
     return;
   }
 }
@@ -1093,7 +1123,7 @@ function renderSession(data) {
 /* ══════════════════════════════════════════════════════════ */
 /* SCREEN: Voting                                            */
 /* ══════════════════════════════════════════════════════════ */
-function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, color) {
+function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, color, presence) {
   el('votingRoleLabel').textContent = isFac ? '👑 Facilitatore' : '👤 ' + state.myName;
   el('votingCodeBadge').textContent = state.sessionCode;
   el('votingCardCounter').textContent = (idx+1) + ' / ' + total;
@@ -1139,7 +1169,10 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, c
     memberList.forEach(m => {
       const chip = document.createElement('span');
       chip.className = 'pp-voter-chip' + (cardVotes[m] ? ' voted' : '');
-      chip.textContent = m;
+      const dot = document.createElement('span');
+      dot.className = 'pp-presence-dot ' + (isOnline(presence, m) ? 'online' : 'offline');
+      chip.appendChild(dot);
+      chip.appendChild(document.createTextNode(m));
       vList.appendChild(chip);
     });
   }
@@ -1228,7 +1261,7 @@ el('btnReveal').addEventListener('click', async () => {
 /* ══════════════════════════════════════════════════════════ */
 /* SCREEN: Reveal                                            */
 /* ══════════════════════════════════════════════════════════ */
-function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, isFac) {
+function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, isFac, presence) {
   el('revealRoleLabel').textContent = isFac ? '👑 Facilitatore' : '👤 ' + state.myName;
   el('revealCodeBadge').textContent = state.sessionCode;
   el('revealCardCounter').textContent = (idx+1) + ' / ' + total;
@@ -1258,8 +1291,9 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
     chip.className = 'pp-reveal-chip';
     if (!isNaN(num) && num === maxVal && hasDivergence) chip.classList.add('high');
     if (!isNaN(num) && num === minVal && hasDivergence) chip.classList.add('low');
+    const dot = `<span class="pp-presence-dot ${isOnline(presence, name) ? 'online' : 'offline'}" style="display:inline-block;vertical-align:middle;margin-right:3px;"></span>`;
     chip.innerHTML = `
-      <span class="pp-reveal-name">${escHtml(name)}</span>
+      <span class="pp-reveal-name">${dot}${escHtml(name)}</span>
       <span class="pp-reveal-value${v === '?' || v === '☕' ? ' red' : ''}">${v ? escHtml(v) : '—'}</span>`;
     grid.appendChild(chip);
   });
@@ -1504,7 +1538,8 @@ el('btnCopySummary').addEventListener('click', () => {
 
 el('btnNewSession').addEventListener('click', () => {
   if (state.unsubscribe) { state.unsubscribe(); state.unsubscribe = null; }
-  state = { sessionCode:null, isFacilitator:false, myName:null, unsubscribe:null, setupMembers:[], setupCards:[], myVotes:{}, selectedFinal:null, lastCardIdx:-1, cachedData:null };
+  stopPresence();
+  state = { sessionCode:null, isFacilitator:false, myName:null, unsubscribe:null, presenceInterval:null, setupMembers:[], setupCards:[], myVotes:{}, selectedFinal:null, lastCardIdx:-1, cachedData:null };
   el('joinCodeInput').value = '';
   el('joinNameInput').value = '';
   el('joinError').style.display = 'none';
