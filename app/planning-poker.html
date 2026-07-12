@@ -154,8 +154,16 @@ permalink: /app/planning-poker/
     0 28px 60px rgba(0,0,0,0.20),
     0 52px 88px rgba(0,0,0,0.09);
   display: flex; flex-direction: column;
-  /* clip-path invece di overflow:hidden: evita il flattening 3D del browser */
-  clip-path: inset(0 round 18px);
+  /* overflow hidden su wrapper interno — non qui, per non schiacciare il 3D flip */
+}
+/* Wrapper interno che clippa il contenuto senza toccare il parent 3D */
+.pp-playing-card > .pp-card-inner-clip {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
 }
 /* Doppio bordo interno — caratteristico delle carte da gioco */
 .pp-playing-card::before {
@@ -711,6 +719,7 @@ permalink: /app/planning-poker/
     <!-- Carta da poker con la card -->
     <div class="pp-card-perspective">
     <div class="pp-playing-card" id="votingPlayingCard">
+      <div class="pp-card-inner-clip"></div>
       <div class="pp-card-corner">
         <span class="pp-corner-num" id="vcCornerNum">1</span>
         <span class="pp-corner-suit" id="vcCornerSuit">♠</span>
