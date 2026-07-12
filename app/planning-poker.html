@@ -1220,9 +1220,18 @@ async function addMemberLive(inputId, okId) {
     });
     input.value = '';
     const ok = el(okId);
+    ok.textContent   = '✓ ' + name + ' aggiunto';
+    ok.style.color   = '';
     ok.style.display = '';
     setTimeout(() => { ok.style.display = 'none'; }, 2500);
-  } catch(e) { console.error('Add member error', e); }
+  } catch(e) {
+    console.error('Add member error', e);
+    const ok = el(okId);
+    ok.textContent   = '✗ Errore: ' + (e.message || 'scrittura fallita');
+    ok.style.color   = '#e05c5c';
+    ok.style.display = '';
+    setTimeout(() => { ok.style.display = 'none'; ok.style.color = ''; }, 4000);
+  }
 }
 
 el('btnVotingAddMember').addEventListener('click', () => addMemberLive('votingAddMemberInput', 'votingAddMemberOk'));
