@@ -1337,11 +1337,11 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
     finalPanel.style.display = '';
     revealActs.style.display = '';
     revealWait.style.display = 'none';
-    // mini-carte per voto finale
+    // mini-carte per voto finale — escludi ?, ☕ e 21 (non sono stime valide)
     const fCards = el('finalVoteCards');
     fCards.innerHTML = '';
     const existing = finalVotes && finalVotes[card.id];
-    VOTES.forEach(vc => {
+    VOTES.filter(vc => vc.val !== '?' && vc.val !== '☕' && vc.val !== '21').forEach(vc => {
       fCards.appendChild(makeVoteCard(vc, existing === vc.val, () => selectFinalVote(card.id, vc.val)));
     });
     state.selectedFinal = existing || null;
