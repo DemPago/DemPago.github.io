@@ -1,881 +1,1034 @@
 ---
 layout: app
 title: Planning Poker
-description: Valuta le card del tuo sprint con Planning Poker (scala Fibonacci). Inserisci le user story, vota ogni card e ottieni il riepilogo finale. Tutto nel browser, nessun dato inviato.
+description: Valuta le card del tuo sprint con Planning Poker multi-device. Crea una sessione, condividi il codice al team, votate in segreto e rivelate insieme.
 permalink: /app/planning-poker/
 ---
 
 <style>
-/* ── Layout ───────────────────────────────────────────────── */
+/* ── Base ─────────────────────────────────────────────────── */
 .pp-app {
-  max-width: 740px;
+  max-width: 700px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.75rem;
 }
+.pp-screen { display: none; flex-direction: column; gap: 1.5rem; }
+.pp-screen.active { display: flex; }
 
 /* ── Header ───────────────────────────────────────────────── */
-.pp-header h1 {
-  font-size: 1.6rem;
-  font-weight: 800;
-  margin: 0 0 0.25rem;
-  color: var(--text);
-}
-.pp-header p {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  margin: 0;
-}
+.pp-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0 0 0.2rem; color: var(--text); }
+.pp-header p  { color: var(--text-muted); font-size: 0.88rem; margin: 0; }
 
-/* ── Istruzioni collassabili ──────────────────────────────── */
-.pp-instructions {
+/* ── Card container (panel) ───────────────────────────────── */
+.pp-panel {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  overflow: hidden;
-}
-.pp-instructions summary {
-  padding: 0.85rem 1.1rem;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.88rem;
-  color: var(--text-muted);
-  list-style: none;
+  border-radius: 12px;
+  padding: 1.25rem;
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  user-select: none;
+  flex-direction: column;
+  gap: 1rem;
 }
-.pp-instructions summary::-webkit-details-marker { display: none; }
-.pp-instructions summary::before {
-  content: "▶";
-  font-size: 0.65rem;
-  transition: transform 0.2s;
-}
-.pp-instructions[open] summary::before { transform: rotate(90deg); }
-.pp-instructions .pp-instr-body {
-  padding: 0 1.1rem 1rem;
-  font-size: 0.84rem;
-  color: var(--text-muted);
-  line-height: 1.65;
-  border-top: 1px solid var(--border);
-}
-.pp-instructions .pp-instr-body ol {
-  margin: 0.6rem 0 0.6rem 1.2rem;
-  padding: 0;
-}
-.pp-instructions .pp-instr-body li { margin-bottom: 0.3rem; }
-.pp-fib-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-top: 0.6rem;
-}
-.pp-fib-legend span {
-  background: var(--accent);
-  color: #000;
-  font-weight: 700;
-  font-size: 0.75rem;
-  border-radius: 5px;
-  padding: 0.15rem 0.5rem;
-}
-.pp-fib-legend span.muted {
-  background: var(--border);
-  color: var(--text-muted);
-  font-weight: 600;
-}
+.pp-panel h2 { font-size: 1rem; font-weight: 700; margin: 0; color: var(--text); }
+.pp-panel p  { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.55; }
 
-/* ── Form aggiungi card ───────────────────────────────────── */
-.pp-add-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1.1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-}
-.pp-add-card h2 {
-  font-size: 0.95rem;
-  font-weight: 700;
-  margin: 0;
-  color: var(--text);
-}
-.pp-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-.pp-field label {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.pp-field input,
-.pp-field textarea {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  color: var(--text);
-  font-size: 0.9rem;
-  padding: 0.55rem 0.75rem;
-  width: 100%;
-  box-sizing: border-box;
-  font-family: inherit;
-  transition: border-color 0.2s;
-  resize: vertical;
-}
-.pp-field input:focus,
-.pp-field textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-}
-.pp-field textarea { min-height: 60px; }
-.pp-btn-row {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end;
-}
+/* ── Bottoni ──────────────────────────────────────────────── */
 .pp-btn {
-  border: none;
-  border-radius: 7px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  padding: 0.55rem 1.1rem;
-  cursor: pointer;
-  transition: opacity 0.15s, transform 0.1s;
+  border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 700;
+  padding: 0.6rem 1.2rem; cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s; font-family: inherit;
 }
 .pp-btn:active { transform: scale(0.97); }
-.pp-btn-primary { background: var(--accent); color: #000; }
-.pp-btn-ghost { background: var(--border); color: var(--text-muted); }
-.pp-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.pp-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.pp-btn-primary  { background: var(--accent); color: #000; }
+.pp-btn-ghost    { background: var(--border); color: var(--text-muted); }
+.pp-btn-danger   { background: rgba(224,92,92,0.15); color: #e05c5c; border: 1px solid rgba(224,92,92,0.3); }
+.pp-btn-large    { padding: 0.85rem 1.5rem; font-size: 1rem; border-radius: 10px; }
+.pp-btn-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
-/* ── Barra avanzamento ────────────────────────────────────── */
-.pp-progress-row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.8rem;
-  color: var(--text-muted);
+/* ── Input / Textarea ─────────────────────────────────────── */
+.pp-field { display: flex; flex-direction: column; gap: 0.25rem; }
+.pp-field label {
+  font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--text-muted);
 }
-.pp-progress-bar-wrap {
-  flex: 1;
-  height: 6px;
-  background: var(--border);
-  border-radius: 999px;
-  overflow: hidden;
+.pp-field input, .pp-field textarea {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  color: var(--text); font-size: 0.9rem; padding: 0.6rem 0.8rem;
+  width: 100%; box-sizing: border-box; font-family: inherit;
+  transition: border-color 0.2s; resize: vertical;
 }
-.pp-progress-fill {
-  height: 100%;
-  background: var(--accent);
-  border-radius: 999px;
-  transition: width 0.35s;
-  width: 0%;
-}
+.pp-field input:focus, .pp-field textarea:focus { outline: none; border-color: var(--accent); }
+.pp-field textarea { min-height: 60px; }
 
-/* ── Sezione lista card ───────────────────────────────────── */
-.pp-cards-section h2 {
-  font-size: 0.95rem;
-  font-weight: 700;
+/* ── Codice sessione ──────────────────────────────────────── */
+.pp-code-display {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1rem; flex-wrap: wrap;
+}
+.pp-code-badge {
+  font-size: 2.5rem; font-weight: 900; letter-spacing: 0.25em;
+  color: var(--accent); font-family: 'Courier New', monospace;
+  background: var(--bg); border: 2px solid var(--accent);
+  border-radius: 12px; padding: 0.4rem 1.2rem;
+}
+.pp-code-hint { font-size: 0.8rem; color: var(--text-muted); text-align: center; }
+
+/* ── Tag membri ───────────────────────────────────────────── */
+.pp-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.pp-tag {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 20px; padding: 0.2rem 0.65rem; font-size: 0.8rem;
   color: var(--text);
-  margin: 0 0 1rem;
 }
-.pp-empty {
-  text-align: center;
-  color: var(--text-muted);
-  font-size: 0.88rem;
-  padding: 2.5rem 0;
-  border: 1px dashed var(--border);
-  border-radius: 10px;
+.pp-tag button {
+  background: none; border: none; color: var(--text-muted);
+  cursor: pointer; font-size: 0.7rem; padding: 0; line-height: 1;
+  transition: color 0.15s;
 }
+.pp-tag button:hover { color: #e05c5c; }
 
-/* ── Wrapper carta da poker ───────────────────────────────── */
-.pp-card-wrap {
-  margin-bottom: 1.5rem;
+/* ── Lista card setup ─────────────────────────────────────── */
+.pp-card-list-setup { display: flex; flex-direction: column; gap: 0.5rem; }
+.pp-card-item {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 0.75rem; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.6rem 0.85rem; font-size: 0.85rem;
 }
+.pp-card-item-text { flex: 1; min-width: 0; }
+.pp-card-item-title { font-weight: 600; color: var(--text); word-break: break-word; }
+.pp-card-item-desc  { color: var(--text-muted); font-size: 0.78rem; margin-top: 0.1rem; }
+.pp-card-item button {
+  background: none; border: none; color: var(--text-muted); cursor: pointer;
+  font-size: 0.85rem; padding: 0.15rem 0.3rem; border-radius: 5px;
+  flex-shrink: 0; transition: color 0.15s;
+}
+.pp-card-item button:hover { color: #e05c5c; }
 
-/* ── Carta da poker ───────────────────────────────────────── */
+/* ── Carta da poker (schermata di voto) ───────────────────── */
 .pp-playing-card {
-  position: relative;
-  background: #fafaf5;
-  border: 2px solid #c8c8b0;
-  border-radius: 14px;
-  padding: 0.9rem 1rem 1rem;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.6);
-  min-height: 140px;
-  display: flex;
-  flex-direction: column;
-  transition: box-shadow 0.2s, border-color 0.2s;
-  overflow: hidden;
+  position: relative; background: #fafaf5; border: 2px solid #c8c8b0;
+  border-radius: 16px; padding: 1.1rem 1.2rem 1.2rem;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.6);
+  min-height: 160px; display: flex; flex-direction: column; overflow: hidden;
 }
-.pp-playing-card.voted {
-  border-color: var(--accent);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.22), 0 0 0 2px var(--accent);
-}
-
-/* pattern a rombi sottile in background */
 .pp-playing-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(45deg, rgba(0,0,0,0.025) 0, rgba(0,0,0,0.025) 1px, transparent 0, transparent 50%);
-  background-size: 14px 14px;
-  border-radius: 12px;
-  pointer-events: none;
+  content: ''; position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.025) 0, rgba(0,0,0,0.025) 1px, transparent 0, transparent 50%);
+  background-size: 14px 14px; border-radius: 14px; pointer-events: none;
 }
-
-/* Angolo top-left */
-.pp-card-corner {
-  position: absolute;
-  top: 0.55rem;
-  left: 0.65rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 1;
-  z-index: 1;
+.pp-card-corner { position: absolute; top: 0.6rem; left: 0.75rem; line-height: 1; z-index: 1; }
+.pp-card-corner-br { position: absolute; bottom: 0.6rem; right: 0.75rem; transform: rotate(180deg); line-height: 1; z-index: 1; }
+.pp-corner-num  { font-size: 1.1rem; font-weight: 900; font-family: Georgia, serif; display: block; }
+.pp-corner-suit { font-size: 0.8rem; display: block; }
+.pp-card-suit-bg {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  font-size: 5rem; opacity: 0.06; pointer-events: none; user-select: none; line-height: 1;
 }
-/* Angolo bottom-right (ruotato 180°) */
-.pp-card-corner-br {
-  position: absolute;
-  bottom: 0.55rem;
-  right: 0.65rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 1;
-  transform: rotate(180deg);
-  z-index: 1;
-}
-.pp-corner-index {
-  font-size: 1rem;
-  font-weight: 800;
-  color: #1a1a1a;
-  font-family: Georgia, serif;
-}
-.pp-corner-suit {
-  font-size: 0.75rem;
-  margin-top: 1px;
-}
-
-/* Centro carta: seme grande */
-.pp-card-suit-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 3.5rem;
-  opacity: 0.07;
-  pointer-events: none;
-  user-select: none;
-  line-height: 1;
-}
-
-/* Contenuto carta */
 .pp-card-body {
-  position: relative;
-  z-index: 1;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
+  position: relative; z-index: 1; padding: 0 2rem; flex: 1;
+  display: flex; flex-direction: column; justify-content: center; gap: 0.35rem;
 }
-.pp-card-title {
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: #1a1a1a;
-  margin: 0;
-  line-height: 1.35;
-  word-break: break-word;
-}
-.pp-card-desc {
-  font-size: 0.78rem;
-  color: #555;
-  margin: 0;
-  word-break: break-word;
-  line-height: 1.45;
-}
-.pp-card-badge-voted {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  margin-top: 0.4rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #1a6e2e;
-  background: #d4f5dc;
-  border-radius: 5px;
-  padding: 0.15rem 0.5rem;
-  width: fit-content;
-}
+.pp-card-issue-key { font-size: 0.72rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.06em; }
+.pp-card-title-main { font-weight: 800; font-size: 1.05rem; color: #1a1a1a; line-height: 1.35; word-break: break-word; }
+.pp-card-desc-main  { font-size: 0.8rem; color: #555; line-height: 1.45; word-break: break-word; }
 
-/* Tasto elimina */
-.pp-card-delete {
-  position: absolute;
-  top: 0.45rem;
-  right: 0.5rem;
-  background: none;
-  border: none;
-  color: #bbb;
-  cursor: pointer;
-  font-size: 0.85rem;
-  padding: 0.2rem 0.3rem;
-  border-radius: 5px;
-  transition: color 0.15s, background 0.15s;
-  z-index: 2;
-}
-.pp-card-delete:hover { color: #e05c5c; background: rgba(224,92,92,0.08); }
-
-/* ── Voti: mini-carte da poker ────────────────────────────── */
-.pp-votes-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  margin: 0.85rem 0 0.5rem;
-}
-.pp-votes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-/* mini carta da poker come bottone voto */
+/* ── Mini-carte voto ──────────────────────────────────────── */
+.pp-votes-section { display: flex; flex-direction: column; gap: 0.6rem; }
+.pp-votes-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); }
+.pp-votes { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .pp-vote-card {
-  position: relative;
-  width: 2.8rem;
-  height: 4rem;
-  background: #fafaf5;
-  border: 2px solid #c8c8b0;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: Georgia, serif;
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: #1a1a1a;
+  position: relative; width: 3rem; height: 4.3rem;
+  background: #fafaf5; border: 2px solid #c8c8b0; border-radius: 9px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-family: Georgia, serif; font-size: 1.1rem; font-weight: 800; color: #1a1a1a;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   transition: transform 0.12s, border-color 0.12s, box-shadow 0.12s;
-  user-select: none;
-  flex-shrink: 0;
+  user-select: none; flex-shrink: 0;
 }
-.pp-vote-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--accent);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.22);
-}
-.pp-vote-card.selected {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: #000;
-  transform: translateY(-6px) scale(1.05);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.28);
-}
-/* angolino valore in alto a sinistra della mini carta */
-.pp-vote-card::before {
-  content: attr(data-val);
-  position: absolute;
-  top: 0.2rem;
-  left: 0.28rem;
-  font-size: 0.55rem;
-  font-weight: 800;
-  line-height: 1;
-  color: inherit;
-  opacity: 0.7;
-}
-/* seme piccolo in basso a destra */
-.pp-vote-card::after {
-  content: attr(data-suit);
-  position: absolute;
-  bottom: 0.2rem;
-  right: 0.28rem;
-  font-size: 0.6rem;
-  line-height: 1;
-  opacity: 0.5;
-  transform: rotate(180deg);
-}
-/* colore rosso per cuori e quadri */
+.pp-vote-card:hover   { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 7px 16px rgba(0,0,0,0.22); }
+.pp-vote-card.selected { border-color: var(--accent); background: var(--accent); color: #000; transform: translateY(-7px) scale(1.06); box-shadow: 0 10px 20px rgba(0,0,0,0.28); }
+.pp-vote-card.disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+.pp-vote-card::before { content: attr(data-val); position: absolute; top: 0.22rem; left: 0.3rem; font-size: 0.52rem; font-weight: 800; opacity: 0.65; }
+.pp-vote-card::after  { content: attr(data-suit); position: absolute; bottom: 0.22rem; right: 0.3rem; font-size: 0.58rem; opacity: 0.45; transform: rotate(180deg); }
 .pp-vote-card.red { color: #c0392b; }
 .pp-vote-card.red.selected { color: #7b0000; }
 
 /* ── Spiegazione voto ─────────────────────────────────────── */
 .pp-vote-explain {
-  margin-top: 0.75rem;
-  padding: 0.75rem 1rem;
-  background: var(--card);
-  border-left: 3px solid var(--accent);
-  border-radius: 0 8px 8px 0;
-  font-size: 0.84rem;
-  color: var(--text-muted);
-  line-height: 1.55;
-  animation: fadeIn 0.2s ease;
+  padding: 0.7rem 1rem; background: var(--card); border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0; font-size: 0.83rem; color: var(--text-muted);
+  line-height: 1.55; animation: fadeSlide 0.2s ease;
 }
-.pp-vote-explain strong {
-  color: var(--text);
-  display: block;
-  margin-bottom: 0.2rem;
-  font-size: 0.88rem;
+.pp-vote-explain strong { color: var(--text); display: block; margin-bottom: 0.15rem; font-size: 0.87rem; }
+@keyframes fadeSlide { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── Progress votanti ─────────────────────────────────────── */
+.pp-vote-progress {
+  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+  padding: 0.85rem 1rem; display: flex; flex-direction: column; gap: 0.5rem;
 }
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
+.pp-vote-progress-top { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+.pp-vote-progress-label { font-weight: 600; color: var(--text); }
+.pp-vote-progress-count { color: var(--accent); font-weight: 700; }
+.pp-vote-bar-wrap { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; }
+.pp-vote-bar-fill  { height: 100%; background: var(--accent); border-radius: 999px; transition: width 0.4s; }
+.pp-voters-list { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.2rem; }
+.pp-voter-chip {
+  font-size: 0.75rem; padding: 0.15rem 0.6rem; border-radius: 20px;
+  border: 1px solid var(--border); color: var(--text-muted); background: var(--bg);
+  transition: all 0.2s;
+}
+.pp-voter-chip.voted { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+
+/* ── Reveal ───────────────────────────────────────────────── */
+.pp-reveal-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.pp-reveal-chip {
+  display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+  padding: 0.6rem 0.9rem; min-width: 80px; text-align: center;
+  animation: fadeSlide 0.3s ease;
+}
+.pp-reveal-chip.high { border-color: #e05c5c; background: rgba(224,92,92,0.07); }
+.pp-reveal-chip.low  { border-color: #5cb8e0; background: rgba(92,184,224,0.07); }
+.pp-reveal-name  { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+.pp-reveal-value { font-size: 1.6rem; font-weight: 900; color: var(--text); font-family: Georgia, serif; }
+.pp-reveal-value.red { color: #c0392b; }
+.pp-divergence {
+  padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.85rem;
+  background: rgba(224,185,92,0.12); border: 1px solid rgba(224,185,92,0.3);
+  color: var(--text); line-height: 1.5;
+}
+.pp-divergence strong { color: #e0b55c; }
+
+/* ── Riepilogo finale ─────────────────────────────────────── */
+.pp-summary-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.pp-summary-table th {
+  text-align: left; color: var(--text-muted); font-size: 0.73rem;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--border);
+}
+.pp-summary-table td { padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+.pp-summary-table td:nth-child(2) { font-weight: 700; color: var(--accent); width: 4rem; }
+.pp-summary-table tr:last-child td { border-bottom: none; }
+.pp-total-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 0.85rem; padding-top: 0.85rem; border-top: 1px solid var(--border);
+}
+.pp-total-label { font-weight: 600; color: var(--text-muted); font-size: 0.9rem; }
+.pp-total-value { font-size: 1.5rem; font-weight: 900; color: var(--accent); }
+
+/* ── Stato sessione (badge) ───────────────────────────────── */
+.pp-session-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 0.75rem; font-size: 0.8rem; flex-wrap: wrap;
+}
+.pp-session-code-small {
+  font-weight: 800; color: var(--accent); font-family: monospace;
+  font-size: 1rem; letter-spacing: 0.1em;
+  background: var(--bg); border: 1px solid var(--accent);
+  border-radius: 6px; padding: 0.1rem 0.5rem;
+}
+.pp-session-role { color: var(--text-muted); }
+
+/* ── Schermata attesa ─────────────────────────────────────── */
+.pp-waiting-anim {
+  text-align: center; padding: 1.5rem 0;
+  font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;
+}
+.pp-spinner {
+  width: 36px; height: 36px; border: 3px solid var(--border);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin 0.8s linear infinite; margin: 0 auto 1rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Card counter ─────────────────────────────────────────── */
+.pp-card-counter {
+  font-size: 0.78rem; color: var(--text-muted); text-align: right; font-weight: 600;
 }
 
-/* ── Riepilogo ────────────────────────────────────────────── */
-.pp-summary {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1.1rem;
+/* ── Alert ────────────────────────────────────────────────── */
+.pp-alert {
+  padding: 0.65rem 1rem; border-radius: 8px; font-size: 0.83rem;
+  border: 1px solid; line-height: 1.5;
 }
-.pp-summary h2 {
-  font-size: 0.95rem;
-  font-weight: 700;
-  margin: 0 0 0.85rem;
-  color: var(--text);
+.pp-alert-error { background: rgba(224,92,92,0.1); border-color: rgba(224,92,92,0.3); color: #e05c5c; }
+.pp-alert-info  { background: rgba(92,184,224,0.08); border-color: rgba(92,184,224,0.25); color: var(--text-muted); }
+
+/* ── Input codice grande ──────────────────────────────────── */
+.pp-code-input {
+  font-size: 1.8rem !important; font-weight: 900 !important;
+  letter-spacing: 0.3em !important; text-align: center;
+  text-transform: uppercase; font-family: 'Courier New', monospace !important;
+  color: var(--accent) !important;
 }
-.pp-summary table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.85rem;
+
+/* ── Divider ──────────────────────────────────────────────── */
+.pp-divider {
+  display: flex; align-items: center; gap: 0.75rem; color: var(--text-muted); font-size: 0.78rem;
 }
-.pp-summary th {
-  text-align: left;
-  color: var(--text-muted);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 0.35rem 0.5rem;
-  border-bottom: 1px solid var(--border);
-}
-.pp-summary td {
-  padding: 0.45rem 0.5rem;
-  border-bottom: 1px solid var(--border);
-  color: var(--text);
-  vertical-align: top;
-}
-.pp-summary td:nth-child(2) {
-  font-weight: 700;
-  color: var(--accent);
-  white-space: nowrap;
-  width: 5rem;
-}
-.pp-summary td:nth-child(3) {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-}
-.pp-summary tr:last-child td { border-bottom: none; }
-.pp-total-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 0.85rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid var(--border);
-  font-size: 0.9rem;
-}
-.pp-total-label { font-weight: 600; color: var(--text-muted); }
-.pp-total-value { font-size: 1.4rem; font-weight: 800; color: var(--accent); }
-.pp-summary-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.85rem;
-  flex-wrap: wrap;
-}
-.pp-pending-badge {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  font-style: italic;
-}
+.pp-divider::before, .pp-divider::after { content:''; flex:1; height:1px; background: var(--border); }
 </style>
 
-<div class="pp-app">
+<div class="pp-app" id="ppApp">
 
-  <!-- Header -->
-  <div class="pp-header">
-    <h1>&#127183; Planning Poker</h1>
-    <p>Stima le card del tuo sprint con la scala Fibonacci. Tutto nel browser — nessun dato inviato.</p>
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SCREEN: Welcome                                        -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="pp-screen active" id="screenWelcome">
+    <div class="pp-header">
+      <h1>&#127183; Planning Poker</h1>
+      <p>Vota le card dello sprint in segreto, rivela tutto insieme. Multi-device, real-time.</p>
+    </div>
+
+    <div class="pp-panel" style="align-items:center;text-align:center;gap:1.25rem;padding:2rem;">
+      <div style="font-size:3.5rem;line-height:1;">&#127183;</div>
+      <div>
+        <p style="font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:0.35rem;">Sei il facilitatore?</p>
+        <p>Crea una nuova sessione, aggiungi le card e condividi il codice al team.</p>
+      </div>
+      <button class="pp-btn pp-btn-primary pp-btn-large" id="btnCreateSession">&#43; Crea sessione</button>
+
+      <div class="pp-divider" style="width:100%;max-width:320px;">oppure</div>
+
+      <div style="width:100%;max-width:320px;">
+        <p style="font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:0.75rem;">Hai un codice sessione?</p>
+        <div class="pp-field">
+          <input type="text" id="joinCodeInput" class="pp-code-input" placeholder="XXXX" maxlength="6" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="pp-field" style="margin-top:0.5rem;">
+          <input type="text" id="joinNameInput" placeholder="Il tuo nome" maxlength="30" autocomplete="off">
+        </div>
+        <button class="pp-btn pp-btn-ghost" id="btnJoinSession" style="width:100%;margin-top:0.5rem;">Unisciti alla sessione</button>
+        <div id="joinError" style="display:none;margin-top:0.5rem;"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- Istruzioni -->
-  <details class="pp-instructions" id="ppInstructions">
-    <summary>&#128218; Come funziona</summary>
-    <div class="pp-instr-body">
-      <ol>
-        <li>Aggiungi le <strong>user story</strong> o task dello sprint (titolo obbligatorio, descrizione opzionale).</li>
-        <li>Per ogni card clicca la <strong>mini-carta</strong> con il valore Fibonacci che stima la complessità.</li>
-        <li>Sotto ogni voto appare una <strong>spiegazione</strong> di cosa significa quel punteggio.</li>
-        <li>Quando tutte le card sono votate, il <strong>riepilogo</strong> mostra il totale punti con spiegazioni.</li>
-      </ol>
-      <strong>Scala Fibonacci:</strong>
-      <div class="pp-fib-legend">
-        <span>1</span><span>2</span><span>3</span><span>5</span><span>8</span><span>13</span><span>21</span>
-        <span class="muted">?</span><span class="muted">☕</span>
-      </div>
-      <p style="margin-top:0.6rem;">
-        <strong>?</strong> = non abbastanza informazioni per stimare &nbsp;|&nbsp;
-        <strong>☕</strong> = card troppo grande, va spezzata
-      </p>
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SCREEN: Setup (facilitatore)                           -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="pp-screen" id="screenSetup">
+    <div class="pp-session-bar">
+      <span class="pp-session-role">&#128081; Facilitatore</span>
+      <span>Codice sessione: <span class="pp-session-code-small" id="setupCodeBadge">—</span></span>
+      <button class="pp-btn pp-btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.7rem;" id="btnCopyCode">&#128203; Copia</button>
     </div>
-  </details>
 
-  <!-- Form aggiungi card -->
-  <div class="pp-add-card">
-    <h2>&#43; Aggiungi card</h2>
-    <div class="pp-field">
-      <label for="ppTitle">Titolo *</label>
-      <input type="text" id="ppTitle" placeholder="Es. Come utente voglio filtrare i risultati per data" maxlength="200" autocomplete="off">
+    <!-- Membri del team -->
+    <div class="pp-panel">
+      <h2>&#128101; Membri del team</h2>
+      <p>Aggiungi i nomi di chi parteciperà alla sessione.</p>
+      <div style="display:flex;gap:0.5rem;">
+        <div class="pp-field" style="flex:1;">
+          <input type="text" id="memberInput" placeholder="Nome membro" maxlength="30" autocomplete="off">
+        </div>
+        <button class="pp-btn pp-btn-primary" id="btnAddMember" style="align-self:flex-end;">Aggiungi</button>
+      </div>
+      <div class="pp-tags" id="memberTags"></div>
     </div>
-    <div class="pp-field">
-      <label for="ppDesc">Descrizione (opzionale)</label>
-      <textarea id="ppDesc" placeholder="Criteri di accettazione, note, link..." maxlength="500"></textarea>
+
+    <!-- Card dello sprint -->
+    <div class="pp-panel">
+      <h2>&#128203; Card dello sprint</h2>
+      <p>Aggiungi le user story o task da stimare.</p>
+      <div class="pp-field">
+        <label for="cardTitleInput">Titolo *</label>
+        <input type="text" id="cardTitleInput" placeholder="Es. Come utente voglio filtrare per data" maxlength="200" autocomplete="off">
+      </div>
+      <div class="pp-field">
+        <label for="cardDescInput">Descrizione (opzionale)</label>
+        <textarea id="cardDescInput" placeholder="Criteri di accettazione, note..." maxlength="500"></textarea>
+      </div>
+      <div class="pp-btn-row">
+        <button class="pp-btn pp-btn-ghost" id="btnClearCard">Cancella</button>
+        <button class="pp-btn pp-btn-primary" id="btnAddCard">Aggiungi card</button>
+      </div>
+      <div class="pp-card-list-setup" id="setupCardList"></div>
+    </div>
+
+    <div class="pp-btn-row">
+      <button class="pp-btn pp-btn-ghost" id="btnAbortSetup">Annulla</button>
+      <button class="pp-btn pp-btn-primary pp-btn-large" id="btnStartSession">&#9654;&#65039; Avvia sessione</button>
+    </div>
+    <div id="setupError" style="display:none;"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SCREEN: Waiting (votante in attesa che inizi)          -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="pp-screen" id="screenWaiting">
+    <div class="pp-session-bar">
+      <span class="pp-session-role" id="waitingRoleLabel">&#128100; Votante</span>
+      <span>Sessione: <span class="pp-session-code-small" id="waitingCodeBadge">—</span></span>
+    </div>
+    <div class="pp-panel">
+      <div class="pp-waiting-anim">
+        <div class="pp-spinner"></div>
+        <strong id="waitingTitle">In attesa che il facilitatore avvii la sessione…</strong><br>
+        <span id="waitingSubtitle">Siediti comodo, arriva subito.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SCREEN: Voting                                         -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="pp-screen" id="screenVoting">
+    <div class="pp-session-bar">
+      <span class="pp-session-role" id="votingRoleLabel">Sessione</span>
+      <span>Sessione: <span class="pp-session-code-small" id="votingCodeBadge">—</span></span>
+      <span class="pp-card-counter" id="votingCardCounter"></span>
+    </div>
+
+    <!-- Carta da poker con la card -->
+    <div class="pp-playing-card" id="votingPlayingCard">
+      <div class="pp-card-corner">
+        <span class="pp-corner-num" id="vcCornerNum">1</span>
+        <span class="pp-corner-suit" id="vcCornerSuit">♠</span>
+      </div>
+      <div class="pp-card-suit-bg" id="vcSuitBg">♠</div>
+      <div class="pp-card-corner-br">
+        <span class="pp-corner-num" id="vcCornerNum2">1</span>
+        <span class="pp-corner-suit" id="vcCornerSuit2">♠</span>
+      </div>
+      <div class="pp-card-body">
+        <span class="pp-card-issue-key" id="vcIssueKey"></span>
+        <p class="pp-card-title-main" id="vcTitle">—</p>
+        <p class="pp-card-desc-main"  id="vcDesc"></p>
+      </div>
+    </div>
+
+    <!-- Progress votanti -->
+    <div class="pp-vote-progress">
+      <div class="pp-vote-progress-top">
+        <span class="pp-vote-progress-label">Voti ricevuti</span>
+        <span class="pp-vote-progress-count" id="voteProgressCount">0 / 0</span>
+      </div>
+      <div class="pp-vote-bar-wrap"><div class="pp-vote-bar-fill" id="voteProgressBar" style="width:0%"></div></div>
+      <div class="pp-voters-list" id="votersList"></div>
+    </div>
+
+    <!-- Mini-carte voto (solo per votanti, nascoste per facilitatore) -->
+    <div class="pp-votes-section" id="votingSection">
+      <div class="pp-votes-label">La tua stima</div>
+      <div class="pp-votes" id="voteCards"></div>
+    </div>
+    <div id="voteExplainBox"></div>
+
+    <!-- Bottone Rivela (solo facilitatore) -->
+    <div id="revealSection" style="display:none;">
+      <div class="pp-alert pp-alert-info" style="margin-bottom:0.75rem;" id="revealHint">
+        Attendi che tutti votino, poi rivela i voti al team.
+      </div>
+      <button class="pp-btn pp-btn-primary pp-btn-large" id="btnReveal" style="width:100%;">&#128064; Rivela i voti</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SCREEN: Reveal                                         -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="pp-screen" id="screenReveal">
+    <div class="pp-session-bar">
+      <span class="pp-session-role" id="revealRoleLabel">Sessione</span>
+      <span>Sessione: <span class="pp-session-code-small" id="revealCodeBadge">—</span></span>
+      <span class="pp-card-counter" id="revealCardCounter"></span>
+    </div>
+
+    <div class="pp-panel">
+      <h2 id="revealCardTitle">—</h2>
+      <div class="pp-reveal-grid" id="revealGrid"></div>
+      <div id="divergenceBox" style="display:none;margin-top:0.75rem;"></div>
+    </div>
+
+    <!-- Voto finale (solo facilitatore) -->
+    <div class="pp-panel" id="finalVotePanel" style="display:none;">
+      <h2>&#10003; Voto finale</h2>
+      <p>Scegli il punteggio concordato dopo la discussione.</p>
+      <div class="pp-votes" id="finalVoteCards"></div>
+    </div>
+
+    <!-- Azioni facilitatore -->
+    <div class="pp-btn-row" id="revealActions" style="display:none;">
+      <button class="pp-btn pp-btn-ghost" id="btnRevote">&#128260; Rivota</button>
+      <button class="pp-btn pp-btn-primary" id="btnNextCard">Prossima card &#8594;</button>
+    </div>
+
+    <!-- Messaggio per votanti -->
+    <div class="pp-waiting-anim" id="revealWaiting" style="display:none;">
+      <div class="pp-spinner"></div>
+      Il facilitatore sta scegliendo il voto finale…
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- SCREEN: Summary                                        -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <div class="pp-screen" id="screenSummary">
+    <div class="pp-header">
+      <h1>&#127881; Sprint completato!</h1>
+      <p>Ecco il riepilogo delle stime del team.</p>
+    </div>
+    <div class="pp-panel">
+      <h2>&#128202; Riepilogo</h2>
+      <table class="pp-summary-table">
+        <thead><tr><th>Card</th><th>Punti</th><th>Note</th></tr></thead>
+        <tbody id="summaryBody"></tbody>
+      </table>
+      <div class="pp-total-row">
+        <span class="pp-total-label">Totale story points</span>
+        <span class="pp-total-value" id="summaryTotal">—</span>
+      </div>
     </div>
     <div class="pp-btn-row">
-      <button class="pp-btn pp-btn-ghost" id="ppClearForm">Cancella</button>
-      <button class="pp-btn pp-btn-primary" id="ppAddBtn">Aggiungi card</button>
-    </div>
-  </div>
-
-  <!-- Avanzamento -->
-  <div class="pp-progress-row" id="ppProgressRow" style="display:none;">
-    <span id="ppProgressLabel">0 / 0 votate</span>
-    <div class="pp-progress-bar-wrap">
-      <div class="pp-progress-fill" id="ppProgressFill"></div>
-    </div>
-  </div>
-
-  <!-- Lista card -->
-  <div class="pp-cards-section">
-    <h2>Card sprint <span id="ppCardCount" style="color:var(--text-muted);font-weight:400;font-size:0.85rem;"></span></h2>
-    <div id="ppCardList">
-      <div class="pp-empty" id="ppEmpty">Nessuna card ancora. Aggiungine una sopra.</div>
-    </div>
-  </div>
-
-  <!-- Riepilogo -->
-  <div class="pp-summary" id="ppSummary" style="display:none;">
-    <h2>&#128202; Riepilogo sprint</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Card</th>
-          <th>Punti</th>
-          <th>Significato</th>
-        </tr>
-      </thead>
-      <tbody id="ppSummaryBody"></tbody>
-    </table>
-    <div class="pp-total-row">
-      <span class="pp-total-label">Totale story points</span>
-      <span class="pp-total-value" id="ppTotal">—</span>
-    </div>
-    <div class="pp-summary-actions">
-      <button class="pp-btn pp-btn-primary" id="ppCopyBtn">&#128203; Copia riepilogo</button>
-      <button class="pp-btn pp-btn-ghost" id="ppResetBtn">&#128260; Nuovo sprint</button>
+      <button class="pp-btn pp-btn-primary" id="btnCopySummary">&#128203; Copia riepilogo</button>
+      <button class="pp-btn pp-btn-ghost" id="btnNewSession">&#127183; Nuova sessione</button>
     </div>
   </div>
 
 </div>
 
-<script>
-(function () {
+<script type="module">
+import { initializeApp, getApps, getApp }
+  from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  /* ── Configurazione voti ─────────────────────────────────── */
-  const VOTE_CONFIG = [
-    { val: '1',  suit: '♠', red: false,
-      label: '1 — Triviale',
-      explain: 'Compito banale, già fatto decine di volte. Nessun rischio, nessuna dipendenza. Si completa in meno di un\'ora.' },
-    { val: '2',  suit: '♥', red: true,
-      label: '2 — Semplice',
-      explain: 'Piccola modifica con logica chiara. Qualche dettaglio da verificare, ma nessuna sorpresa attesa.' },
-    { val: '3',  suit: '♦', red: true,
-      label: '3 — Piccolo-medio',
-      explain: 'Richiede un po\' di analisi o tocca più file/componenti. Effort contenuto ma non trascurabile.' },
-    { val: '5',  suit: '♣', red: false,
-      label: '5 — Medio',
-      explain: 'Task significativo con qualche incognita. Potrebbe toccare più layer o richiedere un piccolo design.' },
-    { val: '8',  suit: '♠', red: false,
-      label: '8 — Complesso',
-      explain: 'Alta complessità tecnica o molte dipendenze. Rischio di imprevisti. Valuta di spezzarla o approfondire prima.' },
-    { val: '13', suit: '♥', red: true,
-      label: '13 — Molto complesso',
-      explain: 'Effort elevato, incertezze significative. Considerare fortemente di suddividerla in sotto-task più gestibili.' },
-    { val: '21', suit: '♦', red: true,
-      label: '21 — Epico',
-      explain: 'Troppo grande per uno sprint. Va quasi certamente spezzata in story più piccole prima di procedere.' },
-    { val: '?',  suit: '♣', red: false,
-      label: '? — Informazioni insufficienti',
-      explain: 'Non abbiamo abbastanza dettagli per stimare. Serve un\'analisi o una conversazione con il product owner prima di votare.' },
-    { val: '☕', suit: '♠', red: false,
-      label: '☕ — Pausa / Da spezzare',
-      explain: 'La card è troppo vaga o troppo grande. Il team si ferma, la ridefinisce o la divide in task più piccoli.' },
-  ];
+/* ── Firebase ────────────────────────────────────────────── */
+const FB_CONFIG = {
+  apiKey:     "AIzaSyA7YbK9xW2OiGXZu55mvlTLSw2enQf4Efg",
+  authDomain: "blog-a5907.firebaseapp.com",
+  projectId:  "blog-a5907",
+};
+const app = getApps().length ? getApp() : initializeApp(FB_CONFIG);
+const db  = getFirestore(app);
 
-  const STORAGE_KEY = 'pp_sprint_v2';
-  let cards = [];
+/* ── Voti config ─────────────────────────────────────────── */
+const VOTES = [
+  { val:'1',  suit:'♠', red:false, label:'1 — Triviale',            explain:'Compito banale, già fatto decine di volte. Nessun rischio. Si chiude in meno di un\'ora.' },
+  { val:'2',  suit:'♥', red:true,  label:'2 — Semplice',            explain:'Piccola modifica con logica chiara. Qualche dettaglio da verificare, nessuna sorpresa attesa.' },
+  { val:'3',  suit:'♦', red:true,  label:'3 — Piccolo-medio',       explain:'Richiede un po\' di analisi o tocca più file. Effort contenuto ma non trascurabile.' },
+  { val:'5',  suit:'♣', red:false, label:'5 — Medio',               explain:'Task significativo con qualche incognita. Può toccare più layer o richiedere un piccolo design.' },
+  { val:'8',  suit:'♠', red:false, label:'8 — Complesso',           explain:'Alta complessità tecnica o molte dipendenze. Valuta di spezzarla o approfondire prima.' },
+  { val:'13', suit:'♥', red:true,  label:'13 — Molto complesso',    explain:'Effort elevato, incertezze significative. Considera di suddividerla in sotto-task.' },
+  { val:'21', suit:'♦', red:true,  label:'21 — Epico',              explain:'Troppo grande per uno sprint. Va quasi certamente spezzata prima di procedere.' },
+  { val:'?',  suit:'♣', red:false, label:'? — Informazioni mancanti', explain:'Non abbiamo abbastanza dettagli. Serve analisi o conversazione col product owner.' },
+  { val:'☕', suit:'♠', red:false, label:'☕ — Da spezzare',         explain:'Card troppo vaga o grande. Il team si ferma, la ridefinisce o la divide.' },
+];
+const SUITS  = ['♠','♥','♦','♣'];
+const COLORS = ['#1a1a1a','#c0392b','#c0392b','#1a1a1a'];
 
-  /* ── Persistenza ─────────────────────────────────────────── */
-  function save() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(cards)); } catch(e) {}
+/* ── Stato locale ────────────────────────────────────────── */
+let state = {
+  sessionCode:    null,
+  isFacilitator:  false,
+  myName:         null,
+  unsubscribe:    null,
+  setupMembers:   [],
+  setupCards:     [],
+  myVotes:        {},   // cardId → val (locale, non inviato finché non confermato)
+  selectedFinal:  null,
+};
+
+/* ── Utilità ─────────────────────────────────────────────── */
+function genCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  return Array.from({length:5}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+}
+function suitFor(i)  { return SUITS[i % 4]; }
+function colorFor(i) { return COLORS[i % 4]; }
+function voteInfo(v) { return VOTES.find(x => x.val === v) || {label: v, explain:''}; }
+
+function showScreen(id) {
+  document.querySelectorAll('.pp-screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function el(id) { return document.getElementById(id); }
+
+/* ══════════════════════════════════════════════════════════ */
+/* SCREEN: Welcome                                           */
+/* ══════════════════════════════════════════════════════════ */
+el('btnCreateSession').addEventListener('click', () => {
+  state.isFacilitator = true;
+  state.sessionCode   = genCode();
+  state.setupMembers  = [];
+  state.setupCards    = [];
+  el('setupCodeBadge').textContent = state.sessionCode;
+  renderSetupMembers();
+  renderSetupCards();
+  showScreen('screenSetup');
+});
+
+el('btnJoinSession').addEventListener('click', joinSession);
+el('joinCodeInput').addEventListener('keydown', e => { if (e.key === 'Enter') joinSession(); });
+
+async function joinSession() {
+  const code = el('joinCodeInput').value.trim().toUpperCase();
+  const name = el('joinNameInput').value.trim();
+  if (!code || code.length < 4) { showJoinError('Inserisci un codice sessione valido.'); return; }
+  if (!name) { showJoinError('Inserisci il tuo nome.'); return; }
+
+  el('joinError').style.display = 'none';
+  el('btnJoinSession').disabled = true;
+  el('btnJoinSession').textContent = 'Connessione…';
+
+  try {
+    const snap = await getDoc(doc(db, 'poker_sessions', code));
+    if (!snap.exists()) { showJoinError('Sessione non trovata. Controlla il codice.'); return; }
+    state.sessionCode   = code;
+    state.isFacilitator = false;
+    state.myName        = name;
+    startListening();
+  } catch(e) {
+    showJoinError('Errore di connessione. Riprova.');
+  } finally {
+    el('btnJoinSession').disabled = false;
+    el('btnJoinSession').textContent = 'Unisciti alla sessione';
   }
-  function load() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) cards = JSON.parse(raw);
-    } catch(e) { cards = []; }
-  }
+}
 
-  /* ── Utilità ─────────────────────────────────────────────── */
-  let _id = Date.now();
-  function uid() { return 'c' + (++_id); }
+function showJoinError(msg) {
+  const div = el('joinError');
+  div.className = 'pp-alert pp-alert-error';
+  div.textContent = msg;
+  div.style.display = 'block';
+}
 
-  const SUITS = ['♠','♥','♦','♣'];
-  function suitForIndex(i) { return SUITS[i % SUITS.length]; }
+/* ══════════════════════════════════════════════════════════ */
+/* SCREEN: Setup                                             */
+/* ══════════════════════════════════════════════════════════ */
+el('btnCopyCode').addEventListener('click', () => {
+  navigator.clipboard.writeText(state.sessionCode).then(() => {
+    el('btnCopyCode').textContent = '✓ Copiato!';
+    setTimeout(() => { el('btnCopyCode').innerHTML = '&#128203; Copia'; }, 2000);
+  });
+});
 
-  function voteInfo(v) {
-    return VOTE_CONFIG.find(c => c.val === v) || { label: v, explain: '' };
-  }
+el('btnAddMember').addEventListener('click', addMember);
+el('memberInput').addEventListener('keydown', e => { if (e.key === 'Enter') addMember(); });
 
-  /* ── Render ──────────────────────────────────────────────── */
-  function render() {
-    const list    = document.getElementById('ppCardList');
-    const empty   = document.getElementById('ppEmpty');
-    const countEl = document.getElementById('ppCardCount');
+function addMember() {
+  const name = el('memberInput').value.trim();
+  if (!name || state.setupMembers.includes(name)) return;
+  state.setupMembers.push(name);
+  el('memberInput').value = '';
+  el('memberInput').focus();
+  renderSetupMembers();
+}
 
-    Array.from(list.querySelectorAll('.pp-card-wrap')).forEach(el => el.remove());
-
-    if (cards.length === 0) {
-      empty.style.display = '';
-      countEl.textContent = '';
-    } else {
-      empty.style.display = 'none';
-      countEl.textContent = '(' + cards.length + ')';
-      cards.forEach((card, idx) => list.appendChild(buildCardEl(card, idx)));
-    }
-
-    renderProgress();
-    renderSummary();
-  }
-
-  function buildCardEl(card, idx) {
-    const suit   = suitForIndex(idx);
-    const isRed  = suit === '♥' || suit === '♦';
-    const corner = String(idx + 1);
-
-    const wrap = document.createElement('div');
-    wrap.className = 'pp-card-wrap';
-    wrap.dataset.id = card.id;
-
-    /* ── Carta da poker ── */
-    const playing = document.createElement('div');
-    playing.className = 'pp-playing-card' + (card.vote ? ' voted' : '');
-
-    // Angolo top-left
-    const cornerTL = document.createElement('div');
-    cornerTL.className = 'pp-card-corner';
-    cornerTL.innerHTML = '<span class="pp-corner-index" style="color:' + (isRed ? '#c0392b' : '#1a1a1a') + '">' + corner + '</span>'
-                       + '<span class="pp-corner-suit">' + suit + '</span>';
-    playing.appendChild(cornerTL);
-
-    // Seme grande al centro
-    const suitCenter = document.createElement('div');
-    suitCenter.className = 'pp-card-suit-center';
-    suitCenter.textContent = suit;
-    playing.appendChild(suitCenter);
-
-    // Angolo bottom-right
-    const cornerBR = document.createElement('div');
-    cornerBR.className = 'pp-card-corner-br';
-    cornerBR.innerHTML = '<span class="pp-corner-index" style="color:' + (isRed ? '#c0392b' : '#1a1a1a') + '">' + corner + '</span>'
-                       + '<span class="pp-corner-suit">' + suit + '</span>';
-    playing.appendChild(cornerBR);
-
-    // Tasto elimina
-    const del = document.createElement('button');
-    del.className = 'pp-card-delete';
-    del.title = 'Rimuovi card';
-    del.textContent = '✕';
-    del.addEventListener('click', () => {
-      cards = cards.filter(c => c.id !== card.id);
-      save(); render();
+function renderSetupMembers() {
+  const wrap = el('memberTags');
+  wrap.innerHTML = '';
+  state.setupMembers.forEach(name => {
+    const tag = document.createElement('span');
+    tag.className = 'pp-tag';
+    tag.innerHTML = name + ' <button title="Rimuovi">✕</button>';
+    tag.querySelector('button').addEventListener('click', () => {
+      state.setupMembers = state.setupMembers.filter(n => n !== name);
+      renderSetupMembers();
     });
-    playing.appendChild(del);
+    wrap.appendChild(tag);
+  });
+}
 
-    // Body carta
-    const body = document.createElement('div');
-    body.className = 'pp-card-body';
+el('btnAddCard').addEventListener('click', addCard);
+el('cardTitleInput').addEventListener('keydown', e => { if (e.key === 'Enter') addCard(); });
+el('btnClearCard').addEventListener('click', () => {
+  el('cardTitleInput').value = '';
+  el('cardDescInput').value = '';
+  el('cardTitleInput').focus();
+});
 
-    const title = document.createElement('p');
-    title.className = 'pp-card-title';
-    title.textContent = card.title;
-    body.appendChild(title);
+function addCard() {
+  const title = el('cardTitleInput').value.trim();
+  if (!title) { el('cardTitleInput').focus(); return; }
+  const desc = el('cardDescInput').value.trim();
+  state.setupCards.push({ id: 'c' + Date.now(), title, desc });
+  el('cardTitleInput').value = '';
+  el('cardDescInput').value = '';
+  el('cardTitleInput').focus();
+  renderSetupCards();
+}
 
-    if (card.desc) {
-      const desc = document.createElement('p');
-      desc.className = 'pp-card-desc';
-      desc.textContent = card.desc;
-      body.appendChild(desc);
-    }
+function renderSetupCards() {
+  const list = el('setupCardList');
+  list.innerHTML = '';
+  state.setupCards.forEach((card, i) => {
+    const div = document.createElement('div');
+    div.className = 'pp-card-item';
+    div.innerHTML = `
+      <div class="pp-card-item-text">
+        <div class="pp-card-item-title">${i+1}. ${escHtml(card.title)}</div>
+        ${card.desc ? '<div class="pp-card-item-desc">'+escHtml(card.desc)+'</div>' : ''}
+      </div>
+      <button title="Rimuovi">✕</button>`;
+    div.querySelector('button').addEventListener('click', () => {
+      state.setupCards.splice(i, 1);
+      renderSetupCards();
+    });
+    list.appendChild(div);
+  });
+}
 
-    if (card.vote) {
-      const badge = document.createElement('div');
-      badge.className = 'pp-card-badge-voted';
-      badge.innerHTML = '&#10003; Votata: <b style="margin-left:0.25rem">' + card.vote + ' pt</b>';
-      body.appendChild(badge);
-    }
+el('btnAbortSetup').addEventListener('click', () => { state.sessionCode = null; showScreen('screenWelcome'); });
 
-    playing.appendChild(body);
-    wrap.appendChild(playing);
+el('btnStartSession').addEventListener('click', async () => {
+  if (state.setupCards.length === 0) {
+    const e = el('setupError');
+    e.className = 'pp-alert pp-alert-error';
+    e.textContent = 'Aggiungi almeno una card prima di avviare.';
+    e.style.display = 'block';
+    return;
+  }
+  el('setupError').style.display = 'none';
+  el('btnStartSession').disabled = true;
+  el('btnStartSession').textContent = 'Avvio…';
 
-    /* ── Voti: mini-carte ── */
-    const votesLabel = document.createElement('div');
-    votesLabel.className = 'pp-votes-label';
-    votesLabel.textContent = 'Seleziona la stima';
-    wrap.appendChild(votesLabel);
+  const sessionData = {
+    createdAt:    serverTimestamp(),
+    members:      state.setupMembers,
+    cards:        state.setupCards,
+    currentCard:  0,
+    status:       'voting',   // voting | revealed | finished
+    votes:        {},         // { cardId: { memberName: value } }
+    finalVotes:   {},         // { cardId: value }
+  };
 
-    const votesRow = document.createElement('div');
-    votesRow.className = 'pp-votes';
+  try {
+    await setDoc(doc(db, 'poker_sessions', state.sessionCode), sessionData);
+    state.myName = 'Facilitatore';
+    startListening();
+  } catch(e) {
+    el('setupError').className = 'pp-alert pp-alert-error';
+    el('setupError').textContent = 'Errore nel creare la sessione. Riprova.';
+    el('setupError').style.display = 'block';
+    el('btnStartSession').disabled = false;
+    el('btnStartSession').textContent = '▶️ Avvia sessione';
+  }
+});
 
-    VOTE_CONFIG.forEach(vc => {
+/* ══════════════════════════════════════════════════════════ */
+/* Listener Firestore real-time                              */
+/* ══════════════════════════════════════════════════════════ */
+function startListening() {
+  if (state.unsubscribe) state.unsubscribe();
+  state.unsubscribe = onSnapshot(
+    doc(db, 'poker_sessions', state.sessionCode),
+    snap => { if (snap.exists()) renderSession(snap.data()); },
+    err  => console.error('Firestore error', err)
+  );
+}
+
+function renderSession(data) {
+  const { status, cards, currentCard, votes, finalVotes, members } = data;
+  const isFac   = state.isFacilitator;
+  const cardIdx = currentCard ?? 0;
+  const card    = cards[cardIdx];
+
+  // ── Waiting: sessione non ancora avviata (votante arrivato prima) ──
+  if (!card) {
+    el('waitingCodeBadge').textContent = state.sessionCode;
+    el('waitingRoleLabel').textContent = isFac ? '👑 Facilitatore' : '👤 ' + state.myName;
+    showScreen('screenWaiting');
+    return;
+  }
+
+  const suit   = suitFor(cardIdx);
+  const color  = colorFor(cardIdx);
+  const cardVotes = (votes && votes[card.id]) ? votes[card.id] : {};
+
+  if (status === 'finished') {
+    renderSummary(cards, finalVotes);
+    return;
+  }
+
+  if (status === 'voting') {
+    renderVotingScreen(card, cardIdx, cards.length, cardVotes, members, isFac, suit, color);
+    return;
+  }
+
+  if (status === 'revealed') {
+    renderRevealScreen(card, cardIdx, cards.length, cardVotes, members, finalVotes, isFac);
+    return;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════ */
+/* SCREEN: Voting                                            */
+/* ══════════════════════════════════════════════════════════ */
+function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, color) {
+  el('votingRoleLabel').textContent = isFac ? '👑 Facilitatore' : '👤 ' + state.myName;
+  el('votingCodeBadge').textContent = state.sessionCode;
+  el('votingCardCounter').textContent = (idx+1) + ' / ' + total;
+
+  // Carta da poker
+  el('vcCornerNum').textContent   = idx+1;
+  el('vcCornerSuit').textContent  = suit;
+  el('vcCornerNum2').textContent  = idx+1;
+  el('vcCornerSuit2').textContent = suit;
+  el('vcSuitBg').textContent      = suit;
+  el('vcCornerNum').style.color   = color;
+  el('vcCornerNum2').style.color  = color;
+  el('vcTitle').textContent = card.title;
+  el('vcDesc').textContent  = card.desc || '';
+  el('vcDesc').style.display = card.desc ? '' : 'none';
+  el('vcIssueKey').textContent = 'Card ' + (idx+1);
+
+  // Progress votanti
+  const memberList = members && members.length > 0 ? members : Object.keys(cardVotes);
+  const votedCount = Object.keys(cardVotes).length;
+  const totalCount = memberList.length || '?';
+  el('voteProgressCount').textContent = votedCount + ' / ' + totalCount;
+  const pct = memberList.length > 0 ? Math.round(votedCount / memberList.length * 100) : 0;
+  el('voteProgressBar').style.width = pct + '%';
+
+  const vList = el('votersList');
+  vList.innerHTML = '';
+  if (memberList.length > 0) {
+    memberList.forEach(m => {
+      const chip = document.createElement('span');
+      chip.className = 'pp-voter-chip' + (cardVotes[m] ? ' voted' : '');
+      chip.textContent = m;
+      vList.appendChild(chip);
+    });
+  }
+
+  // Mini-carte voto (nascosto per facilitatore)
+  const myVote = cardVotes[state.myName] || state.myVotes[card.id] || null;
+  if (!isFac) {
+    el('votingSection').style.display = '';
+    const vCards = el('voteCards');
+    vCards.innerHTML = '';
+    VOTES.forEach(vc => {
       const btn = document.createElement('button');
-      btn.className = 'pp-vote-card' + (vc.red ? ' red' : '') + (card.vote === vc.val ? ' selected' : '');
+      btn.className = 'pp-vote-card' + (vc.red ? ' red' : '') + (myVote === vc.val ? ' selected' : '');
       btn.dataset.val  = vc.val;
       btn.dataset.suit = vc.suit;
       btn.textContent  = vc.val;
       btn.title        = vc.label;
-      btn.addEventListener('click', () => {
-        const c = cards.find(x => x.id === card.id);
-        if (c) { c.vote = (c.vote === vc.val) ? null : vc.val; save(); render(); }
-      });
-      votesRow.appendChild(btn);
+      btn.addEventListener('click', () => castVote(card.id, vc.val));
+      vCards.appendChild(btn);
     });
-    wrap.appendChild(votesRow);
-
-    /* ── Spiegazione voto ── */
-    if (card.vote) {
-      const info = voteInfo(card.vote);
-      const explain = document.createElement('div');
-      explain.className = 'pp-vote-explain';
-      explain.innerHTML = '<strong>' + info.label + '</strong>' + info.explain;
-      wrap.appendChild(explain);
+    // Spiegazione
+    const box = el('voteExplainBox');
+    if (myVote) {
+      const info = voteInfo(myVote);
+      box.innerHTML = `<div class="pp-vote-explain"><strong>${info.label}</strong>${info.explain}</div>`;
+    } else {
+      box.innerHTML = '';
     }
-
-    return wrap;
+    el('revealSection').style.display = 'none';
+  } else {
+    el('votingSection').style.display = 'none';
+    el('voteExplainBox').innerHTML = '';
+    el('revealSection').style.display = '';
+    const allVoted = memberList.length > 0 && votedCount >= memberList.length;
+    el('revealHint').style.display = allVoted ? 'none' : '';
   }
 
-  /* ── Progress ─────────────────────────────────────────────── */
-  function renderProgress() {
-    const row   = document.getElementById('ppProgressRow');
-    const label = document.getElementById('ppProgressLabel');
-    const fill  = document.getElementById('ppProgressFill');
-    if (cards.length === 0) { row.style.display = 'none'; return; }
-    row.style.display = '';
-    const voted = cards.filter(c => c.vote).length;
-    const pct   = Math.round((voted / cards.length) * 100);
-    label.textContent = voted + ' / ' + cards.length + ' votate';
-    fill.style.width  = pct + '%';
+  showScreen('screenVoting');
+}
+
+async function castVote(cardId, val) {
+  state.myVotes[cardId] = val;
+  // aggiorna subito UI locale
+  el('voteCards').querySelectorAll('.pp-vote-card').forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.val === val);
+  });
+  const info = voteInfo(val);
+  el('voteExplainBox').innerHTML = `<div class="pp-vote-explain"><strong>${info.label}</strong>${info.explain}</div>`;
+
+  // scrivi su Firestore
+  try {
+    const path = 'votes.' + cardId + '.' + state.myName;
+    await updateDoc(doc(db, 'poker_sessions', state.sessionCode), { [path]: val });
+  } catch(e) { console.error('Vote error', e); }
+}
+
+el('btnReveal').addEventListener('click', async () => {
+  el('btnReveal').disabled = true;
+  try {
+    await updateDoc(doc(db, 'poker_sessions', state.sessionCode), { status: 'revealed' });
+  } catch(e) { el('btnReveal').disabled = false; }
+});
+
+/* ══════════════════════════════════════════════════════════ */
+/* SCREEN: Reveal                                            */
+/* ══════════════════════════════════════════════════════════ */
+function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, isFac) {
+  el('revealRoleLabel').textContent = isFac ? '👑 Facilitatore' : '👤 ' + state.myName;
+  el('revealCodeBadge').textContent = state.sessionCode;
+  el('revealCardCounter').textContent = (idx+1) + ' / ' + total;
+  el('revealCardTitle').textContent = card.title;
+
+  // Calcola spread
+  const numericVotes = Object.entries(cardVotes)
+    .map(([n,v]) => ({ name: n, val: v, num: parseInt(v) }));
+  const nums    = numericVotes.filter(x => !isNaN(x.num)).map(x => x.num);
+  const maxVal  = nums.length ? Math.max(...nums) : null;
+  const minVal  = nums.length ? Math.min(...nums) : null;
+  const hasDivergence = nums.length >= 2 && (maxVal - minVal) >= 3;
+
+  // Grid voti
+  const grid = el('revealGrid');
+  grid.innerHTML = '';
+  const allNames = (members && members.length > 0) ? members : Object.keys(cardVotes);
+  allNames.forEach(name => {
+    const v   = cardVotes[name];
+    const num = parseInt(v);
+    const chip = document.createElement('div');
+    chip.className = 'pp-reveal-chip';
+    if (!isNaN(num) && num === maxVal && hasDivergence) chip.classList.add('high');
+    if (!isNaN(num) && num === minVal && hasDivergence) chip.classList.add('low');
+    chip.innerHTML = `
+      <span class="pp-reveal-name">${escHtml(name)}</span>
+      <span class="pp-reveal-value${v === '?' || v === '☕' ? '' : ''}">${v ? escHtml(v) : '—'}</span>`;
+    grid.appendChild(chip);
+  });
+
+  // Divergenza
+  const divBox = el('divergenceBox');
+  if (hasDivergence) {
+    divBox.style.display = '';
+    divBox.innerHTML = `<div class="pp-divergence">
+      <strong>&#9888;&#65039; Divergenza rilevata (${minVal} → ${maxVal} pt)</strong>
+      I voti sono distanti. Discuti le stime prima di procedere — chi ha votato alto e chi basso motiva la scelta.
+    </div>`;
+  } else {
+    divBox.style.display = 'none';
   }
 
-  /* ── Summary ──────────────────────────────────────────────── */
-  function renderSummary() {
-    const box   = document.getElementById('ppSummary');
-    const tbody = document.getElementById('ppSummaryBody');
-    const total = document.getElementById('ppTotal');
-    if (cards.length === 0) { box.style.display = 'none'; return; }
-    box.style.display = '';
-
-    tbody.innerHTML = '';
-    let sum = 0;
-    let allVoted = true;
-    cards.forEach(card => {
-      const tr = document.createElement('tr');
-
-      const tdTitle = document.createElement('td');
-      tdTitle.textContent = card.title;
-
-      const tdVote = document.createElement('td');
-      const tdExpl = document.createElement('td');
-
-      if (card.vote) {
-        tdVote.textContent = card.vote;
-        const n = parseInt(card.vote);
-        if (!isNaN(n)) sum += n;
-        tdExpl.textContent = voteInfo(card.vote).label;
-      } else {
-        tdVote.innerHTML = '<span class="pp-pending-badge">—</span>';
-        tdExpl.innerHTML = '<span class="pp-pending-badge">non votata</span>';
-        allVoted = false;
-      }
-
-      tr.appendChild(tdTitle);
-      tr.appendChild(tdVote);
-      tr.appendChild(tdExpl);
-      tbody.appendChild(tr);
+  // Voto finale (solo facilitatore)
+  const finalPanel  = el('finalVotePanel');
+  const revealActs  = el('revealActions');
+  const revealWait  = el('revealWaiting');
+  if (isFac) {
+    finalPanel.style.display = '';
+    revealActs.style.display = '';
+    revealWait.style.display = 'none';
+    // mini-carte per voto finale
+    const fCards = el('finalVoteCards');
+    fCards.innerHTML = '';
+    const existing = finalVotes && finalVotes[card.id];
+    VOTES.forEach(vc => {
+      const btn = document.createElement('button');
+      btn.className = 'pp-vote-card' + (vc.red ? ' red' : '') + (existing === vc.val ? ' selected' : '');
+      btn.dataset.val  = vc.val;
+      btn.dataset.suit = vc.suit;
+      btn.textContent  = vc.val;
+      btn.title        = vc.label;
+      btn.addEventListener('click', () => selectFinalVote(card.id, vc.val));
+      fCards.appendChild(btn);
     });
-
-    const numVoted = cards.filter(c => c.vote && !isNaN(parseInt(c.vote)));
-    const partial  = numVoted.reduce((a, c) => a + parseInt(c.vote), 0);
-    total.textContent = (allVoted && cards.length > 0)
-      ? sum + ' pt'
-      : partial + ' pt (parziale)';
+    state.selectedFinal = existing || null;
+    el('btnNextCard').disabled = !existing;
+  } else {
+    finalPanel.style.display  = 'none';
+    revealActs.style.display  = 'none';
+    revealWait.style.display  = '';
   }
 
-  /* ── Copia riepilogo ─────────────────────────────────────── */
-  document.getElementById('ppCopyBtn').addEventListener('click', () => {
-    let text = '🃏 Planning Poker — Sprint\n\n';
-    cards.forEach((c, i) => {
-      const info = c.vote ? voteInfo(c.vote).label : '—';
-      text += (i+1) + '. ' + c.title + '\n   → ' + (c.vote || '—') + ' pt  |  ' + info + '\n\n';
-    });
-    const numVoted = cards.filter(c => c.vote && !isNaN(parseInt(c.vote)));
-    const sum = numVoted.reduce((a, c) => a + parseInt(c.vote), 0);
-    text += 'Totale: ' + sum + ' story point' + (numVoted.length < cards.length ? ' (parziale)' : '');
-    navigator.clipboard.writeText(text).then(() => {
-      const btn = document.getElementById('ppCopyBtn');
-      btn.textContent = '✓ Copiato!';
-      setTimeout(() => { btn.innerHTML = '&#128203; Copia riepilogo'; }, 2000);
-    }).catch(() => { alert(text); });
-  });
+  showScreen('screenReveal');
+}
 
-  /* ── Reset sprint ────────────────────────────────────────── */
-  document.getElementById('ppResetBtn').addEventListener('click', () => {
-    if (!confirm('Resettare lo sprint? Tutte le card e i voti verranno eliminati.')) return;
-    cards = []; save(); render();
+async function selectFinalVote(cardId, val) {
+  state.selectedFinal = val;
+  el('finalVoteCards').querySelectorAll('.pp-vote-card').forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.val === val);
   });
+  el('btnNextCard').disabled = false;
+  try {
+    const path = 'finalVotes.' + cardId;
+    await updateDoc(doc(db, 'poker_sessions', state.sessionCode), { [path]: val });
+  } catch(e) { console.error('Final vote error', e); }
+}
 
-  /* ── Aggiungi card ───────────────────────────────────────── */
-  document.getElementById('ppAddBtn').addEventListener('click', addCard);
-  document.getElementById('ppTitle').addEventListener('keydown', e => {
-    if (e.key === 'Enter') addCard();
+el('btnRevote').addEventListener('click', async () => {
+  try {
+    // svuota voti card corrente e torna a voting
+    const snap = await getDoc(doc(db, 'poker_sessions', state.sessionCode));
+    if (!snap.exists()) return;
+    const data = snap.data();
+    const cardId = data.cards[data.currentCard].id;
+    const votes = data.votes || {};
+    delete votes[cardId];
+    await updateDoc(doc(db, 'poker_sessions', state.sessionCode), { votes, status: 'voting' });
+    // resetta voto locale
+    delete state.myVotes[cardId];
+  } catch(e) { console.error('Revote error', e); }
+});
+
+el('btnNextCard').addEventListener('click', async () => {
+  if (!state.selectedFinal) return;
+  try {
+    const snap = await getDoc(doc(db, 'poker_sessions', state.sessionCode));
+    if (!snap.exists()) return;
+    const data = snap.data();
+    const nextIdx = (data.currentCard ?? 0) + 1;
+    if (nextIdx >= data.cards.length) {
+      await updateDoc(doc(db, 'poker_sessions', state.sessionCode), { status: 'finished' });
+    } else {
+      await updateDoc(doc(db, 'poker_sessions', state.sessionCode), {
+        currentCard: nextIdx, status: 'voting'
+      });
+      state.selectedFinal = null;
+    }
+  } catch(e) { console.error('Next card error', e); }
+});
+
+/* ══════════════════════════════════════════════════════════ */
+/* SCREEN: Summary                                           */
+/* ══════════════════════════════════════════════════════════ */
+function renderSummary(cards, finalVotes) {
+  const tbody = el('summaryBody');
+  tbody.innerHTML = '';
+  let total = 0;
+  cards.forEach(card => {
+    const v = finalVotes && finalVotes[card.id];
+    const n = parseInt(v);
+    if (!isNaN(n)) total += n;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${escHtml(card.title)}</td>
+      <td>${v ? escHtml(v) : '—'}</td>
+      <td style="font-size:0.78rem;color:var(--text-muted)">${v ? voteInfo(v).label : '<em>non stimata</em>'}</td>`;
+    tbody.appendChild(tr);
   });
-  document.getElementById('ppClearForm').addEventListener('click', () => {
-    document.getElementById('ppTitle').value = '';
-    document.getElementById('ppDesc').value  = '';
-    document.getElementById('ppTitle').focus();
+  el('summaryTotal').textContent = total + ' pt';
+  showScreen('screenSummary');
+}
+
+el('btnCopySummary').addEventListener('click', () => {
+  // legge dal DOM
+  const rows = Array.from(el('summaryBody').querySelectorAll('tr'));
+  let text = '🃏 Planning Poker — Riepilogo sprint\n\n';
+  rows.forEach((tr, i) => {
+    const cells = tr.querySelectorAll('td');
+    text += (i+1) + '. ' + cells[0].textContent + '  →  ' + cells[1].textContent + ' pt\n';
   });
+  text += '\nTotale: ' + el('summaryTotal').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    el('btnCopySummary').textContent = '✓ Copiato!';
+    setTimeout(() => { el('btnCopySummary').innerHTML = '&#128203; Copia riepilogo'; }, 2000);
+  }).catch(() => alert(text));
+});
 
-  function addCard() {
-    const title = document.getElementById('ppTitle').value.trim();
-    if (!title) { document.getElementById('ppTitle').focus(); return; }
-    const desc = document.getElementById('ppDesc').value.trim();
-    cards.push({ id: uid(), title, desc, vote: null });
-    save(); render();
-    document.getElementById('ppTitle').value = '';
-    document.getElementById('ppDesc').value  = '';
-    document.getElementById('ppTitle').focus();
-    document.getElementById('ppInstructions').removeAttribute('open');
-  }
+el('btnNewSession').addEventListener('click', () => {
+  if (state.unsubscribe) { state.unsubscribe(); state.unsubscribe = null; }
+  state = { sessionCode:null, isFacilitator:false, myName:null, unsubscribe:null, setupMembers:[], setupCards:[], myVotes:{}, selectedFinal:null };
+  el('joinCodeInput').value = '';
+  el('joinNameInput').value = '';
+  el('joinError').style.display = 'none';
+  showScreen('screenWelcome');
+});
 
-  /* ── Init ────────────────────────────────────────────────── */
-  load(); render();
-})();
+/* ── Escape HTML ─────────────────────────────────────────── */
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 </script>
