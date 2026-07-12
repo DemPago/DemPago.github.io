@@ -122,7 +122,9 @@ permalink: /app/planning-poker/
     0 8px 22px rgba(0,0,0,0.13),
     0 28px 60px rgba(0,0,0,0.20),
     0 52px 88px rgba(0,0,0,0.09);
-  display: flex; flex-direction: column; overflow: hidden;
+  display: flex; flex-direction: column;
+  /* clip-path invece di overflow:hidden: evita il flattening 3D del browser */
+  clip-path: inset(0 round 18px);
 }
 /* Doppio bordo interno — caratteristico delle carte da gioco */
 .pp-playing-card::before {
@@ -168,18 +170,6 @@ permalink: /app/planning-poker/
   gap: 0.5rem; text-align: center;
 }
 /* Ritratto face-card stile fante di Picche */
-.pp-card-portrait-wrap {
-  display: flex; justify-content: center;
-  margin: 0.15rem 0 0.3rem;
-}
-.pp-card-portrait {
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  border: 2.5px solid rgba(0,0,0,0.18);
-  object-fit: cover; object-position: top center;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.18);
-  filter: grayscale(12%) contrast(1.06);
-}
 .pp-card-issue-key {
   font-size: 0.62rem; font-weight: 800; color: var(--accent);
   text-transform: uppercase; letter-spacing: 0.14em;
@@ -458,16 +448,6 @@ permalink: /app/planning-poker/
   color: var(--accent) !important;
 }
 
-/* ── Mini-carta 13 — ritratto Lorenzo (King of Spades) ───── */
-.pp-vote-card-portrait {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  object-fit: cover; object-position: top center;
-  border: 1.5px solid rgba(0,0,0,0.14);
-  display: block; pointer-events: none;
-  filter: grayscale(10%) contrast(1.05);
-}
-
 /* ── Aggiungi membro live (facilitatore) ──────────────────── */
 .pp-add-member-bar {
   display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;
@@ -686,9 +666,6 @@ permalink: /app/planning-poker/
       </div>
       <div class="pp-card-body">
         <span class="pp-card-issue-key" id="vcIssueKey"></span>
-        <div class="pp-card-portrait-wrap">
-          <img class="pp-card-portrait" src="https://img-c.udemycdn.com/user/200_H/48810756_2aad.jpg" alt="Lorenzo">
-        </div>
         <p class="pp-card-title-main" id="vcTitle">—</p>
         <p class="pp-card-desc-main"  id="vcDesc"></p>
       </div>
@@ -1601,24 +1578,13 @@ function escHtml(s) {
 }
 
 /* ── Crea mini-carta voto ────────────────────────────────── */
-const LORENZO_IMG = 'https://img-c.udemycdn.com/user/200_H/48810756_2aad.jpg';
-
 function makeVoteCard(vc, isSelected, onClick) {
   const btn = document.createElement('button');
   btn.className = 'pp-vote-card' + (vc.red ? ' red' : '') + (isSelected ? ' selected' : '');
   btn.dataset.val  = vc.val;
   btn.dataset.suit = vc.suit;
   btn.title        = vc.label;
-  // Card 13 = King → ritratto di Lorenzo
-  if (vc.val === '13') {
-    const img = document.createElement('img');
-    img.className = 'pp-vote-card-portrait';
-    img.src = LORENZO_IMG;
-    img.alt = '';
-    btn.appendChild(img);
-  } else {
-    btn.textContent = vc.val;
-  }
+  btn.textContent  = vc.val;
   const suitSpan = document.createElement('span');
   suitSpan.className = 'pp-vote-card-suit';
   suitSpan.textContent = vc.suit;
