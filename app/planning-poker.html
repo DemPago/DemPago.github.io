@@ -8,7 +8,7 @@ permalink: /app/planning-poker/
 <style>
 /* ── Layout ───────────────────────────────────────────────── */
 .pp-app {
-  max-width: 720px;
+  max-width: 740px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -86,7 +86,7 @@ permalink: /app/planning-poker/
   font-weight: 600;
 }
 
-/* ── Sezione aggiungi card ────────────────────────────────── */
+/* ── Form aggiungi card ───────────────────────────────────── */
 .pp-add-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -153,100 +153,6 @@ permalink: /app/planning-poker/
 .pp-btn-ghost { background: var(--border); color: var(--text-muted); }
 .pp-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-/* ── Lista card ───────────────────────────────────────────── */
-.pp-cards-section h2 {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text);
-  margin: 0 0 0.75rem;
-}
-.pp-empty {
-  text-align: center;
-  color: var(--text-muted);
-  font-size: 0.88rem;
-  padding: 2rem 0;
-  border: 1px dashed var(--border);
-  border-radius: 10px;
-}
-
-/* ── Singola card ─────────────────────────────────────────── */
-.pp-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1rem 1.1rem;
-  margin-bottom: 0.75rem;
-  transition: border-color 0.2s;
-}
-.pp-card.voted { border-color: var(--accent); }
-.pp-card-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
-}
-.pp-card-info { flex: 1; min-width: 0; }
-.pp-card-title {
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--text);
-  margin: 0 0 0.2rem;
-  word-break: break-word;
-}
-.pp-card-desc {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin: 0;
-  word-break: break-word;
-}
-.pp-card-delete {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 1rem;
-  padding: 0.15rem 0.3rem;
-  border-radius: 5px;
-  flex-shrink: 0;
-  transition: color 0.15s, background 0.15s;
-}
-.pp-card-delete:hover { color: #e05c5c; background: rgba(224,92,92,0.08); }
-
-/* ── Voti ─────────────────────────────────────────────────── */
-.pp-votes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.6rem;
-}
-.pp-vote-btn {
-  border: 2px solid var(--border);
-  background: var(--bg);
-  color: var(--text);
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  min-width: 2.5rem;
-  height: 2.5rem;
-  padding: 0 0.5rem;
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s, color 0.15s, transform 0.1s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.pp-vote-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-.pp-vote-btn.selected {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #000;
-  transform: scale(1.1);
-}
-
 /* ── Barra avanzamento ────────────────────────────────────── */
 .pp-progress-row {
   display: flex;
@@ -268,6 +174,260 @@ permalink: /app/planning-poker/
   border-radius: 999px;
   transition: width 0.35s;
   width: 0%;
+}
+
+/* ── Sezione lista card ───────────────────────────────────── */
+.pp-cards-section h2 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 1rem;
+}
+.pp-empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  padding: 2.5rem 0;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+}
+
+/* ── Wrapper carta da poker ───────────────────────────────── */
+.pp-card-wrap {
+  margin-bottom: 1.5rem;
+}
+
+/* ── Carta da poker ───────────────────────────────────────── */
+.pp-playing-card {
+  position: relative;
+  background: #fafaf5;
+  border: 2px solid #c8c8b0;
+  border-radius: 14px;
+  padding: 0.9rem 1rem 1rem;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.6);
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s, border-color 0.2s;
+  overflow: hidden;
+}
+.pp-playing-card.voted {
+  border-color: var(--accent);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.22), 0 0 0 2px var(--accent);
+}
+
+/* pattern a rombi sottile in background */
+.pp-playing-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.025) 0, rgba(0,0,0,0.025) 1px, transparent 0, transparent 50%);
+  background-size: 14px 14px;
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+/* Angolo top-left */
+.pp-card-corner {
+  position: absolute;
+  top: 0.55rem;
+  left: 0.65rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  z-index: 1;
+}
+/* Angolo bottom-right (ruotato 180°) */
+.pp-card-corner-br {
+  position: absolute;
+  bottom: 0.55rem;
+  right: 0.65rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  transform: rotate(180deg);
+  z-index: 1;
+}
+.pp-corner-index {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  font-family: Georgia, serif;
+}
+.pp-corner-suit {
+  font-size: 0.75rem;
+  margin-top: 1px;
+}
+
+/* Centro carta: seme grande */
+.pp-card-suit-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3.5rem;
+  opacity: 0.07;
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+}
+
+/* Contenuto carta */
+.pp-card-body {
+  position: relative;
+  z-index: 1;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.pp-card-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+  margin: 0;
+  line-height: 1.35;
+  word-break: break-word;
+}
+.pp-card-desc {
+  font-size: 0.78rem;
+  color: #555;
+  margin: 0;
+  word-break: break-word;
+  line-height: 1.45;
+}
+.pp-card-badge-voted {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1a6e2e;
+  background: #d4f5dc;
+  border-radius: 5px;
+  padding: 0.15rem 0.5rem;
+  width: fit-content;
+}
+
+/* Tasto elimina */
+.pp-card-delete {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  color: #bbb;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.2rem 0.3rem;
+  border-radius: 5px;
+  transition: color 0.15s, background 0.15s;
+  z-index: 2;
+}
+.pp-card-delete:hover { color: #e05c5c; background: rgba(224,92,92,0.08); }
+
+/* ── Voti: mini-carte da poker ────────────────────────────── */
+.pp-votes-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin: 0.85rem 0 0.5rem;
+}
+.pp-votes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* mini carta da poker come bottone voto */
+.pp-vote-card {
+  position: relative;
+  width: 2.8rem;
+  height: 4rem;
+  background: #fafaf5;
+  border: 2px solid #c8c8b0;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: transform 0.12s, border-color 0.12s, box-shadow 0.12s;
+  user-select: none;
+  flex-shrink: 0;
+}
+.pp-vote-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.22);
+}
+.pp-vote-card.selected {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #000;
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.28);
+}
+/* angolino valore in alto a sinistra della mini carta */
+.pp-vote-card::before {
+  content: attr(data-val);
+  position: absolute;
+  top: 0.2rem;
+  left: 0.28rem;
+  font-size: 0.55rem;
+  font-weight: 800;
+  line-height: 1;
+  color: inherit;
+  opacity: 0.7;
+}
+/* seme piccolo in basso a destra */
+.pp-vote-card::after {
+  content: attr(data-suit);
+  position: absolute;
+  bottom: 0.2rem;
+  right: 0.28rem;
+  font-size: 0.6rem;
+  line-height: 1;
+  opacity: 0.5;
+  transform: rotate(180deg);
+}
+/* colore rosso per cuori e quadri */
+.pp-vote-card.red { color: #c0392b; }
+.pp-vote-card.red.selected { color: #7b0000; }
+
+/* ── Spiegazione voto ─────────────────────────────────────── */
+.pp-vote-explain {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--card);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  animation: fadeIn 0.2s ease;
+}
+.pp-vote-explain strong {
+  color: var(--text);
+  display: block;
+  margin-bottom: 0.2rem;
+  font-size: 0.88rem;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Riepilogo ────────────────────────────────────────────── */
@@ -303,10 +463,15 @@ permalink: /app/planning-poker/
   color: var(--text);
   vertical-align: top;
 }
-.pp-summary td:last-child {
+.pp-summary td:nth-child(2) {
   font-weight: 700;
   color: var(--accent);
   white-space: nowrap;
+  width: 5rem;
+}
+.pp-summary td:nth-child(3) {
+  font-size: 0.78rem;
+  color: var(--text-muted);
 }
 .pp-summary tr:last-child td { border-bottom: none; }
 .pp-total-row {
@@ -347,9 +512,9 @@ permalink: /app/planning-poker/
     <div class="pp-instr-body">
       <ol>
         <li>Aggiungi le <strong>user story</strong> o task dello sprint (titolo obbligatorio, descrizione opzionale).</li>
-        <li>Per ogni card seleziona il <strong>valore Fibonacci</strong> che stima la complessità/effort.</li>
-        <li>Quando tutte le card sono votate, il <strong>riepilogo</strong> mostra il totale dei punti.</li>
-        <li>Puoi copiare il riepilogo o <strong>resettare</strong> lo sprint per ricominciare.</li>
+        <li>Per ogni card clicca la <strong>mini-carta</strong> con il valore Fibonacci che stima la complessità.</li>
+        <li>Sotto ogni voto appare una <strong>spiegazione</strong> di cosa significa quel punteggio.</li>
+        <li>Quando tutte le card sono votate, il <strong>riepilogo</strong> mostra il totale punti con spiegazioni.</li>
       </ol>
       <strong>Scala Fibonacci:</strong>
       <div class="pp-fib-legend">
@@ -358,12 +523,12 @@ permalink: /app/planning-poker/
       </div>
       <p style="margin-top:0.6rem;">
         <strong>?</strong> = non abbastanza informazioni per stimare &nbsp;|&nbsp;
-        <strong>☕</strong> = pausa, card troppo grande o da spezzare
+        <strong>☕</strong> = card troppo grande, va spezzata
       </p>
     </div>
   </details>
 
-  <!-- Aggiungi card -->
+  <!-- Form aggiungi card -->
   <div class="pp-add-card">
     <h2>&#43; Aggiungi card</h2>
     <div class="pp-field">
@@ -399,11 +564,12 @@ permalink: /app/planning-poker/
   <!-- Riepilogo -->
   <div class="pp-summary" id="ppSummary" style="display:none;">
     <h2>&#128202; Riepilogo sprint</h2>
-    <table id="ppSummaryTable">
+    <table>
       <thead>
         <tr>
           <th>Card</th>
           <th>Punti</th>
+          <th>Significato</th>
         </tr>
       </thead>
       <tbody id="ppSummaryBody"></tbody>
@@ -422,9 +588,39 @@ permalink: /app/planning-poker/
 
 <script>
 (function () {
-  const VOTES = ['1','2','3','5','8','13','21','?','☕'];
-  const STORAGE_KEY = 'pp_sprint_v1';
 
+  /* ── Configurazione voti ─────────────────────────────────── */
+  const VOTE_CONFIG = [
+    { val: '1',  suit: '♠', red: false,
+      label: '1 — Triviale',
+      explain: 'Compito banale, già fatto decine di volte. Nessun rischio, nessuna dipendenza. Si completa in meno di un\'ora.' },
+    { val: '2',  suit: '♥', red: true,
+      label: '2 — Semplice',
+      explain: 'Piccola modifica con logica chiara. Qualche dettaglio da verificare, ma nessuna sorpresa attesa.' },
+    { val: '3',  suit: '♦', red: true,
+      label: '3 — Piccolo-medio',
+      explain: 'Richiede un po\' di analisi o tocca più file/componenti. Effort contenuto ma non trascurabile.' },
+    { val: '5',  suit: '♣', red: false,
+      label: '5 — Medio',
+      explain: 'Task significativo con qualche incognita. Potrebbe toccare più layer o richiedere un piccolo design.' },
+    { val: '8',  suit: '♠', red: false,
+      label: '8 — Complesso',
+      explain: 'Alta complessità tecnica o molte dipendenze. Rischio di imprevisti. Valuta di spezzarla o approfondire prima.' },
+    { val: '13', suit: '♥', red: true,
+      label: '13 — Molto complesso',
+      explain: 'Effort elevato, incertezze significative. Considerare fortemente di suddividerla in sotto-task più gestibili.' },
+    { val: '21', suit: '♦', red: true,
+      label: '21 — Epico',
+      explain: 'Troppo grande per uno sprint. Va quasi certamente spezzata in story più piccole prima di procedere.' },
+    { val: '?',  suit: '♣', red: false,
+      label: '? — Informazioni insufficienti',
+      explain: 'Non abbiamo abbastanza dettagli per stimare. Serve un\'analisi o una conversazione con il product owner prima di votare.' },
+    { val: '☕', suit: '♠', red: false,
+      label: '☕ — Pausa / Da spezzare',
+      explain: 'La card è troppo vaga o troppo grande. Il team si ferma, la ridefinisce o la divide in task più piccoli.' },
+  ];
+
+  const STORAGE_KEY = 'pp_sprint_v2';
   let cards = [];
 
   /* ── Persistenza ─────────────────────────────────────────── */
@@ -438,18 +634,24 @@ permalink: /app/planning-poker/
     } catch(e) { cards = []; }
   }
 
-  /* ── ID univoco ──────────────────────────────────────────── */
+  /* ── Utilità ─────────────────────────────────────────────── */
   let _id = Date.now();
   function uid() { return 'c' + (++_id); }
 
+  const SUITS = ['♠','♥','♦','♣'];
+  function suitForIndex(i) { return SUITS[i % SUITS.length]; }
+
+  function voteInfo(v) {
+    return VOTE_CONFIG.find(c => c.val === v) || { label: v, explain: '' };
+  }
+
   /* ── Render ──────────────────────────────────────────────── */
   function render() {
-    const list  = document.getElementById('ppCardList');
-    const empty = document.getElementById('ppEmpty');
+    const list    = document.getElementById('ppCardList');
+    const empty   = document.getElementById('ppEmpty');
     const countEl = document.getElementById('ppCardCount');
 
-    // rimuove le card precedenti (ma non #ppEmpty)
-    Array.from(list.querySelectorAll('.pp-card')).forEach(el => el.remove());
+    Array.from(list.querySelectorAll('.pp-card-wrap')).forEach(el => el.remove());
 
     if (cards.length === 0) {
       empty.style.display = '';
@@ -457,72 +659,117 @@ permalink: /app/planning-poker/
     } else {
       empty.style.display = 'none';
       countEl.textContent = '(' + cards.length + ')';
-      cards.forEach(card => list.appendChild(buildCardEl(card)));
+      cards.forEach((card, idx) => list.appendChild(buildCardEl(card, idx)));
     }
 
     renderProgress();
     renderSummary();
   }
 
-  function buildCardEl(card) {
-    const div = document.createElement('div');
-    div.className = 'pp-card' + (card.vote ? ' voted' : '');
-    div.dataset.id = card.id;
+  function buildCardEl(card, idx) {
+    const suit   = suitForIndex(idx);
+    const isRed  = suit === '♥' || suit === '♦';
+    const corner = String(idx + 1);
 
-    const top = document.createElement('div');
-    top.className = 'pp-card-top';
+    const wrap = document.createElement('div');
+    wrap.className = 'pp-card-wrap';
+    wrap.dataset.id = card.id;
 
-    const info = document.createElement('div');
-    info.className = 'pp-card-info';
-    const title = document.createElement('p');
-    title.className = 'pp-card-title';
-    title.textContent = card.title;
-    info.appendChild(title);
-    if (card.desc) {
-      const desc = document.createElement('p');
-      desc.className = 'pp-card-desc';
-      desc.textContent = card.desc;
-      info.appendChild(desc);
-    }
+    /* ── Carta da poker ── */
+    const playing = document.createElement('div');
+    playing.className = 'pp-playing-card' + (card.vote ? ' voted' : '');
 
+    // Angolo top-left
+    const cornerTL = document.createElement('div');
+    cornerTL.className = 'pp-card-corner';
+    cornerTL.innerHTML = '<span class="pp-corner-index" style="color:' + (isRed ? '#c0392b' : '#1a1a1a') + '">' + corner + '</span>'
+                       + '<span class="pp-corner-suit">' + suit + '</span>';
+    playing.appendChild(cornerTL);
+
+    // Seme grande al centro
+    const suitCenter = document.createElement('div');
+    suitCenter.className = 'pp-card-suit-center';
+    suitCenter.textContent = suit;
+    playing.appendChild(suitCenter);
+
+    // Angolo bottom-right
+    const cornerBR = document.createElement('div');
+    cornerBR.className = 'pp-card-corner-br';
+    cornerBR.innerHTML = '<span class="pp-corner-index" style="color:' + (isRed ? '#c0392b' : '#1a1a1a') + '">' + corner + '</span>'
+                       + '<span class="pp-corner-suit">' + suit + '</span>';
+    playing.appendChild(cornerBR);
+
+    // Tasto elimina
     const del = document.createElement('button');
     del.className = 'pp-card-delete';
     del.title = 'Rimuovi card';
     del.textContent = '✕';
     del.addEventListener('click', () => {
       cards = cards.filter(c => c.id !== card.id);
-      save();
-      render();
+      save(); render();
     });
+    playing.appendChild(del);
 
-    top.appendChild(info);
-    top.appendChild(del);
-    div.appendChild(top);
+    // Body carta
+    const body = document.createElement('div');
+    body.className = 'pp-card-body';
 
-    // Voti
-    const votesWrap = document.createElement('div');
-    votesWrap.className = 'pp-votes';
-    VOTES.forEach(v => {
+    const title = document.createElement('p');
+    title.className = 'pp-card-title';
+    title.textContent = card.title;
+    body.appendChild(title);
+
+    if (card.desc) {
+      const desc = document.createElement('p');
+      desc.className = 'pp-card-desc';
+      desc.textContent = card.desc;
+      body.appendChild(desc);
+    }
+
+    if (card.vote) {
+      const badge = document.createElement('div');
+      badge.className = 'pp-card-badge-voted';
+      badge.innerHTML = '&#10003; Votata: <b style="margin-left:0.25rem">' + card.vote + ' pt</b>';
+      body.appendChild(badge);
+    }
+
+    playing.appendChild(body);
+    wrap.appendChild(playing);
+
+    /* ── Voti: mini-carte ── */
+    const votesLabel = document.createElement('div');
+    votesLabel.className = 'pp-votes-label';
+    votesLabel.textContent = 'Seleziona la stima';
+    wrap.appendChild(votesLabel);
+
+    const votesRow = document.createElement('div');
+    votesRow.className = 'pp-votes';
+
+    VOTE_CONFIG.forEach(vc => {
       const btn = document.createElement('button');
-      btn.className = 'pp-vote-btn' + (card.vote === v ? ' selected' : '');
-      btn.textContent = v;
-      btn.title = voteLabel(v);
+      btn.className = 'pp-vote-card' + (vc.red ? ' red' : '') + (card.vote === vc.val ? ' selected' : '');
+      btn.dataset.val  = vc.val;
+      btn.dataset.suit = vc.suit;
+      btn.textContent  = vc.val;
+      btn.title        = vc.label;
       btn.addEventListener('click', () => {
         const c = cards.find(x => x.id === card.id);
-        if (c) { c.vote = (c.vote === v) ? null : v; save(); render(); }
+        if (c) { c.vote = (c.vote === vc.val) ? null : vc.val; save(); render(); }
       });
-      votesWrap.appendChild(btn);
+      votesRow.appendChild(btn);
     });
-    div.appendChild(votesWrap);
+    wrap.appendChild(votesRow);
 
-    return div;
-  }
+    /* ── Spiegazione voto ── */
+    if (card.vote) {
+      const info = voteInfo(card.vote);
+      const explain = document.createElement('div');
+      explain.className = 'pp-vote-explain';
+      explain.innerHTML = '<strong>' + info.label + '</strong>' + info.explain;
+      wrap.appendChild(explain);
+    }
 
-  function voteLabel(v) {
-    const map = {'1':'Banale','2':'Piccolo','3':'Piccolo-medio','5':'Medio',
-                 '8':'Complesso','13':'Molto complesso','21':'Epico',
-                 '?':'Non abbastanza info','☕':'Troppo grande, spezza la card'};
-    return map[v] || v;
+    return wrap;
   }
 
   /* ── Progress ─────────────────────────────────────────────── */
@@ -551,55 +798,58 @@ permalink: /app/planning-poker/
     let allVoted = true;
     cards.forEach(card => {
       const tr = document.createElement('tr');
+
       const tdTitle = document.createElement('td');
       tdTitle.textContent = card.title;
-      const tdVote  = document.createElement('td');
+
+      const tdVote = document.createElement('td');
+      const tdExpl = document.createElement('td');
+
       if (card.vote) {
         tdVote.textContent = card.vote;
         const n = parseInt(card.vote);
         if (!isNaN(n)) sum += n;
+        tdExpl.textContent = voteInfo(card.vote).label;
       } else {
-        tdVote.innerHTML = '<span class="pp-pending-badge">— non votata</span>';
+        tdVote.innerHTML = '<span class="pp-pending-badge">—</span>';
+        tdExpl.innerHTML = '<span class="pp-pending-badge">non votata</span>';
         allVoted = false;
       }
+
       tr.appendChild(tdTitle);
       tr.appendChild(tdVote);
+      tr.appendChild(tdExpl);
       tbody.appendChild(tr);
     });
 
-    if (allVoted && cards.length > 0) {
-      total.textContent = sum + ' pt';
-    } else {
-      const voted = cards.filter(c => c.vote && !isNaN(parseInt(c.vote)));
-      const partial = voted.reduce((a,c) => a + parseInt(c.vote), 0);
-      total.textContent = partial + ' pt (parziale)';
-    }
+    const numVoted = cards.filter(c => c.vote && !isNaN(parseInt(c.vote)));
+    const partial  = numVoted.reduce((a, c) => a + parseInt(c.vote), 0);
+    total.textContent = (allVoted && cards.length > 0)
+      ? sum + ' pt'
+      : partial + ' pt (parziale)';
   }
 
   /* ── Copia riepilogo ─────────────────────────────────────── */
   document.getElementById('ppCopyBtn').addEventListener('click', () => {
-    let text = '📋 Planning Poker — Sprint\n\n';
+    let text = '🃏 Planning Poker — Sprint\n\n';
     cards.forEach((c, i) => {
-      text += (i+1) + '. ' + c.title + '  →  ' + (c.vote || '—') + '\n';
+      const info = c.vote ? voteInfo(c.vote).label : '—';
+      text += (i+1) + '. ' + c.title + '\n   → ' + (c.vote || '—') + ' pt  |  ' + info + '\n\n';
     });
     const numVoted = cards.filter(c => c.vote && !isNaN(parseInt(c.vote)));
-    const sum = numVoted.reduce((a,c) => a + parseInt(c.vote), 0);
-    text += '\nTotale: ' + sum + ' story point' + (numVoted.length < cards.length ? ' (parziale)' : '');
+    const sum = numVoted.reduce((a, c) => a + parseInt(c.vote), 0);
+    text += 'Totale: ' + sum + ' story point' + (numVoted.length < cards.length ? ' (parziale)' : '');
     navigator.clipboard.writeText(text).then(() => {
       const btn = document.getElementById('ppCopyBtn');
       btn.textContent = '✓ Copiato!';
       setTimeout(() => { btn.innerHTML = '&#128203; Copia riepilogo'; }, 2000);
-    }).catch(() => {
-      alert(text);
-    });
+    }).catch(() => { alert(text); });
   });
 
   /* ── Reset sprint ────────────────────────────────────────── */
   document.getElementById('ppResetBtn').addEventListener('click', () => {
     if (!confirm('Resettare lo sprint? Tutte le card e i voti verranno eliminati.')) return;
-    cards = [];
-    save();
-    render();
+    cards = []; save(); render();
   });
 
   /* ── Aggiungi card ───────────────────────────────────────── */
@@ -615,23 +865,17 @@ permalink: /app/planning-poker/
 
   function addCard() {
     const title = document.getElementById('ppTitle').value.trim();
-    if (!title) {
-      document.getElementById('ppTitle').focus();
-      return;
-    }
+    if (!title) { document.getElementById('ppTitle').focus(); return; }
     const desc = document.getElementById('ppDesc').value.trim();
     cards.push({ id: uid(), title, desc, vote: null });
-    save();
-    render();
+    save(); render();
     document.getElementById('ppTitle').value = '';
     document.getElementById('ppDesc').value  = '';
     document.getElementById('ppTitle').focus();
-    // chiude le istruzioni dopo la prima card
     document.getElementById('ppInstructions').removeAttribute('open');
   }
 
   /* ── Init ────────────────────────────────────────────────── */
-  load();
-  render();
+  load(); render();
 })();
 </script>
