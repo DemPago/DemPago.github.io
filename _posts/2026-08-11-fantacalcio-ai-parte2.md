@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Fantacalcio AI, parte 2: ho smontato il RAG e ricostruito tutto da zero"
-description: "AnythingLLM non funzionava. Allora ho buttato via l'interfaccia, scritto uno script Python, aggiunto una verifica anti-allucinazione, e testato un modello da 14 miliardi di parametri. Ecco com'è andata."
+description: "AnythingLLM non funzionava. Ho buttato via il RAG, scritto uno script Python, aggiunto verifica anti-allucinazione, query relazionali, quick picks e un refactoring completo. Il 14B fa swapping. Ecco com'è andata davvero."
 date: 2026-08-11
 categories: ai
 tags: [AI, Ollama, LLM, Fantacalcio, Python, LocalAI, ContextStuffing]
@@ -14,7 +14,7 @@ Nel primo articolo vi ho raccontato come ho costruito un assistente AI per il Fa
 
 Mentivo — o meglio, ci speravo.
 
-Questa è la parte 2. Quella in cui il RAG si è rivelato la soluzione sbagliata, AnythingLLM è stato smontato pezzo per pezzo, e alla fine ho trovato un approccio che funziona davvero. Con un modello da 14 miliardi di parametri che gira sul mio Mac.
+Questa è la parte 2. Quella in cui il RAG si è rivelato la soluzione sbagliata, AnythingLLM è stato smontato pezzo per pezzo, il 14B si è rivelato inutilizzabile su 16GB, e alla fine ho costruito qualcosa che funziona davvero — con query relazionali, un menu di quick picks, e un refactoring che ha reso il tutto più veloce e robusto.
 
 ---
 
@@ -157,7 +157,7 @@ L'app web ha senso durante l'asta vera — quando aggiungi giocatori in tempo re
 
 ---
 
-## Il salto al 14B
+## Il salto al 14B (e il ritorno al 7B)
 
 Tutto il percorso sopra è stato fatto con `qwen2.5:7b` — 7 miliardi di parametri, 4.7GB su disco, gestibile su 16GB di RAM.
 
@@ -165,13 +165,100 @@ Il limite che emergeva era il **ragionamento numerico**. Chiedevi "portieri tra 
 
 Ho rimosso i modelli inutilizzati — qwen3:4b, deepseek-r1:8b, gemma3:4b, llama3.2:3b, tutti accumulati durante mesi di test — e ho scaricato `qwen2.5:14b`.
 
-9GB su disco. ~11GB in RAM a runtime. Sul mio Mac con 16GB è al limite: tecnicamente ci sta, ma il sistema operativo ha poco spazio per respirare.
+9GB su disco. ~11GB in RAM a runtime. Sul mio Mac con 16GB è al limite.
 
-Il test dirà se vale il rischio di swapping.
+Il test non è andato bene. Il sistema operativo inizia a fare swapping quasi subito, i tempi di risposta esplodono, e dopo due domande Ollama va in timeout. Il 14B su 16GB non è inutilizzabile in assoluto — è inutilizzabile *mentre hai aperto anche il terminale, il browser e qualcos'altro*. Ovvero: inutilizzabile nella realtà.
 
-Il principio che mi ha guidato: **i parametri non sono marketing**. La differenza tra 7B e 14B non è solo "più grande" — è la capacità di tenere in testa più relazioni contemporaneamente mentre ragiona. Per un compito come "filtra questi 62 portieri per quotazione e dimmi chi vale l'asta", quella capacità in più si vede.
+Ho scaricato `mistral:7b` (4.4GB) come alternativa. Il ragionamento numerico non è miracolosamente migliore rispetto a qwen2.5:7b, ma la gestione del contesto è più stabile e i timeout sono rari. Il modello attuale è `mistral:7b`.
 
-O almeno, è quello che speriamo.
+**Lezione:** i parametri non sono marketing, ma la RAM lo è. 16GB è il limite fisico reale per i modelli 7B in uso continuo. Il 14B richiede almeno 24GB per essere utilizzabile senza swapping.
+
+---
+
+## Il problema del linguaggio naturale
+
+Una volta risolto il problema delle allucinazioni di nomi, ne è emerso un altro: il **vocabolario del fantacalciatore**.
+
+Nessuno dice "portieri dello stesso ruolo e squadra del titolare". Tutti dicono *"il secondo di Martinez"*, *"la riserva di Leao"*, *"il panchinaro di De Gea"*.
+
+Il modello capisce la struttura della frase — ma non sa chi è il secondo portiere dell'Inter. Non lo sa perché nel listone c'è solo la lista dei giocatori, non la gerarchia di squadra.
+
+La soluzione non è aggiungere dati sulle gerarchie (che cambiano ogni settimana). È **tradurre il linguaggio naturale in una query sui dati che abbiamo**.
+
+```
+"il secondo di Martinez"
+        ↓
+trova Martinez nel listone → Inter, P
+        ↓
+restituisci tutti i P dell'Inter tranne Martinez
+        ↓
+inietta quella lista come contesto esplicito
+```
+
+Nessuna inference del modello. Nessun dato esterno. Solo un mapping deterministico fatto dallo script prima di chiamare il modello.
+
+```
+Tu: no ma quando si dice secondo di Martinez si intende il suo panchinaro
+  ✓ Martinez Jo. (Inter, P, Q:17, FVM:16)
+  [relazione rilevata → compagni di ruolo iniettati]
+AI: Il secondo portiere dell'Inter nel listone è Calligaris
+    (Inter, P, Q:1, FVM:1). Quotazione bassa, adatto come riserva...
+```
+
+Stesso principio si applica a *"riserva di"*, *"backup di"*, *"dodicesimo di"*. Il regex cattura il nome del titolare, lo script fa il lookup, inietta i compagni di ruolo. Il modello non deve indovinare niente.
+
+---
+
+## Quick picks: domande pre-costruite
+
+L'altro problema era pratico: durante la pre-asta fai sempre le stesse domande. "Dimmi la difesa più forte." "Chi sono i top 3 attaccanti?" "Costruiscimi una rosa da 250 crediti."
+
+Ogni volta riscrivere la domanda è noioso. Ogni volta il modello riceve tutto il contesto anche quando non serve. E per le rose complete — che richiedono 4 ruoli — una singola chiamata con tutto il listone rischia il timeout.
+
+Ho aggiunto un **menu numerato** che appare all'avvio:
+
+```
+  ┌─ QUICK PICKS ─────────────────────────────────────┐
+  │  [ 1] Miglior portiere assoluto
+  │  [ 2] Miglior portiere low-cost (quotazione ≤ 5)
+  │  [ 3] Difesa più forte possibile
+  │  [ 4] Difesa economica (budget ≤ 60 crediti totali)
+  │  [ 5] Centrocampo più forte (modulo 3-5-2)
+  │  [ 6] Top 3 attaccanti da non perdere
+  │  [ 7] Attaccante sorpresa (FVM alto, quotazione bassa)
+  │  [ 8] Rosa competitiva completa (3-4-3)
+  │  [ 9] Rosa low-cost (budget totale ≤ 250 crediti)
+  │  [ 0] Torna alla chat libera
+  └────────────────────────────────────────────────────┘
+```
+
+Digiti `3`, ottieni la difesa più forte. Digiti `8`, ottieni la rosa completa.
+
+Per le rose complete (pick 8 e 9), lo script fa **4 chiamate separate** — una per ruolo, in sequenza:
+
+```
+  [rosa sequenziale: 4 chiamate separate]
+
+  ── PORTIERI ──────────────────────────────
+  AI: ...
+
+  ── DIFENSORI ──────────────────────────────
+  AI: ...
+```
+
+Ogni chiamata riceve solo il contesto del suo ruolo. Niente timeout, niente context overflow. I risultati arrivano man mano invece di aspettare 4 minuti per una risposta sola.
+
+---
+
+## Refactoring: meno token, più robusto
+
+Con il codice che cresceva ho fatto un passaggio di pulizia su tre fronti.
+
+**Performance.** Il `num_ctx` — la finestra di contesto allocata da Ollama — era fisso a 16384 per ogni chiamata. Anche quando stavi chiedendo solo del miglior portiere, con 62 righe di testo. Ora viene calcolato dinamicamente: si stima la dimensione reale del contesto in caratteri, si converte in token (÷4), si arrotonda alla potenza di 2 minima sufficiente. Una domanda sui portieri usa 4096 invece di 16384 — risposta più veloce, meno RAM occupata.
+
+**Struttura.** Le regex erano compilate dentro le funzioni, quindi ricompilate ad ogni chiamata. Ora sono costanti a livello modulo. La logica di lookup del giocatore era duplicata in due posti — ora è una funzione sola (`lookup_player`) usata ovunque.
+
+**Robustezza.** La storia della conversazione ora viene troncata a 10 turni (20 messaggi). Senza limite, dopo una sessione lunga il contesto esplodeva e causava timeout silenziosi. Il gestore degli errori di Ollama ora cattura anche `json.JSONDecodeError` — le risposte malformate non crashano più lo script, restituiscono un messaggio leggibile.
 
 ---
 
@@ -179,30 +266,38 @@ O almeno, è quello che speriamo.
 
 **Il context stuffing batte il RAG per dati strutturati piccoli.** Se il tuo documento sta in meno di 20.000 token, non hai bisogno di retrieval vettoriale. Inietta tutto e lascia ragionare il modello.
 
-**La verifica pre-modello vale più del prompt engineering.** Aggiungere "non inventare nomi" nel system prompt non basta — il modello inventa lo stesso quando non trova quello che cerca. Verificare i nomi *prima* di chiamare il modello è più robusto di qualsiasi istruzione.
+**La verifica pre-modello vale più del prompt engineering.** Aggiungere "non inventare nomi" nel system prompt non basta. Verificare i nomi *prima* di chiamare il modello è più robusto di qualsiasi istruzione.
+
+**Tradurre il linguaggio naturale in query deterministiche.** Quando l'utente usa vocabolario di dominio ("secondo di", "riserva di"), non chiedere al modello di inferire — scrivi il mapping nello script. È più veloce, non allucinato, e non consuma token.
+
+**Spezzare le chiamate grandi in chiamate piccole.** Una rosa completa in una chiamata sola = timeout probabile. Quattro chiamate per ruolo = nessun timeout, risultati parziali subito, debug più semplice.
+
+**16GB è il tetto reale per i 7B. Il 14B richiede 24GB.** Non è una questione di ottimizzazione — è fisica.
 
 **L'interfaccia giusta dipende dal momento.** App web per l'asta in tempo reale. Script da terminale per la preparazione. Sono use case diversi che meritano strumenti diversi.
-
-**I timeout sono il nemico numero uno dei modelli locali.** Non puoi eliminare il problema — puoi solo gestirlo con un buon sistema di recovery automatico.
 
 ---
 
 ## Lo stato attuale
 
 ```
-Modello:    qwen2.5:14b (9GB, ~11GB in RAM)
-Script:     chat_preasta.py con contesto smart + verifica nomi
+Modello:    mistral:7b (4.4GB, ~6GB in RAM)
+Script:     chat_preasta.py
+            ├── contesto smart per ruolo
+            ├── verifica nomi anti-allucinazione
+            ├── query relazionali (secondo/riserva/panchinaro di X)
+            ├── quick picks menu numerato (9 pick)
+            ├── rosa sequenziale anti-timeout
+            └── num_ctx dinamico + storia troncata
 Repository: github.com/DemPago/fantacalcio-ai
 Stato:      pronto per la pre-asta
 ```
 
-Il prossimo aggiornamento arriverà dopo l'asta di agosto — con le domande reali che ho fatto, i consigli che ho seguito, quelli che ho ignorato, e se il 14B ha fatto la differenza rispetto al 7B.
-
-Se il Mac sopravvive.
+Il prossimo aggiornamento arriverà dopo l'asta di agosto — con le domande reali che ho fatto, i consigli che ho seguito, quelli che ho ignorato, e i risultati veri in classifica.
 
 Portiamo luce.
 
-> 💡 *Te lo spiega Dem* — **Grey Jedi Tip:** Prima di costruire un sistema RAG complesso, chiediti quanti token pesano davvero i tuoi documenti. Se ci stanno in una finestra di contesto, il context stuffing è più semplice, più affidabile e più veloce da debuggare. La complessità aggiuntiva del RAG ha senso solo quando i dati non ci stanno più.
+> 💡 *Te lo spiega Dem* — **Grey Jedi Tip:** Prima di aggiungere un layer di intelligenza (RAG, embedding, fine-tuning), chiediti se puoi risolvere il problema con un mapping deterministico nello script. "Secondo di Martinez" → lookup + filter è più veloce, più affidabile e più manutenibile di qualsiasi prompt engineering. Riserva l'AI per le decisioni che richiedono davvero ragionamento.
 
 ---
 
