@@ -62,7 +62,9 @@ Nessun token inviato online. Nessun abbonamento. Nessun dato della tua lega che 
 | **Python** | Script per elaborare i dati (voti, rosa, statistiche) |
 | **GitHub** | Repository pubblico del progetto |
 
-Il punto chiave è il **RAG** — Retrieval Augmented Generation. Invece di sperare che il modello "sappia" qualcosa, gli dai tu i documenti giusti. Lui li legge, li usa come contesto, e risponde in modo preciso e aggiornato.
+Il punto chiave è il **RAG** — Retrieval Augmented Generation. 
+Invece di sperare che il modello "sappia" qualcosa, gli dai tu i documenti giusti. 
+Lui li legge, li usa come contesto, e risponde in modo preciso e aggiornato.
 
 ---
 
@@ -407,7 +409,8 @@ Hai bisogno di aiuto per configurare Ollama o AnythingLLM? Stai costruendo qualc
 
 Dopo settimane di debug, la verità è semplice: **il RAG non è lo strumento giusto per questo problema**.
 
-Il RAG serve quando hai molti documenti e vuoi trovare quelli rilevanti. Io ho un solo file da 38.000 caratteri. Non ho bisogno di ricerca vettoriale — ho bisogno che il modello legga tutto e ragioni.
+Il RAG serve quando hai molti documenti e vuoi trovare quelli rilevanti. 
+Io ho un solo file da 38.000 caratteri. Non ho bisogno di ricerca vettoriale — ho bisogno che il modello legga tutto e ragioni.
 
 La soluzione si chiama **context stuffing**: invece di caricare i documenti in un vettore e sperare che il retrieval trovi i chunk giusti, si inietta tutto il testo direttamente nel system prompt ad ogni richiesta.
 
