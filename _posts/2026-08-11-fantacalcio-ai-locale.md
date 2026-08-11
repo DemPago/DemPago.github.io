@@ -400,3 +400,78 @@ Portiamo luce.
 Hai bisogno di aiuto per configurare Ollama o AnythingLLM? Stai costruendo qualcosa di simile per un altro dominio?
 
 **Scrivimi nei commenti.** Sono curioso di sapere per quali use case state usando i modelli locali. 👇
+
+---
+
+## Problema 6 — Il RAG era la soluzione sbagliata
+
+Dopo settimane di debug, la verità è semplice: **il RAG non è lo strumento giusto per questo problema**.
+
+Il RAG serve quando hai molti documenti e vuoi trovare quelli rilevanti. Io ho un solo file da 38.000 caratteri. Non ho bisogno di ricerca vettoriale — ho bisogno che il modello legga tutto e ragioni.
+
+La soluzione si chiama **context stuffing**: invece di caricare i documenti in un vettore e sperare che il retrieval trovi i chunk giusti, si inietta tutto il testo direttamente nel system prompt ad ogni richiesta.
+
+```python
+# Niente RAG. Niente AnythingLLM. Solo Python + Ollama.
+system_prompt = f"""Sei un esperto di Fantacalcio Classic.
+
+{tutti_i_505_calciatori_in_testo_piano}
+
+Rispondi solo usando questi dati."""
+
+messages = [{"role": "system", "content": system_prompt}] + history
+```
+
+Ho scritto uno script da terminale — `chat_preasta.py` — che:
+- Carica i 4 file per ruolo (P, D, C, A) all'avvio
+- Rileva automaticamente il ruolo rilevante nella domanda e inietta solo quello
+- Mantiene la storia completa della conversazione
+- Gira con un solo comando: `python3 scripts/chat_preasta.py`
+
+Il test immediato con `qwen2.5:7b`:
+
+> *"Chi sono i portieri con quotazione tra 8 e 15?"*
+
+Risposta:
+> *Maignan (Milan, 15), De Gea (Fiorentina, 13), Meret (Napoli, 11), Skorupski (Bologna, 10)...*
+
+Nomi reali. Squadre reali. Dal listone. Senza RAG.
+
+AnythingLLM smontato.
+
+---
+
+## La dipendenza nascosta dai modelli premium
+
+Il context stuffing funziona — ma ha esposto un problema più sottile.
+
+`qwen2.5:7b` trova i dati nel contesto, ma il **ragionamento numerico è approssimativo**. Quando chiedo "portieri tra 8 e 15" lui mi restituisce anche Butez (16) e Martinez Jo. (17). Non capisce il filtro numerico preciso con costanza.
+
+Per la strategia d'asta serve di meglio: confronti, valutazioni, ragionamenti multicritério. E lì i 7B iniziano a mostrare i limiti.
+
+La domanda che questo progetto ha sollevato non è tecnica. È economica:
+
+**Quanto vale la privacy dei miei dati di fantacalcio?**
+
+Per un uso serio — analisi pre-asta con consigli affidabili, ragionamento preciso sui numeri, memoria coerente tra sessioni — la risposta onesta è che servono modelli da 13B in su. Che sul mio hardware non girano in modo accettabile. Che in cloud costano abbonamenti mensili.
+
+Ho costruito questo sistema proprio per evitare quei costi e mantenere i dati locali. Ma il risultato finale è che per avere qualità accettabile, le alternative sono:
+- Comprare hardware migliore (Mac con 64GB+ di RAM unificata)
+- Tornare ai modelli cloud (OpenAI, Anthropic, Google)
+- Accettare i limiti del 7B e usarlo solo per domande semplici
+
+Nessuna di queste è la risposta che speravo. Ma è la risposta onesta.
+
+### Cosa ho imparato davvero
+
+Il fantacalcio era il pretesto. Il vero esperimento era capire **dove passa il confine tra ciò che si può fare in locale e ciò che richiede infrastruttura cloud**.
+
+Il confine passa qui: i modelli locali piccoli sono ottimi per compiti linguistici aperti (riassumi, spiega, traduci). Diventano inaffidabili quando il compito richiede precisione su dati strutturati, ragionamento numerico o memoria a lungo termine.
+
+Per quei compiti, oggi, i modelli premium hanno un vantaggio reale. Non di marketing — tecnico.
+
+Il LocalAI non è morto. Ma non è ancora per tutti i casi d'uso.
+
+Portiamo luce.
+
+> 💡 *Te lo spiega Dem* — **Grey Jedi Tip:** Se stai valutando un sistema AI locale, definisci prima il tipo di ragionamento che ti serve. Per domande aperte su testi, i modelli da 7B funzionano bene. Per analisi su dati strutturati con filtri precisi, considera i costi dell'hardware prima di quelli degli abbonamenti cloud — potrebbero sorprenderti.
