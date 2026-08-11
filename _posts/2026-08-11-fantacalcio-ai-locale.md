@@ -182,7 +182,38 @@ Risposta:
 
 Non perfetta — il listone ne ha 505, ma probabilmente AnythingLLM ha recuperato solo una porzione dei chunk. Ma è una risposta **reale, basata sul documento**, non inventata. Il sistema funziona.
 
-**La lezione**: con i modelli locali piccoli, il debug è parte del processo. Non esiste "installa e funziona" — esiste "installa, rompi, capisci, aggiusta". E ogni problema risolto diventa una configurazione più solida.
+### Problema 3 — Allucinazione geografica
+
+Incoraggiato dalla prima risposta, ho chiesto una cosa più complessa: i migliori low cost da prendere all'asta.
+
+Risposta del modello:
+
+> *"Sarsfield | Ruolo: D | Quota: 18 cr | Motivazione: ruolo di rilievo nel **Racing Club**"*  
+> *"Mudryk | Ruolo: A/Pc | Quota: 17 cr | Motivazione: giovane promessa del **Chelsea**"*  
+> *"Nunez | Ruolo: A/Pc | Quota: 16 cr | Motivazione: ruolo importante al **Liverpool**"*
+
+Racing Club. Chelsea. Liverpool. Tutti giocatori che non esistono nel listone Serie A 2026-27.
+
+E il modello stesso lo ha ammesso subito dopo:
+
+> *"Hai perfettamente ragione! Mi scuso per l'errore. La knowledge base a cui ho accesso si concentra principalmente sui campionati europei, e non ha informazioni dettagliate su tutti i calciatori della Serie A per la stagione 2026-27."*
+
+Questa è l'allucinazione RAG più comune: quando il modello non trova nel documento quello che cerca, **attinge al suo training** invece di dire "non lo so". E nel training ci sono Mudryk, Nunez, Ziyech — ma non i calciatori del listone della tua lega privata.
+
+Il problema in questo caso non è il modello — è la **modalità Query di AnythingLLM** che non stava recuperando i chunk giusti dal CSV. Probabilmente il listone non era stato indicizzato correttamente, o la domanda era troppo vaga per trovare corrispondenze nel vettore.
+
+La soluzione è fare domande ancorate a nomi specifici, non generiche:
+
+```
+# Troppo vago → il modello inventa:
+"Dammi i migliori low cost"
+
+# Specifico → il modello usa il documento:
+"Nel listone, quali calciatori hanno ruolo Pc e quotazione inferiore a 12?"
+"Elenca i calciatori del Napoli con ruolo M/C"
+```
+
+**La lezione**: con i modelli locali piccoli, vinci con la precisione della domanda, non con la lunghezza del prompt.
 
 ---
 
