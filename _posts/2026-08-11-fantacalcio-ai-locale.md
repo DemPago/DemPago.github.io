@@ -352,6 +352,43 @@ Ogni chunk ora contiene intestazioni leggibili, nomi reali, squadre reali, numer
 
 Il prossimo test dirà se il cambio di formato risolve il problema. Se sì, la lezione è chiara: **il formato del documento conta quanto il contenuto**. Un CSV ben strutturato per Excel è spesso pessimo per un sistema RAG.
 
+---
+
+## Problema 5 — Nessun modello locale piccolo funziona per il RAG
+
+Dopo il fallimento del formato, ho cambiato approccio sui modelli. Situazione finale testata:
+
+| Modello | Dimensione | Problema |
+|---------|-----------|---------|
+| `qwen3:4b` | 2.5 GB | Thinking mode — timeout totale |
+| `deepseek-r1:8b` | 5.2 GB | Thinking mode — timeout totale |
+| `gemma3:4b` | 3.3 GB | Risponde ma mescola training e documenti |
+| `llama3.2:3b` | 2.0 GB | Risponde ma ignora completamente i documenti |
+
+Con `llama3.2:3b` ho chiesto i portieri disponibili. Risposta:
+
+> *"Alisson Becker, Gianluigi Donnarumma, Emiliano Martinez..."*
+
+Portieri della Premier League e della Nazionale. Il modello leggeva il nome del file (`classic_ruolo_P.md`) ma non il contenuto — citava i portieri più famosi del suo training.
+
+Ho spezzato il listone in 4 file separati per ruolo (P, D, C, A), ho aggiornato il prompt con i riferimenti corretti, ho provato CSV, Markdown, file grandi, file piccoli. Il risultato non cambia: **i modelli da 3-4B parametri non hanno abbastanza capacità di ragionamento per fare RAG affidabile su dati strutturati**.
+
+### La conclusione onesta
+
+AnythingLLM + modelli piccoli funziona bene per:
+- Domande su testi narrativi (regolamenti, spiegazioni)
+- Riassunti di documenti
+- Domande generali con risposte aperte
+
+Non funziona per:
+- Filtrare dati strutturati ("dammi gli attaccanti con quota < 15")
+- Rispettare vincoli precisi ("solo dati dal documento")
+- Ragionamento su tabelle con molte righe
+
+Per questo use case servono **modelli più grandi** (13B+) o un approccio diverso: invece del RAG, passare i dati già filtrati direttamente nel prompt via script Python.
+
+**Il prossimo step**: uno script che interroga il listone localmente e genera un brief di testo compatto da incollare nella chat — così il modello deve solo ragionare su 20-30 righe invece di cercare in 500.
+
 Portiamo luce.
 
 > 💡 *Te lo spiega Dem* — **Grey Jedi Tip:** Prima di pagare l'ennesimo abbonamento a un servizio AI, chiediti se il tuo caso d'uso è abbastanza verticale da funzionare con un modello locale + i tuoi documenti. Nella maggior parte dei casi, la risposta è sì — e i tuoi dati restano tuoi.
