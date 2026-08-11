@@ -129,6 +129,46 @@ Il modello risponde usando i dati reali del listone e il regolamento che ho cari
 
 ---
 
+## Quello che è andato storto (e come l'ho risolto)
+
+Sarebbe disonesto raccontare solo la parte che funziona. Ecco i due problemi che ho incontrato subito.
+
+### Problema 1 — Risposta in inglese con nomi inventati
+
+La prima volta che ho chiesto *"Prepara la mia strategia d'asta"* il modello ha risposto in inglese. E i giocatori suggeriti si chiamavano **G. Bianchi**, **E. Rossi**, **A. Verdi**.
+
+Nomi placeholder. Nomi che il modello si è inventato perché non stava usando i documenti — stava semplicemente generando testo plausibile sulla base del suo training.
+
+Il problema era doppio:
+1. La **modalità chat** era impostata su *Chat* invece di *Query* — in modalità Chat il modello ignora i documenti caricati e risponde di testa sua
+2. Mancava nel system prompt l'istruzione esplicita `Rispondi sempre in italiano`
+
+Soluzione: modalità **Query** + aggiunta della riga in fondo al prompt. Dopo la correzione, i nomi erano quelli reali del listone.
+
+### Problema 2 — Timeout sulla seconda domanda
+
+La domanda successiva non ha mai ricevuto risposta — il modello è andato in timeout.
+
+Il prompt D (strategia asta) è lungo e dettagliato: chiede al modello di analizzare l'intero listone, raggruppare per fascia di prezzo, valutare ruoli e polivalenza. Troppo per una singola inferenza su un modello da 4B parametri.
+
+La soluzione è spezzare la richiesta:
+
+```
+# Invece di:
+"Prepara la mia strategia d'asta completa"
+
+# Meglio fare in più step:
+"Suggerisci 3 portieri da prendere all'asta con quota sotto 15"
+"Quali sono i migliori 5 difensori centrali per rapporto qualità/prezzo?"
+"Chi sono i centrocampisti multiruolo M/C più interessanti?"
+```
+
+Domande specifiche, risposte veloci, nessun timeout. I modelli locali da 4B non sono ChatGPT-4 — vanno usati in modo diverso: richieste mirate, non analisi massive in un colpo solo.
+
+**La lezione**: con i modelli locali piccoli, vinci con la precisione della domanda, non con la lunghezza del prompt.
+
+---
+
 ## Il progetto è pubblico
 
 Tutto il codice, i template, i prompt e la documentazione sono su GitHub:
