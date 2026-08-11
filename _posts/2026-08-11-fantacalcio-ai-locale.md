@@ -238,6 +238,60 @@ Se giochi al Fantacalcio e vuoi adattarlo alla tua lega, puoi forkarlo e persona
 
 **Seguirà un post di aggiornamento** dopo l'asta — con le risposte reali del modello, i consigli che ho seguito e quelli che ho ignorato. E a fine stagione vi dico se ha fatto la differenza in classifica.
 
+---
+
+## Aggiornamento in tempo reale — il RAG ancora non legge il listone
+
+Dopo aver configurato anche il workspace **FC-CLASSIC-2026**, ho fatto la domanda principale:
+
+> *"Prepara la mia strategia d'asta"*
+
+Il formato della risposta era perfetto — esattamente il template che avevo definito nel prompt:
+
+```
+BUDGET CONSIGLIATO PER REPARTO:
+P:   18 cr  (2 acquisti)
+D:   80 cr  (9 acquisti)
+C:  110 cr  (13 acquisti)
+A:  100 cr  (11 acquisti)
+Riserva jolly: 20 cr
+
+OBIETTIVI TOP (>50cr):
+Rabiot | Ruolo: C | Quota: 22 | Max asta: 35 | Motivazione: Centrocampista completo...
+
+OBIETTIVI MEDI (20-50cr):
+Pulisic | Ruolo: C | Quota: 25 | Max asta: 40 ...
+Nkunku | Ruolo: A | Quota: 13 | Max asta: 30 ...
+De Ketelaere | Ruolo: A | Quota: 17 | Max asta: 35 ...
+
+LOW COST CONSIGLIATI (<20cr):
+Gaetano | Ruolo: C | Quota: 7 | Max asta: 15 ...
+Samardzic | Ruolo: C | Quota: 12 | Max asta: 20 ...
+Ahanor | Ruolo: D | Quota: 6 | Max asta: 12 ...
+```
+
+Il problema: **Rabiot non è in Serie A. Nkunku nemmeno. Pulisic è al Milan ma la quota non corrisponde.**
+
+Il modello ha imparato perfettamente il formato — ma sta ancora attingendo al suo training invece di leggere il CSV. Il RAG non sta recuperando i chunk giusti dal listone quando la domanda è generica.
+
+### Dove siamo adesso
+
+| Cosa funziona | Cosa non funziona ancora |
+|---|---|
+| Formato risposta corretto | Nomi calciatori reali dal listone |
+| Risponde in italiano | RAG su domande generiche |
+| Ollama stabile con gemma3:4b | Allucinazione su domande ampie |
+| Sistema operativo end-to-end | Precisione dei dati |
+
+Il prossimo test è una domanda ancorata a dati specifici:
+
+> *"Elenca tutti i calciatori con ruolo A nel listone con quotazione tra 10 e 20"*
+
+Se risponde con nomi reali → il RAG funziona ma ha bisogno di domande precise.  
+Se inventa ancora → il CSV non è indicizzato correttamente e va ricaricato.
+
+**Questa è la parte che nessun tutorial racconta**: configurare un sistema RAG locale non è "carica i documenti e chatta". È un processo iterativo di test, diagnosi e aggiustamento. Lo stiamo facendo in diretta.
+
 Portiamo luce.
 
 > 💡 *Te lo spiega Dem* — **Grey Jedi Tip:** Prima di pagare l'ennesimo abbonamento a un servizio AI, chiediti se il tuo caso d'uso è abbastanza verticale da funzionare con un modello locale + i tuoi documenti. Nella maggior parte dei casi, la risposta è sì — e i tuoi dati restano tuoi.
