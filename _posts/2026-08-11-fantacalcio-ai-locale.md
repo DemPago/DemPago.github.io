@@ -145,27 +145,44 @@ Il problema era doppio:
 
 Soluzione: modalità **Query** + aggiunta della riga in fondo al prompt. Dopo la correzione, i nomi erano quelli reali del listone.
 
-### Problema 2 — Timeout sulla seconda domanda
+### Problema 2 — Timeout totale: Ollama bloccato e qwen3 inutilizzabile
 
-La domanda successiva non ha mai ricevuto risposta — il modello è andato in timeout.
+Dopo il primo fix, il pallino continuava a girare senza risposta. Ho fatto debug da terminale:
 
-Il prompt D (strategia asta) è lungo e dettagliato: chiede al modello di analizzare l'intero listone, raggruppare per fascia di prezzo, valutare ruoli e polivalenza. Troppo per una singola inferenza su un modello da 4B parametri.
-
-La soluzione è spezzare la richiesta:
-
-```
-# Invece di:
-"Prepara la mia strategia d'asta completa"
-
-# Meglio fare in più step:
-"Suggerisci 3 portieri da prendere all'asta con quota sotto 15"
-"Quali sono i migliori 5 difensori centrali per rapporto qualità/prezzo?"
-"Chi sono i centrocampisti multiruolo M/C più interessanti?"
+```bash
+curl -s http://localhost:11434/api/generate \
+  -d '{"model":"qwen3:4b","prompt":"Ciao","stream":false}' 
+# → timeout dopo 60 secondi. Sempre.
 ```
 
-Domande specifiche, risposte veloci, nessun timeout. I modelli locali da 4B non sono ChatGPT-4 — vanno usati in modo diverso: richieste mirate, non analisi massive in un colpo solo.
+Problema doppio:
 
-**La lezione**: con i modelli locali piccoli, vinci con la precisione della domanda, non con la lunghezza del prompt.
+1. **Ollama era bloccato** — il processo girava ma non rispondeva. Soluzione: kill e riavvio manuale
+   ```bash
+   pkill ollama && sleep 3 && ollama serve
+   ```
+
+2. **qwen3:4b ha la modalità "thinking" attiva di default** — prima di rispondere ragiona internamente in modo esteso. Su domande complesse con documenti RAG può girare per minuti senza mai produrre output. Ho provato a disabilitarla via API (`"think":false`) ma su questa versione di Ollama non funziona.
+
+**Soluzione definitiva**: cambiare modello. Ho sostituito `qwen3:4b` con `gemma3:4b` — stesso Mac, stesso hardware, nessuna modalità thinking, risposte in pochi secondi.
+
+Il cambio va fatto in **due posti** in AnythingLLM (l'avevo fatto solo in uno — altro errore da non ripetere):
+- Impostazioni Chat → Modello di chat
+- Configurazione dell'agente → Modello dell'agente
+
+### La prima risposta che funziona
+
+Dopo tutti questi fix, ho fatto la domanda più semplice possibile per verificare che il sistema leggesse davvero i documenti:
+
+> *"Quanti calciatori ci sono nel listone?"*
+
+Risposta:
+
+> *"Ci sono 261 calciatori nel listone listone_mantra_2026_27.csv."*
+
+Non perfetta — il listone ne ha 505, ma probabilmente AnythingLLM ha recuperato solo una porzione dei chunk. Ma è una risposta **reale, basata sul documento**, non inventata. Il sistema funziona.
+
+**La lezione**: con i modelli locali piccoli, il debug è parte del processo. Non esiste "installa e funziona" — esiste "installa, rompi, capisci, aggiusta". E ogni problema risolto diventa una configurazione più solida.
 
 ---
 
@@ -183,11 +200,12 @@ Se giochi al Fantacalcio e vuoi adattarlo alla tua lega, puoi forkarlo e persona
 
 ## Prossimi passi
 
+- Fare domande specifiche per reparto e documentare le risposte reali
 - Popolare la rosa dopo l'asta di agosto
 - Testare il prompt D durante l'asta in tempo reale
 - Valutare un'interfaccia custom in Streamlit per avere i 4 prompt selezionabili con un click
 
-Se l'esperimento funziona, nel post di fine stagione vi dico quanto mi ha aiutato davvero — e se ha fatto la differenza in classifica.
+**Seguirà un post di aggiornamento** dopo l'asta — con le risposte reali del modello, i consigli che ho seguito e quelli che ho ignorato. E a fine stagione vi dico se ha fatto la differenza in classifica.
 
 Portiamo luce.
 
