@@ -292,6 +292,66 @@ Se inventa ancora → il CSV non è indicizzato correttamente e va ricaricato.
 
 **Questa è la parte che nessun tutorial racconta**: configurare un sistema RAG locale non è "carica i documenti e chatta". È un processo iterativo di test, diagnosi e aggiustamento. Lo stiamo facendo in diretta.
 
+---
+
+## Problema 4 — Il CSV è il formato sbagliato per il RAG
+
+Ho fatto il test diagnostico con una domanda più precisa:
+
+> *"Elenca tutti i calciatori con ruolo A nel listone con quotazione tra 10 e 20"*
+
+Risposta del modello:
+
+> *"Ahanor | Ruolo: A | Quota: 6 | Difensore duttile e affidabile..."*  
+> *"Samardzic | Ruolo: A | Quota: 12 | Giovane talento..."*  
+> *"Zlate | Ruolo: A | Quota: 16 | Attaccante giovane nel Cagliari..."*
+
+Ho verificato nel CSV reale. Risultato:
+
+| Nome | Realtà |
+|------|--------|
+| Ahanor | Esiste — ma è un **D** (difensore), non un A. Quota 6, non nel range 10-20 |
+| Samardzic | Esiste — ma è un **C** (centrocampista), non un A |
+| Zlate | **Non esiste** nel listone |
+
+Nel listone ci sono **29 attaccanti reali** con quotazione tra 10 e 20 — Scamacca, Leao, De Ketelaere, Dybala, Raspadori, Lukaku... Il modello non ne ha citato nemmeno uno.
+
+### La causa: il CSV è opaco per il RAG
+
+AnythingLLM indicizza i documenti spezzandoli in chunk di testo. Un CSV viene letto come testo grezzo, una riga dopo l'altra:
+
+```
+Scamacca,Atalanta,19,A,32
+Leao,Milan,18,A,30
+De Ketelaere,Atalanta,17,A,27
+```
+
+Per un essere umano è leggibile. Per un sistema RAG è quasi illeggibile — mancano le intestazioni nel contesto di ogni chunk, i numeri non hanno significato senza etichette, e il modello non riesce a ragionare su "filtra per ruolo A e quota > 10".
+
+### La soluzione: convertire in Markdown strutturato
+
+Ho riscritto il listone in Markdown, raggruppato per ruolo con tabelle esplicite:
+
+```markdown
+## Ruolo: A (29 calciatori)
+
+| Nome | Squadra | Quota | FVM |
+|------|---------|-------|-----|
+| Douvikas | Como | 20 | 39 |
+| Scamacca | Atalanta | 19 | 32 |
+| Leao | Milan | 18 | 30 |
+| Berardi | Sassuolo | 18 | 29 |
+| De Ketelaere | Atalanta | 17 | 27 |
+| Dybala | Roma | 14 | 17 |
+| Raspadori | Atalanta | 13 | 16 |
+| Lukaku | Napoli | 10 | 11 |
+...
+```
+
+Ogni chunk ora contiene intestazioni leggibili, nomi reali, squadre reali, numeri con contesto. Il RAG può finalmente trovare quello che cerca.
+
+Il prossimo test dirà se il cambio di formato risolve il problema. Se sì, la lezione è chiara: **il formato del documento conta quanto il contenuto**. Un CSV ben strutturato per Excel è spesso pessimo per un sistema RAG.
+
 Portiamo luce.
 
 > 💡 *Te lo spiega Dem* — **Grey Jedi Tip:** Prima di pagare l'ennesimo abbonamento a un servizio AI, chiediti se il tuo caso d'uso è abbastanza verticale da funzionare con un modello locale + i tuoi documenti. Nella maggior parte dei casi, la risposta è sì — e i tuoi dati restano tuoi.
