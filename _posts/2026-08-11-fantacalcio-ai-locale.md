@@ -270,7 +270,7 @@ Samardzic | Ruolo: C | Quota: 12 | Max asta: 20 ...
 Ahanor | Ruolo: D | Quota: 6 | Max asta: 12 ...
 ```
 
-Il problema: **Rabiot non è in Serie A. Nkunku nemmeno. Pulisic è al Milan ma la quota non corrisponde.**
+Il problema: **Nkunku non è in Serie A. Rabiot è al Milan ma la quota non corrisponde a quella del listone. Pulisic è al Milan ma anche la sua quota è sbagliata.**
 
 Il modello ha imparato perfettamente il formato — ma sta ancora attingendo al suo training invece di leggere il CSV. Il RAG non sta recuperando i chunk giusti dal listone quando la domanda è generica.
 
