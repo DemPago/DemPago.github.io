@@ -28,23 +28,33 @@ Non si tratta di aggiungere una firma visibile in fondo al testo, né di cambiar
 
 ### 🎓 Scuola e università: addio al copia-incolla indolore
 
+![Studente universitario che scrive a mano su un quaderno in biblioteca — il ritorno al lavoro autentico](https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800)
+
 Questa è probabilmente la svolta più attesa da professori e commissioni d'esame. Finora i software anti-plagio come Turnitin rilevavano il copia-incolla da fonti esistenti, ma faticavano con i testi generati ex novo dall'IA. Il watermark cambia le regole: un saggio universitario, una tesina delle medie, un tema di maturità — se generati da un modello certificato — **potranno essere identificati con certezza matematica**.
 
 Non si tratta di vietare l'uso dell'IA nello studio, ma di rendere obbligatoria la trasparenza. Usarla come strumento di apprendimento, per riassumere o fare brainstorming è legittimo; consegnarla come lavoro proprio senza dichiararlo diventa rilevabile.
 
 ### 📰 Giornali e blog: il ritorno del valore umano
 
+![Giornalista che lavora al computer in una redazione — il mestiere di scrivere davvero](https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800)
+
 Quanti articoli hai letto nell'ultimo anno che sembravano scritti da un umano ma puzzavano di generato? I siti che producono centinaia di post al giorno ottimizzati per i motori di ricerca, con zero valore informativo reale, stanno per incontrare un problema. Il watermark introduce due conseguenze pratiche: i lettori potranno sapere — se i browser o le piattaforme integreranno strumenti di rilevamento — se un articolo è stato generato automaticamente, e **Google e gli altri motori di ricerca**, potendo identificare i contenuti AI in massa, avranno finalmente uno strumento per **penalizzare la spazzatura SEO** prodotta industrialmente. Per chi scrive davvero, a mano, mettendoci testa e ricerca, questa è una buona notizia.
 
 ### 💼 Lavoro e aziende: la fine del "l'ho scritto io"
+
+![Persona che lavora al laptop in ufficio con documenti sul tavolo — la tracciabilità entra nel posto di lavoro](https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800)
 
 Quante email di lavoro, report trimestrali e proposte commerciali vengono già scritte con un copia-incolla da ChatGPT? Molte più di quante le aziende ammettano. Con il watermark le policy aziendali cambieranno per forza: se un documento interno porta il timbro invisibile di un modello AI è tracciabile, e le aziende — soprattutto in settori regolamentati come legale, finanza e medicina — inizieranno a **pretendere dichiarazione esplicita** dell'uso dell'IA, o a limitarne l'uso ai soli contesti di supporto. Il messaggio implicito è chiaro: usare l'IA come assistente è accettabile, usarla come sostituto del proprio pensiero senza dirlo non lo sarà più.
 
 ### 📱 Social network e disinformazione: i bot avranno la filigrana
 
+![Schermo con feed di social network e notifiche — il problema della disinformazione automatizzata](https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800)
+
 Uno degli usi più dannosi dell'IA generativa negli ultimi anni è stato la produzione industriale di contenuti falsi: post, commenti, recensioni, profili fake costruiti a tavolino con migliaia di testi credibili generati in secondi. Il watermark non risolve tutto — i testi generati da modelli non certificati o da sistemi home-made non ne saranno dotati — ma introduce uno strato di filtraggio che prima non esisteva: **le piattaforme potranno etichettare automaticamente o limitare la distribuzione** dei contenuti generati da modelli certificati usati in modo sospetto. Non è una soluzione definitiva, ma è un inizio concreto.
 
 ### 🧠 Il cambio di paradigma culturale
+
+![Persona che legge e riflette con una matita in mano — il pensiero critico come valore nel mondo dell'AI](https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?w=800)
 
 Questa è forse la conseguenza più profonda, anche se meno visibile nell'immediato. Finora l'IA generativa ha alimentato una cultura del risultato rapido: il testo pronto in dieci secondi, il report generato mentre sorseggi il caffè, la tesi finita in una notte. Il watermark non rende l'IA illegale — e non deve farlo — ma rende **quasi impossibile nascondere il suo uso**. Il valore tornerà dove è sempre stato: nel tocco umano, nella revisione personale, nel pensiero critico che trasforma un output generico in qualcosa di autentico. L'IA come punto di partenza, non come prodotto finito.
 
