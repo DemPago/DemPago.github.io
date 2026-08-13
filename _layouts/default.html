@@ -35,6 +35,31 @@
   {% if page.layout == 'post' %}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
   {% endif %}
+
+  {% if page.layout == 'post' %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": {{ page.title | jsonify }},
+    "description": {{ page.description | default: site.description | jsonify }},
+    "datePublished": "{{ page.date | date_to_xmlschema }}",
+    "dateModified": "{{ page.date | date_to_xmlschema }}",
+    "url": "{{ site.url }}{{ page.url }}",
+    "author": {
+      "@type": "Person",
+      "name": "{{ site.author | default: 'Demetrio Ferraro' }}",
+      "url": "https://www.linkedin.com/in/demetrio-ferraro-78a6974b/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "{{ site.title }}",
+      "url": "{{ site.url }}"
+    }{% if page.cover %},
+    "image": "{% if page.cover contains 'http' %}{{ page.cover }}{% else %}{{ site.url }}{{ page.cover }}{% endif %}"{% endif %}
+  }
+  </script>
+  {% endif %}
 </head>
 <body data-layout="{{ page.layout | default: 'default' }}">
   <div class="loader" id="loader">
