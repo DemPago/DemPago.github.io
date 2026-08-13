@@ -50,6 +50,22 @@ Questa è forse la conseguenza più profonda, anche se meno visibile nell'immedi
 
 ---
 
+## ✉️ Il caso più comune: "scrivo la mail io, poi la faccio correggere all'AI"
+
+Facciamo un esempio pratico che in tanti fanno ogni giorno senza pensarci. Scrivi una mail al tuo capo, ti sembra un po' grezza, la incolli in ChatGPT e chiedi: *"Riscrivila in modo più professionale."* Copi il risultato, lo incolli in Outlook, invii.
+
+Domanda legittima: il tuo capo furbo può accorgersi che quella mail è passata dall'AI?
+
+La risposta dipende da **quanto l'AI ha riscritto** rispetto a quello che hai scritto tu. Se hai mandato tre righe sconnesse e l'AI ti ha restituito un testo completamente nuovo — struttura diversa, vocabolario diverso, frasi rifatte da zero — quel testo porta il watermark del modello. Un software di rilevamento potrebbe identificarlo. Un capo tecnico che usa strumenti del settore, sì, potrebbe accorgersene. Un capo normale che legge la mail su telefono? No, non ha modo.
+
+Ma c'è una distinzione importante che spesso si ignora: **correggere non è lo stesso che generare**. Se hai scritto tu il contenuto — le idee, i punti, la sostanza — e hai chiesto all'AI solo di limare la forma, il testo risultante è un ibrido. Il watermark statistico si indebolisce perché la struttura originale è tua; l'AI ha solo lucidato la superficie. In questo caso il rilevamento è molto meno affidabile, e onestamente il testo è *davvero* tuo con una mano d'aiuto — esattamente come chiedere a un collega di rileggere prima di inviare.
+
+Il problema nasce quando il flusso è invertito: prima l'AI genera tutto, poi tu togli qualche virgola e invii come se fosse tuo. Lì il watermark è integro, il testo è quasi interamente generato, e la tracciabilità funziona.
+
+Quindi la domanda pratica non è *"mi scoprono?"* ma *"cosa ho effettivamente scritto io?"*. Se la risposta è "le idee, la struttura, i punti chiave — l'AI ha solo sistemato la grammatica", stai usando lo strumento nel modo giusto e non hai nulla da nascondere. Se la risposta è "ho scritto il nome del destinatario e il resto è tutto dell'AI", allora il watermark è il minore dei tuoi problemi: stai semplicemente non facendo il tuo lavoro.
+
+---
+
 ## I limiti: cosa succede se riscrivi il testo a mano?
 
 La domanda ovvia è: basta riscrivere qualche frase per cancellare il watermark? La risposta è: dipende da quanto riscrivi. Una piccola modifica — cambiare qualche parola, spostare una frase — **non è sufficiente** a rimuovere lo schema statistico, perché il watermark è distribuito sull'intero testo e non concentrato in un punto preciso. Una riscrittura profonda e sostanziale — cambiare struttura, riformulare ogni concetto con parole proprie, integrare ragionamenti originali — sì, può attenuarlo fino a renderlo irrilevabile, ma a quel punto hai fatto esattamente quello che l'IA avrebbe dovuto risparmiarti di fare: **hai lavorato davvero**. Il vantaggio del pigro copia-incolla si annulla da solo, e chi vuole eludere il watermark deve investire lo stesso sforzo che avrebbe dovuto investire scrivendo in autonomia.
