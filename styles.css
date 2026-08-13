@@ -412,6 +412,14 @@ li {
   cursor: pointer;
 }
 
+/* Immagini inline nei post: max 600px, centrate */
+.post-content img:not(.post-cover) {
+  display: block;
+  max-width: 600px;
+  width: 100%;
+  margin: 1.5rem auto;
+}
+
 .post-content img:hover, .post-cover:hover {
   transform: scale(1.03);
 }
