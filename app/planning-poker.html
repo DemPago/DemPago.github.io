@@ -1004,17 +1004,22 @@ async function joinSession() {
       showJoinError('Questa sessione è già terminata. Chiedi al facilitatore di crearne una nuova.');
       return;
     }
-    // Verifica che il nome sia nella lista membri (se lista configurata)
+    // Verifica che il nome sia nella lista membri (se lista configurata).
+    // Match case-insensitive, ma si adotta la grafia ufficiale della lista
+    // così "demetrio" e "Demetrio" non diventano due partecipanti distinti.
+    let resolvedName = name;
     if (data.members && data.members.length > 0) {
-      const normalized = data.members.map(m => m.trim().toLowerCase());
-      if (!normalized.includes(name.trim().toLowerCase())) {
+      const target = name.trim().toLowerCase();
+      const official = data.members.find(m => m.trim().toLowerCase() === target);
+      if (!official) {
         showJoinError('Non sei nella lista dei partecipanti. Chiedi al facilitatore di aggiungerti.');
         return;
       }
+      resolvedName = official;
     }
     state.sessionCode   = code;
     state.isFacilitator = false;
-    state.myName        = name;
+    state.myName        = resolvedName;
     startListening();
   } catch(e) {
     showJoinError('Errore di connessione. Riprova.');
