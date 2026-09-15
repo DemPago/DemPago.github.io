@@ -308,6 +308,22 @@ permalink: /app/planning-poker/
 
 /* ── Reveal ───────────────────────────────────────────────── */
 .pp-reveal-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.pp-reveal-stats {
+  display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.9rem;
+}
+.pp-stat {
+  flex: 1; min-width: 90px;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+  padding: 0.6rem 0.7rem; text-align: center;
+}
+.pp-stat-val { font-size: 1.3rem; font-weight: 800; color: var(--text); line-height: 1.1; }
+.pp-stat-label {
+  font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--text-muted); margin-top: 0.2rem;
+}
+.pp-stat.consensus-ok    .pp-stat-val { color: #4caf82; }
+.pp-stat.consensus-warn  .pp-stat-val { color: #e0a052; }
+.pp-stat.consensus-high  .pp-stat-val { color: #e05c5c; }
 .pp-reveal-chip {
   display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
   background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
@@ -783,6 +799,7 @@ permalink: /app/planning-poker/
     <div class="pp-panel">
       <h2 id="revealCardTitle">—</h2>
       <div class="pp-reveal-grid" id="revealGrid"></div>
+      <div id="revealStats" class="pp-reveal-stats" style="display:none;"></div>
       <div id="divergenceBox" style="display:none;margin-top:0.75rem;"></div>
     </div>
 
@@ -828,6 +845,8 @@ permalink: /app/planning-poker/
     </div>
     <div class="pp-btn-row">
       <button class="pp-btn pp-btn-primary" id="btnCopySummary">&#128203; Copia riepilogo</button>
+      <button class="pp-btn pp-btn-ghost" id="btnExportCsv">&#11015; CSV</button>
+      <button class="pp-btn pp-btn-ghost" id="btnExportJson">&#11015; JSON</button>
       <button class="pp-btn pp-btn-ghost" id="btnNewSession">&#127183; Nuova sessione</button>
     </div>
   </div>
@@ -1386,6 +1405,39 @@ function renderRevealScreen(card, idx, total, cardVotes, members, finalVotes, is
     grid.appendChild(chip);
   });
 
+  // Statistiche di consenso (solo su voti numerici validi)
+  const statsBox = el('revealStats');
+  if (nums.length >= 1) {
+    const sorted = [...nums].sort((a, b) => a - b);
+    const sum    = nums.reduce((a, b) => a + b, 0);
+    const avg    = sum / nums.length;
+    const mid    = Math.floor(sorted.length / 2);
+    const median = sorted.length % 2 !== 0
+      ? sorted[mid]
+      : (sorted[mid - 1] + sorted[mid]) / 2;
+    // Moda (valore più votato)
+    const freq = {};
+    nums.forEach(n => { freq[n] = (freq[n] || 0) + 1; });
+    let mode = sorted[0], modeCount = 0;
+    Object.entries(freq).forEach(([val, c]) => { if (c > modeCount) { modeCount = c; mode = +val; } });
+    // Consenso: quanti hanno votato la moda sul totale voti validi
+    const agreePct = Math.round(modeCount / nums.length * 100);
+    const spread   = maxVal - minVal;
+    const cls = spread === 0 ? 'consensus-ok'
+              : spread >= 3  ? 'consensus-high'
+              : 'consensus-warn';
+    const fmt = n => Number.isInteger(n) ? n : n.toFixed(1);
+    statsBox.style.display = '';
+    statsBox.innerHTML = `
+      <div class="pp-stat"><div class="pp-stat-val">${fmt(avg)}</div><div class="pp-stat-label">Media</div></div>
+      <div class="pp-stat"><div class="pp-stat-val">${fmt(median)}</div><div class="pp-stat-label">Mediana</div></div>
+      <div class="pp-stat"><div class="pp-stat-val">${mode}</div><div class="pp-stat-label">Più votato</div></div>
+      <div class="pp-stat ${cls}"><div class="pp-stat-val">${agreePct}%</div><div class="pp-stat-label">Consenso</div></div>`;
+  } else {
+    statsBox.style.display = 'none';
+    statsBox.innerHTML = '';
+  }
+
   // Divergenza
   const divBox = el('divergenceBox');
   if (allQuestion) {
@@ -1606,6 +1658,7 @@ function renderSummary(cards, finalVotes, allVotes) {
     tbody.appendChild(tr);
   });
   el('summaryTotal').textContent = total + ' pt';
+  state.summaryData = { cards, finalVotes: finalVotes || {}, allVotes: allVotes || {} };
   showScreen('screenSummary');
 }
 
@@ -1624,10 +1677,65 @@ el('btnCopySummary').addEventListener('click', () => {
   }).catch(() => alert(text));
 });
 
+/* ── Export CSV / JSON scaricabile ───────────────────────── */
+function downloadFile(filename, content, mime) {
+  const blob = new Blob([content], { type: mime });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function summaryRows() {
+  const d = state.summaryData || { cards: [], finalVotes: {}, allVotes: {} };
+  return d.cards.map(card => {
+    const fv       = d.finalVotes[card.id];
+    const isSplit  = fv === 'split';
+    const points   = isSplit ? '' : (fv != null ? String(fv) : '');
+    const votes    = d.allVotes[card.id] || {};
+    const keyMatch = (card.title || '').match(/^\[([A-Z]+-\d+)\]/);
+    return {
+      key:    keyMatch ? keyMatch[1] : '',
+      title:  card.title || '',
+      points: points,
+      status: isSplit ? 'da splittare' : (fv != null ? 'stimata' : 'non stimata'),
+      votes:  votes
+    };
+  });
+}
+
+el('btnExportCsv').addEventListener('click', () => {
+  const rows = summaryRows();
+  const esc  = s => `"${String(s).replace(/"/g, '""')}"`;
+  let csv = ['Chiave', 'Titolo', 'Punti', 'Stato', 'Voti individuali'].map(esc).join(',') + '\r\n';
+  rows.forEach(r => {
+    const voti = Object.entries(r.votes).map(([n, v]) => `${n}:${v}`).join(' | ');
+    csv += [r.key, r.title, r.points, r.status, voti].map(esc).join(',') + '\r\n';
+  });
+  const stamp = new Date().toISOString().slice(0, 10);
+  downloadFile(`planning-poker-${state.sessionCode || 'sessione'}-${stamp}.csv`, '\uFEFF' + csv, 'text/csv;charset=utf-8');
+});
+
+el('btnExportJson').addEventListener('click', () => {
+  const d = state.summaryData || { cards: [], finalVotes: {}, allVotes: {} };
+  const rows = summaryRows();
+  const totale = rows.reduce((a, r) => a + (parseInt(r.points) || 0), 0);
+  const payload = {
+    tool: 'planning-poker',
+    sessione: state.sessionCode || null,
+    esportato: new Date().toISOString(),
+    totalePunti: totale,
+    cards: rows
+  };
+  const stamp = new Date().toISOString().slice(0, 10);
+  downloadFile(`planning-poker-${state.sessionCode || 'sessione'}-${stamp}.json`, JSON.stringify(payload, null, 2), 'application/json');
+});
+
 el('btnNewSession').addEventListener('click', () => {
   if (state.unsubscribe) { state.unsubscribe(); state.unsubscribe = null; }
   stopPresence();
-  state = { sessionCode:null, isFacilitator:false, myName:null, unsubscribe:null, presenceInterval:null, sessionSuit:'♠', setupMembers:[], setupCards:[], myVotes:{}, selectedFinal:null, lastCardIdx:-1, cachedData:null };
+  state = { sessionCode:null, isFacilitator:false, myName:null, unsubscribe:null, presenceInterval:null, sessionSuit:'♠', setupMembers:[], setupCards:[], myVotes:{}, selectedFinal:null, lastCardIdx:-1, cachedData:null, summaryData:null };
   // Riporta il picker al default ♠
   document.querySelectorAll('.pp-suit-btn').forEach(b => b.classList.toggle('selected', b.dataset.suit === '♠'));
   el('joinCodeInput').value = '';
