@@ -79,8 +79,7 @@ ollama run llama3
 
 <iframe width="100%" height="315" src="https://www.youtube.com/embed/MnQ4F5v-0HQ" title="Video: Green AI e sostenibilità" frameborder="0" allowfullscreen style="border-radius: 8px; margin: 1rem 0; border: none;"></iframe>
 
-💡 *Te lo spiega Dem*: "La Green AI non è solo una scelta etica, è una necessità. E penso che nel 2026 vedremo sempre più aziende che adotteranno Small Language Models per ridurre i costi e l'impatto ambientale.
-Potrebbe essere una vera svolta, come anche l'AI in locale è qualcosa che potrebbe andar bene per molti compiti!"
+💡 *Te lo spiega Dem*: "La Green AI non è solo una scelta etica, è una necessità. E penso che nel 2026 vedremo sempre più aziende che adotteranno Small Language Models per ridurre i costi e l'impatto ambientale. Potrebbe essere una vera svolta, come anche l'AI in locale è qualcosa che potrebbe andar bene per molti compiti!"
 
 ---
 

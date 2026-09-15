@@ -84,6 +84,7 @@ permalink: /app/lancio-moneta/
   user-select: none;
   filter: drop-shadow(0 12px 32px rgba(0,0,0,0.7));
 }
+.coin-stage.flipping-active { cursor: wait; }
 .coin {
   width: 240px;
   height: 240px;
@@ -148,11 +149,18 @@ permalink: /app/lancio-moneta/
 .res-dilemma { font-size: 0.82rem; color: var(--text-muted); font-style: italic; }
 
 /* ── Stats ──────────────────────────────────────────────── */
-.coin-stats { display: flex; gap: 1.5rem; }
+.coin-stats { display: flex; gap: 1.5rem; align-items: center; }
 .stat-item  { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
 .stat-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
 .stat-value { font-size: 1.35rem; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
 .coin-hint  { font-size: 0.8rem; color: var(--text-muted); text-align: center; line-height: 1.5; }
+.stats-reset-btn {
+  font-size: 0.72rem; font-weight: 600; background: none;
+  border: 1px solid var(--border); color: var(--text-muted);
+  padding: 0.2rem 0.6rem; border-radius: 6px; cursor: pointer;
+  font-family: inherit; transition: border-color 0.2s, color 0.2s;
+}
+.stats-reset-btn:hover { border-color: var(--accent); color: var(--accent); }
 </style>
 
 <div class="coin-app">
@@ -401,9 +409,10 @@ permalink: /app/lancio-moneta/
       <span class="stat-label">🌍 Croce</span>
       <span class="stat-value" id="stat-croce">0</span>
     </div>
+    <button class="stats-reset-btn" id="stats-reset-btn" title="Azzera statistiche" style="display:none;">↺ Reset</button>
   </div>
 
-  <p class="coin-hint">Compila il dilemma, assegna un'alternativa per lato<br>e lascia che la moneta decida.</p>
+  <p class="coin-hint" id="coin-hint">Compila il dilemma, assegna un'alternativa per lato<br>e lascia che la moneta decida.</p>
 
 </div>
 
@@ -482,15 +491,56 @@ let isFlipping    = false;
 let totalRotation = 0;
 let stats         = { testa: 0, croce: 0 };
 
+const DILEMMA_KEY = 'lancio_moneta_dilemma';
+
+/* Ripristina dilemma salvato */
+(function restoreDilemma() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(DILEMMA_KEY) || 'null');
+    if (!saved) return;
+    if (saved.testo)  document.getElementById('dilemma-text').value = saved.testo;
+    if (saved.testa)  document.getElementById('alt-testa').value    = saved.testa;
+    if (saved.croce)  document.getElementById('alt-croce').value    = saved.croce;
+    if (saved.testo || saved.testa || saved.croce)
+      document.getElementById('coin-hint').style.display = 'none';
+  } catch(_) {}
+})();
+
+/* Salva dilemma ad ogni modifica */
+['dilemma-text','alt-testa','alt-croce'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    try {
+      localStorage.setItem(DILEMMA_KEY, JSON.stringify({
+        testo: document.getElementById('dilemma-text').value,
+        testa: document.getElementById('alt-testa').value,
+        croce: document.getElementById('alt-croce').value,
+      }));
+    } catch(_) {}
+    const anyVal = ['dilemma-text','alt-testa','alt-croce'].some(i => document.getElementById(i).value.trim());
+    document.getElementById('coin-hint').style.display = anyVal ? 'none' : '';
+  });
+});
+
+/* Reset statistiche */
+document.getElementById('stats-reset-btn').addEventListener('click', () => {
+  stats = { testa: 0, croce: 0 };
+  document.getElementById('stat-testa').textContent  = 0;
+  document.getElementById('stat-croce').textContent  = 0;
+  document.getElementById('stat-totale').textContent = 0;
+  document.getElementById('stats-reset-btn').style.display = 'none';
+});
+
 function lancia() {
   if (isFlipping) return;
   isFlipping = true;
 
+  const stage    = document.querySelector('.coin-stage');
   const btn      = document.getElementById('coin-btn');
   const resultEl = document.getElementById('coin-result');
   const coin     = document.getElementById('coin');
 
   btn.disabled = true;
+  stage.classList.add('flipping-active');
   resultEl.className = 'coin-result';
 
   const isTesta    = Math.random() < 0.5;
@@ -509,14 +559,18 @@ function lancia() {
 
   setTimeout(() => {
     coin.classList.remove('flipping');
-    totalRotation = endRotation;
-    coin.style.transform = `rotateY(${endRotation}deg)`;
+    /* Normalizza totalRotation per evitare crescita infinita */
+    totalRotation = ((endRotation % 360) + 360) % 360;
+    if (isTesta && totalRotation > 90 && totalRotation < 270) totalRotation = 0;
+    if (!isTesta && (totalRotation < 90 || totalRotation > 270)) totalRotation = 180;
+    coin.style.transform = `rotateY(${totalRotation}deg)`;
 
     const face = isTesta ? 'testa' : 'croce';
     stats[face]++;
     document.getElementById('stat-testa').textContent  = stats.testa;
     document.getElementById('stat-croce').textContent  = stats.croce;
     document.getElementById('stat-totale').textContent = stats.testa + stats.croce;
+    document.getElementById('stats-reset-btn').style.display = '';
 
     const dilemma  = document.getElementById('dilemma-text').value.trim();
     const altTesta = document.getElementById('alt-testa').value.trim();
@@ -532,6 +586,7 @@ function lancia() {
 
     resultEl.className = 'coin-result show res-' + face;
 
+    stage.classList.remove('flipping-active');
     btn.disabled = false;
     isFlipping   = false;
   }, duration);

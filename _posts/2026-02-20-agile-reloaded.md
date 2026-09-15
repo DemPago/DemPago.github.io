@@ -10,9 +10,7 @@ cover: https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800
 
 <p class="post-intro">Ciao! Bentornati su <strong>Tech Illuminato</strong>.</p>
 
-Oggi parliamo di qualcosa che ha cambiato il modo di fare software: **Agile**.
-
-Ma prima di parlare del futuro, dobbiamo capire il passato.
+Oggi parliamo di qualcosa che ha cambiato il modo di fare software: **Agile**. Ma prima di parlare del futuro, dobbiamo capire il passato.
 
 ---
 
@@ -44,21 +42,15 @@ I 17 guru che hanno scritto la storia:
 
 ### Il Waterfall (1970)
 
-Prima di Agile, c'era il **Waterfall** (a cascata). Nato negli anni '70 principalmente da **Winston Royce** (che in realtà lo criticò!) e adottato da **IBM** e dal **settore militare** (specialmente il Dipartimento della Difesa USA).
+Prima di Agile, c'era il **Waterfall** (a cascata). Nato negli anni '70 principalmente da **Winston Royce** (che in realtà lo criticò!) e adottato da **IBM** e dal **settore militare** (specialmente il Dipartimento della Difesa USA), era un metodo **lineare e sequenziale**:
 
-Era un metodo **lineare e sequenziale**:
 1. **Requisiti** - Si raccoglie tutto quello che il cliente vuole
 2. **Design** - Si progetta l'architettura
 3. **Implementazione** - Si scrive il codice
 4. **Verifica** - Si testano i componenti
 5. **Manutenzione** - Si deploya e mantiene
 
-Funzionava? Sì, per progetti **prevedibili** come:
-- Sistemi bancari con regole fisse
-- Software militare con requisiti stabili
-- Progetti con budget illimitato e timeline lunga
-
-Ma il mondo reale non è prevedibile. I requisiti cambiano, il mercato si muove, i clienti capiscono cosa vogliono solo vedendo il prodotto.
+Funzionava per progetti **prevedibili** come sistemi bancari con regole fisse, software militare con requisiti stabili e progetti con budget illimitato e timeline lunga. Ma il mondo reale non è prevedibile: i requisiti cambiano, il mercato si muove, i clienti capiscono cosa vogliono solo vedendo il prodotto.
 
 <div class="esempio-tech">📦 <strong>Problema fondamentale</strong>: Nel Waterfall, se scopri un errore nei requisiti al punto 5, devi tornare a monte. È come scoprire che la fondamenta sono sbagliate dopo aver costruito il tetto.</div>
 
@@ -66,9 +58,8 @@ Ma il mondo reale non è prevedibile. I requisiti cambiano, il mercato si muove,
 
 ### La Svolta Giapponese: Scrum (1986)
 
-Nel 1986, due guru giapponesi **Takeuchi e Nonaka** pubblicano il paper *"The New New Product Development Game"* nella Harvard Business Review.
+Nel 1986, due guru giapponesi **Takeuchi e Nonaka** pubblicano il paper *"The New New Product Development Game"* nella Harvard Business Review. La loro intuizione? I team di successo (come Honda, Canon, Fuji-Xerox) condividevano queste caratteristiche:
 
-La loro intuizione? I team di successo (come Honda, Canon, Fuji-Xerox) condividevano queste caratteristiche:
 - **Team cross-functional** - Tutte le competenze dentro il team
 - **Iterazioni brevi** - "Sprint" prima del nome
 - **Auto-organizzazione** - Nessuna gerarchia rigida
@@ -125,7 +116,7 @@ E arriviamo a oggi. L'AI ha cambiato tutto. Come dice il proverbio:
 
 #### 1. Working Software + AI = Super Output
 
-La documentazione la scrive l'AI. I test li genera l'AI. Ma il software che **funziona** resta il metro di misura. Un codice che non gira è teoria, non pratica.
+La documentazione la scrive l'AI, i test li genera l'AI, ma il software che **funziona** resta il metro di misura. Un codice che non gira è teoria, non pratica.
 
 <div class="esempio-tech">📦 <strong>Esempio tech</strong>: Usa <a href="https://github.com/features/copilot" target="_blank" rel="noopener noreferrer">GitHub Copilot</a> per generare test automatici in pochi secondi.</div>
 
@@ -146,7 +137,7 @@ I piani a 6 mesi sono morti. In un mondo dove l'AI cambia le regole del gioco og
 
 #### 3. Customer Collaboration (Always On)
 
-Il cliente non è più chi firma il contratto. È l'utente finale. Con i feedback in tempo reale (analytics, heatmaps, crash reports), la collaborazione è **continua**, non più solo al kickoff.
+Il cliente non è più chi firma il contratto, ma l'utente finale. Con i feedback in tempo reale (analytics, heatmaps, crash reports), la collaborazione è **continua**, non più solo al kickoff.
 
 💡 *Te lo spiega Dem*: "Il cliente è l'utente finale, non chi firma il contratto. Con gli analytics in tempo reale, collaboriamo sempre."
 
@@ -154,7 +145,7 @@ Il cliente non è più chi firma il contratto. È l'utente finale. Con i feedbac
 
 #### 4. Humans + AI: The Dream Team
 
-Usiamo più tool che mai (Jira, GitHub, CI/CD, AI). Ma contano le **persone**. L'AI può automatizzare il processo, ma non può sostituire la comunicazione umana.
+Usiamo più tool che mai (Jira, GitHub, CI/CD, AI), ma contano le **persone**. L'AI può automatizzare il processo, ma non può sostituire la comunicazione umana.
 
 <div class="esempio-tech">📦 <strong>Esempio tech</strong>: <a href="https://linear.app" target="_blank" rel="noopener noreferrer">Linear</a> combina project management con GitHub, creando un flusso seamless tra pianificazione e codice.</div>
 
@@ -177,11 +168,7 @@ Usiamo più tool che mai (Jira, GitHub, CI/CD, AI). Ma contano le **persone**. L
 
 > "There is no Agile methodology. There is only Agile thinking."
 
-Agile non è un framework. Non è Scrum, Kanban o Spotify Model.
-
-È un **mindset**: collaborare, adattarsi, consegnare valore.
-
-L'AI è il nuovo teammate. Usiamolo bene.
+Agile non è un framework, non è Scrum, Kanban o Spotify Model. È un **mindset**: collaborare, adattarsi, consegnare valore. L'AI è il nuovo teammate — usiamolo bene.
 
 ---
 
