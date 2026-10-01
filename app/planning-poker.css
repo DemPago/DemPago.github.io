@@ -1,0 +1,568 @@
+/* ── Base ─────────────────────────────────────────────────── */
+.pp-app {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+.pp-screen { display: none; flex-direction: column; gap: 1.5rem; }
+.pp-screen.active { display: flex; }
+
+/* ── Header ───────────────────────────────────────────────── */
+.pp-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0 0 0.2rem; color: var(--text); }
+.pp-header p  { color: var(--text-muted); font-size: 0.88rem; margin: 0; }
+
+/* ── Card container (panel) ───────────────────────────────── */
+.pp-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.pp-panel h2 { font-size: 1rem; font-weight: 700; margin: 0; color: var(--text); }
+.pp-panel p  { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.55; }
+
+/* ── Bottoni ──────────────────────────────────────────────── */
+.pp-btn {
+  border: none; border-radius: 8px; font-size: 0.88rem; font-weight: 700;
+  padding: 0.6rem 1.2rem; cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s; font-family: inherit;
+}
+.pp-btn:active { transform: scale(0.97); }
+.pp-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.pp-btn-primary  { background: var(--accent); color: #000; }
+.pp-btn-ghost    { background: var(--border); color: var(--text-muted); }
+.pp-btn-danger   { background: rgba(224,92,92,0.15); color: #e05c5c; border: 1px solid rgba(224,92,92,0.3); }
+
+/* ── Selettore seme ───────────────────────────────────────── */
+.pp-suit-picker { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.pp-suit-btn {
+  width: 56px; height: 72px;
+  border-radius: 10px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 0.2rem;
+  font-size: 1.9rem; line-height: 1;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  position: relative;
+}
+.pp-suit-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,0.14); }
+.pp-suit-btn.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb, 99,179,237), 0.25), 0 6px 18px rgba(0,0,0,0.14);
+  transform: translateY(-3px);
+}
+.pp-suit-btn .pp-suit-name {
+  font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; opacity: 0.65;
+}
+.pp-suit-btn[data-suit="♥"] { color: #e05252; }
+.pp-suit-btn[data-suit="♦"] { color: #e05252; }
+.pp-suit-btn[data-suit="♠"] { color: #e8e8e8; }
+.pp-suit-btn[data-suit="♣"] { color: #e8e8e8; }
+.pp-btn-large    { padding: 0.85rem 1.5rem; font-size: 1rem; border-radius: 10px; }
+.pp-btn-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+/* ── Input / Textarea ─────────────────────────────────────── */
+.pp-field { display: flex; flex-direction: column; gap: 0.25rem; }
+.pp-field label {
+  font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--text-muted);
+}
+.pp-field input, .pp-field textarea {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  color: var(--text); font-size: 0.9rem; padding: 0.6rem 0.8rem;
+  width: 100%; box-sizing: border-box; font-family: inherit;
+  transition: border-color 0.2s; resize: vertical;
+}
+.pp-field input:focus, .pp-field textarea:focus { outline: none; border-color: var(--accent); }
+.pp-field textarea { min-height: 60px; }
+
+/* ── Codice sessione ──────────────────────────────────────── */
+.pp-code-display {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1rem; flex-wrap: wrap;
+}
+.pp-code-badge {
+  font-size: 2.5rem; font-weight: 900; letter-spacing: 0.25em;
+  color: var(--accent); font-family: 'Courier New', monospace;
+  background: var(--bg); border: 2px solid var(--accent);
+  border-radius: 12px; padding: 0.4rem 1.2rem;
+}
+.pp-code-hint { font-size: 0.8rem; color: var(--text-muted); text-align: center; }
+
+/* ── Tag membri ───────────────────────────────────────────── */
+.pp-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.pp-tag {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 20px; padding: 0.2rem 0.65rem; font-size: 0.8rem;
+  color: var(--text);
+}
+.pp-tag button {
+  background: none; border: none; color: var(--text-muted);
+  cursor: pointer; font-size: 0.7rem; padding: 0; line-height: 1;
+  transition: color 0.15s;
+}
+.pp-tag button:hover { color: #e05c5c; }
+
+/* ── Lista card setup ─────────────────────────────────────── */
+.pp-card-list-setup { display: flex; flex-direction: column; gap: 0.5rem; }
+.pp-card-item {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 0.75rem; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.6rem 0.85rem; font-size: 0.85rem;
+}
+.pp-card-item-text { flex: 1; min-width: 0; }
+.pp-card-item-title { font-weight: 600; color: var(--text); word-break: break-word; }
+.pp-card-item-desc  { color: var(--text-muted); font-size: 0.78rem; margin-top: 0.1rem; }
+.pp-card-item button {
+  background: none; border: none; color: var(--text-muted); cursor: pointer;
+  font-size: 0.85rem; padding: 0.15rem 0.3rem; border-radius: 5px;
+  flex-shrink: 0; transition: color 0.15s;
+}
+.pp-card-item button:hover { color: #e05c5c; }
+
+/* ── Carta da poker (schermata di voto) ───────────────────── */
+.pp-playing-card {
+  position: relative;
+  width: min(280px, 100%);
+  min-height: 390px;
+  margin: 0 auto;
+  background: #fff;
+  border: 2px solid #c8c8c8;
+  border-radius: 18px;
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.06),
+    0 8px 22px rgba(0,0,0,0.13),
+    0 28px 60px rgba(0,0,0,0.20),
+    0 52px 88px rgba(0,0,0,0.09);
+  display: flex; flex-direction: column;
+  /* overflow hidden su wrapper interno — non qui, per non schiacciare il 3D flip */
+}
+/* Wrapper interno che clippa il contenuto senza toccare il parent 3D */
+.pp-playing-card > .pp-card-inner-clip {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Doppio bordo interno — caratteristico delle carte da gioco */
+.pp-playing-card::before {
+  content: ''; position: absolute;
+  inset: 7px; border: 1px solid rgba(0,0,0,0.09);
+  border-radius: 12px; pointer-events: none; z-index: 0;
+}
+.pp-playing-card::after { display: none; }
+
+/* Angolo top-left */
+.pp-card-corner {
+  position: absolute; top: 0.85rem; left: 0.95rem;
+  z-index: 2; display: flex; flex-direction: column; align-items: center;
+}
+/* Angolo bottom-right — ruotato 180° */
+.pp-card-corner-br {
+  position: absolute; bottom: 0.85rem; right: 0.95rem;
+  transform: rotate(180deg);
+  z-index: 2; display: flex; flex-direction: column; align-items: center;
+}
+.pp-corner-num {
+  font-size: 2.6rem; font-weight: 900; font-family: 'Georgia', serif;
+  display: block; line-height: 1; color: #111;
+}
+.pp-corner-suit {
+  font-size: 1.6rem; display: block; line-height: 1.1; color: #111;
+}
+/* Seme centrale — grande watermark */
+.pp-card-suit-bg {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14rem; opacity: 0.055; pointer-events: none; user-select: none;
+  line-height: 1; z-index: 0; color: #000;
+}
+.pp-card-suit-tl, .pp-card-suit-br { display: none; }
+
+/* Corpo carta — centrato, schiacciato dagli angoli */
+.pp-card-body {
+  position: relative; z-index: 1;
+  padding: 4.8rem 1.2rem 4.2rem;
+  flex: 1; display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  gap: 0.5rem; text-align: center;
+}
+/* Ritratto face-card stile fante di Picche */
+.pp-card-issue-key {
+  font-size: 0.62rem; font-weight: 800; color: var(--accent);
+  text-transform: uppercase; letter-spacing: 0.14em;
+  font-family: 'Courier New', monospace;
+}
+.pp-card-title-main {
+  font-weight: 700; font-size: 0.88rem; color: #111;
+  line-height: 1.42; word-break: break-word;
+  font-family: Georgia, serif;
+}
+.pp-card-desc-main {
+  font-size: 0.72rem; color: #666; line-height: 1.5;
+  word-break: break-word;
+}
+
+/* ── Mini-carte voto ──────────────────────────────────────── */
+.pp-votes-section { display: flex; flex-direction: column; gap: 0.7rem; }
+.pp-votes-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); }
+.pp-votes { display: flex; flex-wrap: wrap; gap: 0.6rem; padding: 0.5rem 0; }
+.pp-vote-card {
+  position: relative;
+  width: 3.4rem; height: 4.8rem;
+  background: linear-gradient(160deg, #fffef7 0%, #f5f0e8 100%);
+  border: 2px solid #d4c9a8;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-family: Georgia, serif; font-size: 1.15rem; font-weight: 900; color: #1a1414;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.8);
+  transition: transform 0.13s cubic-bezier(.2,.8,.3,1.2), border-color 0.13s, box-shadow 0.13s;
+  user-select: none; flex-shrink: 0;
+}
+/* Bordo interno */
+.pp-vote-card::before {
+  content: ''; position: absolute; inset: 3px;
+  border: 1px solid rgba(180,155,90,0.2); border-radius: 7px; pointer-events: none;
+}
+/* Valore angolo top-left */
+.pp-vote-card::after {
+  content: attr(data-val);
+  position: absolute; top: 0.22rem; left: 0.28rem;
+  font-size: 0.5rem; font-weight: 900; opacity: 0.6; line-height: 1;
+  font-family: Georgia, serif;
+}
+/* Seme angolo bottom-right */
+.pp-vote-card-suit {
+  position: absolute; bottom: 0.22rem; right: 0.28rem;
+  font-size: 0.55rem; opacity: 0.4; line-height: 1;
+  transform: rotate(180deg); pointer-events: none;
+}
+.pp-vote-card:hover {
+  transform: translateY(-6px) scale(1.04);
+  border-color: var(--accent);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.pp-vote-card.selected {
+  background: linear-gradient(160deg, #ffe97a 0%, var(--accent) 100%);
+  border-color: var(--accent);
+  color: #1a0e00;
+  transform: translateY(-8px) scale(1.08);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.22), 0 0 0 2px var(--accent);
+}
+.pp-vote-card.selected::before { border-color: rgba(0,0,0,0.15); }
+.pp-vote-card.disabled { opacity: 0.35; cursor: not-allowed; transform: none !important; box-shadow: none; }
+.pp-vote-card.red { color: #c0392b; }
+.pp-vote-card.red.selected { color: #7b0000; }
+
+/* ── Spiegazione voto ─────────────────────────────────────── */
+.pp-vote-explain {
+  padding: 0.7rem 1rem; background: var(--card); border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0; font-size: 0.83rem; color: var(--text-muted);
+  line-height: 1.55; animation: fadeSlide 0.2s ease;
+}
+.pp-vote-explain strong { color: var(--text); display: block; margin-bottom: 0.15rem; font-size: 0.87rem; }
+@keyframes fadeSlide { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── Progress votanti ─────────────────────────────────────── */
+.pp-vote-progress {
+  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+  padding: 0.85rem 1rem; display: flex; flex-direction: column; gap: 0.5rem;
+}
+.pp-vote-progress-top { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+.pp-vote-progress-label { font-weight: 600; color: var(--text); }
+.pp-vote-progress-count { color: var(--accent); font-weight: 700; }
+.pp-vote-bar-wrap { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; }
+.pp-vote-bar-fill  { height: 100%; background: var(--accent); border-radius: 999px; transition: width 0.4s; }
+.pp-voters-list { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.2rem; }
+.pp-voter-chip {
+  font-size: 0.75rem; padding: 0.15rem 0.6rem; border-radius: 20px;
+  border: 1px solid var(--border); color: var(--text-muted); background: var(--bg);
+  transition: all 0.2s; display: flex; align-items: center; gap: 0.3rem;
+}
+.pp-voter-chip.voted { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+.pp-presence-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.pp-presence-dot.online  { background: #4caf50; }
+.pp-presence-dot.offline { background: var(--border); }
+
+/* ── Reveal ───────────────────────────────────────────────── */
+.pp-reveal-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.pp-reveal-stats {
+  display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.9rem;
+}
+.pp-stat {
+  flex: 1; min-width: 90px;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+  padding: 0.6rem 0.7rem; text-align: center;
+}
+.pp-stat-val { font-size: 1.3rem; font-weight: 800; color: var(--text); line-height: 1.1; }
+.pp-stat-label {
+  font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--text-muted); margin-top: 0.2rem;
+}
+.pp-stat.consensus-ok    .pp-stat-val { color: #4caf82; }
+.pp-stat.consensus-warn  .pp-stat-val { color: #e0a052; }
+.pp-stat.consensus-high  .pp-stat-val { color: #e05c5c; }
+.pp-reveal-chip {
+  display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+  padding: 0.6rem 0.9rem; min-width: 80px; text-align: center;
+  animation: fadeSlide 0.3s ease;
+}
+.pp-reveal-chip.high { border-color: #e05c5c; background: rgba(224,92,92,0.07); }
+.pp-reveal-chip.low  { border-color: #5cb8e0; background: rgba(92,184,224,0.07); }
+.pp-reveal-name  { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+.pp-reveal-value { font-size: 1.6rem; font-weight: 900; color: var(--text); font-family: Georgia, serif; }
+.pp-reveal-value.red { color: #c0392b; }
+.pp-divergence {
+  padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.85rem;
+  background: rgba(224,185,92,0.12); border: 1px solid rgba(224,185,92,0.3);
+  color: var(--text); line-height: 1.5;
+}
+.pp-divergence strong { color: #e0b55c; }
+
+/* ── Import Jira CSV ──────────────────────────────────────── */
+.pp-import-panel { overflow: hidden; }
+.pp-import-panel summary {
+  padding: 0.9rem 1.1rem; cursor: pointer; font-weight: 700; font-size: 0.9rem;
+  color: var(--text); list-style: none; display: flex; align-items: center;
+  gap: 0.5rem; user-select: none; margin: -1.25rem; margin-bottom: 0;
+}
+.pp-import-panel summary::-webkit-details-marker { display: none; }
+.pp-import-panel summary::before { content:"▶"; font-size:0.6rem; color:var(--text-muted); transition:transform 0.2s; }
+.pp-import-panel[open] summary::before { transform: rotate(90deg); }
+.pp-import-panel[open] summary { margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.9rem; }
+.pp-import-steps { display: flex; flex-direction: column; gap: 0.5rem; }
+.pp-import-step {
+  display: flex; gap: 0.75rem; align-items: flex-start;
+  font-size: 0.84rem; color: var(--text-muted); line-height: 1.55;
+}
+.pp-import-step-num {
+  background: var(--accent); color: #000; font-weight: 800; font-size: 0.72rem;
+  border-radius: 50%; width: 1.35rem; height: 1.35rem; display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.1rem;
+}
+.pp-import-step a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.pp-import-step a:hover { text-decoration: underline; }
+.pp-import-step code {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 4px;
+  padding: 0.05rem 0.4rem; font-size: 0.78rem; color: var(--accent);
+  font-family: 'Courier New', monospace; word-break: break-all;
+}
+.pp-import-divider {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.75rem; color: var(--text-muted); margin: 0.25rem 0;
+}
+.pp-import-divider::before, .pp-import-divider::after {
+  content:''; flex:1; height:1px; background: var(--border);
+}
+/* Drop zone */
+.pp-dropzone {
+  border: 2px dashed var(--border); border-radius: 10px; padding: 1.4rem 1rem;
+  text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  position: relative;
+}
+.pp-dropzone:hover, .pp-dropzone.drag-over { border-color: var(--accent); background: rgba(255,255,255,0.02); }
+.pp-dropzone-icon { font-size: 2rem; line-height: 1; margin-bottom: 0.4rem; }
+.pp-dropzone p { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+.pp-dropzone strong { color: var(--accent); }
+.pp-dropzone input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+/* Preview */
+.pp-csv-preview { display: flex; flex-direction: column; gap: 0.6rem; }
+.pp-csv-preview-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;
+  font-size: 0.82rem;
+}
+.pp-csv-preview-header strong { color: var(--text); }
+.pp-csv-preview-header span { color: var(--text-muted); }
+.pp-csv-list {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  max-height: 220px; overflow-y: auto;
+}
+.pp-csv-row {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); font-size: 0.82rem;
+}
+.pp-csv-row:last-child { border-bottom: none; }
+.pp-csv-row input[type=checkbox] { margin-top: 0.2rem; flex-shrink: 0; accent-color: var(--accent); }
+.pp-csv-row-body { flex: 1; min-width: 0; }
+.pp-csv-row-key   { font-size: 0.7rem; font-weight: 700; color: var(--accent); font-family: monospace; margin-bottom: 0.1rem; }
+.pp-csv-row-title { font-weight: 600; color: var(--text); word-break: break-word; }
+.pp-csv-row-desc  { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem; word-break: break-word;
+                    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.pp-csv-error { font-size: 0.82rem; color: #e05c5c; padding: 0.5rem 0.75rem;
+  background: rgba(224,92,92,0.08); border-radius: 7px; border: 1px solid rgba(224,92,92,0.2); }
+.pp-csv-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+.pp-csv-select-all { font-size: 0.78rem; color: var(--accent); cursor: pointer; background: none;
+  border: none; padding: 0; font-family: inherit; text-decoration: underline; }
+
+/* ── Auth facilitatore ────────────────────────────────────── */
+.pp-auth-row {
+  display: flex; gap: 0.5rem; width: 100%; max-width: 320px;
+}
+.pp-auth-row input { flex: 1; }
+.pp-lock-badge {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-size: 0.75rem; font-weight: 700; color: var(--text-muted);
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 20px; padding: 0.2rem 0.65rem;
+}
+.pp-lock-badge.unlocked { color: #2ecc71; border-color: #2ecc71; background: rgba(46,204,113,0.08); }
+
+/* ── Riepilogo finale ─────────────────────────────────────── */
+.pp-summary-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.pp-summary-table th {
+  text-align: left; color: var(--text-muted); font-size: 0.73rem;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--border);
+}
+.pp-summary-table td { padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+.pp-summary-table td:nth-child(2) { font-weight: 700; color: var(--accent); width: 4rem; }
+.pp-summary-table tr:last-child td { border-bottom: none; }
+.pp-total-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 0.85rem; padding-top: 0.85rem; border-top: 1px solid var(--border);
+}
+.pp-total-label { font-weight: 600; color: var(--text-muted); font-size: 0.9rem; }
+.pp-total-value { font-size: 1.5rem; font-weight: 900; color: var(--accent); }
+
+/* ── Stato sessione (badge) ───────────────────────────────── */
+.pp-session-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 0.75rem; font-size: 0.8rem; flex-wrap: wrap;
+}
+.pp-session-code-small {
+  font-weight: 800; color: var(--accent); font-family: monospace;
+  font-size: 1rem; letter-spacing: 0.1em;
+  background: var(--bg); border: 1px solid var(--accent);
+  border-radius: 6px; padding: 0.1rem 0.5rem;
+}
+.pp-session-role { color: var(--text-muted); }
+
+/* ── Schermata attesa ─────────────────────────────────────── */
+.pp-waiting-anim {
+  text-align: center; padding: 1.5rem 0;
+  font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;
+}
+.pp-spinner {
+  width: 36px; height: 36px; border: 3px solid var(--border);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin 0.8s linear infinite; margin: 0 auto 1rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Flip animation ───────────────────────────────────────── */
+/* perspective() come funzione inline nel transform, non come proprietà del parent:
+   overflow:hidden sul parent schiaccia il 3D se si usa la proprietà perspective sul parent */
+@keyframes cardFlipIn {
+  from { transform: perspective(900px) rotateY(90deg) scale(0.94); opacity: 0.2; }
+  to   { transform: perspective(900px) rotateY(0deg)  scale(1);    opacity: 1;   }
+}
+.pp-playing-card.flip-in {
+  animation: cardFlipIn 0.42s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+}
+
+/* ── Card counter ─────────────────────────────────────────── */
+.pp-card-counter {
+  font-size: 0.78rem; color: var(--text-muted); text-align: right; font-weight: 600;
+}
+
+/* ── Alert ────────────────────────────────────────────────── */
+.pp-alert {
+  padding: 0.65rem 1rem; border-radius: 8px; font-size: 0.83rem;
+  border: 1px solid; line-height: 1.5;
+}
+.pp-alert-error { background: rgba(224,92,92,0.1); border-color: rgba(224,92,92,0.3); color: #e05c5c; }
+.pp-alert-info  { background: rgba(92,184,224,0.08); border-color: rgba(92,184,224,0.25); color: var(--text-muted); }
+
+/* ── Input codice grande ──────────────────────────────────── */
+.pp-code-input {
+  font-size: 1.8rem !important; font-weight: 900 !important;
+  letter-spacing: 0.3em !important; text-align: center;
+  text-transform: uppercase; font-family: 'Courier New', monospace !important;
+  color: var(--accent) !important;
+}
+
+/* ── Aggiungi membro live (facilitatore) ──────────────────── */
+.pp-add-member-bar {
+  display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  font-size: 0.82rem;
+}
+.pp-add-member-bar label {
+  font-size: 0.73rem; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
+}
+.pp-add-member-bar input {
+  flex: 1; min-width: 130px;
+  background: var(--card); border: 1px solid var(--border); border-radius: 6px;
+  color: var(--text); font-size: 0.85rem; padding: 0.35rem 0.65rem;
+  font-family: inherit; transition: border-color 0.2s;
+}
+.pp-add-member-bar input:focus { outline: none; border-color: var(--accent); }
+.pp-add-member-bar .pp-add-ok {
+  font-size: 0.78rem; color: #2ecc71; font-weight: 700;
+  animation: fadeSlide 0.2s ease;
+}
+
+/* ── Divider ──────────────────────────────────────────────── */
+.pp-divider {
+  display: flex; align-items: center; gap: 0.75rem; color: var(--text-muted); font-size: 0.78rem;
+}
+.pp-divider::before, .pp-divider::after { content:''; flex:1; height:1px; background: var(--border); }
+
+/* ── Nota sulla issue ─────────────────────────────────────── */
+.pp-card-note-wrap { margin-top: 0.9rem; position: relative; }
+.pp-card-note-label { display: block; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.35rem; }
+.pp-card-note-input {
+  width: 100%; box-sizing: border-box; padding: 0.5rem 0.6rem; font-size: 0.85rem;
+  font-family: inherit; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg, #fff); color: var(--text); resize: vertical;
+}
+.pp-card-note-saved { position: absolute; right: 0.2rem; top: 0.1rem; font-size: 0.75rem; color: #2ecc71; font-weight: 700; }
+
+/* ── Lavagna post-it ──────────────────────────────────────── */
+.pp-postit-compose { margin-bottom: 1rem; }
+.pp-postit-input {
+  width: 100%; box-sizing: border-box; padding: 0.5rem 0.6rem; font-size: 0.9rem;
+  font-family: inherit; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg, #fff); color: var(--text); resize: vertical;
+}
+.pp-postit-compose-row { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-top: 0.5rem; flex-wrap: wrap; }
+.pp-postit-colors { display: flex; gap: 0.4rem; }
+.pp-postit-swatch { width: 22px; height: 22px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.1s; }
+.pp-postit-swatch:hover { transform: scale(1.15); }
+.pp-postit-swatch.selected { border-color: var(--text); box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--text); }
+.pp-postit-board { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+.pp-postit {
+  position: relative; width: 170px; min-height: 120px; padding: 0.7rem 0.75rem 1.6rem;
+  border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.18); color: #1a1a1a;
+  font-size: 0.85rem; line-height: 1.4; word-break: break-word;
+  transform: rotate(-1.2deg); transition: transform 0.12s;
+}
+.pp-postit:nth-child(even) { transform: rotate(1.4deg); }
+.pp-postit:hover { transform: rotate(0) scale(1.03); z-index: 2; }
+.pp-postit-text { white-space: pre-wrap; }
+.pp-postit-author { position: absolute; left: 0.75rem; bottom: 0.5rem; font-size: 0.72rem; font-weight: 700; opacity: 0.65; }
+.pp-postit-del {
+  position: absolute; right: 0.35rem; top: 0.25rem; cursor: pointer; border: none; background: none;
+  font-size: 0.95rem; line-height: 1; opacity: 0.45; color: #1a1a1a;
+}
+.pp-postit-del:hover { opacity: 1; }
+.pp-postit-empty { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 1rem 0; }
