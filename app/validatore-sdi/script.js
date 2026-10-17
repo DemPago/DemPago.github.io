@@ -60,18 +60,34 @@ async function fetchWithFallback(url) {
       if (r.ok) return await r.text();
     } catch (_) {}
   }
-  throw new Error('Impossibile scaricare il dataset. Controlla la connessione.');
+  throw new Error('Impossibile scaricare il dataset. I server proxy CORS non sono raggiungibili in questo momento. Riprova tra qualche minuto.');
 }
 
 /* ══════════════════════════════════════════════════════
    PARSE DATASET
 ══════════════════════════════════════════════════════ */
+function parseCSVLine(line, sep = ',') {
+  const fields = [];
+  let cur = '', inQuote = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') {
+      if (inQuote && line[i + 1] === '"') { cur += '"'; i++; }
+      else inQuote = !inQuote;
+    } else if (c === sep && !inQuote) {
+      fields.push(cur.trim()); cur = '';
+    } else { cur += c; }
+  }
+  fields.push(cur.trim());
+  return fields;
+}
+
 function parseDataset(text) {
   const lines = text.split(/\r?\n/);
   if (lines.length < 2) throw new Error('Dataset vuoto.');
 
   const sep = lines[0].includes('\t') ? '\t' : ',';
-  const headers = lines[0].split(sep).map(h => h.trim().toLowerCase());
+  const headers = parseCSVLine(lines[0], sep).map(h => h.toLowerCase());
 
   let idxCodice = headers.indexOf('cod_uni_ou');
   let idxDesUff = headers.indexOf('des_ou');
@@ -85,7 +101,7 @@ function parseDataset(text) {
   const map = new Map();
   for (let i = 1; i < lines.length; i++) {
     if (!lines[i].trim()) continue;
-    const cols = lines[i].split(sep);
+    const cols = parseCSVLine(lines[i], sep);
     const codice = cols[idxCodice] ? cols[idxCodice].trim().toUpperCase() : '';
     if (codice && /^[A-Z0-9]{6}$/.test(codice)) {
       const des = cols[idxDesUff] ? cols[idxDesUff].trim() : 'Ente Pubblico';
@@ -152,6 +168,11 @@ async function caricaDatabase(forceRefresh = false) {
     } catch (e) {
       if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
         console.warn('localStorage pieno — cache non salvata.');
+        const warn = document.createElement('div');
+        warn.style.cssText = 'margin-top:0.75rem;padding:0.6rem 0.9rem;background:rgba(248,199,72,0.1);border:1px solid rgba(248,199,72,0.3);border-radius:6px;font-size:0.82rem;color:#f8c748;';
+        warn.textContent = '⚠️ Dataset non salvato in cache — verrà riscaricato ad ogni visita.';
+        document.getElementById('db-status')?.after(warn);
+        setTimeout(() => warn.remove(), 8000);
       }
     }
 
