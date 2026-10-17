@@ -1,3 +1,6 @@
+function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+const renderCVDebounced = debounce(renderCV, 180);
+
 /* ── Sector roles ───────────────────────────────────────── */
 const SECTOR_NAMES = {
   tech:'IT & Tecnologia', marketing:'Marketing & Comunicazione',
@@ -144,77 +147,77 @@ function addEntry(type) {
       fields: `
         <div class="cv-row2">
           <div class="cv-field"><label>Ruolo *</label><input type="text" placeholder="Senior Dev" list="sector-roles-list" oninput="onRoleInput(this)"></div>
-          <div class="cv-field"><label>Azienda *</label><input type="text" placeholder="Acme Srl" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Azienda *</label><input type="text" placeholder="Acme Srl" oninput="renderCVDebounced()"></div>
         </div>
         <div class="cv-row2">
-          <div class="cv-field"><label>Da</label><input type="month" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Da</label><input type="month" oninput="renderCVDebounced()"></div>
           <div class="cv-field to-field">
             <label>A</label>
-            <input type="month" oninput="renderCV()">
+            <input type="month" oninput="renderCVDebounced()">
             <label class="present-label"><input type="checkbox" class="present-check" onchange="togglePresent(this)"> <span>Attuale</span></label>
           </div>
         </div>
-        <div class="cv-field"><label>Descrizione</label><textarea placeholder="Attivita svolte, risultati, tecnologie..." oninput="renderCV()"></textarea></div>`,
+        <div class="cv-field"><label>Descrizione</label><textarea placeholder="Attivita svolte, risultati, tecnologie..." oninput="renderCVDebounced()"></textarea></div>`,
     },
     edu: {
       counter: () => eduCount++,
       fields: `
         <div class="cv-row2">
-          <div class="cv-field"><label>Titolo *</label><input type="text" placeholder="Laurea Magistrale in Informatica" oninput="renderCV()"></div>
-          <div class="cv-field"><label>Istituto *</label><input type="text" placeholder="Universita di Bologna" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Titolo *</label><input type="text" placeholder="Laurea Magistrale in Informatica" oninput="renderCVDebounced()"></div>
+          <div class="cv-field"><label>Istituto *</label><input type="text" placeholder="Universita di Bologna" oninput="renderCVDebounced()"></div>
         </div>
         <div class="cv-row2">
-          <div class="cv-field"><label>Da</label><input type="month" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Da</label><input type="month" oninput="renderCVDebounced()"></div>
           <div class="cv-field to-field">
             <label>A</label>
-            <input type="month" oninput="renderCV()">
+            <input type="month" oninput="renderCVDebounced()">
             <label class="present-label"><input type="checkbox" class="present-check" onchange="togglePresent(this)"> <span>In corso</span></label>
           </div>
         </div>
-        <div class="cv-field"><label>Note</label><textarea placeholder="Voto, tesi, specializzazione..." oninput="renderCV()"></textarea></div>`,
+        <div class="cv-field"><label>Note</label><textarea placeholder="Voto, tesi, specializzazione..." oninput="renderCVDebounced()"></textarea></div>`,
     },
     proj: {
       counter: () => projCount++,
       fields: `
         <div class="cv-row2">
-          <div class="cv-field"><label>Nome progetto *</label><input type="text" placeholder="App meteo" oninput="renderCV()"></div>
-          <div class="cv-field"><label>Ruolo</label><input type="text" placeholder="Lead Developer" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Nome progetto *</label><input type="text" placeholder="App meteo" oninput="renderCVDebounced()"></div>
+          <div class="cv-field"><label>Ruolo</label><input type="text" placeholder="Lead Developer" oninput="renderCVDebounced()"></div>
         </div>
         <div class="cv-row2">
-          <div class="cv-field"><label>Da</label><input type="month" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Da</label><input type="month" oninput="renderCVDebounced()"></div>
           <div class="cv-field to-field">
             <label>A</label>
-            <input type="month" oninput="renderCV()">
+            <input type="month" oninput="renderCVDebounced()">
             <label class="present-label"><input type="checkbox" class="present-check" onchange="togglePresent(this)"> <span>In corso</span></label>
           </div>
         </div>
-        <div class="cv-field"><label>Descrizione</label><textarea placeholder="Di cosa si tratta, tecnologie usate, impatto..." oninput="renderCV()"></textarea></div>
+        <div class="cv-field"><label>Descrizione</label><textarea placeholder="Di cosa si tratta, tecnologie usate, impatto..." oninput="renderCVDebounced()"></textarea></div>
         <div class="cv-field"><label>Link (opzionale)</label><input type="text" placeholder="https://github.com/..." oninput="validateUrl(this)"><span class="field-hint">Deve iniziare con http:// o https://</span></div>`,
     },
     vol: {
       counter: () => volCount++,
       fields: `
         <div class="cv-row2">
-          <div class="cv-field"><label>Ruolo *</label><input type="text" placeholder="Tutor volontario" oninput="renderCV()"></div>
-          <div class="cv-field"><label>Organizzazione *</label><input type="text" placeholder="Croce Rossa" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Ruolo *</label><input type="text" placeholder="Tutor volontario" oninput="renderCVDebounced()"></div>
+          <div class="cv-field"><label>Organizzazione *</label><input type="text" placeholder="Croce Rossa" oninput="renderCVDebounced()"></div>
         </div>
         <div class="cv-row2">
-          <div class="cv-field"><label>Da</label><input type="month" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Da</label><input type="month" oninput="renderCVDebounced()"></div>
           <div class="cv-field to-field">
             <label>A</label>
-            <input type="month" oninput="renderCV()">
+            <input type="month" oninput="renderCVDebounced()">
             <label class="present-label"><input type="checkbox" class="present-check" onchange="togglePresent(this)"> <span>Attuale</span></label>
           </div>
         </div>
-        <div class="cv-field"><label>Descrizione</label><textarea placeholder="Attivita svolte, impatto..." oninput="renderCV()"></textarea></div>`,
+        <div class="cv-field"><label>Descrizione</label><textarea placeholder="Attivita svolte, impatto..." oninput="renderCVDebounced()"></textarea></div>`,
     },
     pub: {
       counter: () => pubCount++,
       fields: `
-        <div class="cv-field"><label>Titolo *</label><input type="text" placeholder="Machine Learning applicato al..." oninput="renderCV()"></div>
+        <div class="cv-field"><label>Titolo *</label><input type="text" placeholder="Machine Learning applicato al..." oninput="renderCVDebounced()"></div>
         <div class="cv-row2">
-          <div class="cv-field"><label>Editore / Rivista</label><input type="text" placeholder="IEEE / O'Reilly" oninput="renderCV()"></div>
-          <div class="cv-field"><label>Anno</label><input type="text" placeholder="2024" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Editore / Rivista</label><input type="text" placeholder="IEEE / O'Reilly" oninput="renderCVDebounced()"></div>
+          <div class="cv-field"><label>Anno</label><input type="text" placeholder="2024" oninput="renderCVDebounced()"></div>
         </div>
         <div class="cv-field"><label>Link (opzionale)</label><input type="text" placeholder="https://doi.org/..." oninput="validateUrl(this)"><span class="field-hint">Deve iniziare con http:// o https://</span></div>`,
     },
@@ -222,28 +225,28 @@ function addEntry(type) {
       counter: () => langCount++,
       fields: `
         <div class="cv-row2">
-          <div class="cv-field"><label>Lingua *</label><input type="text" placeholder="Inglese" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Lingua *</label><input type="text" placeholder="Inglese" oninput="renderCVDebounced()"></div>
           <div class="cv-field"><label>Livello</label><select onchange="renderCV()"><option value="">— Seleziona —</option><option>Madrelingua</option><option>C2 – Padronanza</option><option>C1 – Efficacia</option><option>B2 – Autonomia</option><option>B1 – Soglia</option><option>A2 – Sopravvivenza</option><option>A1 – Contatto</option></select></div>
         </div>`,
     },
     cert: {
       counter: () => certCount++,
       fields: `
-        <div class="cv-field"><label>Nome certificazione *</label><input type="text" placeholder="AWS Solutions Architect" oninput="renderCV()"></div>
+        <div class="cv-field"><label>Nome certificazione *</label><input type="text" placeholder="AWS Solutions Architect" oninput="renderCVDebounced()"></div>
         <div class="cv-row2">
-          <div class="cv-field"><label>Ente</label><input type="text" placeholder="Amazon Web Services" oninput="renderCV()"></div>
-          <div class="cv-field"><label>Anno</label><input type="text" placeholder="2024" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Ente</label><input type="text" placeholder="Amazon Web Services" oninput="renderCVDebounced()"></div>
+          <div class="cv-field"><label>Anno</label><input type="text" placeholder="2024" oninput="renderCVDebounced()"></div>
         </div>`,
     },
     award: {
       counter: () => awardCount++,
       fields: `
-        <div class="cv-field"><label>Premio / Riconoscimento *</label><input type="text" placeholder="Best Innovation Award" oninput="renderCV()"></div>
+        <div class="cv-field"><label>Premio / Riconoscimento *</label><input type="text" placeholder="Best Innovation Award" oninput="renderCVDebounced()"></div>
         <div class="cv-row2">
-          <div class="cv-field"><label>Organizzazione</label><input type="text" placeholder="Google DevFest" oninput="renderCV()"></div>
-          <div class="cv-field"><label>Anno</label><input type="text" placeholder="2023" oninput="renderCV()"></div>
+          <div class="cv-field"><label>Organizzazione</label><input type="text" placeholder="Google DevFest" oninput="renderCVDebounced()"></div>
+          <div class="cv-field"><label>Anno</label><input type="text" placeholder="2023" oninput="renderCVDebounced()"></div>
         </div>
-        <div class="cv-field"><label>Descrizione (opzionale)</label><textarea placeholder="Motivazione del riconoscimento..." oninput="renderCV()" style="min-height:50px"></textarea></div>`,
+        <div class="cv-field"><label>Descrizione (opzionale)</label><textarea placeholder="Motivazione del riconoscimento..." oninput="renderCVDebounced()" style="min-height:50px"></textarea></div>`,
     },
   };
 
@@ -557,10 +560,23 @@ function renderCV() {
 /* ── LocalStorage ───────────────────────────────────────── */
 const STORAGE_KEY = 'cv_data_v1';
 
+function showToast(msg) {
+  let toast = document.getElementById('cv-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'cv-toast';
+    toast.style.cssText = 'position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#1c2128;border:1px solid #30363d;color:#e6edf3;padding:0.7rem 1.2rem;border-radius:8px;font-size:0.85rem;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.4);max-width:90vw;text-align:center;';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.display = 'block';
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { toast.style.display = 'none'; }, 5000);
+}
+
 function saveToStorage() {
   const data = {
     fields: {},
-    photo: state.photo,
     skills: state.skills,
     themeIdx: THEMES.indexOf(state.theme),
     sector: state.sector || null,
@@ -576,7 +592,11 @@ function saveToStorage() {
       present: card.querySelector('.present-check')?.checked || false
     }));
   });
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch(e) {
+    showToast('⚠️ Salvataggio automatico non riuscito. Usa Esporta dati per fare un backup completo.');
+  }
 }
 
 function loadFromStorage() {
@@ -586,7 +606,6 @@ function loadFromStorage() {
     const data = JSON.parse(raw);
     if (data.themeIdx >= 0 && data.themeIdx < THEMES.length) state.theme = THEMES[data.themeIdx];
     if (Array.isArray(data.skills)) state.skills = data.skills;
-    if (data.photo) state.photo = data.photo;
     if (data.sector) state.sector = data.sector;
     ['exp','edu','proj','vol','pub','lang','cert','award'].forEach(type => {
       const entries = data.entries?.[type];
@@ -611,9 +630,8 @@ function loadFromStorage() {
 }
 
 function resetCV() {
-  if (!confirm('Cancellare tutti i dati e ricominciare da zero?')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  location.reload();
+  const overlay = document.getElementById('cvResetOverlay');
+  if (overlay) { overlay.style.display = 'flex'; }
 }
 
 function exportJSON() {

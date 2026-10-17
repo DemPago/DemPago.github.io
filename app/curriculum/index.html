@@ -68,6 +68,7 @@ permalink: /app/curriculum/
             <img class="photo-preview" id="photoPreview" alt="Foto profilo">
             <div class="photo-placeholder" id="photoPlaceholder">Clicca per caricare una foto</div>
           </div>
+          <p style="font-size:0.72rem;color:var(--text-muted);margin:0.35rem 0 0;">La foto non viene inclusa nel salvataggio automatico — usa <strong>Esporta dati</strong> per includerla nel backup.</p>
         </div>
         <div class="cv-row2">
           <div class="cv-field">
@@ -94,13 +95,13 @@ permalink: /app/curriculum/
           </div>
           <div class="cv-field">
             <label>Telefono</label>
-            <input type="tel" id="f-tel" placeholder="+39 333 1234567" oninput="renderCV()">
+            <input type="tel" id="f-tel" placeholder="+39 333 1234567" oninput="renderCVDebounced()">
           </div>
         </div>
         <div class="cv-row2">
           <div class="cv-field">
             <label>Citta</label>
-            <input type="text" id="f-citta" placeholder="Milano, Italia" oninput="renderCV()">
+            <input type="text" id="f-citta" placeholder="Milano, Italia" oninput="renderCVDebounced()">
           </div>
           <div class="cv-field">
             <label>LinkedIn</label>
@@ -124,7 +125,7 @@ permalink: /app/curriculum/
       </button>
       <div class="acc-body">
         <div class="cv-field">
-          <textarea id="f-profilo" placeholder="Scrivi 3-5 righe su chi sei e cosa ti rende unico..." oninput="renderCV()"></textarea>
+          <textarea id="f-profilo" placeholder="Scrivi 3-5 righe su chi sei e cosa ti rende unico..." oninput="renderCVDebounced()"></textarea>
         </div>
       </div>
     </div>
@@ -303,6 +304,16 @@ permalink: /app/curriculum/
     </div>
   </div>
 
+</div>
+
+<div id="cvResetOverlay" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.6);backdrop-filter:blur(3px);align-items:center;justify-content:center;">
+  <div style="background:#161b22;border:1px solid #30363d;border-radius:12px;padding:1.8rem 1.6rem;max-width:360px;width:90%;">
+    <p style="margin:0 0 1.2rem;color:#e6edf3;font-size:1rem;">Cancellare tutti i dati e ricominciare da zero?</p>
+    <div style="display:flex;gap:0.6rem;">
+      <button onclick="document.getElementById('cvResetOverlay').style.display='none'" style="flex:1;padding:0.7rem;background:transparent;border:1px solid #30363d;color:#8b949e;border-radius:8px;font-family:inherit;cursor:pointer;">Annulla</button>
+      <button onclick="localStorage.removeItem('cv_data_v1');location.reload()" style="flex:1;padding:0.7rem;background:#e05454;border:none;color:#fff;border-radius:8px;font-weight:700;font-family:inherit;cursor:pointer;">Cancella tutto</button>
+    </div>
+  </div>
 </div>
 
 <!-- CDN libs -->
