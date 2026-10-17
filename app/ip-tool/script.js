@@ -79,7 +79,6 @@ function parseIPv4(str) {
   const parts = str.trim().split('.');
   if (parts.length !== 4) return null;
   const nums = parts.map(Number);
-  if (nums.some(n => isNaN(n) || n < 0 || n > 255 || String(n) !== parts[parts.length - (4 - nums.indexOf(n))])) return null;
   // re-validate cleanly
   for (let i = 0; i < 4; i++) {
     if (isNaN(nums[i]) || nums[i] < 0 || nums[i] > 255) return null;
