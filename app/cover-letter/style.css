@@ -1,0 +1,263 @@
+/* ── Layout ────────────────────────────────────────────── */
+.cl-app {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .cl-app { grid-template-columns: 1fr; }
+  .cl-preview-col { order: -1; }
+}
+
+/* ── Form ──────────────────────────────────────────────── */
+.cl-form-col { display: flex; flex-direction: column; gap: 0; }
+
+/* Accordion sections defined globally in styles.css */
+
+.cl-field { margin-bottom: 0.75rem; }
+.cl-field label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+.cl-field input,
+.cl-field textarea {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+}
+.cl-field input:focus,
+.cl-field textarea:focus { outline: none; border-color: var(--accent); }
+.cl-field textarea { resize: vertical; min-height: 80px; }
+
+.cl-row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+/* ── Toggle groups ─────────────────────────────────────── */
+.cl-toggle-group {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+.cl-toggle-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+.cl-toggle-btn {
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.cl-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.cl-toggle-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0d1117;
+  font-weight: 600;
+}
+
+/* ── Keyword tags ──────────────────────────────────────── */
+.kw-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+  line-height: 1.5;
+}
+.kw-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.25rem;
+}
+.kw-tag {
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+  font-family: inherit;
+}
+.kw-tag:hover { border-color: var(--accent); color: var(--accent); }
+.kw-tag.selected {
+  background: rgba(88,166,255,0.15);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+.kw-tag.disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* ── Action buttons ────────────────────────────────────── */
+.cl-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+.cl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.cl-btn-primary { background: var(--accent); color: #0d1117; }
+.cl-btn-primary:hover { background: var(--accent-hover); }
+.cl-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.cl-btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+.cl-btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+.cl-btn-danger { background: transparent; color: #f85149; border: 1px solid #f85149; }
+.cl-btn-danger:hover { background: rgba(248,81,73,0.08); }
+
+/* ── CV import banner ──────────────────────────────────── */
+.cl-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.4;
+}
+.cl-banner-success {
+  background: rgba(63,185,80,0.1);
+  border: 1px solid rgba(63,185,80,0.3);
+  color: #3fb950;
+}
+.cl-banner-hint {
+  background: rgba(88,166,255,0.07);
+  border: 1px solid rgba(88,166,255,0.2);
+  color: var(--text-muted);
+}
+.cl-banner-text { flex: 1; }
+.cl-banner-text a { color: var(--accent); text-decoration: none; }
+.cl-banner-text a:hover { text-decoration: underline; }
+.cl-banner-close {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.6;
+  font-size: 1rem;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.cl-banner-close:hover { opacity: 1; }
+
+/* ── Autosave indicator ────────────────────────────────────── */
+.cl-autosave {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.4s;
+  margin-left: 0.5rem;
+}
+.cl-autosave.visible { opacity: 1; }
+
+/* ── Inline confirm ────────────────────────────────────────── */
+.cl-inline-confirm {
+  display: none;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.9rem;
+  background: rgba(248,81,73,0.08);
+  border: 1px solid rgba(248,81,73,0.3);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--text);
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+.cl-inline-confirm.show { display: flex; }
+.cl-confirm-yes {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid #f85149;
+  background: #f85149;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.cl-confirm-yes:hover { opacity: 0.85; }
+.cl-confirm-no {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.cl-confirm-no:hover { border-color: var(--accent); color: var(--accent); }
+.cl-preview-col { position: sticky; top: 1rem; }
+.cl-preview-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cl-preview-wrap {
+  background: #888;
+  border-radius: 6px;
+  padding: 8px;
+  overflow: hidden;
+}
+.cl-preview-scaler { transform-origin: top left; }
+#cl-template {
+  width: 794px;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.cl-page-break-indicator {
+  display: none;
+  width: 794px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: #c0392b;
+  border-top: 2px dashed #c0392b;
+  background: rgba(192,57,43,0.06);
+  letter-spacing: 0.05em;
+}

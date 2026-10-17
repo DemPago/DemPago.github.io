@@ -1,0 +1,171 @@
+---
+layout: app
+title: Lettera di Presentazione
+description: Genera la tua lettera di presentazione professionale in italiano o inglese e scaricala in PDF.
+permalink: /app/cover-letter/
+---
+
+<link rel="stylesheet" href="/app/cover-letter/style.css">
+
+<!-- CDN: html2canvas + jsPDF (stessi del CV generator) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<div class="cl-app">
+
+  <!-- ── FORM COLUMN ───────────────────────────────────── -->
+  <div class="cl-form-col">
+
+    <!-- CV import banner (shown/hidden by JS) -->
+    <div id="cl-cv-banner" class="cl-banner" hidden>
+      <span class="cl-banner-text" id="cl-cv-banner-text"></span>
+      <button class="cl-banner-close" onclick="document.getElementById('cl-cv-banner').hidden=true" aria-label="Chiudi">&#x2715;</button>
+    </div>
+
+    <!-- Accordion: Dati personali (open by default) -->
+    <div class="acc-item acc-open" id="acc-dati">
+      <button class="acc-header" onclick="toggleAcc(this)">
+        Dati personali
+        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="cl-row2">
+          <div class="cl-field">
+            <label>Nome *</label>
+            <input type="text" id="cl-nome" placeholder="Mario" oninput="renderLetter()">
+          </div>
+          <div class="cl-field">
+            <label>Cognome *</label>
+            <input type="text" id="cl-cognome" placeholder="Rossi" oninput="renderLetter()">
+          </div>
+        </div>
+        <div class="cl-row2">
+          <div class="cl-field">
+            <label>Email</label>
+            <input type="email" id="cl-email" placeholder="mario@email.com" oninput="renderLetter()">
+          </div>
+          <div class="cl-field">
+            <label>Telefono</label>
+            <input type="tel" id="cl-tel" placeholder="+39 333 000 0000" oninput="renderLetter()">
+          </div>
+        </div>
+        <div class="cl-field">
+          <label>Città</label>
+          <input type="text" id="cl-citta" placeholder="Milano" oninput="renderLetter()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Accordion: Posizione -->
+    <div class="acc-item" id="acc-posizione">
+      <button class="acc-header" onclick="toggleAcc(this)">
+        Posizione
+        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="cl-field">
+          <label>Ruolo cercato *</label>
+          <input type="text" id="cl-ruolo" placeholder="Product Manager" oninput="renderLetter()">
+        </div>
+        <div class="cl-field">
+          <label>Azienda *</label>
+          <input type="text" id="cl-azienda" placeholder="Acme Srl" oninput="renderLetter()">
+        </div>
+        <div class="cl-field">
+          <label>Referente <span style="color:var(--text-muted);font-size:0.75rem;">(opzionale)</span></label>
+          <input type="text" id="cl-referente" placeholder="Responsabile Selezione" oninput="renderLetter()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Accordion: Stile -->
+    <div class="acc-item" id="acc-stile">
+      <button class="acc-header" onclick="toggleAcc(this)">
+        Stile
+        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="acc-body">
+        <span class="cl-toggle-label">Tono</span>
+        <div class="cl-toggle-group" id="tone-group">
+          <button class="cl-toggle-btn active" data-tone="formale" onclick="setTone('formale')">Formale</button>
+          <button class="cl-toggle-btn" data-tone="semi" onclick="setTone('semi')">Semi-formale</button>
+          <button class="cl-toggle-btn" data-tone="creativo" onclick="setTone('creativo')">Creativo</button>
+        </div>
+        <span class="cl-toggle-label">Lingua</span>
+        <div class="cl-toggle-group" id="lang-group">
+          <button class="cl-toggle-btn active" data-lang="it" onclick="setLang('it')">&#127470;&#127481; Italiano</button>
+          <button class="cl-toggle-btn" data-lang="en" onclick="setLang('en')">&#127468;&#127463; English</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accordion: Motivazioni -->
+    <div class="acc-item" id="acc-motivazioni">
+      <button class="acc-header" onclick="toggleAcc(this)">
+        Motivazioni <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.75rem;opacity:0.7;">— scegli fino a 3</span>
+        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="kw-hint" id="kw-hint">Seleziona le ragioni che ti spingono a candidarti — verranno integrate nel testo in modo naturale.</div>
+        <div class="kw-grid" id="kw-grid"></div>
+      </div>
+    </div>
+
+    <!-- Accordion: Valore aggiunto -->
+    <div class="acc-item" id="acc-valore">
+      <button class="acc-header" onclick="toggleAcc(this)">
+        Valore aggiunto <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.75rem;opacity:0.7;">— opzionale</span>
+        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="cl-field">
+          <label>Competenze chiave, punti di forza <span style="color:var(--text-muted);font-size:0.75rem;" id="valore-count">(0/300)</span></label>
+          <textarea id="cl-valore" placeholder="Es. Ho 5 anni di esperienza nella gestione di team agile e ho guidato lanci di prodotto con +30% di conversione rispetto al benchmark..." maxlength="300" oninput="renderLetter(); updateValoreCount()"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="cl-actions">
+      <button class="cl-btn cl-btn-primary" id="downloadBtn" onclick="downloadPDF()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Scarica PDF
+      </button>
+      <button class="cl-btn cl-btn-secondary" onclick="copyText(this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copia testo
+      </button>
+      <button class="cl-btn cl-btn-danger" onclick="askResetLetter()">Nuova lettera</button>
+      <span class="cl-autosave" id="cl-autosave">✓ Salvato</span>
+    </div>
+    <div class="cl-inline-confirm" id="cl-reset-confirm">
+      <span id="cl-reset-confirm-msg">Iniziare una nuova lettera? I dati attuali verranno cancellati.</span>
+      <button class="cl-confirm-yes" onclick="confirmResetLetter()">Sì, cancella</button>
+      <button class="cl-confirm-no" onclick="cancelResetLetter()">Annulla</button>
+    </div>
+
+    <div style="margin-top:1rem;text-align:center;">
+      <a href="https://ko-fi.com/dem420156" target="_blank" rel="noopener noreferrer"
+         style="font-size:0.8rem;color:var(--text-muted);text-decoration:none;">
+        &#9749; Offrimi un caff&egrave; se ti &egrave; utile
+      </a>
+    </div>
+
+  </div><!-- /form col -->
+
+  <!-- ── PREVIEW COLUMN ────────────────────────────────── -->
+  <div class="cl-preview-col">
+    <div class="cl-preview-label">
+      <span>Anteprima</span>
+      <span id="page-count-label" style="font-size:0.7rem;color:var(--text-muted);"></span>
+    </div>
+    <div class="cl-preview-wrap" id="previewWrap">
+      <div class="cl-preview-scaler" id="previewScaler">
+        <div id="cl-template"></div>
+        <div class="cl-page-break-indicator" id="pageBreakLine">Pagina 2 &#9660;</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /cl-app -->
+
+<script src="/app/cover-letter/script.js"></script>

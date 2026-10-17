@@ -35,7 +35,11 @@ _layouts/
   app.html           ← standalone layout for tools (no sidebar, no counter)
 _posts/              ← YYYY-MM-DD-slug.md
 _drafts/             ← _post-template.md is the canonical template
-app/                 ← browser-only mini-tools (CV, cover letter, IP calculator)
+app/                 ← browser-only mini-tools; each tool in its own subdirectory
+  app/<tool>/
+    index.html       ← front matter + HTML (layout: app, permalink: /app/<tool>/)
+    style.css        ← tool-specific CSS
+    script.js        ← tool-specific JS
 main.js              ← all client-side JS (search, tabs, Firebase counter, newsletter)
 styles.css           ← all CSS
 search.json          ← Jekyll Liquid template generating a JSON search index — NOT a static file

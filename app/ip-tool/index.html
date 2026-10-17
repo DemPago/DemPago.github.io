@@ -1,0 +1,99 @@
+---
+layout: app
+title: IP Tool
+description: Scopri il tuo IP pubblico e calcola subnet e CIDR in un click. Tutto nel browser, nessun dato inviato.
+permalink: /app/ip-tool/
+---
+
+<link rel="stylesheet" href="/app/ip-tool/style.css">
+
+<div class="ip-app">
+
+  <!-- ── Section 1: My IP ─────────────────────────────────── -->
+  <div class="ip-card">
+    <div class="ip-card-title">Il tuo IP pubblico</div>
+
+    <div id="ip-loading" class="ip-skeleton">
+      <div class="skel skel-lg"></div>
+      <div class="skel-grid">
+        <div class="skel skel-sm"></div>
+        <div class="skel skel-sm"></div>
+        <div class="skel skel-sm"></div>
+        <div class="skel skel-sm"></div>
+      </div>
+    </div>
+
+    <div id="ip-result" style="display:none;">
+      <div class="my-ip-address">
+        <span id="ip-address-val">—</span>
+        <button class="ip-copy-btn" onclick="copyIP()" id="ip-copy-btn">Copia</button>
+      </div>
+      <div class="ip-meta-grid">
+        <div class="ip-meta-item">
+          <span class="ip-meta-label">Paese</span>
+          <span class="ip-meta-value" id="ip-country">—</span>
+        </div>
+        <div class="ip-meta-item">
+          <span class="ip-meta-label">Città</span>
+          <span class="ip-meta-value" id="ip-city">—</span>
+        </div>
+        <div class="ip-meta-item">
+          <span class="ip-meta-label">Provider</span>
+          <span class="ip-meta-value" id="ip-org">—</span>
+        </div>
+        <div class="ip-meta-item">
+          <span class="ip-meta-label">Timezone</span>
+          <span class="ip-meta-value" id="ip-timezone">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="ip-error" style="display:none;">
+      <p class="ip-error-msg">Impossibile recuperare l'IP. Controlla la connessione o riprova.</p>
+      <button class="ip-copy-btn" onclick="retryIP()" style="margin-top:0.5rem;">↺ Riprova</button>
+    </div>
+  </div>
+
+  <!-- ── Section 2: CIDR Calculator ──────────────────────── -->
+  <div class="ip-card">
+    <div class="ip-card-title">CIDR / Subnet Calculator</div>
+
+    <div class="cidr-inputs">
+      <div class="cidr-field">
+        <label for="cidr-ip">Indirizzo IP</label>
+        <input type="text" id="cidr-ip" placeholder="192.168.1.0" maxlength="15" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="cidr-field">
+        <label>Prefisso</label>
+        <div class="cidr-prefix-wrap">
+          <div class="cidr-prefix-row">
+            <span class="cidr-slash">/</span>
+            <input type="number" class="cidr-prefix-num" id="cidr-prefix-num" min="0" max="32" value="24">
+            <input type="range" class="cidr-prefix-range" id="cidr-prefix-range" min="0" max="32" value="24">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cidr-field" style="margin-bottom:1.5rem;">
+      <label for="cidr-mask">o Subnet Mask → CIDR</label>
+      <input type="text" id="cidr-mask" placeholder="255.255.255.0" maxlength="15" autocomplete="off" spellcheck="false">
+    </div>
+
+    <div id="cidr-result" style="display:none;">
+      <table class="cidr-result-table">
+        <tbody id="cidr-tbody"></tbody>
+      </table>
+      <div class="cidr-binary">
+        <div class="cidr-binary-label">Rappresentazione binaria</div>
+        <div class="binary-row" id="cidr-binary-row"></div>
+      </div>
+    </div>
+
+    <div id="cidr-invalid" class="cidr-invalid" style="display:none;">
+      Indirizzo IP non valido.
+    </div>
+  </div>
+
+</div>
+
+<script src="/app/ip-tool/script.js"></script>

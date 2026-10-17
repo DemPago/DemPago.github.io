@@ -1,0 +1,68 @@
+---
+layout: app
+title: Validatore Codici SDI
+description: Verifica se un codice SDI è presente nell'Indice delle PA abilitate alla fatturazione elettronica. Tutto nel browser, dati ufficiali iPA.
+permalink: /app/validatore-sdi/
+---
+
+<link rel="stylesheet" href="/app/validatore-sdi/style.css">
+
+<div class="sdi-app">
+
+  <!-- ── Validator ───────────────────────────────────────── -->
+  <div class="sdi-card">
+    <div class="sdi-card-title">Verifica Codice SDI</div>
+
+    <div class="sdi-input-row">
+      <div class="sdi-field">
+        <label for="sdi-input">Codice Ufficio (6 caratteri)</label>
+        <input type="text" id="sdi-input" placeholder="Es. UFXXX0" maxlength="6"
+               autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
+      <div>
+        <button class="sdi-btn" id="sdi-btn" onclick="validaSDI()" disabled>Verifica</button>
+      </div>
+    </div>
+
+    <div class="sdi-result" id="sdi-result">
+      <span class="res-badge" id="res-badge"></span>
+      <span class="res-message" id="res-message"></span>
+      <span class="res-ente" id="res-ente"></span>
+    </div>
+  </div>
+
+  <!-- ── Database ────────────────────────────────────────── -->
+  <div class="sdi-card">
+    <div class="sdi-card-title">Database iPA</div>
+
+    <div class="sdi-db-bar">
+      <div class="sdi-db-status" id="db-status">
+        <span class="dot"></span>
+        <span id="db-status-text">Caricamento in corso…</span>
+      </div>
+      <button class="sdi-refresh-btn" id="db-refresh-btn" onclick="caricaDatabase(true)">↻ Aggiorna</button>
+    </div>
+
+    <div class="sdi-progress-wrap" id="sdi-progress">
+      <div class="sdi-progress-label" id="progress-label">Download dataset iPA…</div>
+      <div class="sdi-progress-bar">
+        <div class="sdi-progress-fill indeterminate" id="progress-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Info ────────────────────────────────────────────── -->
+  <div class="sdi-card">
+    <div class="sdi-card-title">Come funziona</div>
+    <p class="sdi-note">
+      Il tool scarica il dataset ufficiale dell'<strong>Indice delle Pubbliche Amministrazioni (iPA)</strong>
+      — aggiornato quotidianamente dal Ministero — e lo salva nel tuo browser per 24 ore.<br><br>
+      Verifica se un codice SDI a 6 caratteri è attivo per la fatturazione elettronica verso la PA.
+      Nessun dato viene inviato a server esterni: tutto gira nel tuo browser.<br><br>
+      Fonte: <a href="https://indicepa.gov.it/ipa-dati/dataset/servizi-fatturazione-elettronica" target="_blank" rel="noopener">indicepa.gov.it — Open Data</a>
+    </p>
+  </div>
+
+</div>
+
+<script src="/app/validatore-sdi/script.js"></script>

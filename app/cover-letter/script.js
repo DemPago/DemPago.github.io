@@ -1,438 +1,3 @@
----
-layout: app
-title: Lettera di Presentazione
-description: Genera la tua lettera di presentazione professionale in italiano o inglese e scaricala in PDF.
-permalink: /app/cover-letter/
----
-
-<style>
-/* ── Layout ────────────────────────────────────────────── */
-.cl-app {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  align-items: start;
-}
-@media (max-width: 900px) {
-  .cl-app { grid-template-columns: 1fr; }
-  .cl-preview-col { order: -1; }
-}
-
-/* ── Form ──────────────────────────────────────────────── */
-.cl-form-col { display: flex; flex-direction: column; gap: 0; }
-
-/* Accordion sections defined globally in styles.css */
-
-.cl-field { margin-bottom: 0.75rem; }
-.cl-field label {
-  display: block;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-bottom: 0.25rem;
-}
-.cl-field input,
-.cl-field textarea {
-  width: 100%;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 0.5rem 0.75rem;
-  color: var(--text);
-  font-family: inherit;
-  font-size: 0.9rem;
-  transition: border-color 0.2s;
-}
-.cl-field input:focus,
-.cl-field textarea:focus { outline: none; border-color: var(--accent); }
-.cl-field textarea { resize: vertical; min-height: 80px; }
-
-.cl-row2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-}
-
-/* ── Toggle groups ─────────────────────────────────────── */
-.cl-toggle-group {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-  margin-bottom: 0.75rem;
-}
-.cl-toggle-label {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  display: block;
-  margin-bottom: 0.3rem;
-}
-.cl-toggle-btn {
-  padding: 0.35rem 0.85rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
-}
-.cl-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
-.cl-toggle-btn.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #0d1117;
-  font-weight: 600;
-}
-
-/* ── Keyword tags ──────────────────────────────────────── */
-.kw-hint {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-bottom: 0.6rem;
-  line-height: 1.5;
-}
-.kw-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-bottom: 0.25rem;
-}
-.kw-tag {
-  padding: 0.3rem 0.8rem;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  user-select: none;
-  font-family: inherit;
-}
-.kw-tag:hover { border-color: var(--accent); color: var(--accent); }
-.kw-tag.selected {
-  background: rgba(88,166,255,0.15);
-  border-color: var(--accent);
-  color: var(--accent);
-  font-weight: 600;
-}
-.kw-tag.disabled { opacity: 0.35; cursor: not-allowed; }
-
-/* ── Action buttons ────────────────────────────────────── */
-.cl-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
-  flex-wrap: wrap;
-}
-.cl-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.6rem 1.1rem;
-  border-radius: 8px;
-  font-size: 0.88rem;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition: all 0.2s;
-  font-family: inherit;
-}
-.cl-btn-primary { background: var(--accent); color: #0d1117; }
-.cl-btn-primary:hover { background: var(--accent-hover); }
-.cl-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-.cl-btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--border); }
-.cl-btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-.cl-btn-danger { background: transparent; color: #f85149; border: 1px solid #f85149; }
-.cl-btn-danger:hover { background: rgba(248,81,73,0.08); }
-
-/* ── CV import banner ──────────────────────────────────── */
-.cl-banner {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.65rem 1rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  margin-bottom: 1.25rem;
-  line-height: 1.4;
-}
-.cl-banner-success {
-  background: rgba(63,185,80,0.1);
-  border: 1px solid rgba(63,185,80,0.3);
-  color: #3fb950;
-}
-.cl-banner-hint {
-  background: rgba(88,166,255,0.07);
-  border: 1px solid rgba(88,166,255,0.2);
-  color: var(--text-muted);
-}
-.cl-banner-text { flex: 1; }
-.cl-banner-text a { color: var(--accent); text-decoration: none; }
-.cl-banner-text a:hover { text-decoration: underline; }
-.cl-banner-close {
-  background: none;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-  opacity: 0.6;
-  font-size: 1rem;
-  padding: 0;
-  line-height: 1;
-  flex-shrink: 0;
-}
-.cl-banner-close:hover { opacity: 1; }
-
-/* ── Autosave indicator ────────────────────────────────────── */
-.cl-autosave {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  opacity: 0;
-  transition: opacity 0.4s;
-  margin-left: 0.5rem;
-}
-.cl-autosave.visible { opacity: 1; }
-
-/* ── Inline confirm ────────────────────────────────────────── */
-.cl-inline-confirm {
-  display: none;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.55rem 0.9rem;
-  background: rgba(248,81,73,0.08);
-  border: 1px solid rgba(248,81,73,0.3);
-  border-radius: 8px;
-  font-size: 0.85rem;
-  color: var(--text);
-  margin-top: 1rem;
-  flex-wrap: wrap;
-}
-.cl-inline-confirm.show { display: flex; }
-.cl-confirm-yes {
-  padding: 0.3rem 0.75rem;
-  border: 1px solid #f85149;
-  background: #f85149;
-  color: #fff;
-  border-radius: 6px;
-  font-size: 0.82rem;
-  font-family: inherit;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-.cl-confirm-yes:hover { opacity: 0.85; }
-.cl-confirm-no {
-  padding: 0.3rem 0.75rem;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text-muted);
-  border-radius: 6px;
-  font-size: 0.82rem;
-  font-family: inherit;
-  cursor: pointer;
-  transition: border-color 0.2s;
-}
-.cl-confirm-no:hover { border-color: var(--accent); color: var(--accent); }
-.cl-preview-col { position: sticky; top: 1rem; }
-.cl-preview-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.cl-preview-wrap {
-  background: #888;
-  border-radius: 6px;
-  padding: 8px;
-  overflow: hidden;
-}
-.cl-preview-scaler { transform-origin: top left; }
-#cl-template {
-  width: 794px;
-  min-width: 0;
-  overflow-wrap: break-word;
-  word-break: break-word;
-}
-.cl-page-break-indicator {
-  display: none;
-  width: 794px;
-  text-align: center;
-  padding: 6px 0;
-  font-size: 11px;
-  font-weight: 700;
-  color: #c0392b;
-  border-top: 2px dashed #c0392b;
-  background: rgba(192,57,43,0.06);
-  letter-spacing: 0.05em;
-}
-</style>
-
-<!-- CDN: html2canvas + jsPDF (stessi del CV generator) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<div class="cl-app">
-
-  <!-- ── FORM COLUMN ───────────────────────────────────── -->
-  <div class="cl-form-col">
-
-    <!-- CV import banner (shown/hidden by JS) -->
-    <div id="cl-cv-banner" class="cl-banner" hidden>
-      <span class="cl-banner-text" id="cl-cv-banner-text"></span>
-      <button class="cl-banner-close" onclick="document.getElementById('cl-cv-banner').hidden=true" aria-label="Chiudi">&#x2715;</button>
-    </div>
-
-    <!-- Accordion: Dati personali (open by default) -->
-    <div class="acc-item acc-open" id="acc-dati">
-      <button class="acc-header" onclick="toggleAcc(this)">
-        Dati personali
-        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="acc-body">
-        <div class="cl-row2">
-          <div class="cl-field">
-            <label>Nome *</label>
-            <input type="text" id="cl-nome" placeholder="Mario" oninput="renderLetter()">
-          </div>
-          <div class="cl-field">
-            <label>Cognome *</label>
-            <input type="text" id="cl-cognome" placeholder="Rossi" oninput="renderLetter()">
-          </div>
-        </div>
-        <div class="cl-row2">
-          <div class="cl-field">
-            <label>Email</label>
-            <input type="email" id="cl-email" placeholder="mario@email.com" oninput="renderLetter()">
-          </div>
-          <div class="cl-field">
-            <label>Telefono</label>
-            <input type="tel" id="cl-tel" placeholder="+39 333 000 0000" oninput="renderLetter()">
-          </div>
-        </div>
-        <div class="cl-field">
-          <label>Città</label>
-          <input type="text" id="cl-citta" placeholder="Milano" oninput="renderLetter()">
-        </div>
-      </div>
-    </div>
-
-    <!-- Accordion: Posizione -->
-    <div class="acc-item" id="acc-posizione">
-      <button class="acc-header" onclick="toggleAcc(this)">
-        Posizione
-        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="acc-body">
-        <div class="cl-field">
-          <label>Ruolo cercato *</label>
-          <input type="text" id="cl-ruolo" placeholder="Product Manager" oninput="renderLetter()">
-        </div>
-        <div class="cl-field">
-          <label>Azienda *</label>
-          <input type="text" id="cl-azienda" placeholder="Acme Srl" oninput="renderLetter()">
-        </div>
-        <div class="cl-field">
-          <label>Referente <span style="color:var(--text-muted);font-size:0.75rem;">(opzionale)</span></label>
-          <input type="text" id="cl-referente" placeholder="Responsabile Selezione" oninput="renderLetter()">
-        </div>
-      </div>
-    </div>
-
-    <!-- Accordion: Stile -->
-    <div class="acc-item" id="acc-stile">
-      <button class="acc-header" onclick="toggleAcc(this)">
-        Stile
-        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="acc-body">
-        <span class="cl-toggle-label">Tono</span>
-        <div class="cl-toggle-group" id="tone-group">
-          <button class="cl-toggle-btn active" data-tone="formale" onclick="setTone('formale')">Formale</button>
-          <button class="cl-toggle-btn" data-tone="semi" onclick="setTone('semi')">Semi-formale</button>
-          <button class="cl-toggle-btn" data-tone="creativo" onclick="setTone('creativo')">Creativo</button>
-        </div>
-        <span class="cl-toggle-label">Lingua</span>
-        <div class="cl-toggle-group" id="lang-group">
-          <button class="cl-toggle-btn active" data-lang="it" onclick="setLang('it')">&#127470;&#127481; Italiano</button>
-          <button class="cl-toggle-btn" data-lang="en" onclick="setLang('en')">&#127468;&#127463; English</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Accordion: Motivazioni -->
-    <div class="acc-item" id="acc-motivazioni">
-      <button class="acc-header" onclick="toggleAcc(this)">
-        Motivazioni <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.75rem;opacity:0.7;">— scegli fino a 3</span>
-        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="acc-body">
-        <div class="kw-hint" id="kw-hint">Seleziona le ragioni che ti spingono a candidarti — verranno integrate nel testo in modo naturale.</div>
-        <div class="kw-grid" id="kw-grid"></div>
-      </div>
-    </div>
-
-    <!-- Accordion: Valore aggiunto -->
-    <div class="acc-item" id="acc-valore">
-      <button class="acc-header" onclick="toggleAcc(this)">
-        Valore aggiunto <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.75rem;opacity:0.7;">— opzionale</span>
-        <svg class="acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="acc-body">
-        <div class="cl-field">
-          <label>Competenze chiave, punti di forza <span style="color:var(--text-muted);font-size:0.75rem;" id="valore-count">(0/300)</span></label>
-          <textarea id="cl-valore" placeholder="Es. Ho 5 anni di esperienza nella gestione di team agile e ho guidato lanci di prodotto con +30% di conversione rispetto al benchmark..." maxlength="300" oninput="renderLetter(); updateValoreCount()"></textarea>
-        </div>
-      </div>
-    </div>
-
-    <div class="cl-actions">
-      <button class="cl-btn cl-btn-primary" id="downloadBtn" onclick="downloadPDF()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Scarica PDF
-      </button>
-      <button class="cl-btn cl-btn-secondary" onclick="copyText(this)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        Copia testo
-      </button>
-      <button class="cl-btn cl-btn-danger" onclick="askResetLetter()">Nuova lettera</button>
-      <span class="cl-autosave" id="cl-autosave">✓ Salvato</span>
-    </div>
-    <div class="cl-inline-confirm" id="cl-reset-confirm">
-      <span id="cl-reset-confirm-msg">Iniziare una nuova lettera? I dati attuali verranno cancellati.</span>
-      <button class="cl-confirm-yes" onclick="confirmResetLetter()">Sì, cancella</button>
-      <button class="cl-confirm-no" onclick="cancelResetLetter()">Annulla</button>
-    </div>
-
-    <div style="margin-top:1rem;text-align:center;">
-      <a href="https://ko-fi.com/dem420156" target="_blank" rel="noopener noreferrer"
-         style="font-size:0.8rem;color:var(--text-muted);text-decoration:none;">
-        &#9749; Offrimi un caff&egrave; se ti &egrave; utile
-      </a>
-    </div>
-
-  </div><!-- /form col -->
-
-  <!-- ── PREVIEW COLUMN ────────────────────────────────── -->
-  <div class="cl-preview-col">
-    <div class="cl-preview-label">
-      <span>Anteprima</span>
-      <span id="page-count-label" style="font-size:0.7rem;color:var(--text-muted);"></span>
-    </div>
-    <div class="cl-preview-wrap" id="previewWrap">
-      <div class="cl-preview-scaler" id="previewScaler">
-        <div id="cl-template"></div>
-        <div class="cl-page-break-indicator" id="pageBreakLine">Pagina 2 &#9660;</div>
-      </div>
-    </div>
-  </div>
-
-</div><!-- /cl-app -->
-
-<script>
 /* ── Helper ─────────────────────────────────────────────── */
 const v = id => (document.getElementById(id)?.value || '').trim();
 
@@ -481,11 +46,11 @@ const KEYWORDS = [
   },
   {
     id: 'responsabilita',
-    label: { it: 'Pi\u00f9 responsabilit\u00e0', en: 'Greater responsibility' },
+    label: { it: 'Più responsabilità', en: 'Greater responsibility' },
     phrase: {
       it: {
-        formale: 'sono pronto ad assumere un ruolo di maggiore impatto e responsabilit\u00e0 diretta sui risultati',
-        informal: 'sono pronto per un ruolo con pi\u00f9 responsabilit\u00e0 e un impatto concreto e misurabile'
+        formale: 'sono pronto ad assumere un ruolo di maggiore impatto e responsabilità diretta sui risultati',
+        informal: 'sono pronto per un ruolo con più responsabilità e un impatto concreto e misurabile'
       },
       en: {
         formale: 'I am ready to take on a role with greater impact and direct accountability for results',
@@ -499,7 +64,7 @@ const KEYWORDS = [
     phrase: {
       it: {
         formale: 'sono motivato a intraprendere una nuova sfida professionale con entusiasmo e piena determinazione',
-        informal: 'sento che \u00e8 il momento giusto per affrontare una nuova sfida professionale'
+        informal: 'sento che è il momento giusto per affrontare una nuova sfida professionale'
       },
       en: {
         formale: 'I am motivated to embrace a new professional challenge with full enthusiasm and commitment',
@@ -512,7 +77,7 @@ const KEYWORDS = [
     label: { it: 'Cambio settore', en: 'New sector' },
     phrase: {
       it: {
-        formale: 'sto compiendo un passo consapevole verso un nuovo ambito, con la volont\u00e0 di apportare una prospettiva trasversale e un approccio fresco',
+        formale: 'sto compiendo un passo consapevole verso un nuovo ambito, con la volontà di apportare una prospettiva trasversale e un approccio fresco',
         informal: 'sto cambiando settore in modo consapevole, portando uno sguardo nuovo e una prospettiva diversa'
       },
       en: {
@@ -527,7 +92,7 @@ const KEYWORDS = [
     phrase: {
       it: {
         formale: 'sono particolarmente attratto dalla reputazione e dai valori che [AZ] esprime nel mercato',
-        informal: 'mi ha colpito la cultura e i valori di [AZ] \u2014 voglio farne parte'
+        informal: 'mi ha colpito la cultura e i valori di [AZ] — voglio farne parte'
       },
       en: {
         formale: 'I am particularly drawn to the reputation and values that [AZ] demonstrates in the market',
@@ -568,8 +133,8 @@ const KEYWORDS = [
     label: { it: 'Work-life balance', en: 'Work-life balance' },
     phrase: {
       it: {
-        formale: 'valuto positivamente la flessibilit\u00e0 organizzativa, elemento che ritengo determinante per massimizzare produttivit\u00e0 e benessere professionale',
-        informal: 'do molto valore alla flessibilit\u00e0 lavorativa \u2014 \u00e8 ci\u00f2 che mi permette di dare il meglio'
+        formale: 'valuto positivamente la flessibilità organizzativa, elemento che ritengo determinante per massimizzare produttività e benessere professionale',
+        informal: 'do molto valore alla flessibilità lavorativa — è ciò che mi permette di dare il meglio'
       },
       en: {
         formale: 'I place great value on organizational flexibility, which I consider key to maximizing both productivity and professional wellbeing',
@@ -582,8 +147,8 @@ const KEYWORDS = [
     label: { it: 'Formazione continua', en: 'Continuous learning' },
     phrase: {
       it: {
-        formale: "sono fortemente interessato alle opportunit\u00e0 di sviluppo e aggiornamento professionale che [AZ] \u00e8 in grado di offrire",
-        informal: 'tengo molto alla formazione continua e alle opportunit\u00e0 di crescita che [AZ] offre'
+        formale: "sono fortemente interessato alle opportunità di sviluppo e aggiornamento professionale che [AZ] è in grado di offrire",
+        informal: 'tengo molto alla formazione continua e alle opportunità di crescita che [AZ] offre'
       },
       en: {
         formale: 'I am strongly interested in the professional development and continuous learning opportunities that [AZ] provides',
@@ -608,8 +173,8 @@ function updateKwLabels() {
   });
   const hint = document.getElementById('kw-hint');
   if (hint) hint.textContent = clState.lang === 'it'
-    ? 'Seleziona le ragioni che ti spingono a candidarti \u2014 verranno integrate nel testo in modo naturale.'
-    : 'Select the reasons that drive your application \u2014 they will be naturally woven into the letter.';
+    ? 'Seleziona le ragioni che ti spingono a candidarti — verranno integrate nel testo in modo naturale.'
+    : 'Select the reasons that drive your application — they will be naturally woven into the letter.';
 }
 
 function toggleKeyword(id) {
@@ -647,7 +212,7 @@ function setLang(lang) {
     btn.classList.toggle('active', btn.dataset.lang === lang)
   );
   document.getElementById('pageBreakLine').textContent =
-    lang === 'it' ? 'Pagina 2 \u25bc' : 'Page 2 \u25bc';
+    lang === 'it' ? 'Pagina 2 ▼' : 'Page 2 ▼';
   updateKwLabels();
   renderLetter();
 }
@@ -841,7 +406,7 @@ function checkPageBreak() {
   const over = h > 1123;
   lineEl.style.display = over ? 'block' : 'none';
   if (countEl) countEl.textContent = over
-    ? (clState.lang === 'it' ? '2 pagine \u2014 lettera lunga' : '2 pages \u2014 letter is long')
+    ? (clState.lang === 'it' ? '2 pagine — lettera lunga' : '2 pages — letter is long')
     : '';
 }
 
@@ -870,12 +435,12 @@ function copyText(btn) {
   const text = (tmp.innerText || tmp.textContent || '').trim();
   const origHTML = btn.innerHTML;
   navigator.clipboard.writeText(text).then(() => {
-    btn.innerHTML = '\u2713 ' + (clState.lang === 'it' ? 'Copiato!' : 'Copied!');
+    btn.innerHTML = '✓ ' + (clState.lang === 'it' ? 'Copiato!' : 'Copied!');
     setTimeout(() => { btn.innerHTML = origHTML; }, 2000);
   }).catch(() => {
     alert(clState.lang === 'it'
-      ? 'Copia non riuscita \u2014 seleziona il testo manualmente.'
-      : 'Copy failed \u2014 please select the text manually.');
+      ? 'Copia non riuscita — seleziona il testo manualmente.'
+      : 'Copy failed — please select the text manually.');
   });
 }
 
@@ -883,7 +448,7 @@ function copyText(btn) {
 async function downloadPDF() {
   const btn = document.getElementById('downloadBtn');
   btn.disabled = true;
-  btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> ${clState.lang === 'it' ? 'Generazione PDF\u2026' : 'Generating PDF\u2026'}`;
+  btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> ${clState.lang === 'it' ? 'Generazione PDF…' : 'Generating PDF…'}`;
   if (!document.getElementById('spin-style')) {
     const s = document.createElement('style');
     s.id = 'spin-style';
@@ -1077,4 +642,3 @@ if (restored) {
 updateValoreCount();
 renderLetter();
 requestAnimationFrame(scalePreview);
-</script>

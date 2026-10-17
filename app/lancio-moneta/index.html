@@ -1,0 +1,263 @@
+---
+layout: app
+title: Lancia la Moneta — Decidi con Dem
+description: Hai un dubbio che non riesci a sciogliere? Scrivi le due alternative, lancia la moneta e lascia decidere al caso.
+permalink: /app/lancio-moneta/
+---
+
+<link rel="stylesheet" href="/app/lancio-moneta/style.css">
+
+<div class="coin-app">
+
+  <!-- ── Form dilemma ──────────────────────────────────── -->
+  <div class="dilemma-card">
+    <div>
+      <label for="dilemma-text">Il tuo dilemma</label>
+      <textarea id="dilemma-text" rows="2" placeholder="Es: Accetto il nuovo lavoro o resto dove sono?"></textarea>
+    </div>
+    <div class="alternatives-row">
+      <div class="alt-field">
+        <span class="alt-badge testa">🪙 Testa</span>
+        <input type="text" id="alt-testa" placeholder="Alternativa A" maxlength="60">
+      </div>
+      <div class="alt-field">
+        <span class="alt-badge croce">🌍 Croce</span>
+        <input type="text" id="alt-croce" placeholder="Alternativa B" maxlength="60">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Moneta ────────────────────────────────────────── -->
+  <div class="coin-stage" onclick="lancia()" title="Clicca per lanciare">
+    <div class="coin" id="coin">
+
+      <!-- ══ TESTA — lato Dem ══ -->
+      <div class="coin-face coin-testa">
+        <svg id="svg-testa" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg"
+             xmlns:xlink="http://www.w3.org/1999/xlink" width="240" height="240">
+          <defs>
+            <!-- Oro disco interno -->
+            <radialGradient id="gGoldT" cx="38%" cy="32%" r="65%">
+              <stop offset="0%"   stop-color="#fdf0a0"/>
+              <stop offset="20%"  stop-color="#e8c040"/>
+              <stop offset="50%"  stop-color="#c49020"/>
+              <stop offset="80%"  stop-color="#a07018"/>
+              <stop offset="100%" stop-color="#7a5010"/>
+            </radialGradient>
+            <!-- Argento anello esterno -->
+            <radialGradient id="gSilverT" cx="35%" cy="28%" r="70%">
+              <stop offset="0%"   stop-color="#ffffff"/>
+              <stop offset="15%"  stop-color="#e8e8e8"/>
+              <stop offset="45%"  stop-color="#b8b8b8"/>
+              <stop offset="75%"  stop-color="#787878"/>
+              <stop offset="100%" stop-color="#a0a0a0"/>
+            </radialGradient>
+            <!-- Riflesso speculare -->
+            <radialGradient id="gSpecT" cx="30%" cy="25%" r="45%">
+              <stop offset="0%"  stop-color="rgba(255,255,255,0.55)"/>
+              <stop offset="60%" stop-color="rgba(255,255,255,0.0)"/>
+            </radialGradient>
+            <!-- Filtro foto: b/n + alto contrasto + tint oro -->
+            <filter id="fPhotoT" color-interpolation-filters="sRGB">
+              <feColorMatrix type="saturate" values="0"/>
+              <feComponentTransfer>
+                <feFuncR type="gamma" amplitude="1.1" exponent="0.85" offset="0.0"/>
+                <feFuncG type="gamma" amplitude="1.0" exponent="0.90" offset="0.0"/>
+                <feFuncB type="gamma" amplitude="0.7" exponent="1.1"  offset="0.0"/>
+              </feComponentTransfer>
+            </filter>
+            <!-- Incavo del bordo moneta -->
+            <clipPath id="clipInnerT"><circle cx="120" cy="120" r="78"/></clipPath>
+            <clipPath id="clipOuterT"><circle cx="120" cy="120" r="118"/></clipPath>
+          </defs>
+
+          <!-- BORDO ESTERNO scuro (spessore moneta) -->
+          <circle cx="120" cy="120" r="119" fill="#4a3808"/>
+
+          <!-- ANELLO ARGENTO -->
+          <circle cx="120" cy="120" r="118" fill="url(#gSilverT)"/>
+
+          <!-- Reeding: dentellatura generata via JS, inserita qui -->
+          <g id="reeding-testa" fill="#606060" opacity="0.55"></g>
+
+          <!-- Solco separazione bimetallica -->
+          <circle cx="120" cy="120" r="80" fill="none" stroke="#3a2a08" stroke-width="2.5"/>
+          <circle cx="120" cy="120" r="77" fill="none" stroke="#c8a030" stroke-width="0.8" opacity="0.5"/>
+
+          <!-- DISCO ORO interno -->
+          <circle cx="120" cy="120" r="78" fill="url(#gGoldT)"/>
+
+          <!-- Foto Dem nel disco -->
+          <image href="/images/profilo.png"
+                 x="42" y="42" width="156" height="156"
+                 clip-path="url(#clipInnerT)"
+                 filter="url(#fPhotoT)"
+                 preserveAspectRatio="xMidYMid slice"/>
+
+          <!-- Velo dorato sulla foto per integrazione -->
+          <circle cx="120" cy="120" r="78" fill="url(#gGoldT)" opacity="0.28" clip-path="url(#clipInnerT)"/>
+
+          <!-- Testo DEM in basso nel disco -->
+          <text x="120" y="186" text-anchor="middle"
+                font-size="11" font-weight="900" font-family="Georgia,serif"
+                fill="#3a2008" letter-spacing="5"
+                style="text-shadow:0 1px 0 rgba(255,220,80,0.4)">DEM</text>
+
+          <!-- Anno in basso a destra -->
+          <text x="158" y="174" text-anchor="middle" font-size="7"
+                fill="#5a3808" font-family="Georgia,serif" opacity="0.75">2024</text>
+
+          <!-- Riflesso speculare su tutto -->
+          <circle cx="120" cy="120" r="118" fill="url(#gSpecT)"/>
+        </svg>
+      </div>
+
+      <!-- ══ CROCE — lato europeo 2€ ══ -->
+      <div class="coin-face coin-croce">
+        <svg id="svg-croce" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg"
+             width="240" height="240">
+          <defs>
+            <radialGradient id="gGoldC" cx="62%" cy="32%" r="65%">
+              <stop offset="0%"   stop-color="#fdf0a0"/>
+              <stop offset="20%"  stop-color="#e8c040"/>
+              <stop offset="50%"  stop-color="#c49020"/>
+              <stop offset="80%"  stop-color="#a07018"/>
+              <stop offset="100%" stop-color="#7a5010"/>
+            </radialGradient>
+            <radialGradient id="gSilverC" cx="65%" cy="28%" r="70%">
+              <stop offset="0%"   stop-color="#ffffff"/>
+              <stop offset="15%"  stop-color="#e8e8e8"/>
+              <stop offset="45%"  stop-color="#b8b8b8"/>
+              <stop offset="75%"  stop-color="#787878"/>
+              <stop offset="100%" stop-color="#a0a0a0"/>
+            </radialGradient>
+            <radialGradient id="gSpecC" cx="70%" cy="25%" r="45%">
+              <stop offset="0%"  stop-color="rgba(255,255,255,0.55)"/>
+              <stop offset="60%" stop-color="rgba(255,255,255,0.0)"/>
+            </radialGradient>
+            <clipPath id="clipInnerC"><circle cx="120" cy="120" r="78"/></clipPath>
+          </defs>
+
+          <circle cx="120" cy="120" r="119" fill="#4a3808"/>
+          <circle cx="120" cy="120" r="118" fill="url(#gSilverC)"/>
+
+          <g id="reeding-croce" fill="#606060" opacity="0.55"></g>
+
+          <circle cx="120" cy="120" r="80" fill="none" stroke="#3a2a08" stroke-width="2.5"/>
+          <circle cx="120" cy="120" r="77" fill="none" stroke="#c8a030" stroke-width="0.8" opacity="0.5"/>
+          <circle cx="120" cy="120" r="78" fill="url(#gGoldC)"/>
+
+          <!-- Stelle UE sull'anello (12 stelle) -->
+          <g id="stars-croce" fill="#d4a017" opacity="0.9"></g>
+
+          <!-- Cartina Europa — coordinate da proiezione geografica reale
+               Formula: x = 52 + (lon+10)*2.32 | y = 50 + (72-lat)*3.19
+               Disco interno r=78, centro (120,120) -->
+          <g clip-path="url(#clipInnerC)" fill="#7a5010" stroke="#5a3808"
+             stroke-width="0.5" opacity="0.85">
+
+            <!-- Massa continentale principale (senso orario da Gibilterra) -->
+            <path d="
+              M 63,162
+              L 70,161 L 73,156 L 80,148
+              L 87,141 L 92,139 L 95,137
+              L 98,140 L 103,146 L 108,151
+              L 111,158
+              Q 115,154 117,151
+              L 118,148 L 116,143
+              Q 111,136 107,134
+              L 110,135 L 114,141 L 117,144
+              L 122,151 L 126,161 L 130,158
+              L 128,149 L 128,143
+              L 134,138 L 140,133
+              L 141,120 L 135,107
+              L 131,98 L 133,90
+              L 138,72 L 135,58 L 125,56
+              L 110,68 L 104,76 L 100,80
+              L 91,88 L 89,92
+              L 96,92 L 100,96 L 104,100
+              L 101,107 L 97,107
+              L 91,108 L 85,110 L 80,116
+              L 70,121 L 64,124
+              L 68,133 L 70,140
+              L 57,140 L 55,147 L 54,156 L 54,160
+              L 61,163 L 63,162 Z
+            "/>
+
+            <!-- Sicilia (triangolare, caratteristica) -->
+            <path d="M 104,159 L 112,159 L 109,164 Z"/>
+
+            <!-- Sardegna -->
+            <ellipse cx="93" cy="150" rx="2.5" ry="4.5"/>
+
+            <!-- Corsica -->
+            <ellipse cx="93" cy="142" rx="1.5" ry="3"/>
+
+            <!-- Gran Bretagna -->
+            <path d="M 62,120 L 65,116 L 78,117 L 74,112 L 68,101
+                     L 66,94 L 63,95 L 61,100 L 63,110 L 62,120 Z"/>
+
+            <!-- Irlanda -->
+            <path d="M 52,109 L 56,104 L 59,108 L 57,114 L 52,112 Z"/>
+
+          </g>
+
+          <!-- "2" grande -->
+          <text x="128" y="130" text-anchor="middle"
+                font-size="58" font-weight="900" font-family="Georgia,serif"
+                fill="#4a2e08" stroke="#2a1808" stroke-width="0.8"
+                opacity="0.88">2</text>
+          <text x="128" y="143" text-anchor="middle"
+                font-size="9" font-weight="700" font-family="Georgia,serif"
+                fill="#4a2e08" letter-spacing="3">EURO</text>
+
+          <!-- Linee orizzontali campo sinistro -->
+          <g stroke="#6a4010" stroke-width="0.9" opacity="0.5">
+            <line x1="50" y1="102" x2="83" y2="102"/>
+            <line x1="50" y1="107" x2="80" y2="107"/>
+            <line x1="50" y1="112" x2="79" y2="112"/>
+            <line x1="50" y1="117" x2="79" y2="117"/>
+            <line x1="50" y1="122" x2="80" y2="122"/>
+            <line x1="50" y1="127" x2="82" y2="127"/>
+            <line x1="50" y1="132" x2="84" y2="132"/>
+          </g>
+
+          <circle cx="120" cy="120" r="118" fill="url(#gSpecC)"/>
+        </svg>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Risultato ─────────────────────────────────────── -->
+  <div class="coin-result" id="coin-result">
+    <span class="res-label"   id="res-label"></span>
+    <span class="res-winner"  id="res-winner"></span>
+    <span class="res-dilemma" id="res-dilemma"></span>
+  </div>
+
+  <!-- ── Bottone ───────────────────────────────────────── -->
+  <button class="coin-btn" id="coin-btn" onclick="lancia()">🪙 Lascia decidere a Dem</button>
+
+  <!-- ── Stats ─────────────────────────────────────────── -->
+  <div class="coin-stats">
+    <div class="stat-item">
+      <span class="stat-label">🪙 Testa</span>
+      <span class="stat-value" id="stat-testa">0</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Lanci</span>
+      <span class="stat-value" id="stat-totale">0</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">🌍 Croce</span>
+      <span class="stat-value" id="stat-croce">0</span>
+    </div>
+    <button class="stats-reset-btn" id="stats-reset-btn" title="Azzera statistiche" style="display:none;">↺ Reset</button>
+  </div>
+
+  <p class="coin-hint" id="coin-hint">Compila il dilemma, assegna un'alternativa per lato<br>e lascia che la moneta decida.</p>
+
+</div>
+
+<script src="/app/lancio-moneta/script.js"></script>

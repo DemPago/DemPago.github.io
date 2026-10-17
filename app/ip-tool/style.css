@@ -1,0 +1,290 @@
+/* ── Layout ───────────────────────────────────────────────── */
+.ip-app {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+/* ── Card ─────────────────────────────────────────────────── */
+.ip-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.75rem 2rem;
+}
+
+.ip-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── My IP ────────────────────────────────────────────────── */
+.my-ip-address {
+  font-size: 2.4rem;
+  font-weight: 700;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--accent);
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.ip-copy-btn {
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: inherit;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  letter-spacing: 0;
+}
+.ip-copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.ip-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.ip-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ip-meta-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.ip-meta-value {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+/* Skeleton loader */
+.ip-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.skel {
+  background: var(--border);
+  border-radius: 6px;
+  animation: skel-pulse 1.4s ease-in-out infinite;
+}
+.skel-lg { height: 2.8rem; width: 240px; }
+.skel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+.skel-sm { height: 2.6rem; }
+@keyframes skel-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.ip-error-msg {
+  color: #f85149;
+  font-size: 0.9rem;
+}
+
+/* ── CIDR Calculator ──────────────────────────────────────── */
+.cidr-inputs {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 540px) {
+  .cidr-inputs { grid-template-columns: 1fr; }
+}
+
+.cidr-field label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.cidr-field input[type="text"] {
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 1rem;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.cidr-field input[type="text"]:focus { border-color: var(--accent); }
+
+.cidr-prefix-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cidr-prefix-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cidr-slash {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+.cidr-prefix-num {
+  width: 62px;
+  padding: 0.6rem 0.5rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--accent);
+  font-size: 1.1rem;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.cidr-prefix-num:focus { border-color: var(--accent); }
+
+.cidr-prefix-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 130px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+.cidr-prefix-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.cidr-prefix-range::-webkit-slider-thumb:hover { background: var(--accent-hover); }
+
+@media (max-width: 540px) {
+  .cidr-prefix-range { width: 100%; }
+}
+
+/* Results table */
+.cidr-result-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+.cidr-result-table tr {
+  border-bottom: 1px solid var(--border);
+}
+.cidr-result-table tr:last-child { border-bottom: none; }
+.cidr-result-table td {
+  padding: 0.55rem 0.5rem;
+  vertical-align: middle;
+}
+.cidr-result-table td:first-child {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  width: 44%;
+  padding-left: 0;
+}
+.cidr-result-table td:last-child {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--text);
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 99px;
+  font-family: inherit;
+  letter-spacing: 0.04em;
+}
+.badge-private { background: rgba(63,185,80,0.15); color: #3fb950; border: 1px solid rgba(63,185,80,0.3); }
+.badge-public  { background: rgba(88,166,255,0.12); color: var(--accent); border: 1px solid rgba(88,166,255,0.25); }
+.badge-class   { background: rgba(139,148,158,0.15); color: var(--text-muted); border: 1px solid var(--border); }
+
+/* Binary bar */
+.cidr-binary {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+.cidr-binary-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+}
+.binary-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.78rem;
+}
+.binary-row .oct {
+  display: flex;
+  gap: 1px;
+}
+.binary-row .b-net {
+  color: var(--accent);
+  font-weight: 700;
+}
+.binary-row .b-host {
+  color: var(--text-muted);
+}
+.binary-row .oct-sep {
+  color: var(--border);
+  margin: 0 2px;
+}
+
+.cidr-invalid {
+  color: #f85149;
+  font-size: 0.88rem;
+  margin-top: 0.5rem;
+}
