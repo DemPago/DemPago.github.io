@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, serverTimestamp, deleteField, arrayUnion }
+import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, serverTimestamp, deleteField, arrayUnion,
+         collection, query, where, getDocs, Timestamp, deleteDoc }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 /* ── Firebase ────────────────────────────────────────────── */
@@ -11,6 +12,15 @@ const FB_CONFIG = {
 };
 const app = getApps().length ? getApp() : initializeApp(FB_CONFIG);
 const db  = getFirestore(app);
+
+async function cleanOldSessions() {
+  try {
+    const cutoff = Timestamp.fromDate(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000));
+    const snap = await getDocs(query(collection(db, 'poker_sessions'), where('createdAt', '<', cutoff)));
+    snap.forEach(d => deleteDoc(d.ref));
+  } catch(e) {}
+}
+cleanOldSessions();
 
 /* ── Voti config ─────────────────────────────────────────── */
 const VOTES = [
