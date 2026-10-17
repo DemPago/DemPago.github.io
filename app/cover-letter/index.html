@@ -32,26 +32,26 @@ permalink: /app/cover-letter/
         <div class="cl-row2">
           <div class="cl-field">
             <label>Nome *</label>
-            <input type="text" id="cl-nome" placeholder="Mario" oninput="renderLetter()">
+            <input type="text" id="cl-nome" placeholder="Mario" oninput="renderLetterDebounced()">
           </div>
           <div class="cl-field">
             <label>Cognome *</label>
-            <input type="text" id="cl-cognome" placeholder="Rossi" oninput="renderLetter()">
+            <input type="text" id="cl-cognome" placeholder="Rossi" oninput="renderLetterDebounced()">
           </div>
         </div>
         <div class="cl-row2">
           <div class="cl-field">
             <label>Email</label>
-            <input type="email" id="cl-email" placeholder="mario@email.com" oninput="renderLetter()">
+            <input type="email" id="cl-email" placeholder="mario@email.com" oninput="renderLetterDebounced()">
           </div>
           <div class="cl-field">
             <label>Telefono</label>
-            <input type="tel" id="cl-tel" placeholder="+39 333 000 0000" oninput="renderLetter()">
+            <input type="tel" id="cl-tel" placeholder="+39 333 000 0000" oninput="renderLetterDebounced()">
           </div>
         </div>
         <div class="cl-field">
           <label>Città</label>
-          <input type="text" id="cl-citta" placeholder="Milano" oninput="renderLetter()">
+          <input type="text" id="cl-citta" placeholder="Milano" oninput="renderLetterDebounced()">
         </div>
       </div>
     </div>
@@ -65,15 +65,15 @@ permalink: /app/cover-letter/
       <div class="acc-body">
         <div class="cl-field">
           <label>Ruolo cercato *</label>
-          <input type="text" id="cl-ruolo" placeholder="Product Manager" oninput="renderLetter()">
+          <input type="text" id="cl-ruolo" placeholder="Product Manager" oninput="renderLetterDebounced()">
         </div>
         <div class="cl-field">
           <label>Azienda *</label>
-          <input type="text" id="cl-azienda" placeholder="Acme Srl" oninput="renderLetter()">
+          <input type="text" id="cl-azienda" placeholder="Acme Srl" oninput="renderLetterDebounced()">
         </div>
         <div class="cl-field">
           <label>Referente <span style="color:var(--text-muted);font-size:0.75rem;">(opzionale)</span></label>
-          <input type="text" id="cl-referente" placeholder="Responsabile Selezione" oninput="renderLetter()">
+          <input type="text" id="cl-referente" placeholder="Responsabile Selezione" oninput="renderLetterDebounced()">
         </div>
       </div>
     </div>
@@ -120,7 +120,7 @@ permalink: /app/cover-letter/
       <div class="acc-body">
         <div class="cl-field">
           <label>Competenze chiave, punti di forza <span style="color:var(--text-muted);font-size:0.75rem;" id="valore-count">(0/300)</span></label>
-          <textarea id="cl-valore" placeholder="Es. Ho 5 anni di esperienza nella gestione di team agile e ho guidato lanci di prodotto con +30% di conversione rispetto al benchmark..." maxlength="300" oninput="renderLetter(); updateValoreCount()"></textarea>
+          <textarea id="cl-valore" placeholder="Es. Ho 5 anni di esperienza nella gestione di team agile e ho guidato lanci di prodotto con +30% di conversione rispetto al benchmark..." maxlength="300" oninput="renderLetterDebounced(); updateValoreCount()"></textarea>
         </div>
       </div>
     </div>

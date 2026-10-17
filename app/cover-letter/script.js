@@ -1,6 +1,9 @@
 /* ── Helper ─────────────────────────────────────────────── */
 const v = id => (document.getElementById(id)?.value || '').trim();
 
+function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+const renderLetterDebounced = debounce(renderLetter, 180);
+
 function esc(str) {
   if (!str) return '';
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
