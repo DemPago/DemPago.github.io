@@ -26,7 +26,7 @@ E quando il feedback esiste solo in alcune direzioni, solo in certi team, solo s
 
 ---
 
-![Tre persone che comunicano con bolle di dialogo — il feedback fluisce in più direzioni](/feedback-dialogo.png)
+![Tre persone che comunicano con bolle di dialogo — il feedback fluisce in più direzioni](/images/feedback-dialogo.png)
 
 ```python
 # feedback_aziendale.py
@@ -192,7 +192,7 @@ Con ogni survey ignorata, la percentuale di compilazione cala. La qualità delle
 
 ## Come uscirne: tre mosse concrete
 
-![Un gruppo di persone in cerchio che dialogano in modo strutturato — il feedback come pratica collettiva](/feedback-cerchio.png)
+![Un gruppo di persone in cerchio che dialogano in modo strutturato — il feedback come pratica collettiva](/images/feedback-cerchio.png)
 
 ### 1. Decidere che il feedback è aziendale — non di area
 

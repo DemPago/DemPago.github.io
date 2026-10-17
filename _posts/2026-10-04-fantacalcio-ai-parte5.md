@@ -173,7 +173,7 @@ Setup: budget 500 crediti, 25 slot da riempire (3P, 8D, 8C, 6A), asta all'ingles
 
 **Portieri low cost: il modello sbaglia e si corregge**
 
-![Simulazione asta - portieri low cost](asta-sim-01.png)
+![Simulazione asta - portieri low cost](/images/asta-sim-01.png)
 
 Ho chiesto "quale portieri prendo low cost?". L'AI ha risposto subito con Suzuki del Parma — quotazione 7 crediti, FVM 5. Problema: Suzuki non gioca nel Parma.
 
@@ -183,7 +183,7 @@ Questo è il comportamento che mi aspetto da uno strumento di questo tipo: i dat
 
 **Rosa parziale: Muric confermato, Dimarco già in rosa**
 
-![Simulazione asta - rosa parziale con primi acquisti](asta-sim-02.png)
+![Simulazione asta - rosa parziale con primi acquisti](/images/asta-sim-02.png)
 
 Dopo aver scritto "ok prendiamo Murici" (errore di battitura mio), il modello ha capito e confermato: "Perfetto! Prendiamo **Muric** del Sassuolo come portiere low cost." Ha anche calcolato correttamente il budget: "utilizzerai 7 dei tuoi 500 crediti rimasti."
 
@@ -191,7 +191,7 @@ La rosa a questo punto aveva già Dimarco (Inter, 50 crediti) come difensore —
 
 **Streaming in azione: risposta in costruzione**
 
-![Simulazione asta - risposta in streaming con cursore](asta-sim-03.png)
+![Simulazione asta - risposta in streaming con cursore](/images/asta-sim-03.png)
 
 Qui si vede lo streaming nel momento più evidente: il cursore `▌` è visibile alla fine dell'ultima riga mentre il modello sta ancora generando. La rosa adesso ha 4 giocatori (Muric, Stankovic F., Dimarco, Pongracic), speso 153 crediti su 500.
 

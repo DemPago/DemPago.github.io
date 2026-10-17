@@ -5,7 +5,7 @@ description: "Spesso restiamo a bocca aperta davanti all'AI. Poi afferma che i g
 date: 2026-02-28
 categories: tech
 tags: [AI, LLM, Allucinazioni, RAG]
-cover: /ai-cazzara-cover.jpg
+cover: /images/ai-cazzara-cover.jpg
 ---
 
 <p class="post-intro">Ciao! Bentornati su <strong>Tech Illuminato</strong>.</p>

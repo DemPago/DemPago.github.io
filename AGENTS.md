@@ -56,7 +56,7 @@ tags: [AI, Tech]      # optional
 ```
 
 - Filename: `_posts/YYYY-MM-DD-slug.md` — date in filename determines `page.date`
-- Images go in the **repo root** (e.g. `/titanic.png`) — no `assets/` or `images/` convention
+- Images go in **`/images/`** (e.g. `/images/titanic.png`) — reference with absolute path `/images/filename.ext`
 
 ---
 

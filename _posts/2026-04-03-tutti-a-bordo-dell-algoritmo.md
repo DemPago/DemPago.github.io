@@ -5,7 +5,7 @@ description: "L'IA come il Titanic del 1912: un miracolo ingegneristico che tutt
 date: 2026-04-03
 categories: tech
 tags: [AI, Tech, Innovazione]
-cover: /titanic.png
+cover: /images/titanic.png
 ---
 
 <p class="post-intro">Ciao! Bentornati su <strong>Tech Illuminato</strong>.</p>
@@ -16,15 +16,15 @@ L'umanità ha già visto questo film. Quattro volte.
 
 **Prima rivoluzione industriale, 1760** — il vapore batte il muscolo. I telai meccanici distruggono il lavoro dei tessitori. Gli operai bruciano le macchine — i Luddisti — convinti che l'innovazione sia il nemico. Ma il mondo va avanti.
 
-![La prima rivoluzione industriale — fabbriche a vapore e operai](/prima_rivoluzione_industriale.png)
+![La prima rivoluzione industriale — fabbriche a vapore e operai](/images/prima_rivoluzione_industriale.png)
 
 **Seconda rivoluzione, 1870** — l'elettricità batte il buio. Edison contro Tesla, corrente continua contro alternata, mentre le città si illuminano e le fabbriche non si fermano più.
 
-![La seconda rivoluzione industriale — elettricità, Edison e Tesla](/seconda_rivoluzione_industriale.png)
+![La seconda rivoluzione industriale — elettricità, Edison e Tesla](/images/seconda_rivoluzione_industriale.png)
 
 **Terza rivoluzione, 1969–1990** — internet batte la distanza. Le informazioni viaggiano alla velocità della luce e qualcuno — in un garage — diventa miliardario.
 
-![La terza rivoluzione industriale — internet e l'era digitale](/terza_rivoluzione_industriale.png)
+![La terza rivoluzione industriale — internet e l'era digitale](/images/terza_rivoluzione_industriale.png)
 
 Ogni volta, gli stessi ingredienti: un'invenzione che "cambierà tutto", ottimismo isterico, qualcuno che giura che è "assolutamente sicuro". E qualcuno che paga il prezzo di quella certezza.
 
@@ -36,7 +36,7 @@ Il Titanic era il figlio più ambizioso della seconda rivoluzione industriale �
 
 Non c'è fumo sopra il molo moderno. C'è solo il calore elettrico dei data center, il peso invisibile di petabyte di dati gettati nelle fornaci digitali. Passeggeri di terza classe – utenti comuni con i loro prompt quotidiani – sognano una vita più facile. I miliardari in prima classe – investitori e CEO – hanno già prenotato il loro posto al comando, sicuri che questa nave li porterà alla ricchezza eterna.
 
-![Iceberg sommerso nell'oceano digitale — la metafora dei rischi nascosti dell'AI](/iceberg-ai.png)
+![Iceberg sommerso nell'oceano digitale — la metafora dei rischi nascosti dell'AI](/images/iceberg-ai.png)
 
 Il rumore? Non il fischio del vapore, ma il beep delle notifiche, il clic dei mouse che confermano acquisti. L'odore? Non sale marina, ma ozono dell'elettricità statica. Tutti sentono l'eccitazione: abbiamo costruito qualcosa di più grande di noi. Il silicio contro il neurone. L'algoritmo contro l'intuizione.
 

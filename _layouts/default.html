@@ -17,7 +17,7 @@
   <meta property="og:description" content="{{ page.description | default: site.description }}">
   <meta property="og:url" content="{{ site.url }}{{ page.url }}">
   <meta property="og:site_name" content="{{ site.title }}">
-  {% if page.cover %}{% if page.cover contains 'http' %}<meta property="og:image" content="{{ page.cover }}">{% else %}<meta property="og:image" content="{{ site.url }}{{ page.cover }}">{% endif %}{% else %}<meta property="og:image" content="{{ site.url }}/profilo.png">{% endif %}
+  {% if page.cover %}{% if page.cover contains 'http' %}<meta property="og:image" content="{{ page.cover }}">{% else %}<meta property="og:image" content="{{ site.url }}{{ page.cover }}">{% endif %}{% else %}<meta property="og:image" content="{{ site.url }}/images/profilo.png">{% endif %}
   {% if page.layout == 'post' %}
   <meta property="article:author" content="https://www.linkedin.com/in/demetrio-ferraro-78a6974b/">
   <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
@@ -79,7 +79,7 @@
   {% endif %}
   <div class="container">
     <aside class="sidebar" aria-label="Profilo autore">
-      <img src="/profilo.png" alt="Demetrio Ferraro" loading="lazy" width="150" height="150">
+      <img src="/images/profilo.png" alt="Demetrio Ferraro" loading="lazy" width="150" height="150">
       <h2>Dem</h2>
       <p>Cerco di portare luce nel tech - Grey Jedi del codice.</p>
       <div class="bio">
