@@ -7,7 +7,7 @@ permalink: /about/
 
 <div class="post-content">
 
-<a href="/" style="display:inline-flex;align-items:center;gap:0.4rem;font-size:0.85rem;color:var(--text-muted);text-decoration:none;margin-bottom:1.5rem;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">&#8592; Home</a>
+<a href="/" class="sidebar-about-link">&#8592; Home</a>
 
 <img src="/profilo.png" alt="Demetrio Ferraro" style="width:96px;height:96px;border-radius:50%;object-fit:cover;display:block;margin:0 0 1.25rem 0;">
 
@@ -43,6 +43,41 @@ L'AI è il futuro, il presente, e ormai quasi il passato di questa rivoluzione. 
     <div>
       <div style="font-weight:600;font-size:0.95rem;">IP Tool</div>
       <div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.15rem;">Il tuo IP pubblico e calcolatore CIDR / subnet</div>
+    </div>
+  </a>
+  <a href="/app/validatore-sdi/" class="about-tool-card">
+    <span style="font-size:1.4rem;line-height:1;">&#128203;</span>
+    <div>
+      <div style="font-weight:600;font-size:0.95rem;">Validatore SDI PA</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.15rem;">Valida i codici destinatario SDI per la PA italiana</div>
+    </div>
+  </a>
+  <a href="/app/lancio-moneta/" class="about-tool-card">
+    <span style="font-size:1.4rem;line-height:1;">&#129689;</span>
+    <div>
+      <div style="font-weight:600;font-size:0.95rem;">Lancia la Moneta</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.15rem;">Decidere è difficile. Una moneta, no.</div>
+    </div>
+  </a>
+  <a href="/app/planning-poker/" class="about-tool-card">
+    <span style="font-size:1.4rem;line-height:1;">&#127183;</span>
+    <div>
+      <div style="font-weight:600;font-size:0.95rem;">Planning Poker</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.15rem;">Stima agile con il team in tempo reale</div>
+    </div>
+  </a>
+  <a href="/app/tshirt-poker/" class="about-tool-card">
+    <span style="font-size:1.4rem;line-height:1;">&#128085;</span>
+    <div>
+      <div style="font-weight:600;font-size:0.95rem;">T-Shirt Sizing</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.15rem;">Stima XS→XXL per backlog veloce</div>
+    </div>
+  </a>
+  <a href="https://github.com/DemPago/mac-health" class="about-tool-card" target="_blank" rel="noopener noreferrer">
+    <span style="font-size:1.4rem;line-height:1;">&#128187;</span>
+    <div>
+      <div style="font-weight:600;font-size:0.95rem;">mac-health</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.15rem;">Monitor prestazioni macOS da terminale — open source</div>
     </div>
   </a>
 </div>
