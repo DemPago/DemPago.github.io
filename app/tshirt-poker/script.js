@@ -800,7 +800,7 @@ function renderSummary(cards, finalVotes, allVotes) {
   postits.forEach(p => renderPostit(p, sp, false));
   el('tsSummaryBoardPanel').style.display = postits.length ? '' : 'none';
 
-  state.summaryData = { cards, finalVotes: finalVotes || {}, cardNotes, postits };
+  state.summaryData = { cards, finalVotes: finalVotes || {}, allVotes: allVotes || {}, cardNotes, postits };
   showScreen('tsScreenSummary');
 }
 
@@ -823,6 +823,66 @@ el('tsBtnCopySummary').addEventListener('click', () => {
     el('tsBtnCopySummary').textContent = '✓ Copiato!';
     setTimeout(() => { el('tsBtnCopySummary').innerHTML = '&#128203; Copia riepilogo'; }, 2000);
   }).catch(() => alert(text));
+});
+
+/* ── Export CSV / JSON ─────────────────────────────────────── */
+function tsDownloadFile(filename, content, mime) {
+  const blob = new Blob([content], { type: mime });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function tsSummaryRows() {
+  const d = state.summaryData || { cards: [], finalVotes: {}, allVotes: {}, cardNotes: {} };
+  return d.cards.map(card => {
+    const fv      = d.finalVotes[card.id];
+    const isSplit = fv === 'split';
+    const taglia  = isSplit ? '' : (fv != null ? String(fv) : '');
+    const votes   = d.allVotes[card.id] || {};
+    return {
+      title:  card.title || '',
+      taglia: taglia,
+      status: isSplit ? 'da splittare' : (fv != null ? 'stimata' : 'non stimata'),
+      nota:   (d.cardNotes && d.cardNotes[card.id]) || '',
+      votes:  votes
+    };
+  });
+}
+
+el('tsBtnExportCsv').addEventListener('click', () => {
+  const rows = tsSummaryRows();
+  const esc  = s => `"${String(s).replace(/"/g, '""')}"`;
+  let csv = ['Titolo', 'Taglia', 'Stato', 'Nota', 'Voti individuali'].map(esc).join(',') + '\r\n';
+  rows.forEach(r => {
+    const voti = Object.entries(r.votes).map(([n, v]) => `${n}:${v}`).join(' | ');
+    csv += [r.title, r.taglia, r.status, r.nota, voti].map(esc).join(',') + '\r\n';
+  });
+  const postits = (state.summaryData && state.summaryData.postits) || [];
+  if (postits.length) {
+    csv += '\r\n' + ['Lavagna — post-it', 'Autore'].map(esc).join(',') + '\r\n';
+    postits.forEach(p => { csv += [p.text, p.author || ''].map(esc).join(',') + '\r\n'; });
+  }
+  const stamp = new Date().toISOString().slice(0, 10);
+  tsDownloadFile(`tshirt-poker-${state.sessionCode || 'sessione'}-${stamp}.csv`, '﻿' + csv, 'text/csv;charset=utf-8');
+});
+
+el('tsBtnExportJson').addEventListener('click', () => {
+  const rows  = tsSummaryRows();
+  const count = rows.filter(r => r.status === 'stimata').length;
+  const payload = {
+    tool:      'tshirt-poker',
+    sessione:  state.sessionCode || null,
+    esportato: new Date().toISOString(),
+    totaleStimate: count,
+    cards: rows,
+    lavagna: ((state.summaryData && state.summaryData.postits) || [])
+      .map(p => ({ testo: p.text, autore: p.author || null, colore: p.color || null }))
+  };
+  const stamp = new Date().toISOString().slice(0, 10);
+  tsDownloadFile(`tshirt-poker-${state.sessionCode || 'sessione'}-${stamp}.json`, JSON.stringify(payload, null, 2), 'application/json');
 });
 
 el('tsBtnNewSession').addEventListener('click', () => {

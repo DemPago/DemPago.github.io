@@ -1,7 +1,7 @@
 import { initializeApp, getApps, getApp }
-  from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, serverTimestamp, deleteField, arrayUnion }
-  from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 /* ── Firebase ────────────────────────────────────────────── */
 const FB_CONFIG = {
