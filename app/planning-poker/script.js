@@ -19,6 +19,7 @@ const gProvider = new GoogleAuthProvider();
 
 /* ── Google Auth ─────────────────────────────────────────── */
 let currentUser = null;
+const urlSessionCode = new URLSearchParams(location.search).get('session');
 const FACILITATOR_EMAILS = [
   'demetrio.ferraro@pagopa.it',
   'lorenzo.franceschini@pagopa.it',
@@ -35,9 +36,13 @@ onAuthStateChanged(auth, user => {
     el('ppUserAvatar').src = user.photoURL || '';
     el('ppUserAvatar').style.display = user.photoURL ? '' : 'none';
     el('ppUserName').textContent = user.displayName || user.email;
-    // Pre-compila il campo nome
-    if (el('joinNameInput') && !el('joinNameInput').value) {
-      el('joinNameInput').value = user.displayName || '';
+    // Nascondi campo nome, mostra display name
+    const nameRow = el('joinNameRow');
+    const nameDisplay = el('joinNameDisplay');
+    if (nameRow) nameRow.style.display = 'none';
+    if (nameDisplay) {
+      nameDisplay.textContent = 'Verrai identificato come: ' + (user.displayName || user.email.split('@')[0]);
+      nameDisplay.style.display = '';
     }
     // Se sei un facilitatore: mostra il pannello di scelta (crea vs partecipa)
     if (isFacilitatorEmail(user.email)) {
@@ -47,11 +52,20 @@ onAuthStateChanged(auth, user => {
       el('ppFacilitatorChoice').style.display = 'none';
       el('ppPasswordPanel').style.display     = '';
     }
+    // Auto-join se arrivati via link condiviso
+    if (urlSessionCode && !state.sessionCode) {
+      attemptAutoJoin();
+    }
   } else {
     el('ppAuthLoggedOut').style.display = 'flex';
     el('ppAuthLoggedIn').style.display  = 'none';
     el('ppFacilitatorChoice').style.display = 'none';
     el('ppPasswordPanel').style.display     = '';
+    // Ripristina campo nome
+    const nameRow = el('joinNameRow');
+    const nameDisplay = el('joinNameDisplay');
+    if (nameRow) nameRow.style.display = '';
+    if (nameDisplay) nameDisplay.style.display = 'none';
     // Se era sbloccato via Google, rilascia
     if (isUnlocked) {
       isUnlocked = false;
@@ -234,7 +248,7 @@ async function joinSession() {
   const code = el('joinCodeInput').value.trim().toUpperCase();
   const name = el('joinNameInput').value.trim();
   if (!code || code.length < 4) { showJoinError('Inserisci un codice sessione valido.'); return; }
-  if (!name) { showJoinError('Inserisci il tuo nome.'); return; }
+  if (!name && !currentUser) { showJoinError('Inserisci il tuo nome oppure accedi con Google.'); return; }
 
   el('joinError').style.display = 'none';
   el('btnJoinSession').disabled = true;
@@ -244,24 +258,35 @@ async function joinSession() {
     const snap = await getDoc(doc(db, 'poker_sessions', code));
     if (!snap.exists()) { showJoinError('Sessione non trovata. Controlla il codice.'); return; }
     const data = snap.data();
-    // Sessione già terminata
     if (data.status === 'finished') {
       showJoinError('Questa sessione è già terminata. Chiedi al facilitatore di crearne una nuova.');
       return;
     }
-    // Verifica che il nome sia nella lista membri (se lista configurata).
-    // Match case-insensitive, ma si adotta la grafia ufficiale della lista
-    // così "demetrio" e "Demetrio" non diventano due partecipanti distinti.
-    let resolvedName = name;
+
+    let resolvedName = name || (currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Anonimo');
+
     if (data.members && data.members.length > 0) {
-      const target = name.trim().toLowerCase();
-      const official = data.members.find(m => m.trim().toLowerCase() === target);
-      if (!official) {
-        showJoinError('Non sei nella lista dei partecipanti. Chiedi al facilitatore di aggiungerti.');
-        return;
+      const hasEmails = data.members.some(m => m.includes('@'));
+      if (hasEmails && currentUser) {
+        // Sessione con lista email — verifica tramite Google Auth
+        const allowed = data.members.map(m => m.toLowerCase());
+        if (!allowed.includes(currentUser.email.toLowerCase())) {
+          showJoinError('Non sei nella lista dei partecipanti. Chiedi al facilitatore di aggiungerti.');
+          return;
+        }
+        resolvedName = currentUser.displayName || currentUser.email.split('@')[0];
+      } else if (!hasEmails) {
+        // Sessione legacy con nomi — match case-insensitive
+        const target   = resolvedName.toLowerCase();
+        const official = data.members.find(m => m.trim().toLowerCase() === target);
+        if (!official) {
+          showJoinError('Non sei nella lista dei partecipanti. Chiedi al facilitatore di aggiungerti.');
+          return;
+        }
+        resolvedName = official;
       }
-      resolvedName = official;
     }
+
     state.sessionCode   = code;
     state.isFacilitator = false;
     state.myName        = resolvedName;
@@ -272,6 +297,13 @@ async function joinSession() {
     el('btnJoinSession').disabled = false;
     el('btnJoinSession').textContent = 'Unisciti alla sessione';
   }
+}
+
+async function attemptAutoJoin() {
+  const code = el('joinCodeInput').value.trim().toUpperCase();
+  if (!code || !currentUser) return;
+  el('joinNameInput').value = currentUser.displayName || currentUser.email.split('@')[0];
+  await joinSession();
 }
 
 function showJoinError(msg) {
@@ -287,7 +319,15 @@ function showJoinError(msg) {
 el('btnCopyCode').addEventListener('click', () => {
   navigator.clipboard.writeText(state.sessionCode).then(() => {
     el('btnCopyCode').textContent = '✓ Copiato!';
-    setTimeout(() => { el('btnCopyCode').innerHTML = '&#128203; Copia'; }, 2000);
+    setTimeout(() => { el('btnCopyCode').innerHTML = '&#128203; Copia codice'; }, 2000);
+  });
+});
+
+el('btnCopyLink').addEventListener('click', () => {
+  const link = location.origin + '/app/planning-poker/?session=' + state.sessionCode;
+  navigator.clipboard.writeText(link).then(() => {
+    el('btnCopyLink').textContent = '✓ Link copiato!';
+    setTimeout(() => { el('btnCopyLink').innerHTML = '&#128279; Copia link'; }, 2000);
   });
 });
 
@@ -296,8 +336,16 @@ el('memberInput').addEventListener('keydown', e => { if (e.key === 'Enter') addM
 
 function addMember() {
   const name = el('memberInput').value.trim();
-  if (!name || state.setupMembers.includes(name)) return;
-  state.setupMembers.push(name);
+  if (!name) return;
+  if (!name.includes('@')) {
+    const hint = el('memberHint');
+    if (hint) { hint.textContent = 'Inserisci un indirizzo email valido.'; hint.style.display = ''; }
+    return;
+  }
+  const hint = el('memberHint');
+  if (hint) hint.style.display = 'none';
+  if (state.setupMembers.map(m => m.toLowerCase()).includes(name.toLowerCase())) return;
+  state.setupMembers.push(name.toLowerCase());
   el('memberInput').value = '';
   el('memberInput').focus();
   renderSetupMembers();
@@ -1264,6 +1312,11 @@ el('csvImportBtn').addEventListener('click', () => {
   // chiudi il pannello
   el('importPanel').removeAttribute('open');
 });
+
+/* ── Init: leggi ?session= dall'URL ─────────────────────── */
+if (urlSessionCode) {
+  el('joinCodeInput').value = urlSessionCode.toUpperCase();
+}
 
 /* ── Escape HTML ─────────────────────────────────────────── */
 function escHtml(s) {

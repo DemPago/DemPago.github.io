@@ -75,9 +75,10 @@ permalink: /app/planning-poker/
         <div class="pp-field">
           <input type="text" id="joinCodeInput" class="pp-code-input" placeholder="XXXX" maxlength="6" autocomplete="off" spellcheck="false">
         </div>
-        <div class="pp-field" style="margin-top:0.5rem;">
+        <div id="joinNameRow" class="pp-field" style="margin-top:0.5rem;">
           <input type="text" id="joinNameInput" placeholder="Il tuo nome" maxlength="30" autocomplete="off">
         </div>
+        <div id="joinNameDisplay" style="display:none;padding:0.4rem 0.6rem;font-size:0.85rem;color:var(--text-muted);text-align:center;margin-top:0.25rem;"></div>
         <button class="pp-btn pp-btn-ghost" id="btnJoinSession" style="width:100%;margin-top:0.5rem;">Unisciti alla sessione</button>
         <div id="joinError" style="display:none;margin-top:0.5rem;"></div>
       </div>
@@ -91,19 +92,21 @@ permalink: /app/planning-poker/
     <div class="pp-session-bar">
       <span class="pp-session-role">&#128081; Facilitatore</span>
       <span>Codice sessione: <span class="pp-session-code-small" id="setupCodeBadge">—</span></span>
-      <button class="pp-btn pp-btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.7rem;" id="btnCopyCode">&#128203; Copia</button>
+      <button class="pp-btn pp-btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.7rem;" id="btnCopyCode">&#128203; Copia codice</button>
+      <button class="pp-btn pp-btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.7rem;" id="btnCopyLink">&#128279; Copia link</button>
     </div>
 
     <!-- Membri del team -->
     <div class="pp-panel">
       <h2>&#128101; Membri del team</h2>
-      <p>Aggiungi i nomi di chi parteciperà alla sessione.</p>
+      <p>Aggiungi le email Google di chi parteciperà. I partecipanti riceveranno il link e potranno entrare accedendo con Google.</p>
       <div style="display:flex;gap:0.5rem;">
         <div class="pp-field" style="flex:1;">
-          <input type="text" id="memberInput" placeholder="Nome membro" maxlength="30" autocomplete="off">
+          <input type="email" id="memberInput" placeholder="email@esempio.it" maxlength="80" autocomplete="off" inputmode="email">
         </div>
         <button class="pp-btn pp-btn-primary" id="btnAddMember" style="align-self:flex-end;">Aggiungi</button>
       </div>
+      <div id="memberHint" style="display:none;font-size:0.8rem;color:#e05c5c;margin-top:0.3rem;"></div>
       <div class="pp-tags" id="memberTags"></div>
     </div>
 
