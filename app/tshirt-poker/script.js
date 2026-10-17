@@ -3,6 +3,8 @@ import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot,
          serverTimestamp, deleteField, arrayUnion,
          collection, query, where, getDocs, Timestamp, deleteDoc }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 const app = initializeApp({
   apiKey:            'AIzaSyA7YbK9xW2OiGXZu55mvlTLSw2enQf4Efg',
@@ -13,6 +15,18 @@ const app = initializeApp({
   appId:             '1:612926535:web:cf5b5e94e70fc7697d3e4c',
 });
 const db = getFirestore(app);
+const auth = getAuth(app);
+const gProvider = new GoogleAuthProvider();
+let currentUser = null;
+const urlSessionCode = new URLSearchParams(location.search).get('session');
+
+const FACILITATOR_EMAILS = [
+  'demetrio.ferraro@pagopa.it',
+  'lorenzo.franceschini@pagopa.it',
+];
+function isFacilitatorEmail(email) {
+  return FACILITATOR_EMAILS.includes((email || '').toLowerCase());
+}
 
 async function cleanOldSessions() {
   try {
@@ -57,6 +71,65 @@ function applyUnlockUI() {
   el('tsImportPanel').style.display      = isUnlocked ? '' : 'none';
 }
 applyUnlockUI();
+if (urlSessionCode) el('tsJoinCodeInput').value = urlSessionCode;
+
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  if (user) {
+    el('tsAuthLoggedOut').style.display = 'none';
+    el('tsAuthLoggedIn').style.display  = 'flex';
+    el('tsUserAvatar').src = user.photoURL || '';
+    el('tsUserAvatar').style.display = user.photoURL ? '' : 'none';
+    el('tsUserName').textContent = user.displayName || user.email;
+    const nameRow = el('tsJoinNameRow');
+    const nameDisplay = el('tsJoinNameDisplay');
+    if (nameRow) nameRow.style.display = 'none';
+    if (nameDisplay) {
+      nameDisplay.textContent = 'Verrai identificato come: ' + (user.displayName || user.email.split('@')[0]);
+      nameDisplay.style.display = '';
+    }
+    if (isFacilitatorEmail(user.email)) {
+      el('tsFacilitatorChoice').style.display = 'flex';
+      el('tsPasswordPanel').style.display     = 'none';
+    } else {
+      el('tsFacilitatorChoice').style.display = 'none';
+      el('tsPasswordPanel').style.display     = '';
+    }
+    if (urlSessionCode && !state.sessionCode) {
+      attemptAutoJoin();
+    }
+  } else {
+    el('tsAuthLoggedOut').style.display = 'flex';
+    el('tsAuthLoggedIn').style.display  = 'none';
+    el('tsFacilitatorChoice').style.display = 'none';
+    el('tsPasswordPanel').style.display     = '';
+    const nameRow = el('tsJoinNameRow');
+    const nameDisplay = el('tsJoinNameDisplay');
+    if (nameRow) nameRow.style.display = '';
+    if (nameDisplay) nameDisplay.style.display = 'none';
+    if (isUnlocked) {
+      isUnlocked = false;
+      sessionStorage.removeItem('ts_unlocked');
+      applyUnlockUI();
+    }
+  }
+});
+
+el('tsBtnGoogleLogin').addEventListener('click',  () => signInWithPopup(auth, gProvider).catch(() => {}));
+el('tsBtnGoogleLogout').addEventListener('click', () => signOut(auth));
+
+el('tsBtnBecomeFacilitator').addEventListener('click', () => {
+  isUnlocked = true;
+  sessionStorage.setItem('ts_unlocked', '1');
+  applyUnlockUI();
+  state.isFacilitator = true;
+  state.sessionCode   = randCode();
+  el('tsSetupCode').textContent = state.sessionCode;
+  showScreen('tsScreenSetup');
+});
+el('tsBtnJoinAsParticipant').addEventListener('click', () => {
+  el('tsJoinCodeInput').focus();
+});
 
 el('tsBtnUnlock').addEventListener('click', async () => {
   const pwd = el('tsFacilitatorPwd').value;
@@ -143,7 +216,13 @@ document.querySelectorAll('.ts-color-swatch').forEach(btn => {
 
 function addMember() {
   const name = el('tsMemberInput').value.trim();
-  if (!name || state.setupMembers.includes(name)) return;
+  if (!name) return;
+  if (!name.includes('@')) {
+    const errEl = el('tsMemberError');
+    if (errEl) { errEl.style.display = ''; setTimeout(() => { errEl.style.display = 'none'; }, 2500); }
+    return;
+  }
+  if (state.setupMembers.includes(name)) return;
   state.setupMembers.push(name);
   el('tsMemberInput').value = '';
   renderMemberList();
@@ -163,11 +242,18 @@ function renderMemberList() {
   });
 }
 
-/* ── Setup: copia codice ───────────────────────────────────── */
+/* ── Setup: copia codice / link ────────────────────────────── */
 el('tsBtnCopyCode').addEventListener('click', () => {
   navigator.clipboard.writeText(state.sessionCode).then(() => {
     el('tsBtnCopyCode').textContent = '✓ Copiato!';
     setTimeout(() => { el('tsBtnCopyCode').innerHTML = '&#128203; Copia codice'; }, 2000);
+  });
+});
+el('tsBtnCopyLink').addEventListener('click', () => {
+  const link = `${location.origin}/app/tshirt-poker/?session=${state.sessionCode}`;
+  navigator.clipboard.writeText(link).then(() => {
+    el('tsBtnCopyLink').textContent = '✓ Copiato!';
+    setTimeout(() => { el('tsBtnCopyLink').innerHTML = '&#128279; Copia link'; }, 2000);
   });
 });
 
@@ -316,7 +402,8 @@ async function joinSession() {
   const code = el('tsJoinCodeInput').value.trim().toUpperCase();
   const name = el('tsJoinNameInput').value.trim();
   el('tsJoinError').style.display = 'none';
-  if (!code || !name) { showJoinError('Inserisci codice e nome.'); return; }
+  if (!code || code.length < 4) { showJoinError('Inserisci un codice sessione valido.'); return; }
+  if (!name && !currentUser) { showJoinError('Inserisci il tuo nome oppure accedi con Google.'); return; }
   el('tsBtnJoinSession').disabled = true;
   el('tsBtnJoinSession').textContent = 'Connessione…';
   try {
@@ -324,16 +411,32 @@ async function joinSession() {
     if (!snap.exists()) { showJoinError('Sessione non trovata. Controlla il codice.'); return; }
     const data = snap.data();
     if (data.status === 'finished') { showJoinError('Questa sessione è già terminata.'); return; }
+
+    let resolvedName = name || (currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Anonimo');
+
     if (data.members && data.members.length > 0) {
-      const norm = data.members.map(m => m.trim().toLowerCase());
-      if (!norm.includes(name.trim().toLowerCase())) {
-        showJoinError('Non sei nella lista dei partecipanti. Chiedi al facilitatore di aggiungerti.');
-        return;
+      const hasEmails = data.members.some(m => m.includes('@'));
+      if (hasEmails && currentUser) {
+        const allowed = data.members.map(m => m.toLowerCase());
+        if (!allowed.includes(currentUser.email.toLowerCase())) {
+          showJoinError('Non sei nella lista dei partecipanti. Chiedi al facilitatore di aggiungerti.');
+          return;
+        }
+        resolvedName = currentUser.displayName || currentUser.email.split('@')[0];
+      } else if (!hasEmails) {
+        const target   = resolvedName.toLowerCase();
+        const official = data.members.find(m => m.trim().toLowerCase() === target);
+        if (!official) {
+          showJoinError('Non sei nella lista dei partecipanti. Chiedi al facilitatore di aggiungerti.');
+          return;
+        }
+        resolvedName = official;
       }
     }
+
     state.sessionCode   = code;
     state.isFacilitator = false;
-    state.myName        = name;
+    state.myName        = resolvedName;
     startListening();
   } catch(e) {
     showJoinError('Errore di connessione. Riprova.');
@@ -341,6 +444,13 @@ async function joinSession() {
     el('tsBtnJoinSession').disabled = false;
     el('tsBtnJoinSession').textContent = 'Unisciti alla sessione';
   }
+}
+
+async function attemptAutoJoin() {
+  const code = el('tsJoinCodeInput').value.trim().toUpperCase();
+  if (!code || !currentUser) return;
+  el('tsJoinNameInput').value = currentUser.displayName || currentUser.email.split('@')[0];
+  await joinSession();
 }
 function showJoinError(msg) {
   const d = el('tsJoinError');
@@ -899,7 +1009,13 @@ el('tsBtnNewSession').addEventListener('click', () => {
   if (state.unsubscribe) { state.unsubscribe(); state.unsubscribe = null; }
   stopPresence();
   state = { sessionCode:null, isFacilitator:false, myName:null, unsubscribe:null, presenceInterval:null, setupMembers:[], setupCards:[], myVotes:{}, selectedFinal:null, lastCardIdx:-1, cachedData:null, sessionColor:'#3b82f6', summaryData:null };
-  // Riporta picker al default blu
   document.querySelectorAll('.ts-color-swatch').forEach(b => b.classList.toggle('selected', b.dataset.color === '#3b82f6'));
+  if (currentUser && isFacilitatorEmail(currentUser.email)) {
+    el('tsFacilitatorChoice').style.display = 'flex';
+    el('tsPasswordPanel').style.display     = 'none';
+  } else {
+    el('tsFacilitatorChoice').style.display = 'none';
+    el('tsPasswordPanel').style.display     = '';
+  }
   showScreen('tsScreenWelcome');
 });

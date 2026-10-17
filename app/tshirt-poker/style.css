@@ -1,3 +1,10 @@
+/* ── Google Auth ──────────────────────────────────────────── */
+.ts-auth-bar { width:100%;max-width:320px;display:flex;flex-direction:column;align-items:center;gap:0.75rem;padding:1rem;background:var(--bg);border:1px solid var(--border);border-radius:10px; }
+.ts-btn-google { display:inline-flex;align-items:center;gap:0.6rem;background:#fff;color:#3c4043;border:1px solid #dadce0;border-radius:8px;padding:0.55rem 1rem;font-size:0.88rem;font-weight:600;font-family:inherit;cursor:pointer;transition:box-shadow 0.15s,background 0.15s;box-shadow:0 1px 3px rgba(0,0,0,0.12); }
+.ts-btn-google:hover { box-shadow:0 2px 6px rgba(0,0,0,0.2);background:#f8f8f8; }
+.ts-user-avatar { width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid var(--accent); }
+.ts-facilitator-choice { width:100%;max-width:320px;display:flex;flex-direction:column;align-items:center;gap:0.75rem;padding:1rem;background:rgba(59,130,246,0.06);border:1px solid var(--border);border-radius:10px; }
+
 /* ── Base ─────────────────────────────────────────────────── */
 .ts-app {
   max-width: 700px; margin: 0 auto;
