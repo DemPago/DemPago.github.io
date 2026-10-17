@@ -1,6 +1,7 @@
 import { initializeApp }    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot,
-         serverTimestamp, deleteField, arrayUnion }
+         serverTimestamp, deleteField, arrayUnion,
+         collection, query, where, getDocs, Timestamp, deleteDoc }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const app = initializeApp({
@@ -12,6 +13,15 @@ const app = initializeApp({
   appId:             '1:612926535:web:cf5b5e94e70fc7697d3e4c',
 });
 const db = getFirestore(app);
+
+async function cleanOldSessions() {
+  try {
+    const cutoff = Timestamp.fromDate(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000));
+    const snap = await getDocs(query(collection(db, 'ts_sessions'), where('createdAt', '<', cutoff)));
+    snap.forEach(d => deleteDoc(d.ref));
+  } catch(e) {}
+}
+cleanOldSessions();
 
 /* ── Taglie T-shirt ────────────────────────────────────────── */
 const SIZES = [
