@@ -83,6 +83,41 @@ body[data-layout="post"] .container {
   color: var(--accent);
 }
 
+.sidebar-link {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+  display: block;
+}
+.sidebar-link:hover { color: var(--accent); }
+
+.sidebar-about-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s;
+}
+.sidebar-about-link:hover { color: var(--accent); }
+
+.about-tool-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.2s;
+}
+.about-tool-card:hover { border-color: var(--accent); }
+
 .kofi-button {
   display: inline-block;
   margin-top: 1rem;

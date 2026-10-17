@@ -72,7 +72,7 @@
   <div class="newsletter-overlay" id="newsletterOverlay" role="dialog" aria-modal="true" aria-label="Iscriviti alla newsletter">
     <div class="newsletter-box">
       <button class="newsletter-close" id="newsletterClose" aria-label="Chiudi">&times;</button>
-      <iframe width="540" height="305" src="https://02be3445.sibforms.com/serve/MUIFAGlZ-civp2wWCcRcXP1g3O82Gnkx1LljnvhY1cGRRBM9Vx-NNj9HPkARZZmosz79YS7AV_4Cmzffl5Tr0HbzBt-3DPBaZSN0oOIr3reTJGDru8HRlo-tyuq4pqgJzHLP7Gn-tZXXWgk5HTmneORgEhQrmpIbw8V_gJMS5bbon6465nPv-0wWuTCHnUyWMkfEVdaHIIwNHTRQCQ==" frameborder="0" scrolling="auto" allowfullscreen style="display: block;margin-left: auto;margin-right: auto;max-width: 100%;"></iframe>
+      <div id="newsletter-iframe-placeholder" style="min-height:305px;"></div>
       <button class="newsletter-skip" id="newsletterSkip">No grazie, ho già abbastanza email</button>
     </div>
   </div>
@@ -104,17 +104,18 @@
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
         </a>
       </div>
-      <a href="/about/" style="display:block;text-align:center;margin-top:0.75rem;font-size:0.8rem;color:var(--text-muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">Chi sono &rarr;</a>
+      <a href="/about/" class="sidebar-link" style="text-align:center;margin-top:0.75rem;font-size:0.8rem;">Chi sono &rarr;</a>
       <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border);">
         <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:0.5rem;">Tool</div>
         <div style="display:flex;flex-direction:column;gap:0.3rem;">
-          <a href="/app/curriculum/" style="font-size:0.82rem;color:var(--text-muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">&#128196; Generatore CV</a>
-          <a href="/app/cover-letter/" style="font-size:0.82rem;color:var(--text-muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">&#9993; Lettera di Presentazione</a>
-          <a href="/app/ip-tool/" style="font-size:0.82rem;color:var(--text-muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">&#127760; IP Tool</a>
-          <a href="/app/validatore-sdi/" style="font-size:0.82rem;color:var(--text-muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">&#128203; Validatore SDI PA</a>
-          <a href="/app/lancio-moneta/" style="font-size:0.82rem;color:var(--text-muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">&#129689; Lancia la Moneta</a>
-          <a href="/app/planning-poker/" style="font-size:0.82rem;color:var(--text-muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">&#127183; Planning Poker</a>
-          <a href="/app/tshirt-poker/" style="font-size:0.82rem;color:var(--text-muted);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">&#128085; T-Shirt Sizing</a>
+          <a href="/app/curriculum/" class="sidebar-link">&#128196; Generatore CV</a>
+          <a href="/app/cover-letter/" class="sidebar-link">&#9993; Lettera di Presentazione</a>
+          <a href="/app/ip-tool/" class="sidebar-link">&#127760; IP Tool</a>
+          <a href="/app/validatore-sdi/" class="sidebar-link">&#128203; Validatore SDI PA</a>
+          <a href="/app/lancio-moneta/" class="sidebar-link">&#129689; Lancia la Moneta</a>
+          <a href="/app/planning-poker/" class="sidebar-link">&#127183; Planning Poker</a>
+          <a href="/app/tshirt-poker/" class="sidebar-link">&#128085; T-Shirt Sizing</a>
+          <a href="https://github.com/DemPago/mac-health" class="sidebar-link" target="_blank" rel="noopener noreferrer">&#128187; mac-health</a>
         </div>
       </div>
     </aside>

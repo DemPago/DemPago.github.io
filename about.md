@@ -24,21 +24,21 @@ L'AI è il futuro, il presente, e ormai quasi il passato di questa rivoluzione. 
 </p>
 
 <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:2rem;">
-  <a href="/app/curriculum/" style="display:flex;align-items:center;gap:1rem;padding:0.9rem 1.1rem;background:var(--card);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+  <a href="/app/curriculum/" class="about-tool-card">
     <span style="font-size:1.4rem;line-height:1;">&#128196;</span>
     <div>
       <div style="font-weight:600;font-size:0.95rem;">Generatore CV</div>
       <div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.15rem;">CV professionale con anteprima live e export PDF</div>
     </div>
   </a>
-  <a href="/app/cover-letter/" style="display:flex;align-items:center;gap:1rem;padding:0.9rem 1.1rem;background:var(--card);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+  <a href="/app/cover-letter/" class="about-tool-card">
     <span style="font-size:1.4rem;line-height:1;">&#9993;</span>
     <div>
       <div style="font-weight:600;font-size:0.95rem;">Lettera di Presentazione</div>
       <div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.15rem;">Lettera in italiano o inglese con tono personalizzato</div>
     </div>
   </a>
-  <a href="/app/ip-tool/" style="display:flex;align-items:center;gap:1rem;padding:0.9rem 1.1rem;background:var(--card);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+  <a href="/app/ip-tool/" class="about-tool-card">
     <span style="font-size:1.4rem;line-height:1;">&#127760;</span>
     <div>
       <div style="font-weight:600;font-size:0.95rem;">IP Tool</div>

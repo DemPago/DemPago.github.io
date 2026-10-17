@@ -181,6 +181,18 @@ function initNewsletterPopup() {
     if (triggered) return;
     triggered = true;
     sessionStorage.setItem('newsletter_shown', '1');
+    const placeholder = document.getElementById('newsletter-iframe-placeholder');
+    if (placeholder && !placeholder.querySelector('iframe')) {
+      const iframe = document.createElement('iframe');
+      iframe.width = '540';
+      iframe.height = '305';
+      iframe.src = 'https://02be3445.sibforms.com/serve/MUIFAGlZ-civp2wWCcRcXP1g3O82Gnkx1LljnvhY1cGRRBM9Vx-NNj9HPkARZZmosz79YS7AV_4Cmzffl5Tr0HbzBt-3DPBaZSN0oOIr3reTJGDru8HRlo-tyuq4pqgJzHLP7Gn-tZXXWgk5HTmneORgEhQrmpIbw8V_gJMS5bbon6465nPv-0wWuTCHnUyWMkfEVdaHIIwNHTRQCQ==';
+      iframe.frameBorder = '0';
+      iframe.scrolling = 'auto';
+      iframe.allowFullscreen = true;
+      iframe.style.cssText = 'display:block;margin-left:auto;margin-right:auto;max-width:100%';
+      placeholder.appendChild(iframe);
+    }
     overlay.classList.add('visible');
   }
 
