@@ -227,7 +227,7 @@ function renderSetupMembers() {
   state.setupMembers.forEach(name => {
     const tag = document.createElement('span');
     tag.className = 'pp-tag';
-    tag.innerHTML = name + ' <button title="Rimuovi">✕</button>';
+    tag.innerHTML = name + ' <button title="Rimuovi" aria-label="Rimuovi">✕</button>';
     tag.querySelector('button').addEventListener('click', () => {
       state.setupMembers = state.setupMembers.filter(n => n !== name);
       renderSetupMembers();
@@ -266,7 +266,7 @@ function renderSetupCards() {
         <div class="pp-card-item-title">${i+1}. ${escHtml(card.title)}</div>
         ${card.desc ? '<div class="pp-card-item-desc">'+escHtml(card.desc)+'</div>' : ''}
       </div>
-      <button title="Rimuovi">✕</button>`;
+      <button title="Rimuovi" aria-label="Rimuovi">✕</button>`;
     div.querySelector('button').addEventListener('click', () => {
       state.setupCards.splice(i, 1);
       renderSetupCards();
@@ -825,7 +825,7 @@ function renderPostit(p, container, canDelete) {
   d.className = 'pp-postit';
   d.style.background = p.color || '#ffe066';
   const delBtn = canDelete
-    ? `<button class="pp-postit-del" data-id="${p.id}" title="Elimina">&times;</button>` : '';
+    ? `<button class="pp-postit-del" data-id="${p.id}" title="Elimina" aria-label="Elimina">&times;</button>` : '';
   d.innerHTML = `${delBtn}
     <div class="pp-postit-text">${escHtml(p.text)}</div>
     <div class="pp-postit-author">— ${escHtml(p.author || '?')}</div>`;

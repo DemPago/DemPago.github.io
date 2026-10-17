@@ -144,7 +144,7 @@ function renderMemberList() {
   state.setupMembers.forEach(m => {
     const chip = document.createElement('span');
     chip.className = 'ts-member-chip';
-    chip.innerHTML = `${escHtml(m)}<button title="Rimuovi">&#10005;</button>`;
+    chip.innerHTML = `${escHtml(m)}<button title="Rimuovi" aria-label="Rimuovi">&#10005;</button>`;
     chip.querySelector('button').addEventListener('click', () => {
       state.setupMembers = state.setupMembers.filter(x => x !== m);
       renderMemberList();
@@ -186,7 +186,7 @@ function renderSetupCardList() {
     item.innerHTML = `
       <span class="ts-card-item-num">${i+1}</span>
       <span class="ts-card-item-text">${escHtml(c.title)}</span>
-      <button title="Rimuovi">&#10005;</button>`;
+      <button title="Rimuovi" aria-label="Rimuovi">&#10005;</button>`;
     item.querySelector('button').addEventListener('click', () => {
       state.setupCards.splice(i, 1);
       renderSetupCardList();
@@ -687,7 +687,7 @@ function renderPostit(p, container, canDelete) {
   const d = document.createElement('div');
   d.className = 'ts-postit';
   d.style.background = p.color || '#ffe066';
-  const delBtn = canDelete ? `<button class="ts-postit-del" data-id="${p.id}" title="Elimina">&times;</button>` : '';
+  const delBtn = canDelete ? `<button class="ts-postit-del" data-id="${p.id}" title="Elimina" aria-label="Elimina">&times;</button>` : '';
   d.innerHTML = `${delBtn}
     <div class="ts-postit-text">${escHtml(p.text)}</div>
     <div class="ts-postit-author">— ${escHtml(p.author || '?')}</div>`;

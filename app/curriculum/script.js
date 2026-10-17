@@ -257,7 +257,7 @@ function addEntry(type) {
   div.className = 'entry-card';
   div.id = id;
   div.innerHTML = `
-    <button class="entry-remove" onclick="removeEl('${id}');renderCV()" title="Rimuovi">&times;</button>
+    <button class="entry-remove" onclick="removeEl('${id}');renderCV()" title="Rimuovi" aria-label="Rimuovi">&times;</button>
     ${cfg.fields}
   `;
   document.getElementById(`${type}-list`).appendChild(div);
@@ -316,7 +316,7 @@ function renderTags() {
   state.skills.forEach((s, i) => {
     const tag = document.createElement('span');
     tag.className = 'skill-tag';
-    tag.innerHTML = `${s}<button onclick="removeTag(${i})" title="Rimuovi">&times;</button>`;
+    tag.innerHTML = `${s}<button onclick="removeTag(${i})" title="Rimuovi" aria-label="Rimuovi">&times;</button>`;
     wrap.insertBefore(tag, input);
   });
 }
