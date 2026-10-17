@@ -21,4 +21,39 @@ layout: null
     <priority>0.8</priority>
   </url>
   {% endfor %}
+  <url>
+    <loc>{{ site.url }}/app/curriculum/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>{{ site.url }}/app/cover-letter/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>{{ site.url }}/app/ip-tool/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>{{ site.url }}/app/validatore-sdi/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>{{ site.url }}/app/planning-poker/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>{{ site.url }}/app/tshirt-poker/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>{{ site.url }}/app/lancio-moneta/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
 </urlset>
