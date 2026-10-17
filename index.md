@@ -282,6 +282,23 @@ title: Home
         <p class="post-card-desc">Stima le epic del tuo backlog con taglie XS–XXL. Multi-device real-time, import da Jira, voto finale e riepilogo condivisibile.</p>
       </div>
     </li>
+    <li class="post-card">
+      <a href="https://github.com/DemPago/mac-health" target="_blank" rel="noopener noreferrer" class="post-card-cover" style="height:160px;background:#0d1117;display:block;overflow:hidden;padding:14px 16px;box-sizing:border-box;text-decoration:none;">
+        <div style="height:100%;display:flex;flex-direction:column;justify-content:center;gap:8px;font-family:monospace;">
+          <div style="font-size:12px;color:#3fb950;">$ mac-health</div>
+          <div style="font-size:10px;color:#8b949e;">────────────────────</div>
+          <div style="font-size:10px;color:#e6edf3;">Memoria libera: <span style="color:#3fb950;">62%  (buono)</span></div>
+          <div style="font-size:10px;color:#e6edf3;">Swap usato: <span style="color:#3fb950;">0.2 GB  (ok)</span></div>
+          <div style="font-size:10px;color:#8b949e;">────────────────────</div>
+          <div style="font-size:10px;color:#e6edf3;">Verdetto: <span style="color:#3fb950;">Sistema in salute.</span></div>
+        </div>
+      </a>
+      <div class="post-card-content">
+        <span class="post-card-category cat-tech">Tool</span>
+        <h3><a href="https://github.com/DemPago/mac-health" target="_blank" rel="noopener noreferrer">mac-health</a></h3>
+        <p class="post-card-desc">Check rapido delle prestazioni del Mac: RAM, swap, CPU, disco, batteria. Zero dipendenze, un comando. Installa con Homebrew.</p>
+      </div>
+    </li>
   </ul>
 </div>
 
