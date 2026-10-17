@@ -73,6 +73,28 @@ let totalRotation = 0;
 let stats         = { testa: 0, croce: 0 };
 
 const DILEMMA_KEY = 'lancio_moneta_dilemma';
+const STATS_KEY   = 'lancio_moneta_stats';
+
+function saveStats() {
+  try { localStorage.setItem(STATS_KEY, JSON.stringify(stats)); } catch(_) {}
+}
+
+/* Ripristina statistiche salvate */
+(function restoreStats() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STATS_KEY) || 'null');
+    if (!saved) return;
+    if (typeof saved.testa === 'number') stats.testa = saved.testa;
+    if (typeof saved.croce === 'number') stats.croce = saved.croce;
+    const totale = stats.testa + stats.croce;
+    if (totale > 0) {
+      document.getElementById('stat-testa').textContent  = stats.testa;
+      document.getElementById('stat-croce').textContent  = stats.croce;
+      document.getElementById('stat-totale').textContent = totale;
+      document.getElementById('stats-reset-btn').style.display = '';
+    }
+  } catch(_) {}
+})();
 
 /* Ripristina dilemma salvato */
 (function restoreDilemma() {
@@ -109,6 +131,7 @@ document.getElementById('stats-reset-btn').addEventListener('click', () => {
   document.getElementById('stat-croce').textContent  = 0;
   document.getElementById('stat-totale').textContent = 0;
   document.getElementById('stats-reset-btn').style.display = 'none';
+  try { localStorage.removeItem(STATS_KEY); } catch(_) {}
 });
 
 function lancia() {
@@ -152,6 +175,7 @@ function lancia() {
     document.getElementById('stat-croce').textContent  = stats.croce;
     document.getElementById('stat-totale').textContent = stats.testa + stats.croce;
     document.getElementById('stats-reset-btn').style.display = '';
+    saveStats();
 
     const dilemma  = document.getElementById('dilemma-text').value.trim();
     const altTesta = document.getElementById('alt-testa').value.trim();
