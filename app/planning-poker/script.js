@@ -3,6 +3,8 @@ import { initializeApp, getApps, getApp }
 import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, serverTimestamp, deleteField, arrayUnion,
          collection, query, where, getDocs, Timestamp, deleteDoc }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 /* ── Firebase ────────────────────────────────────────────── */
 const FB_CONFIG = {
@@ -10,8 +12,78 @@ const FB_CONFIG = {
   authDomain: "blog-a5907.firebaseapp.com",
   projectId:  "blog-a5907",
 };
-const app = getApps().length ? getApp() : initializeApp(FB_CONFIG);
-const db  = getFirestore(app);
+const app      = getApps().length ? getApp() : initializeApp(FB_CONFIG);
+const db       = getFirestore(app);
+const auth     = getAuth(app);
+const gProvider = new GoogleAuthProvider();
+
+/* ── Google Auth ─────────────────────────────────────────── */
+let currentUser = null;
+const FACILITATOR_EMAILS = [
+  'demetrio.ferraro@pagopa.it',
+  'lorenzo.franceschini@pagopa.it',
+];
+function isFacilitatorEmail(email) {
+  return FACILITATOR_EMAILS.includes((email || '').toLowerCase());
+}
+
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  if (user) {
+    el('ppAuthLoggedOut').style.display = 'none';
+    el('ppAuthLoggedIn').style.display  = 'flex';
+    el('ppUserAvatar').src = user.photoURL || '';
+    el('ppUserAvatar').style.display = user.photoURL ? '' : 'none';
+    el('ppUserName').textContent = user.displayName || user.email;
+    // Pre-compila il campo nome
+    if (el('joinNameInput') && !el('joinNameInput').value) {
+      el('joinNameInput').value = user.displayName || '';
+    }
+    // Se sei un facilitatore: mostra il pannello di scelta (crea vs partecipa)
+    if (isFacilitatorEmail(user.email)) {
+      el('ppFacilitatorChoice').style.display = 'flex';
+      el('ppPasswordPanel').style.display     = 'none';
+    } else {
+      el('ppFacilitatorChoice').style.display = 'none';
+      el('ppPasswordPanel').style.display     = '';
+    }
+  } else {
+    el('ppAuthLoggedOut').style.display = 'flex';
+    el('ppAuthLoggedIn').style.display  = 'none';
+    el('ppFacilitatorChoice').style.display = 'none';
+    el('ppPasswordPanel').style.display     = '';
+    // Se era sbloccato via Google, rilascia
+    if (isUnlocked) {
+      isUnlocked = false;
+      sessionStorage.removeItem('pp_unlocked');
+      applyUnlockUI();
+    }
+  }
+});
+
+el('btnGoogleLogin').addEventListener('click', async () => {
+  try { await signInWithPopup(auth, gProvider); }
+  catch(e) { if (e.code !== 'auth/popup-closed-by-user') console.error(e); }
+});
+
+el('btnGoogleLogout').addEventListener('click', async () => {
+  await signOut(auth);
+  el('joinNameInput').value = '';
+});
+
+// Facilitatore sceglie "Crea sessione"
+el('btnBecomeFacilitator').addEventListener('click', () => {
+  isUnlocked = true;
+  sessionStorage.setItem('pp_unlocked', '1');
+  applyUnlockUI();
+  el('btnCreateSession').click();
+});
+
+// Facilitatore sceglie "Unisciti come partecipante" — non fa nulla di speciale,
+// lascia che usi il form join normale con il nome pre-compilato
+el('btnJoinAsParticipant').addEventListener('click', () => {
+  el('joinCodeInput').focus();
+});
 
 async function cleanOldSessions() {
   try {

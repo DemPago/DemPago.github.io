@@ -38,6 +38,30 @@
 .pp-btn-ghost    { background: var(--border); color: var(--text-muted); }
 .pp-btn-danger   { background: rgba(224,92,92,0.15); color: #e05c5c; border: 1px solid rgba(224,92,92,0.3); }
 
+/* ── Google Auth ──────────────────────────────────────────── */
+.pp-auth-bar {
+  width: 100%; max-width: 320px;
+  display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+  padding: 1rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.pp-btn-google {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: #fff; color: #3c4043;
+  border: 1px solid #dadce0; border-radius: 8px;
+  padding: 0.55rem 1rem; font-size: 0.88rem; font-weight: 600;
+  font-family: inherit; cursor: pointer;
+  transition: box-shadow 0.15s, background 0.15s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+.pp-btn-google:hover { background: #f8f9fa; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+.pp-user-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  object-fit: cover; border: 2px solid var(--accent);
+}
+
 /* ── Selettore seme ───────────────────────────────────────── */
 .pp-suit-picker { display: flex; gap: 0.6rem; flex-wrap: wrap; }
 .pp-suit-btn {
