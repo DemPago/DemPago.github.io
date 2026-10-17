@@ -75,21 +75,18 @@ permalink: /app/planning-poker/
 
     <!-- Import da Jira -->
     <details class="pp-panel pp-import-panel" id="importPanel">
-      <summary>&#128196; Importa da Jira (SMION)</summary>
+      <summary>&#128196; Importa da Jira</summary>
 
       <div class="pp-import-steps">
         <div class="pp-import-step">
           <span class="pp-import-step-num">1</span>
-          <span>Vai sull'<a href="https://pagopa.atlassian.net/issues/" target="_blank" rel="noopener">Issue Navigator di Jira ↗</a> e usa il JQL adatto al tuo caso:<br><br>
+          <span>Vai sull'Issue Navigator di Jira e usa il JQL adatto al tuo caso:<br><br>
           <strong>Sprint corrente:</strong><br>
-          <code>project = SMION AND sprint in openSprints() ORDER BY created DESC</code>
-          &nbsp;<a href="https://pagopa.atlassian.net/issues/?jql=project%20%3D%20SMION%20AND%20sprint%20in%20openSprints()%20ORDER%20BY%20created%20DESC" target="_blank" rel="noopener" style="font-size:0.8rem;">↗ apri</a><br><br>
+          <code>project = PROGETTO AND sprint in openSprints() ORDER BY created DESC</code><br><br>
           <strong>Backlog (non ancora in sprint):</strong><br>
-          <code>project = SMION AND sprint is EMPTY AND statusCategory != Done ORDER BY created DESC</code>
-          &nbsp;<a href="https://pagopa.atlassian.net/issues/?jql=project%20%3D%20SMION%20AND%20sprint%20is%20EMPTY%20AND%20statusCategory%20!%3D%20Done%20ORDER%20BY%20created%20DESC" target="_blank" rel="noopener" style="font-size:0.8rem;">↗ apri</a><br><br>
-          <strong>Sprint chiusi (15–30 set 2026):</strong><br>
-          <code>project = SMION AND sprint in closedSprints() AND created &gt;= "2026-09-15" AND created &lt;= "2026-09-30" ORDER BY created DESC</code>
-          &nbsp;<a href="https://pagopa.atlassian.net/issues/?jql=project%20%3D%20SMION%20AND%20sprint%20in%20closedSprints()%20AND%20created%20%3E%3D%20%222026-09-15%22%20AND%20created%20%3C%3D%20%222026-09-30%22%20ORDER%20BY%20created%20DESC" target="_blank" rel="noopener" style="font-size:0.8rem;">↗ apri</a>
+          <code>project = PROGETTO AND sprint is EMPTY AND statusCategory != Done ORDER BY created DESC</code><br><br>
+          <strong>Sprint chiusi (range date):</strong><br>
+          <code>project = PROGETTO AND sprint in closedSprints() AND created &gt;= "2026-01-01" AND created &lt;= "2026-01-31" ORDER BY created DESC</code>
           </span>
         </div>
         <div class="pp-import-step">

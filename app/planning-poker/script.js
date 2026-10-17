@@ -398,7 +398,7 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, c
   el('vcTitle').textContent = card.title;
   el('vcDesc').textContent  = card.desc || '';
   el('vcDesc').style.display = card.desc ? '' : 'none';
-  // Mostra chiave Jira se presente nel titolo es. "[SMION-123] Titolo"
+  // Mostra chiave Jira se presente nel titolo es. "[PROJ-123] Titolo"
   const keyMatch = card.title.match(/^\[([A-Z]+-\d+)\]/);
   el('vcIssueKey').textContent = keyMatch ? keyMatch[1] : '';
 
@@ -1061,7 +1061,7 @@ function parseCSVFile(file) {
     try {
       csvParsed = parseJiraCSV(e.target.result);
       if (csvParsed.length === 0) {
-        showCsvError('Nessuna issue trovata nel CSV. Verifica di aver esportato dal progetto SMION.');
+        showCsvError('Nessuna issue trovata nel CSV. Verifica il file e riprova con "Esporta in CSV (tutti i campi)".');
         return;
       }
       el('csvError').style.display = 'none';
