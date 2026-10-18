@@ -1,41 +1,14 @@
-import { initializeApp }    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { initFirebase, cleanOldSessions, setupAuthUI, sha256, isFacilitatorEmail }
+  from '/app/_shared/firebase-poker.js';
 import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot,
          serverTimestamp, deleteField, arrayUnion,
          collection, query, where, getDocs, Timestamp, deleteDoc }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
-  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
-const app = initializeApp({
-  apiKey:            'AIzaSyA7YbK9xW2OiGXZu55mvlTLSw2enQf4Efg',
-  authDomain:        'blog-a5907.firebaseapp.com',
-  projectId:         'blog-a5907',
-  storageBucket:     'blog-a5907.appspot.com',
-  messagingSenderId: '612926535',
-  appId:             '1:612926535:web:cf5b5e94e70fc7697d3e4c',
-});
-const db = getFirestore(app);
-const auth = getAuth(app);
-const gProvider = new GoogleAuthProvider();
+const { db, auth, gProvider } = initFirebase();
 let currentUser = null;
 const urlSessionCode = new URLSearchParams(location.search).get('session');
-
-const FACILITATOR_EMAILS = [
-  'demetrio.ferraro@pagopa.it',
-  'lorenzo.franceschini@pagopa.it',
-];
-function isFacilitatorEmail(email) {
-  return FACILITATOR_EMAILS.includes((email || '').toLowerCase());
-}
-
-async function cleanOldSessions() {
-  try {
-    const cutoff = Timestamp.fromDate(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000));
-    const snap = await getDocs(query(collection(db, 'ts_sessions'), where('createdAt', '<', cutoff)));
-    snap.forEach(d => deleteDoc(d.ref));
-  } catch(e) {}
-}
-cleanOldSessions();
+cleanOldSessions(db, 'ts_sessions');
 
 /* ── Taglie T-shirt ────────────────────────────────────────── */
 const SIZES = [
@@ -59,11 +32,6 @@ const CARD_ICONS = { XS:'🩴', S:'👕', M:'👔', L:'🧥', XL:'🪄', XXL:'�
 const PWD_HASH = '2a43da7cc03407a5c5a2458acee91c7c1e0ced9c9e83ed3df31b0fb73f82bcec';
 let isUnlocked = sessionStorage.getItem('ts_unlocked') === '1';
 
-async function sha256(str) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
-
 function applyUnlockUI() {
   el('tsLockBadge').className = 'ts-lock-badge' + (isUnlocked ? ' unlocked' : '');
   el('tsLockBadge').innerHTML = isUnlocked ? '&#128275; Team sbloccato' : '&#128274; Sessione bloccata';
@@ -73,62 +41,32 @@ function applyUnlockUI() {
 applyUnlockUI();
 if (urlSessionCode) el('tsJoinCodeInput').value = urlSessionCode;
 
-onAuthStateChanged(auth, user => {
-  currentUser = user;
-  if (user) {
-    el('tsAuthLoggedOut').style.display = 'none';
-    el('tsAuthLoggedIn').style.display  = 'flex';
-    el('tsUserAvatar').src = user.photoURL || '';
-    el('tsUserAvatar').style.display = user.photoURL ? '' : 'none';
-    el('tsUserName').textContent = user.displayName || user.email;
-    const nameRow = el('tsJoinNameRow');
-    const nameDisplay = el('tsJoinNameDisplay');
-    if (nameRow) nameRow.style.display = 'none';
-    if (nameDisplay) {
-      nameDisplay.textContent = 'Verrai identificato come: ' + (user.displayName || user.email.split('@')[0]);
-      nameDisplay.style.display = '';
-    }
-    if (isFacilitatorEmail(user.email)) {
-      el('tsFacilitatorChoice').style.display = 'flex';
-      el('tsPasswordPanel').style.display     = 'none';
-    } else {
-      el('tsFacilitatorChoice').style.display = 'none';
-      el('tsPasswordPanel').style.display     = '';
-    }
-    if (urlSessionCode && !state.sessionCode) {
-      attemptAutoJoin();
-    }
-  } else {
-    el('tsAuthLoggedOut').style.display = 'flex';
-    el('tsAuthLoggedIn').style.display  = 'none';
-    el('tsFacilitatorChoice').style.display = 'none';
-    el('tsPasswordPanel').style.display     = '';
-    const nameRow = el('tsJoinNameRow');
-    const nameDisplay = el('tsJoinNameDisplay');
-    if (nameRow) nameRow.style.display = '';
-    if (nameDisplay) nameDisplay.style.display = 'none';
-    if (isUnlocked) {
-      isUnlocked = false;
-      sessionStorage.removeItem('ts_unlocked');
-      applyUnlockUI();
-    }
-  }
-});
-
-el('tsBtnGoogleLogin').addEventListener('click',  () => signInWithPopup(auth, gProvider).catch(() => {}));
-el('tsBtnGoogleLogout').addEventListener('click', () => signOut(auth));
-
-el('tsBtnBecomeFacilitator').addEventListener('click', () => {
-  isUnlocked = true;
-  sessionStorage.setItem('ts_unlocked', '1');
-  applyUnlockUI();
-  state.isFacilitator = true;
-  state.sessionCode   = randCode();
-  el('tsSetupCode').textContent = state.sessionCode;
-  showScreen('tsScreenSetup');
-});
-el('tsBtnJoinAsParticipant').addEventListener('click', () => {
-  el('tsJoinCodeInput').focus();
+setupAuthUI({
+  auth, gProvider,
+  ids: {
+    authLoggedOut:        'tsAuthLoggedOut',
+    authLoggedIn:         'tsAuthLoggedIn',
+    userAvatar:           'tsUserAvatar',
+    userName:             'tsUserName',
+    joinNameRow:          'tsJoinNameRow',
+    joinNameDisplay:      'tsJoinNameDisplay',
+    facilitatorChoice:    'tsFacilitatorChoice',
+    passwordPanel:        'tsPasswordPanel',
+    btnGoogleLogin:       'tsBtnGoogleLogin',
+    btnGoogleLogout:      'tsBtnGoogleLogout',
+    btnBecomeFacilitator: 'tsBtnBecomeFacilitator',
+    btnJoinAsParticipant: 'tsBtnJoinAsParticipant',
+    joinCodeInput:        'tsJoinCodeInput',
+  },
+  storageKey:          'ts_unlocked',
+  urlSessionCode,
+  setCurrentUser:      user => { currentUser = user; },
+  getIsUnlocked:       () => isUnlocked,
+  setIsUnlocked:       v  => { isUnlocked = v; },
+  applyUnlockUI,
+  getState:            () => state,
+  onFacilitatorCreate: () => el('tsBtnCreateSession').click(),
+  onAutoJoin:          attemptAutoJoin,
 });
 
 el('tsBtnUnlock').addEventListener('click', async () => {

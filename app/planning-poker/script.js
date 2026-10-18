@@ -1,112 +1,16 @@
-import { initializeApp, getApps, getApp }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { initFirebase, cleanOldSessions, setupAuthUI, sha256 }
+  from '/app/_shared/firebase-poker.js';
 import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, serverTimestamp, deleteField, arrayUnion,
          collection, query, where, getDocs, Timestamp, deleteDoc }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 /* ── Firebase ────────────────────────────────────────────── */
-const FB_CONFIG = {
-  apiKey:     "AIzaSyA7YbK9xW2OiGXZu55mvlTLSw2enQf4Efg",
-  authDomain: "blog-a5907.firebaseapp.com",
-  projectId:  "blog-a5907",
-};
-const app      = getApps().length ? getApp() : initializeApp(FB_CONFIG);
-const db       = getFirestore(app);
-const auth     = getAuth(app);
-const gProvider = new GoogleAuthProvider();
+const { db, auth, gProvider } = initFirebase();
+cleanOldSessions(db, 'poker_sessions');
 
 /* ── Google Auth ─────────────────────────────────────────── */
 let currentUser = null;
 const urlSessionCode = new URLSearchParams(location.search).get('session');
-const FACILITATOR_EMAILS = [
-  'demetrio.ferraro@pagopa.it',
-  'lorenzo.franceschini@pagopa.it',
-];
-function isFacilitatorEmail(email) {
-  return FACILITATOR_EMAILS.includes((email || '').toLowerCase());
-}
-
-onAuthStateChanged(auth, user => {
-  currentUser = user;
-  if (user) {
-    el('ppAuthLoggedOut').style.display = 'none';
-    el('ppAuthLoggedIn').style.display  = 'flex';
-    el('ppUserAvatar').src = user.photoURL || '';
-    el('ppUserAvatar').style.display = user.photoURL ? '' : 'none';
-    el('ppUserName').textContent = user.displayName || user.email;
-    // Nascondi campo nome, mostra display name
-    const nameRow = el('joinNameRow');
-    const nameDisplay = el('joinNameDisplay');
-    if (nameRow) nameRow.style.display = 'none';
-    if (nameDisplay) {
-      nameDisplay.textContent = 'Verrai identificato come: ' + (user.displayName || user.email.split('@')[0]);
-      nameDisplay.style.display = '';
-    }
-    // Se sei un facilitatore: mostra il pannello di scelta (crea vs partecipa)
-    if (isFacilitatorEmail(user.email)) {
-      el('ppFacilitatorChoice').style.display = 'flex';
-      el('ppPasswordPanel').style.display     = 'none';
-    } else {
-      el('ppFacilitatorChoice').style.display = 'none';
-      el('ppPasswordPanel').style.display     = '';
-    }
-    // Auto-join se arrivati via link condiviso
-    if (urlSessionCode && !state.sessionCode) {
-      attemptAutoJoin();
-    }
-  } else {
-    el('ppAuthLoggedOut').style.display = 'flex';
-    el('ppAuthLoggedIn').style.display  = 'none';
-    el('ppFacilitatorChoice').style.display = 'none';
-    el('ppPasswordPanel').style.display     = '';
-    // Ripristina campo nome
-    const nameRow = el('joinNameRow');
-    const nameDisplay = el('joinNameDisplay');
-    if (nameRow) nameRow.style.display = '';
-    if (nameDisplay) nameDisplay.style.display = 'none';
-    // Se era sbloccato via Google, rilascia
-    if (isUnlocked) {
-      isUnlocked = false;
-      sessionStorage.removeItem('pp_unlocked');
-      applyUnlockUI();
-    }
-  }
-});
-
-el('btnGoogleLogin').addEventListener('click', async () => {
-  try { await signInWithPopup(auth, gProvider); }
-  catch(e) { if (e.code !== 'auth/popup-closed-by-user') console.error(e); }
-});
-
-el('btnGoogleLogout').addEventListener('click', async () => {
-  await signOut(auth);
-  el('joinNameInput').value = '';
-});
-
-// Facilitatore sceglie "Crea sessione"
-el('btnBecomeFacilitator').addEventListener('click', () => {
-  isUnlocked = true;
-  sessionStorage.setItem('pp_unlocked', '1');
-  applyUnlockUI();
-  el('btnCreateSession').click();
-});
-
-// Facilitatore sceglie "Unisciti come partecipante" — non fa nulla di speciale,
-// lascia che usi il form join normale con il nome pre-compilato
-el('btnJoinAsParticipant').addEventListener('click', () => {
-  el('joinCodeInput').focus();
-});
-
-async function cleanOldSessions() {
-  try {
-    const cutoff = Timestamp.fromDate(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000));
-    const snap = await getDocs(query(collection(db, 'poker_sessions'), where('createdAt', '<', cutoff)));
-    snap.forEach(d => deleteDoc(d.ref));
-  } catch(e) {}
-}
-cleanOldSessions();
 
 /* ── Voti config ─────────────────────────────────────────── */
 const VOTES = [
@@ -143,11 +47,6 @@ let state = {
 const PWD_HASH = '2a43da7cc03407a5c5a2458acee91c7c1e0ced9c9e83ed3df31b0fb73f82bcec';
 let isUnlocked = sessionStorage.getItem('pp_unlocked') === '1';
 
-async function sha256(str) {
-  const buf  = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
-
 function applyUnlockUI() {
   el('lockBadge').className    = 'pp-lock-badge' + (isUnlocked ? ' unlocked' : '');
   el('lockBadge').innerHTML    = isUnlocked ? '&#128275; Team sbloccato' : '&#128274; Sessione bloccata';
@@ -176,6 +75,35 @@ el('facilitatorPwd').addEventListener('keydown', e => { if (e.key === 'Enter') e
 
 // applica stato iniziale
 applyUnlockUI();
+
+setupAuthUI({
+  auth, gProvider,
+  ids: {
+    authLoggedOut:        'ppAuthLoggedOut',
+    authLoggedIn:         'ppAuthLoggedIn',
+    userAvatar:           'ppUserAvatar',
+    userName:             'ppUserName',
+    joinNameRow:          'joinNameRow',
+    joinNameDisplay:      'joinNameDisplay',
+    facilitatorChoice:    'ppFacilitatorChoice',
+    passwordPanel:        'ppPasswordPanel',
+    btnGoogleLogin:       'btnGoogleLogin',
+    btnGoogleLogout:      'btnGoogleLogout',
+    btnBecomeFacilitator: 'btnBecomeFacilitator',
+    btnJoinAsParticipant: 'btnJoinAsParticipant',
+    joinCodeInput:        'joinCodeInput',
+  },
+  storageKey:          'pp_unlocked',
+  urlSessionCode,
+  setCurrentUser:      user => { currentUser = user; },
+  getIsUnlocked:       () => isUnlocked,
+  setIsUnlocked:       v  => { isUnlocked = v; },
+  applyUnlockUI,
+  getState:            () => state,
+  onFacilitatorCreate: () => el('btnCreateSession').click(),
+  onAutoJoin:          attemptAutoJoin,
+  onLogout:            () => { el('joinNameInput').value = ''; },
+});
 
 /* ── Utilità ─────────────────────────────────────────────── */
 function genCode() {
