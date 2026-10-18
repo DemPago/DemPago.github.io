@@ -41,6 +41,20 @@ export async function sha256(str) {
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+export function requestNotificationPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+export function notifyAllVoted(cardTitle) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  new Notification('Tutti hanno votato! 🗳️', {
+    body: cardTitle,
+    tag: 'poker-all-voted',
+  });
+}
+
 /**
  * Configura l'intera UI di autenticazione Google per un tool poker.
  *

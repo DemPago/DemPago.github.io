@@ -1,4 +1,4 @@
-import { initFirebase, cleanOldSessions, setupAuthUI, sha256, isFacilitatorEmail }
+import { initFirebase, cleanOldSessions, setupAuthUI, sha256, isFacilitatorEmail, requestNotificationPermission, notifyAllVoted }
   from '/app/_shared/firebase-poker.js';
 import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot,
          serverTimestamp, deleteField, arrayUnion,
@@ -99,6 +99,7 @@ let state = {
   cachedData:        null,
   sessionColor:      '#3b82f6',
 };
+let lastVotedNotifyCard = null;
 
 /* ── Utils ─────────────────────────────────────────────────── */
 function el(id)           { return document.getElementById(id); }
@@ -406,6 +407,7 @@ function startListening() {
     err  => console.error('Firestore error', err)
   );
   startPresence(state.myName, state.sessionCode);
+  requestNotificationPermission();
 }
 
 /* ── Render sessione ───────────────────────────────────────── */
@@ -498,6 +500,11 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, presenc
   } else {
     el('tsVotingSection').style.display = 'none';
     el('tsRevealHint').style.display    = 'none';
+    const allVoted = memberList.length > 0 && votedCount >= memberList.length;
+    if (allVoted && lastVotedNotifyCard !== card.id) {
+      lastVotedNotifyCard = card.id;
+      notifyAllVoted(card.title);
+    }
   }
 
   el('tsBtnReveal').style.display = isFac ? '' : 'none';
@@ -666,6 +673,7 @@ el('tsBtnRevote').addEventListener('click', async () => {
   if (!data) return;
   const cardId = data.cards[data.currentCard].id;
   delete state.myVotes[cardId];
+  lastVotedNotifyCard = null;
   try {
     await updateDoc(doc(db, 'ts_sessions', state.sessionCode), { ['votes.' + cardId]: deleteField(), status: 'voting' });
   } catch(e) { console.error('revote error', e); }

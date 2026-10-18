@@ -1,4 +1,4 @@
-import { initFirebase, cleanOldSessions, setupAuthUI, sha256 }
+import { initFirebase, cleanOldSessions, setupAuthUI, sha256, requestNotificationPermission, notifyAllVoted }
   from '/app/_shared/firebase-poker.js';
 import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, serverTimestamp, deleteField, arrayUnion,
          collection, query, where, getDocs, Timestamp, deleteDoc }
@@ -42,6 +42,7 @@ let state = {
   lastCardIdx:       -1,   // per trigger animazione flip solo a cambio card
   cachedData:        null, // ultima snapshot Firestore — evita getDoc extra
 };
+let lastVotedNotifyCard = null;
 
 /* ── Auth ────────────────────────────────────────────────── */
 const PWD_HASH = '2a43da7cc03407a5c5a2458acee91c7c1e0ced9c9e83ed3df31b0fb73f82bcec';
@@ -382,6 +383,7 @@ function startListening() {
     err  => console.error('Firestore error', err)
   );
   startPresence(state.myName, state.sessionCode);
+  requestNotificationPermission();
 }
 
 function renderSession(data) {
@@ -507,6 +509,10 @@ function renderVotingScreen(card, idx, total, cardVotes, members, isFac, suit, c
     el('btnReveal').disabled = false;  // reset dopo rivota
     const allVoted = memberList.length > 0 && votedCount >= memberList.length;
     el('revealHint').style.display = allVoted ? 'none' : '';
+    if (allVoted && lastVotedNotifyCard !== card.id) {
+      lastVotedNotifyCard = card.id;
+      notifyAllVoted(card.title);
+    }
   }
 
   el('votingAddMemberBar').style.display = isFac ? '' : 'none';
@@ -789,6 +795,7 @@ el('btnRevote').addEventListener('click', async () => {
   // Cancella lo stato locale prima di scrivere su Firestore,
   // così se lo snapshot arriva prima del return non rilegge il voto vecchio
   delete state.myVotes[cardId];
+  lastVotedNotifyCard = null;
   try {
     await updateDoc(doc(db, 'poker_sessions', state.sessionCode), {
       ['votes.' + cardId]: deleteField(),
