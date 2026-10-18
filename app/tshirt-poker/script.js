@@ -1,5 +1,5 @@
 import { initFirebase, cleanOldSessions, setupAuthUI, sha256, isFacilitatorEmail, requestNotificationPermission, notifyAllVoted }
-  from '/app/_shared/firebase-poker.js';
+  from '/app/shared/firebase-poker.js';
 import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot,
          serverTimestamp, deleteField, arrayUnion,
          collection, query, where, getDocs, Timestamp, deleteDoc }
